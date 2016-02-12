@@ -1,0 +1,12 @@
+-cp src
+
+--each
+
+-neko bin/comn-demo.n
+-main comn.other.Demo
+
+--next
+
+-neko bin/comn-dequeuer.n
+-main comn.Dequeuer
+
