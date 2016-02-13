@@ -34,14 +34,14 @@ typedef SlackPayload = {
 }
 
 class Slack implements comn.Message {
+	var url:String;
 	var payload:SlackPayload;
 
-	public function deliver()
+	public function deliver(creds)
 	{
-		// TODO don't send more than 1msg/s
-		var req = new haxe.Http("");
-		req.addHeader("Content-Type", "application/json");
-		req.addHeader("User-Agent", "sapood");
+		var req = new haxe.Http(creds.slackUrl);
+		req.setHeader("Content-Type", "application/json");
+		req.setHeader("User-Agent", "sapood");
 		req.setPostData(haxe.Json.stringify(payload));
 		
 		var status = null;

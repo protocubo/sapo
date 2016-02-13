@@ -6,7 +6,7 @@ class Dequeuer {
 	var config:{
 		dbCnx : sys.db.Connection,
 		qmessages : sys.db.Manager<QueuedMessage>,
-		slackUrl : String
+		creds : Credentials
 	};
 	var keepGoing:Bool;
 
@@ -35,9 +35,8 @@ class Dequeuer {
 			var msg = next.data;
 			var error = null;
 			try {
-				msg.deliver();
+				msg.deliver(config.creds);
 				next.sentAt = Date.now().getTime();
-				onSuccess(msg);
 			} catch (e:DeliveryError) {
 				error = e;
 				next.delay(e.wait);

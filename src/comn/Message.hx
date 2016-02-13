@@ -1,6 +1,6 @@
 package comn;
 
 interface Message {
-	function deliver():Void;  // throws DeliveryError
+	function deliver(creds:Credentials):Void;  // throws DeliveryError
 }
 

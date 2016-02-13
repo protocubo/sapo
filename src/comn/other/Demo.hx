@@ -14,10 +14,10 @@ class Demo {
 	static function main()
 	{
 		var dbPath = Sys.getEnv("COMN_DB");
-		var slackUrl = Sys.getEnv("SLACK_URL");
+		var slackUrl = Sys.getEnv("COMN_SLACK_URL");
 
 		if (dbPath == null) throw "Missing COMN_DB environment variable";
-		if (slackUrl == null) throw "Missing SLACK_URL environment variable";
+		if (slackUrl == null) throw "Missing COMN_SLACK_URL environment variable";
 
 		Manager.initialize();
 		Manager.cnx = Sqlite.open(dbPath);
@@ -27,7 +27,9 @@ class Demo {
 		var config = {
 			dbCnx : Manager.cnx,
 			qmessages : qmessages,
-			slackUrl : slackUrl
+			creds : {
+				slackUrl : slackUrl
+			}
 		}
 
 		trace("Enqueuing");
