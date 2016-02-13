@@ -24,3 +24,5 @@ Variable | Meaning | Default
 ---
 COMN_DEMO_SLACK_CHANNEL | Channel where demo Slack messages should be  | 
 
+**Note**: `common.EnvVars` might contain more up-to-date information.
+
