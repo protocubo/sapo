@@ -5,17 +5,9 @@ import comn.Spod;
 import sys.db.*;
 
 class Demo {
-	static function msgType(msg:comn.Message)
-	{
-		return switch Type.typeof(msg) {
-			case TClass(cl): Type.getClassName(cl);
-			case t: throw 'Unexpected message type: $t'; }
-	}
-
 	static function main()
 	{
 		var dbPath = Sys.getEnv(COMN_DB);
-
 		if (dbPath == null) throw 'Missing $COMN_DB environment variable';
 
 		Manager.initialize();

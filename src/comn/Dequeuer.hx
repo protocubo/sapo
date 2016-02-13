@@ -18,15 +18,23 @@ class Dequeuer {
 	var keepGoing:Bool;
 
 	public dynamic function onHalt():Void {}
+	public dynamic function onDbError(e:Dynamic):Bool return false;  // return value -> retry?
+	public dynamic function onShutdown():Void {}
+
 	public dynamic function onSuccess(msg:Message):Void {}
 	public dynamic function onError(msg:Message, e:Dynamic):Void {}
-	public dynamic function onShutdown():Void {}
 
 	function dequeue():Null<QueuedMessage>
 	{
-		return config.queue.select(
-			$sentAt == null && $pos <= Date.now().getTime(),
-			{ orderBy : pos });
+		while (true) {
+			try {
+				return config.queue.select(
+					$sentAt == null && $pos <= Date.now().getTime(),
+					{ orderBy : pos });
+			} catch (e:Dynamic) {
+				if (!onDbError(e)) neko.Lib.rethrow(e);
+			}
+		}
 	}
 
 	function loop()
@@ -82,6 +90,13 @@ class Dequeuer {
 		keepGoing = false;
 	}
 
+	static function msgType(msg:comn.Message)
+	{
+		return switch Type.typeof(msg) {
+			case TClass(cl): Type.getClassName(cl);
+			case t: throw 'Unexpected message type: $t'; }
+	}
+
 	static function main()
 	{
 		var verbose = Lambda.has(Sys.args(), "--verbose");
@@ -104,15 +119,24 @@ class Dequeuer {
 
 		var dq = new Dequeuer(config);
 		dq.onHalt = function () {
-			if (verbose) trace("Halted");
+			if (verbose) trace("Halted: no messages to send now");
 			Sys.sleep(1);
 		}
+		dq.onDbError = function (e) {
+			if (Std.string(e).indexOf("Database is busy") > -1) {
+				if (verbose) trace("Databse busy");
+				Sys.sleep(.1);
+				return true;
+			}
+			return false;
+		}
+
 		dq.onSuccess = function (msg) {
-			if (verbose) trace("Sent message");
+			if (verbose) trace('Sent message: ${msgType(msg)} #??');
 			Sys.sleep(.1);
 		}
 		dq.onError = function (msg, e) {
-			if (verbose) trace('Error: $e');
+			trace('ERROR on message #?: $e');
 			Sys.sleep(1);
 		}
 
