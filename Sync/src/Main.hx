@@ -1,6 +1,7 @@
 package;
 
 import db.Familia;
+import db.Modo;
 import db.Morador;
 import db.Ponto;
 import db.Session;
@@ -213,7 +214,15 @@ class Main
 					else
 						new_point = old_point;
 					
-					
+					/**/
+					//TODO: Implementar checks (não são intuitivos se considerar entradas isDeleted)
+					//if(shouldInsert && 
+						
+					var modos = Modo.manager.unsafeObjects("Select * FROM Modo WHERE morador_id = " +new_morador.old_id + "AND firstpoint_id =" +new_point.old_id + "ORDER BY anterior_id");
+					for (m in modos)
+					{
+						
+					}
 					
 					
 				}
