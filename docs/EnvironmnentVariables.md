@@ -1,5 +1,8 @@
 # Environment variables
 
+_Note: at times [`common.EnvVars`](../src/common/EnvVars.hx) might contain more
+or less up-to-date information_
+
 At runtime, we depend on the following environment variables for configuration
 and passing authentication tokens.  Failing to supply the ones that do not have
 default values will make some or all subsystems to fail.
@@ -23,7 +26,4 @@ auxiliary executables:
 Variable | Meaning | Default
 -------- | ------- | -------
 COMN_DEMO_SLACK_CHANNEL | Channel where demo Slack messages should be  | 
-
-**Note**: `common.EnvVars` might contain more up-to-date information.
-
 
