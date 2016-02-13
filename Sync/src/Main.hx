@@ -2,6 +2,7 @@ package;
 
 import db.Familia;
 import db.Morador;
+import db.Ponto;
 import db.Session;
 import haxe.Http;
 import haxe.Json;
@@ -176,7 +177,47 @@ class Main
 						new_morador = old_morador;
 				}
 				
-				//TODO : Continuar no PTO
+				//Convertido para array para pegar points[i-1]
+				var points = targetCnx.request("SELECT * FROM Ponto WHERE session_id = " + id + " AND morador_id = " + new_morador.old_id + " ORDER BY anterior_id").results().array();
+				var i = 0;
+				while (i < points.length)
+				{
+					var ref = points[i];
+					var new_point = new Ponto();
+					for (f in Reflect.fields(ref))
+					{
+						if (f == "id")
+							new_point.old_id = Reflect.field(ref, f);
+						else if (f == "session_id")
+						{
+							new_point.session_id = new_sess.id;
+							new_point.old_session_id = Reflect.field(ref, f);
+						}
+						else if (f == "morador_id")
+							new_point.morador_id = new_morador.id;
+						else if (Reflect.hasField(new_point, f))
+							Reflect.setField(new_point, f, Reflect.field(ref, f));	
+					}
+					
+					var old_point = Ponto.manager.unsafeObject("SELECT * FROM Ponto WHERE old_id = " + ref.id + " ORDER BY syncTimestamp DESC LIMIT 1 ", false);
+					shouldInsert = false;
+					for (f1 in Ponto.manager.dbInfos().fields)
+					{
+						var f = f1.name;
+						if (f != "session_id" && f != "morador_id" && f != "id" && f != "syncTimestamp" && Reflect.field(new_point, f) != Reflect.field(old_point, f))
+							shouldInsert = true;						
+					}
+					
+					if (shouldInsert)
+						new_point.insert();
+					else
+						new_point = old_point;
+					
+					
+					
+					
+				}
+				
 				
 			}			
 		}
