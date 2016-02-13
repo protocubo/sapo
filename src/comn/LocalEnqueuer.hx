@@ -16,7 +16,13 @@ class LocalEnqueuer {
 		qm.errors = 0;
 		qm.data = msg;
 
-		qm.insert();
+		while (true)
+		try {
+			qm.insert();
+			return;
+		} catch (e:Dynamic) {
+			Sys.sleep(.05);
+		}
 	}
 
 	public function new(qmessages)

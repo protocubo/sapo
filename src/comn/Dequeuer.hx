@@ -7,14 +7,10 @@ import sys.db.*;
 // keep
 import comn.message.Slack;
 
-typedef DequeuerConfig = {
-	db : sys.db.Connection,
-	queue : sys.db.Manager<QueuedMessage>,
-	creds : Credentials
-}
-
 class Dequeuer {
-	var config:DequeuerConfig;
+	var cnx:Connection;
+	var queue:Manager<QueuedMessage>;
+	var creds:Credentials;
 	var keepGoing:Bool;
 
 	public dynamic function onHalt():Void {}
@@ -26,24 +22,21 @@ class Dequeuer {
 
 	function dequeue():Null<QueuedMessage>
 	{
-		while (true) {
-			try {
-				return config.queue.select(
-					$sentAt == null && $pos <= Date.now().getTime(),
-					{ orderBy : pos });
-			} catch (e:Dynamic) {
-				if (!onDbError(e)) neko.Lib.rethrow(e);
-			}
+		while (true)
+		try {
+			return queue.select(
+				$sentAt == null && $pos <= Date.now().getTime(),
+				{ orderBy : pos });
+		} catch (e:Dynamic) {
+			if (!onDbError(e)) neko.Lib.rethrow(e);
 		}
 	}
 
 	function loop()
 	{
 		while (keepGoing) {
-			config.db.request("BEGIN");
 			var next = dequeue();
 			if (next == null) {
-				config.db.request("COMMIT");
 				onHalt();
 				continue;
 			}
@@ -51,7 +44,7 @@ class Dequeuer {
 			var msg = next.data;
 			var error = null;
 			try {
-				msg.deliver(config.creds);
+				msg.deliver(creds);
 				next.sentAt = Date.now().getTime();
 			} catch (e:DeliveryError) {
 				error = e;
@@ -63,8 +56,14 @@ class Dequeuer {
 				next.errors++;
 			}
 
-			next.update();
-			config.db.request("COMMIT");
+			while (true)
+			try {
+				next.update();
+				break;
+			} catch (e:Dynamic) {
+				if (!onDbError(e)) neko.Lib.rethrow(e);
+			}
+
 			if (error != null)
 				onError(msg, error);
 			else
@@ -84,21 +83,34 @@ class Dequeuer {
 	public function shutdown()
 		keepGoing = false;
 
-	public function new(config)
+	public function new(cnx, queue, creds)
 	{
-		this.config = config;
+		this.cnx = cnx;
+		this.queue = queue;
+		this.creds = creds;
 		keepGoing = false;
 	}
 
-	static function msgType(msg:comn.Message)
+
+	public static function initDb(cnx:Connection, queue:Manager<QueuedMessage>)
 	{
-		return switch Type.typeof(msg) {
-			case TClass(cl): Type.getClassName(cl);
-			case t: throw 'Unexpected message type: $t'; }
+		if (!TableCreate.exists(queue))
+		{
+			if (cnx.dbName().toLowerCase() == "sqlite") {
+				cnx.request("PRAGMA journal_mode=WAL");
+			}
+			TableCreate.create(queue);
+		}
 	}
 
 	static function main()
 	{
+		function msgType(msg:comn.Message) {
+			return switch Type.typeof(msg) {
+				case TClass(cl): Type.getClassName(cl);
+				case t: throw 'Unexpected message type: $t'; }
+		}
+
 		var verbose = Lambda.has(Sys.args(), "--verbose");
 		var dbPath = Sys.getEnv(COMN_DB);
 		var slackUrl = Sys.getEnv(COMN_SLACK_URL);
@@ -107,25 +119,21 @@ class Dequeuer {
 		if (slackUrl == null) throw 'Missing $COMN_SLACK_URL environment variable';
 
 		Manager.initialize();
-		Manager.cnx = Sqlite.open(dbPath);
-		var config = {
-			db : Manager.cnx,
-			queue : QueuedMessage.manager,
-			creds : {
-				slackUrl : slackUrl
-			}
-		}
-		if (!TableCreate.exists(config.queue)) TableCreate.create(config.queue);
+		var cnx = Manager.cnx = Sqlite.open(dbPath);
+		var queue = QueuedMessage.manager;
+		var creds = { slackUrl : slackUrl };
+		initDb(cnx, queue);
 
-		var dq = new Dequeuer(config);
+		var dq = new Dequeuer(cnx, queue, creds);
 		dq.onHalt = function () {
 			if (verbose) trace("Halted: no messages to send now");
 			Sys.sleep(1);
 		}
 		dq.onDbError = function (e) {
-			if (Std.string(e).indexOf("Database is busy") > -1) {
-				if (verbose) trace("Databse busy");
-				Sys.sleep(.1);
+			var pat = ~/database is (busy|locked)/i;
+			if (pat.match(Std.string(e))) {
+				trace('WARNING database ${pat.matched(1)}, retrying in 50ms');
+				Sys.sleep(.05);
 				return true;
 			}
 			return false;

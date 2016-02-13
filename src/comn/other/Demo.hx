@@ -13,7 +13,7 @@ class Demo {
 		Manager.initialize();
 		Manager.cnx = Sqlite.open(dbPath);
 		var queue = QueuedMessage.manager;
-		if (!TableCreate.exists(queue)) TableCreate.create(queue);
+		comn.Dequeuer.initDb(Manager.cnx, queue);
 
 		trace("Enqueuing");
 		var slackChannel = Sys.getEnv(COMN_DEMO_SLACK_CHANNEL);
