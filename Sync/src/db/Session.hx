@@ -10,9 +10,8 @@ class Session extends Object
 {
 	public var id : SId;
 	public var user_id : SInt;
-	public var tentativa_id : Int;
+	public var tentativa_id : SNull<Int>;
 	
-	public var client_ip : SString<255>;
 	public var lastPageVisited : SNull<SString<255>>;
 	public var isValid : Int;
 	

@@ -22,9 +22,9 @@ class Familia extends Object
 	public var isEdited : SInt;
 	
 	public var numeroResidentes : SNull<SInt>;
-	public var ocupacao_domicilio_id : SInt;
-	public var condicao_moradia_id : SInt;
-	public var tipo_movel_id : SInt;
+	public var ocupacaoDomicilio_id : SNull<SInt>;
+	public var condicaoMoradia_id : SNull<SInt>;
+	public var tipoImovel_id : SNull<SInt>;
 	
 	public var tentativa_id : SInt;
 	
@@ -47,8 +47,8 @@ class Familia extends Object
 	
 	
 	
-	public var nomeContato : SString<255>;
-	public var telefoneContato : SString<255>;
+	public var nomeContato : SNull<SString<255>>;
+	public var telefoneContato : SNull<SString<255>>;
 	public var rendaDomiciliar_id : SNull<SInt>;
 	public var recebeBolsaFamilia_id : SNull<SInt>;
 	

@@ -28,21 +28,21 @@ class Ponto extends Object
 	
 	public var ordem : SNull<SInt>;
 	*/
-	public var uf : SInt;
+	public var uf_id : SInt;
 	public var city_id : SInt;
-	public var regadm_id : SInt;
-	public var street_id : SInt;
-	public var complement_id : SInt;
-	public var complement_two_id : SInt;
-	public var complement2_str : SString<255>;
-	public var ref_id : SInt;
+	public var regadm_id : SNull<SInt>;
+	public var street_id : SNull<SInt>;
+	public var complement_id : SNull<SInt>;
+	public var complement_two_id : SNull<SInt>;
+	public var complement2_str : SNull<SString<255>>;
+	public var ref_id : SNull<SInt>;
 	
 	public var motivoID : SInt;
-	public var motivoOutraPessoaID : SInt;
-	public var tempo_saida : SString<255>;
-	public var tempo_chegada : SString<255>;
+	public var motivoOutraPessoaID : SNull<SInt>;
+	public var tempo_saida : SNull<SString<255>>;
+	public var tempo_chegada : SNull<SString<255>>;
 	
-	public var copiedFrom_id : SInt;
+	public var copiedFrom_id : SNull<SInt>;
 	
 	
 	public var old_id : SInt;

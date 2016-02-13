@@ -21,8 +21,8 @@ class Morador extends Object
 	public var isDeleted : SInt;
 	public var isEdited : SInt;
 	
-	public var nomeMorador : SString<255>;
-	public var proprioMorador_id : SBool;
+	public var nomeMorador : SNull<SString<255>>;
+	public var proprioMorador_id : SNull<SBool>;
 	public var idade_id : SNull <SInt>;
 	public var genero_id : SNull<SInt>;
 	public var grauInstrucao_id : SNull<SInt>;
