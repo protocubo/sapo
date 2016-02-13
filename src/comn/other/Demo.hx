@@ -1,7 +1,8 @@
 package comn.other;
 
-import sys.db.*;
+import common.EnvVars;
 import comn.Spod;
+import sys.db.*;
 
 class Demo {
 	static function msgType(msg:comn.Message)
@@ -13,44 +14,20 @@ class Demo {
 
 	static function main()
 	{
-		var dbPath = Sys.getEnv("COMN_DB");
-		var slackUrl = Sys.getEnv("COMN_SLACK_URL");
+		var dbPath = Sys.getEnv(COMN_DB);
 
-		if (dbPath == null) throw "Missing COMN_DB environment variable";
-		if (slackUrl == null) throw "Missing COMN_SLACK_URL environment variable";
+		if (dbPath == null) throw 'Missing $COMN_DB environment variable';
 
 		Manager.initialize();
 		Manager.cnx = Sqlite.open(dbPath);
-		var qmessages = QueuedMessage.manager;
-		if (!TableCreate.exists(qmessages)) TableCreate.create(qmessages);
-
-		var config = {
-			dbCnx : Manager.cnx,
-			qmessages : qmessages,
-			creds : {
-				slackUrl : slackUrl
-			}
-		}
+		var queue = QueuedMessage.manager;
+		if (!TableCreate.exists(queue)) TableCreate.create(queue);
 
 		trace("Enqueuing");
-		var slackChannel = Sys.getEnv("COMN_DEMO_SLACK_CHANNEL");
-		var eq = new comn.LocalEnqueuer(qmessages);
+		var slackChannel = Sys.getEnv(COMN_DEMO_SLACK_CHANNEL);
+		var eq = new comn.LocalEnqueuer(queue);
 		eq.enqueue(new comn.message.Slack({ text : "hi!", channel : slackChannel }));
 		eq.enqueue(new comn.message.Slack({ text : "hi again", channel : slackChannel }));
-
-		trace("Dequeuing");
-		var dq = new comn.Dequeuer(config);
-		dq.onSuccess = function (msg) {
-			trace('Delivered ${msgType(msg)} messsage $msg');
-			if (qmessages.select($sentAt == null) == null)
-				dq.shutdown();
-		}
-		dq.onError = function (msg, e) {
-			trace('Error when sending ${msgType(msg)} message: $e');
-			Sys.sleep(1);
-		}
-		dq.onShutdown = function () Manager.cnx.close();
-		dq.start();
 	}
 }
 

@@ -33,6 +33,7 @@ typedef SlackPayload = {
 	?attachments : Array<SlackAttachment>
 }
 
+@:keep
 class Slack implements comn.Message {
 	var url:String;
 	var payload:SlackPayload;

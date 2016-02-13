@@ -1,22 +1,30 @@
 package comn;
 
+import common.EnvVars;
 import comn.Spod;
+import sys.db.*;
+
+// keep
+import comn.message.Slack;
+
+typedef DequeuerConfig = {
+	db : sys.db.Connection,
+	queue : sys.db.Manager<QueuedMessage>,
+	creds : Credentials
+}
 
 class Dequeuer {
-	var config:{
-		dbCnx : sys.db.Connection,
-		qmessages : sys.db.Manager<QueuedMessage>,
-		creds : Credentials
-	};
+	var config:DequeuerConfig;
 	var keepGoing:Bool;
 
+	public dynamic function onHalt():Void {}
 	public dynamic function onSuccess(msg:Message):Void {}
 	public dynamic function onError(msg:Message, e:Dynamic):Void {}
 	public dynamic function onShutdown():Void {}
 
 	function dequeue():Null<QueuedMessage>
 	{
-		return config.qmessages.select(
+		return config.queue.select(
 			$sentAt == null && $pos <= Date.now().getTime(),
 			{ orderBy : pos });
 	}
@@ -24,11 +32,11 @@ class Dequeuer {
 	function loop()
 	{
 		while (keepGoing) {
-			config.dbCnx.request("BEGIN");
+			config.db.request("BEGIN");
 			var next = dequeue();
 			if (next == null) {
-				config.dbCnx.request("COMMIT");
-				Sys.sleep(.1);
+				config.db.request("COMMIT");
+				onHalt();
 				continue;
 			}
 
@@ -48,7 +56,7 @@ class Dequeuer {
 			}
 
 			next.update();
-			config.dbCnx.request("COMMIT");
+			config.db.request("COMMIT");
 			if (error != null)
 				onError(msg, error);
 			else
@@ -76,6 +84,39 @@ class Dequeuer {
 
 	static function main()
 	{
+		var verbose = Lambda.has(Sys.args(), "--verbose");
+		var dbPath = Sys.getEnv(COMN_DB);
+		var slackUrl = Sys.getEnv(COMN_SLACK_URL);
+
+		if (dbPath == null) throw 'Missing $COMN_DB environment variable';
+		if (slackUrl == null) throw 'Missing $COMN_SLACK_URL environment variable';
+
+		Manager.initialize();
+		Manager.cnx = Sqlite.open(dbPath);
+		var config = {
+			db : Manager.cnx,
+			queue : QueuedMessage.manager,
+			creds : {
+				slackUrl : slackUrl
+			}
+		}
+		if (!TableCreate.exists(config.queue)) TableCreate.create(config.queue);
+
+		var dq = new Dequeuer(config);
+		dq.onHalt = function () {
+			if (verbose) trace("Halted");
+			Sys.sleep(1);
+		}
+		dq.onSuccess = function (msg) {
+			if (verbose) trace("Sent message");
+			Sys.sleep(.1);
+		}
+		dq.onError = function (msg, e) {
+			if (verbose) trace('Error: $e');
+			Sys.sleep(1);
+		}
+
+		dq.start();
 	}
 }
 
