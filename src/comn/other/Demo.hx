@@ -33,9 +33,10 @@ class Demo {
 		}
 
 		trace("Enqueuing");
+		var slackChannel = Sys.getEnv("COMN_DEMO_SLACK_CHANNEL");
 		var eq = new comn.LocalEnqueuer(qmessages);
-		eq.enqueue(new comn.message.Slack({ text : "hi!" }));
-		eq.enqueue(new comn.message.Slack({ text : "hi again" }));
+		eq.enqueue(new comn.message.Slack({ text : "hi!", channel : slackChannel }));
+		eq.enqueue(new comn.message.Slack({ text : "hi again", channel : slackChannel }));
 
 		trace("Dequeuing");
 		var dq = new comn.Dequeuer(config);
