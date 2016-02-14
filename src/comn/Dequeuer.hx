@@ -6,6 +6,7 @@ import sys.db.*;
 
 // keep
 import comn.message.Slack;
+import comn.message.Email;
 
 class Dequeuer {
 	var cnx:Connection;
