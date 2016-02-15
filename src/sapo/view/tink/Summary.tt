@@ -1,0 +1,46 @@
+(:*
+This is a class-type tink template.
+
+We're using tink_template with it's default syntax and `(:`/`:)` delimiters,
+but we could just as easily use `::` or `{{`/`}}` delimiters.
+
+Tink templates take erazor-like macro templates to the next level, making it
+even easier to mix code (for rendering logic) and static strings together.
+However, writing a lot of Haxe code without autocompletion and/or the ability
+to run expression macros is still hard and/or tiresome, and more complex
+computations should be implemented outside of the template.
+
+Specifically, this type of tink template (class) can have a bunch of functions
+that generate html strings (escaping is automatic) and that can be called from
+regular haxe code, like the controllers.  The main advantage of this is that we
+don't have to write .hx files for the template if all we would put there would
+be the template type signature (like it happens with erazor).  Additionally, we
+can use `import` and `using` to make the haxe expressions as compact as they
+would be in regular haxe code.
+
+For more details, see: https://github.com/haxetink/tink_template
+*:)
+
+(: import sapo.view.tink.* :)
+(: import sapo.Spod :)
+
+(:* we can also create and use helper functions in the template itself *:)
+
+(:* bellow is the function called from sapo.Routes.TinkRoutes.doDefault()
+(src/sapo/Routes.hx) *:)
+
+(: static function render() :)
+<!DOCTYPE html>
+<html>
+(: Util.head("SAPO [tink_template] – Summary") :)
+<h1>A quick summary of what's on the db</h1>
+<p>There are some users:</b>
+<table>
+	<tr><td>Name</td><td>Email</td></tr>
+	(: for u in User.manager.all() :)
+	<tr><td>(: u.name :)</td><td>(: u.email :)</td></tr>
+	(: end :)
+</table>
+</html>
+(: end :)
+

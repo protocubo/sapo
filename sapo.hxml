@@ -1,0 +1,11 @@
+# to get erazor: haxelib git erazor https://github.com/waneck/erazor
+
+-cp src
+-lib tink_template
+#-lib erazor
+
+--each
+
+-neko www/index.n
+-main sapo.Index
+
