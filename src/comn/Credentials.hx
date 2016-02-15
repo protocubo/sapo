@@ -1,6 +1,7 @@
 package comn;
 
 typedef Credentials = {
-	slackUrl : String
+	slackUrl : String,
+	sendGrid : { apiUser:String, apiKey:String }
 }
 

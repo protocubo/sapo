@@ -114,15 +114,18 @@ class Dequeuer {
 
 		var verbose = Lambda.has(Sys.args(), "--verbose");
 		var dbPath = Sys.getEnv(COMN_DB);
-		var slackUrl = Sys.getEnv(COMN_SLACK_URL);
-
 		if (dbPath == null) throw 'Missing $COMN_DB environment variable';
-		if (slackUrl == null) throw 'Missing $COMN_SLACK_URL environment variable';
+
+		var creds = {
+			slackUrl : Sys.getEnv(COMN_SLACK_URL),
+			sendGridKey : Sys.getEnv(COMN_SENDGRID_API_KEY)
+		}
+		if (creds.slackUrl == null) throw 'Missing $COMN_SLACK_URL environment variable';
+		if (creds.sendGridKey == null) throw 'Missing $COMN_SENDGRID_API_KEY environment variable';
 
 		Manager.initialize();
 		var cnx = Manager.cnx = Sqlite.open(dbPath);
 		var queue = QueuedMessage.manager;
-		var creds = { slackUrl : slackUrl };
 		initDb(cnx, queue);
 
 		var dq = new Dequeuer(cnx, queue, creds);

@@ -11,6 +11,7 @@ Variable | Meaning | Default
 -------- | ------- | -------
 COMN_DB | Location of the local Sqlite db for the communication system | _required_
 COMN_SLACK_URL | Url to deliver Slack messages to | _required_
+COMN_SENDGRID_API_KEY | SendGrid API key | _required_
 
 Additionally, the following variables are used sporadically by some systems;
 those systems should handle missing values gracefully, but incorrect values
@@ -25,5 +26,7 @@ auxiliary executables:
 
 Variable | Meaning | Default
 -------- | ------- | -------
-COMN_DEMO_SLACK_CHANNEL | Channel where demo Slack messages should be  | 
+COMN_DEMO_SLACK_CHANNEL | Channel to send demo Slack messages to | 
+COMN_DEMO_EMAIL_AUTHOR | Email `from` field for demo messages | 
+COMN_DEMO_EMAIL_RECIPIENT | Email `to` recipient for demo messages | 
 

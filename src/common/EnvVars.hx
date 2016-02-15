@@ -6,8 +6,14 @@ package common;
 
 	// Url to deliver Slack messages to
 	var COMN_SLACK_URL = "COMN_SLACK_URL";
+	// SendGrid API key
+	var COMN_SENDGRID_API_KEY = "COMN_SENDGRID_API_KEY";
 
-	// Channel where demo Slack messages should be
+	// Channel to send demo Slack messages to
 	var COMN_DEMO_SLACK_CHANNEL = "COMN_DEMO_SLACK_CHANNEL";
+	// Email `from` field for demo messages
+	var COMN_DEMO_EMAIL_AUTHOR = "COMN_DEMO_EMAIL_AUTHOR";
+	// Email `to` recipient for demo messages
+	var COMN_DEMO_EMAIL_RECIPIENT = "COMN_DEMO_EMAIL_RECIPIENT";
 }
 

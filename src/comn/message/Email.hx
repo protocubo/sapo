@@ -30,7 +30,7 @@ typedef SendGridPayload = {
 	// TODO x-smtapi, cc, ccname, bcc, bccname, replyto, date, headers
 }
 
-@:keep
+@:keep @:access(haxe.Http)
 class SendGridEmail implements comn.Message {
 	static var url = "https://api.sendgrid.com/api/mail.send.json";
 
@@ -39,6 +39,7 @@ class SendGridEmail implements comn.Message {
 	public function deliver(creds)
 	{
 		var req = new haxe.Http(url);
+		req.setHeader("Content-Type", "application/x-www-form-urlencoded");
 		req.setHeader("User-Agent", "sapood");
 		req.setParameter("from", payload.from);
 		for (i in payload.to)
@@ -53,14 +54,15 @@ class SendGridEmail implements comn.Message {
 		if (payload.toname != null && payload.toname.length == payload.to.length)
 			for (i in payload.toname)
 				req.addParameter("toname", i);
-		
+		req.setHeader("Authorization", "Bearer " + creds.sendGridKey);
+
 		var status = null;
 		req.onStatus = function (code) status = code;
 		req.onError = function (msg) {
-			switch status {
-			case 429: throw new DeliveryError(ERateLimited, 10, 'rate limited (429)');
-			case _: throw new DeliveryError(EOther, 60, 'unknown: $msg ($status)');
-			}
+			if (400 <= status && status < 500)
+				throw new DeliveryError(EOther, 60, 'errors in the parameters: $msg');
+			else
+				throw new DeliveryError(EOther, 10, 'api call unsuccessfull: $msg');
 		}
 
 		req.request(true);
