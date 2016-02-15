@@ -1,5 +1,6 @@
 -cp src
 -lib hxssl
+# (with haxelib git hxssl https://github.com/tong/hxssl)
 
 --each
 
