@@ -1,0 +1,179 @@
+﻿<!DOCTYPE html>
+
+<html lang="pt-br">
+
+<head>
+    <meta charset="utf-8" />
+
+    <!-- TITLE -->
+    <title></title>
+
+    <!-- JQUERY -->
+    <script src="https://code.jquery.com/jquery-2.2.0.min.js" crossorigin="anonymous"></script>
+
+    <!-- BOOTSTRAP -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+    <!-- GOOGLE FONTS ROBOTO CONDENSED -->
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400,700,300italic,400italic,700italic' rel='stylesheet' type='text/css'>
+
+    <!-- SAPO -->
+    <link href="sapo.css" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <div class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button><img src="sapo_logo.png" style="height:50px;">
+            </div>
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">SAPO</a></li>
+                    <li><a href="#">TICKETS</a></li> <!-- @LOGIT @Telefonista @Supervisor -->
+                    <li><a href="#">PESQUISAS</a></li> <!-- @LOGIT @Telefonista @Supervisor -->
+                    <li><a href="#">SUMÁRIO</a></li> <!-- @LOGIT @Telefonista @Supervisor -->
+                    <li><a href="#">PAGAMENTOS</a></li> <!-- @Pesquisador -->
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">ADMINISTRAÇÃO <b class="caret"></b></a> <!-- @LOGIT -->
+                        <ul class="dropdown-menu">
+                            <li><a href="#">CADASTRO</a></li>
+                            <li><a href="#">PAGAMENTOS</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <!-- (class: super, telefonista, supervisor e pesquisador) -->
+                    <li><a><b class="super">Nome@Grupo</b></a></li> <!-- pós login -->
+                    <li><a href="#">Sair</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- TICKETS -->
+    <div class="container">
+
+        <!-- HEAD -->
+        <h2>TICKETS</h2>
+        <hr />
+
+        <!-- FILTROS -->
+        <h3>Filtros:</h3>
+        <div class="row">
+            <div class="col-md-1"><h4>CAIXA:</h4></div>
+            <div class="col-md-2">
+                <select class="form-control">
+                    <option>Entrada</option>
+                    <option>Enviados</option>
+                </select>
+            </div>
+            <div class="col-md-1"><h4>DESTINO</h4></div>
+            <div class="col-md-2">
+                <select class="form-control">
+                    <option>Todos</option>
+                    <option>Grupo</option>
+                    <option>Individual</option>
+                </select>
+            </div>
+            <div class="col-md-1"><h4>ESTADO</h4></div>
+            <div class="col-md-2">
+                <select class="form-control">
+                    <option>Não Fechadas</option>
+                    <option>Fechadas</option>
+                </select>
+            </div>
+            <div class="col-md-2 col-md-offset-1">
+                <button type="button" class="btn btn-default">APLICAR</button>
+            </div>
+        </div>
+        <hr />
+
+        <!-- BUSCA -->
+        <h3>Busca:</h3>
+        <div class="row">
+            <div class="col-md-2"><h4>Nº DO TICKET</h4></div>
+            <div class="col-md-2">
+                <input type="text" class="form-control" placeholder="Número do Ticket">
+            </div>
+            <div class="col-md-2"><h4>Nº DA PESQUISA</h4></div>
+            <div class="col-md-2">
+                <input type="text" class="form-control" placeholder="Número da Pesquisa">
+            </div>
+            <div class="col-md-2 col-md-offset-2">
+                <button type="button" class="btn btn-default">BUSCAR</button>
+            </div>
+        </div>
+        <hr />
+
+        <!-- TICKETS -->
+        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" style="margin-top: 60px;">
+            <!-- TICKET -->
+            <div class="panel panel-default">
+                <!-- HEAD TICKET : id = HeadTicket1234 -->
+                <div class="panel-heading" role="tab" id="HeadTicket1234">
+                    <h4 class="panel-title">
+                        <!-- DE/PARA (class: super, telefonista, supervisor e pesquisador) -->
+                        <span class="glyphicon glyphicon glyphicon-stop super" aria-hidden="true"></span>
+                        <span class="glyphicon glyphicon glyphicon-stop supervisor" aria-hidden="true"></span>
+                        <!-- Nº do Ticket, Data da criação do Ticket, Hora da criação do Ticket, Assunto : href="#BodyTicket1234" , aria-controls="BodyTicket1234" -->
+                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyTicket1234" aria-expanded="true" aria-controls="BodyTicket1234">
+                            #1234 - 01/01/2016 - 12:00 - Assunto
+                        </a>
+                    </h4>
+                </div>
+                <!-- BODY TICKET : id="BodyTicket1234" , aria-labelledby="HeadTicket1234" -->
+                <div id="BodyTicket1234" class="panel-collapse collapse" role="tabpanel" aria-labelledby="HeadTicket1234">
+                    <div class="panel-body">
+                        <strong>
+                            <!-- DATETIME + DE + PARA (class: super, telefonista, supervisor e pesquisador) -->
+                            01/01/2016 12:00 - <span class="super">FulanoT@LOGIT</span> - <span class="supervisor">FulanoT@LOGIT</span> :
+                        </strong>
+                        <!-- MENSAGEM -->
+                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                    </div>
+                </div>
+            </div>
+            <!-- FIM TICKET -->
+            <!-- TESTE -->
+            <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="HeadTicket1235">
+                    <h4 class="panel-title">
+                        <span class="glyphicon glyphicon glyphicon-stop super" aria-hidden="true"></span>
+                        <span class="glyphicon glyphicon glyphicon-stop supervisor" aria-hidden="true"></span>
+                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyTicket1235" aria-expanded="true" aria-controls="BodyTicket1235">
+                            #1235 - 01/01/2016 - 12:00 - Assunto
+                        </a>
+                    </h4>
+                </div>
+                <div id="BodyTicket1235" class="panel-collapse collapse" role="tabpanel" aria-labelledby="HeadTicket1235">
+                    <div class="panel-body">
+                        <strong>
+                            01/01/2016 12:00 - <span class="super">FulanoT@LOGIT</span> - <span class="supervisor">FulanoT@LOGIT</span> :
+                        </strong>
+                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                    </div>
+                </div>
+            </div>
+            <!-- FIM TESTE -->
+
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <h3 class="text-muted">SAPO OD DF 2016</h3>
+        </div>
+    </footer>
+
+</body>
+</html>
