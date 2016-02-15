@@ -30,12 +30,10 @@ typedef SendGridPayload = {
 	// TODO x-smtapi, cc, ccname, bcc, bccname, replyto, date, headers
 }
 
-@:keep @:access(haxe.Http)
+@:keep
 class SendGridEmail implements comn.Message {
+#if hxssl
 	static var url = "https://api.sendgrid.com/api/mail.send.json";
-
-	var payload:SendGridPayload;
-
 	public function deliver(creds)
 	{
 		var req = new haxe.Http(url);
@@ -67,6 +65,9 @@ class SendGridEmail implements comn.Message {
 
 		req.request(true);
 	}
+#end
+
+	var payload:SendGridPayload;
 
 	public function new(payload)
 	{

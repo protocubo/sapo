@@ -35,16 +35,14 @@ typedef SlackPayload = {
 
 @:keep
 class Slack implements comn.Message {
-	var url:String;
-	var payload:SlackPayload;
-
+#if hxssl
 	public function deliver(creds)
 	{
 		var req = new haxe.Http(creds.slackUrl);
 		req.setHeader("Content-Type", "application/json");
 		req.setHeader("User-Agent", "sapood");
 		req.setPostData(haxe.Json.stringify(payload));
-		
+
 		var status = null;
 		req.onStatus = function (code) status = code;
 		req.onError = function (msg) {
@@ -56,6 +54,9 @@ class Slack implements comn.Message {
 
 		req.request(true);
 	}
+#end
+
+	var payload:SlackPayload;
 
 	public function new(payload)
 	{
