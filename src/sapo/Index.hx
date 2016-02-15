@@ -10,21 +10,11 @@ class Index {
 
 	public static function dbReset()
 	{
-		if (Manager.cnx != null) {
-			Manager.cnx.close();
-			Manager.cnx = null;
-			Manager.cleanup();
-			sys.FileSystem.deleteFile(Index.DBPATH);
-		}
+		Manager.cleanup();
+		Manager.cnx.close();
+		Manager.cnx = null;
+		sys.FileSystem.deleteFile(Index.DBPATH);
 		dbInit();
-
-		Manager.cnx.request("PRAGMA page_size=4096");
-		Manager.cnx.request("PRAGMA journal_mode=wal");
-
-		var managers:Array<Manager<Dynamic>> = [User.manager, Survey.manager, Ticket.manager, TicketMessage.manager];
-		for (m in managers)
-			if (!TableCreate.exists(m))
-				TableCreate.create(m);
 
 		var arthur = new User("arthur@sapo", "Arthur Dent");
 		var ford = new User("ford@sapo", "Ford Prefect");
@@ -48,6 +38,14 @@ class Index {
 	{
 		Manager.initialize();
 		Manager.cnx = Sqlite.open(DBPATH);
+		Manager.cnx.request("PRAGMA page_size=4096");
+		// later windows can't close the connection in wal mode...
+		// an issue with sqlite.ndll perhaps?
+		if (Sys.systemName() != "Windows") Manager.cnx.request("PRAGMA journal_mode=wal");
+		var managers:Array<Manager<Dynamic>> = [User.manager, Survey.manager, Ticket.manager, TicketMessage.manager];
+		for (m in managers)
+			if (!TableCreate.exists(m))
+				TableCreate.create(m);
 	}
 
 	static function main()
@@ -61,9 +59,12 @@ class Index {
 
 			var d = new Dispatch(uri, params);
 			d.dispatch(new Routes());
+			Manager.cnx.close();
+			Manager.cnx = null;
 		} catch (e:Dynamic) {
 			if (Manager.cnx != null)
 				Manager.cnx.close();
+			Manager.cnx = null;
 			neko.Lib.rethrow(e);
 		}
 	}
