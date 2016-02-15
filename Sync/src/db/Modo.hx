@@ -22,7 +22,7 @@ class Modo extends Object
 	
 	public var date : SDateTime;
 	
-	public var isEdited : SBool;
+	public var isEdited : SInt;
 	public var isDeleted : SBool;
 	
 	public var meiotransporte_id : SInt;

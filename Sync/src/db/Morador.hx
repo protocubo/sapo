@@ -18,7 +18,7 @@ class Morador extends Object
 	public var session_id : SInt;
 	public var familia_id : SInt;
 	public var date : SDateTime;
-	public var isDeleted : SInt;
+	public var isDeleted : SBool;
 	public var isEdited : SInt;
 	
 	public var nomeMorador : SNull<SString<255>>;
