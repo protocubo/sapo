@@ -1,8 +1,7 @@
-# to get erazor: haxelib git erazor https://github.com/waneck/erazor
-
 -cp src
 -lib tink_template
-#-lib erazor
+# haxelib git erazor https://github.com/waneck/erazor
+-lib erazor
 
 --each
 

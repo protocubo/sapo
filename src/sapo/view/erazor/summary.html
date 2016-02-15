@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+@{var head = new sapo.view.erazor.Util.Head("SAPO [erazor] – Summary");}@raw(head.execute())
+<h1>A quick summary of what's on the db</h1>
+<p>There are some users:</b>
+<table>
+	<tr><td>Name</td><td>Email</td></tr>
+	@for (u in sapo.Spod.User.manager.all()) {
+	<tr><td>@u.name</td><td>@u.email</td></tr>
+	}
+</table>
+</html>
+
