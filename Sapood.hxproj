@@ -29,7 +29,6 @@
   <!-- haxelib libraries -->
   <haxelib>
     <library name="tink_template" />
-    <library name="erazor" />
   </haxelib>
   <!-- Class files to compile (other referenced classes will automatically be included) -->
   <compileTargets>

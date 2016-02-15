@@ -1,4 +1,3 @@
-(: import sapo.view.tink.* :)
 (: import sapo.Spod :)
 
 (: static function render() :)
