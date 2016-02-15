@@ -1,4 +1,5 @@
-bin
 *.db3
 *.db3*
+*.n
+bin
 
