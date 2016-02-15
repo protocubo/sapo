@@ -12,6 +12,7 @@ class Index {
 	{
 		if (Manager.cnx != null) {
 			Manager.cnx.close();
+			Manager.cnx = null;
 			Manager.cleanup();
 			sys.FileSystem.deleteFile(Index.DBPATH);
 		}
