@@ -18,6 +18,8 @@ class Modo extends Object
 	public var morador_id : SInt;
 	
 	public var firstpoint_id : SInt;
+	@:relation(firstpoint_id) public var firstPoint : Ponto;
+	
 	public var secondpoint_id : SInt;
 	
 	public var date : SDateTime;

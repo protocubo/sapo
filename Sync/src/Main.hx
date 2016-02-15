@@ -15,6 +15,7 @@ import sys.db.Mysql;
 import sys.db.Sqlite;
 import sys.FileSystem;
 import sys.io.File;
+import db.statics.Statics;
 
 /**
  * ...
@@ -162,6 +163,14 @@ class Main
 					{
 						new_familia.isDeleted = (f.isDeleted == 1);
 					}
+					else if (field == "recebeBolsaFamilia_id")
+					{
+						new_familia.recebeBolsaFamilia_id = (f.recebeBolsaFamilia_id == 2);
+					}
+					else if (field == "ruaPavimentada_id")
+					{
+						new_familia.ruaPavimentada_id = (f.ruaPavimentada_id == 1);
+					}
 					else if (famHash.get(field) != "" && famHash.get(field) != null)
 						Reflect.setField(new_familia, field, Reflect.field(f, field));					
 				}
@@ -207,7 +216,8 @@ class Main
 						}
 						else if (f == "proprioMorador_id")
 						{
-							new_morador.proprioMorador_id = (m.proprioMorador_id == 1);
+							//1 - Nao; 2 - Sim
+							new_morador.proprioMorador_id = (m.proprioMorador_id == 2);
 						}
 						else if (f != "syncTimestamp" && f != "old_id" && f != "old_session_id" && f != "session_id" && f != "id")
 						{

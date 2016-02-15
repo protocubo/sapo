@@ -44,7 +44,6 @@ class Ponto extends Object
 	
 	public var copiedFrom_id : SNull<SInt>;
 	
-	
 	public var old_id : SInt;
 	public var syncTimestamp : SFloat;
 	public var old_session_id : SInt;

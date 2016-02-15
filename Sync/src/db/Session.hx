@@ -15,7 +15,6 @@ class Session extends Object
 	public var lastPageVisited : SNull<SString<255>>;
 	public var isValid : Int;
 	
-	//?
 	public var isRestored : SInt;
 	
 	public var date_create : SDateTime;

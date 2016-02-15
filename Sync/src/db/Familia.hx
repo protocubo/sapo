@@ -16,6 +16,7 @@ class Familia extends Object
 {
 	public var id : SId;
 	public var session_id : SInt;
+	@:relation(session_id) public var session : Session;
 	
 	public var date : SDateTime;
 	public var isDeleted : SBool;
@@ -35,7 +36,7 @@ class Familia extends Object
 	public var motos : SNull<SInt>;
 	
 	public var aguaEncanada_id : SNull<SInt>;
-	public var ruaPavimentada_id : SNull<SInt>;
+	public var ruaPavimentada_id : SNull<SBool>;
 	public var vagaPropriaEstacionamento_id : SNull<SInt>;
 	public var anoVeiculoMaisRecente_id : SNull<SInt>;
 	public var empregadosDomesticos_id : SNull<SInt>;
@@ -45,12 +46,10 @@ class Familia extends Object
 	//?
 	public var editsNumeroResidentes : SNull<SString<255>>;
 	
-	
-	
 	public var nomeContato : SNull<SString<255>>;
 	public var telefoneContato : SNull<SString<255>>;
 	public var rendaDomiciliar_id : SNull<SInt>;
-	public var recebeBolsaFamilia_id : SNull<SInt>;
+	public var recebeBolsaFamilia_id : SNull<SBool>;
 	
 	public var codigoReagendamento : SNull<SString<255>>;
 	

@@ -24,6 +24,7 @@ class Morador extends Object
 	public var nomeMorador : SNull<SString<255>>;
 	public var proprioMorador_id : SNull<SBool>;
 	public var idade_id : SNull <SInt>;
+	
 	public var genero_id : SNull<SInt>;
 	public var grauInstrucao_id : SNull<SInt>;
 	
