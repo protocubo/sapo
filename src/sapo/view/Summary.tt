@@ -4,21 +4,46 @@
 <!DOCTYPE html>
 <html>
 (: Util.head("SAPO [tink_template] – Summary") :)
-<h1>Summary</h1>
-<h2>Tickets</h2>
-<table>
-	<tr><td>#</td><td>Opened</td><td>Closed</td></tr>
+<body>
+	(: Util.navbar() :)
+	
+	<!-- TICKETS -->
+    <div class="container">
+
+        <!-- HEAD -->
+        <h2>TICKETS</h2>
+        <hr />
+	</div>
+	
+	
+	<!-- FILTROS -->
+	
+	<!-- BUSCA -->
+	
+	<!-- TICKETS -->
 	(: for t in Ticket.manager.all() :)
-	<tr><td><a href="tink/ticket/(: t.id :)">#(: t.id :)</a></td><td>(: t.opened_at :)</td><td>(: if t.closed_at != null :)(: t.closed_at :)(: end :)</td></tr>
+		(: Util.ticket() :)
 	(: end :)
-</table>
-<h2>Users</h2>
-<table>
-	<tr><td>Name</td><td>Email</td></tr>
-	(: for u in User.manager.all() :)
-	<tr><td>(: u.name :)</td><td>(: u.email :)</td></tr>
-	(: end :)
-</table>
+	
+	
+	
+	
+	
+	<table>
+		<tr><td>#</td><td>Opened</td><td>Closed</td></tr>
+		(: for t in Ticket.manager.all() :)
+		<tr><td><a href="tink/ticket/(: t.id :)">#(: t.id :)</a></td><td>(: t.opened_at :)</td><td>(: if t.closed_at != null :)(: t.closed_at :)(: end :)</td></tr>
+		(: end :)
+	</table>
+	<h2>Users</h2>
+	<table>
+		<tr><td>Name</td><td>Email</td></tr>
+		(: for u in User.manager.all() :)
+		<tr><td>(: u.name :)</td><td>(: u.email :)</td></tr>
+		(: end :)
+	</table>
+(: Util.footer() :)
+</body>
 </html>
 (: end :)
 

@@ -5,6 +5,7 @@
 <html>
 (: Util.head('SAPO [tink_template] – Ticket #${ticket.id}') :)
 <body>
+(: Util.navbar() :)
 <h1>Ticket #(: ticket.id :)</h1>
 (: for m in TicketMessage.manager.search($ticket == ticket) :)
 <article>
@@ -16,6 +17,7 @@
 	</footer>
 </article>
 (: end :)
+(: Util.footer() :)
 </body>
 </html>
 (: end :)
