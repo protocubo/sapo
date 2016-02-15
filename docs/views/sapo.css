@@ -4,7 +4,7 @@
 }
 
 body {
-    margin-top: 120px;
+    margin-top: 90px;
     margin-bottom: 60px;
     font-family: 'Roboto Condensed', sans-serif;
 }
@@ -53,21 +53,27 @@ body {
 .aberta {
     color: #999;
 }
+
 .completa {
     color: #F7931E;
 }
+
 .verificada {
     color: #FBB03B;
 }
+
 .ct {
     color: #FBB03B;
 }
+
 .aceita {
     color: #009245;
 }
+
 .recusada {
     color: #C1272D;
 }
+
 .sobjudice {
     color: #FBB03B;
 }

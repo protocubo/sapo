@@ -1,0 +1,113 @@
+﻿<!DOCTYPE html>
+
+<html lang="pt-br">
+
+<head>
+    <meta charset="utf-8" />
+
+    <!-- TITLE -->
+    <title></title>
+
+    <!-- JQUERY -->
+    <script src="https://code.jquery.com/jquery-2.2.0.min.js" crossorigin="anonymous"></script>
+
+    <!-- BOOTSTRAP -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+    <!-- GOOGLE FONTS ROBOTO CONDENSED -->
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400,700,300italic,400italic,700italic' rel='stylesheet' type='text/css'>
+
+    <!-- SAPO -->
+    <link href="sapo.css" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <div class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button><img src="sapo_logo.png" style="height:50px;">
+            </div>
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">SAPO</a></li>
+                    <li><a href="#">TICKETS</a></li> <!-- @LOGIT @Telefonista @Supervisor -->
+                    <li><a href="#">PESQUISAS</a></li> <!-- @LOGIT @Telefonista @Supervisor -->
+                    <li><a href="#">SUMÁRIO</a></li> <!-- @LOGIT @Telefonista @Supervisor -->
+                    <li><a href="#">PAGAMENTOS</a></li> <!-- @Pesquisador -->
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">ADMINISTRAÇÃO <b class="caret"></b></a> <!-- @LOGIT -->
+                        <ul class="dropdown-menu">
+                            <li><a href="#">CADASTRO</a></li>
+                            <li><a href="#">PAGAMENTOS</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <!-- (class: super, telefonista, supervisor e pesquisador) -->
+                    <li><a><b class="super">Nome@Grupo</b></a></li> <!-- pós login -->
+                    <li><a href="#">Sair</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGAMENTOS / PESQUISADOR -->
+    <div class="container">
+
+        <!-- HEAD -->
+        <h2>PAGAMENTOS</h2>
+        <hr />
+        <h3>Pesquisas:</h3>
+        <hr />
+
+        <!-- TABELA DE USUÁRIOS -->
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <!-- HEAD -->
+                    <th>Nº da Pesquisa</th>
+                    <th>Data</th>
+                    <th>Endereço</th>
+                    <th>RefPagto</th>
+                    <th>Data Pgto</th>
+                    <th style="text-align:right;">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <!-- LINHA: número da pesquisa, data da pesquisa, endereço, refpagto, datapagto, status -->
+                <tr>
+                    <td>1234</td>
+                    <td>01/01/2016</td>
+                    <td>R. Itamirindiba, 3 - São Paulo/SP</td>
+                    <td>813518</td>
+                    <td>02/02/2016</td>
+                    <td align="right">
+                        <b class="aceita">Aceita</b>
+                    </td>
+                </tr>
+                <!-- FIM LINHA -->
+
+            </tbody>
+        </table>
+
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <h3 class="text-muted">SAPO OD DF 2016</h3>
+        </div>
+    </footer>
+
+</body>
+</html>
