@@ -1,5 +1,6 @@
 (: static function head(title:String) :)
 <head>
+<meta charset="utf-8">
 <title>(: title :)</title>
 </head>
 (: end :)

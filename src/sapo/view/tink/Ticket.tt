@@ -1,10 +1,12 @@
 (: import sapo.Spod :)
 
-(: static function render(t:Spod.Ticket) :)
+(: static function render(ticket:Spod.Ticket) :)
 <!DOCTYPE html>
 <html>
-(: Util.head('SAPO [tink_template] – Ticket #${t.id}') :)
-(: for m in TicketMessage.manager.search($ticket == t) :)
+(: Util.head('SAPO [tink_template] – Ticket #${ticket.id}') :)
+<body>
+<h1>Ticket #(: ticket.id :)</h1>
+(: for m in TicketMessage.manager.search($ticket == ticket) :)
 <article>
 	(: for p in m.text.split("\n\n") :)
 	<p>(: p :)</p>
@@ -14,7 +16,7 @@
 	</footer>
 </article>
 (: end :)
+</body>
 </html>
 (: end :)
-
 

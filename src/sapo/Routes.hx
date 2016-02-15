@@ -15,6 +15,9 @@ class TinkRoutes {
 }
 
 class ErazorRoutes {
+	public function doTicket(t:Ticket)
+		Sys.println(new sapo.view.erazor.Ticket(t).execute());
+
 	public function doDefault()
 		Sys.println(new sapo.view.erazor.Summary().execute());
 
@@ -47,3 +50,4 @@ class Routes {
 
 	public function new() {}
 }
+
