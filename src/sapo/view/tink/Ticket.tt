@@ -1,0 +1,20 @@
+(: import sapo.Spod :)
+
+(: static function render(t:Spod.Ticket) :)
+<!DOCTYPE html>
+<html>
+(: Util.head('SAPO [tink_template] – Ticket #${t.id}') :)
+(: for m in TicketMessage.manager.search($ticket == t) :)
+<article>
+	(: for p in m.text.split("\n\n") :)
+	<p>(: p :)</p>
+	(: end :)
+	<footer>
+		<p>Posted by (: m.author.name :) at (: m.posted_at :)</p>
+	</footer>
+</article>
+(: end :)
+</html>
+(: end :)
+
+

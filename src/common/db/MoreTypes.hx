@@ -9,5 +9,13 @@ abstract HaxeTimestamp(Float) from Float to Float {
 
 	@:from public static function fromDate(d:Date)
 		return new HaxeTimestamp(d.getTime());
+
+	@:to public function toString():String
+		return toDate().toString();
+
+#if tink_template
+	@:to public function toHtml():tink.template.Html
+		return toDate().toString();
+#end
 }
 

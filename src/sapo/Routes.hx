@@ -2,8 +2,12 @@ package sapo;
 
 import haxe.web.Dispatch;
 import neko.Web;
+import sapo.Spod;
 
 class TinkRoutes {
+	public function doTicket(t:Ticket)
+		Sys.println(sapo.view.tink.Ticket.render(t));
+
 	public function doDefault()
 		Sys.println(sapo.view.tink.Summary.render());
 
