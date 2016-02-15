@@ -25,6 +25,11 @@ body {
     font-size: 15px;
 }
 
+.barraderolagem {
+    overflow: auto;
+    max-height: 300px;
+}
+
 /*CORES GRUPOS*/
 
 .super {
@@ -41,4 +46,28 @@ body {
 
 .pesquisador {
     color: #C34F4A;
+}
+
+/*CORES STATUS ARRUMAR*/
+
+.aberta {
+    color: #999;
+}
+.completa {
+    color: #F7931E;
+}
+.verificada {
+    color: #FBB03B;
+}
+.ct {
+    color: #FBB03B;
+}
+.aceita {
+    color: #009245;
+}
+.recusada {
+    color: #C1272D;
+}
+.sobjudice {
+    color: #FBB03B;
 }

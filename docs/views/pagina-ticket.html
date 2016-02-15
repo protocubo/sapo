@@ -120,50 +120,62 @@
             <div class="panel panel-default">
                 <!-- HEAD TICKET : id = HeadTicket1234 -->
                 <div class="panel-heading" role="tab" id="HeadTicket1234">
-                    <h4 class="panel-title">
-                        <!-- DE/PARA (class: super, telefonista, supervisor e pesquisador) -->
-                        <span class="glyphicon glyphicon glyphicon-stop super" aria-hidden="true"></span>
-                        <span class="glyphicon glyphicon glyphicon-stop supervisor" aria-hidden="true"></span>
-                        <!-- Nº do Ticket, Data da criação do Ticket, Hora da criação do Ticket, Assunto : href="#BodyTicket1234" , aria-controls="BodyTicket1234" -->
-                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyTicket1234" aria-expanded="true" aria-controls="BodyTicket1234">
-                            #1234 - 01/01/2016 - 12:00 - Assunto
-                        </a>
-                    </h4>
+                    <div class="row">
+                        <div class="col-md-7 panel-title">
+                            <!-- DE/PARA (class: super, telefonista, supervisor e pesquisador) -->
+                            <span class="glyphicon glyphicon glyphicon-stop super" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon glyphicon-stop supervisor" aria-hidden="true"></span>
+                            <!-- Nº do Ticket, Data da criação do Ticket, Hora da criação do Ticket, Assunto : href="#BodyTicket1234" , aria-controls="BodyTicket1234" -->
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyTicket1234" aria-expanded="true" aria-controls="BodyTicket1234">
+                                #1234 - 01/01/2016 - 12:00 - Assunto
+                            </a>
+                        </div>
+                        <div class="col-md-4 panel-title">
+                            <!-- Número da peqsuisa, data da pesquisa, Nome do pesquisador (class: super, telefonista, supervisor e pesquisador) -->
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyTicket1234" aria-expanded="true" aria-controls="BodyTicket1234">
+                                Pesquisa #12345 - 01/01/2016 - <b class="pesquisador">Nome</b>
+                            </a>
+                        </div>
+                        <div class="col-md-1 panel-title">
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyTicket1234" aria-expanded="true" aria-controls="BodyTicket1234">
+                                <!-- STATUS (class: aberta, completa, verificada, CT, aceita, recusada, sobjudice) -->
+                                <b class="completa">STATUS</b>
+                            </a>
+                        </div>
+                    </div>
                 </div>
                 <!-- BODY TICKET : id="BodyTicket1234" , aria-labelledby="HeadTicket1234" -->
                 <div id="BodyTicket1234" class="panel-collapse collapse" role="tabpanel" aria-labelledby="HeadTicket1234">
                     <div class="panel-body">
-                        <strong>
-                            <!-- DATETIME + DE + PARA (class: super, telefonista, supervisor e pesquisador) -->
-                            01/01/2016 12:00 - <span class="super">FulanoT@LOGIT</span> - <span class="supervisor">FulanoT@LOGIT</span> :
-                        </strong>
-                        <!-- MENSAGEM -->
-                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                        <div class="row">
+                            <div class="col-md-7 barraderolagem">
+                                <strong>
+                                    <!-- DATETIME + DE + PARA (class: super, telefonista, supervisor e pesquisador) -->
+                                    01/01/2016 12:00 - <span class="super">FulanoT@LOGIT</span> - <span class="supervisor">FulanoT@LOGIT</span> :
+                                </strong>
+                                <!-- MENSAGEM -->
+                                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                            </div>
+                            <div class="col-md-5 barraderolagem">
+                                <!-- DADOS DA PESQUISA -->
+                                <p><b>Endereço:</b> Lorem Ipsum</p>
+                                <p><b>Contato:</b> Marcelo - (11) 888888888 <b>Senha:</b> 9841321687</p>
+                                <p><b>Moradores:</b></p>
+                                <p>Maria (25): Residência - Trabalho - Residência</p>
+                                <p><b>Conferência:</b> 3 carros</p>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 30px;">
+                            <div class="col-md-2"><button type="button" class="btn btn-default btn-sm">RESPONDER</button></div>
+                            <div class="col-md-2"><button type="button" class="btn btn-default btn-sm">FECHAR</button></div>
+                            <div class="col-md-2"><button type="button" class="btn btn-default btn-sm">INCLUIR</button></div>
+                            <div class="col-md-2 col-md-offset-1"><button type="button" class="btn btn-default btn-sm">VER PESQUISAS</button></div>
+                            <div class="col-md-2"><button type="button" class="btn btn-default btn-sm">RECUSAR</button></div>
+                        </div>
                     </div>
                 </div>
             </div>
             <!-- FIM TICKET -->
-            <!-- TESTE -->
-            <div class="panel panel-default">
-                <div class="panel-heading" role="tab" id="HeadTicket1235">
-                    <h4 class="panel-title">
-                        <span class="glyphicon glyphicon glyphicon-stop super" aria-hidden="true"></span>
-                        <span class="glyphicon glyphicon glyphicon-stop supervisor" aria-hidden="true"></span>
-                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyTicket1235" aria-expanded="true" aria-controls="BodyTicket1235">
-                            #1235 - 01/01/2016 - 12:00 - Assunto
-                        </a>
-                    </h4>
-                </div>
-                <div id="BodyTicket1235" class="panel-collapse collapse" role="tabpanel" aria-labelledby="HeadTicket1235">
-                    <div class="panel-body">
-                        <strong>
-                            01/01/2016 12:00 - <span class="super">FulanoT@LOGIT</span> - <span class="supervisor">FulanoT@LOGIT</span> :
-                        </strong>
-                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                    </div>
-                </div>
-            </div>
-            <!-- FIM TESTE -->
 
         </div>
     </div>
