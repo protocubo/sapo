@@ -19,3 +19,20 @@ abstract HaxeTimestamp(Float) from Float to Float {
 #end
 }
 
+enum Privilege {
+	PSurveyor;
+	PSupervisor;
+	PPhoneOperator;
+	PSuper;
+}
+
+abstract AccessName(String) to String {
+	public function new(name)
+		this = name;
+}
+
+abstract EmailAddress(String) to String {
+	public function new(email)
+		this = email;
+}
+
