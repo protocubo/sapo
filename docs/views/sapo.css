@@ -1,0 +1,79 @@
+﻿html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-top: 90px;
+    margin-bottom: 60px;
+    font-family: 'Roboto Condensed', sans-serif;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+    background-color: #EEE;
+}
+
+.btn {
+    width: 100%;
+}
+
+.navbar-nav > li > a {
+    font-size: 15px;
+}
+
+.barraderolagem {
+    overflow: auto;
+    max-height: 300px;
+}
+
+/*CORES GRUPOS*/
+
+.super {
+    color: #337AB7;
+}
+
+.telefonista {
+    color: #666A18;
+}
+
+.supervisor {
+    color: #B78433;
+}
+
+.pesquisador {
+    color: #C34F4A;
+}
+
+/*CORES STATUS ARRUMAR*/
+
+.aberta {
+    color: #999;
+}
+
+.completa {
+    color: #F7931E;
+}
+
+.verificada {
+    color: #FBB03B;
+}
+
+.ct {
+    color: #FBB03B;
+}
+
+.aceita {
+    color: #009245;
+}
+
+.recusada {
+    color: #C1272D;
+}
+
+.sobjudice {
+    color: #FBB03B;
+}
