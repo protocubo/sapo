@@ -1,4 +1,4 @@
-package db.statics;
+package sync.db.statics;
 import sys.db.Object;
 import sys.db.Types.SFloat;
 import sys.db.Types.SId;

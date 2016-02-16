@@ -1,11 +1,11 @@
-package;
+package sync;
 
-import db.Familia;
-import db.InitDB;
-import db.Modo;
-import db.Morador;
-import db.Ponto;
-import db.Session;
+import sync.db.Familia;
+import sync.db.InitDB;
+import sync.db.Modo;
+import sync.db.Morador;
+import sync.db.Ponto;
+import sync.db.Session;
 import haxe.Http;
 import haxe.Json;
 import haxe.remoting.HttpConnection;
@@ -15,7 +15,7 @@ import sys.db.Mysql;
 import sys.db.Sqlite;
 import sys.FileSystem;
 import sys.io.File;
-import db.statics.Statics;
+import sync.db.statics.Statics;
 
 /**
  * ...
@@ -23,7 +23,7 @@ import db.statics.Statics;
  */
 
  using Lambda;
-class Main 
+class MainSync 
 {
 	
 	static function main() 

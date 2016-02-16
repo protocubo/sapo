@@ -1,4 +1,4 @@
-package db;
+package sync.db;
 import sys.db.Object;
 import sys.db.Types;
 

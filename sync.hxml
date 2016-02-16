@@ -1,0 +1,6 @@
+-cp src
+-D spod_macro
+
+-neko bin/Sync.n
+-main sync.MainSync
+

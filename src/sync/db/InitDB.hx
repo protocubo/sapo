@@ -1,4 +1,4 @@
-package db;
+package sync.db;
 import haxe.Json;
 import sys.db.Connection;
 import sys.db.Manager;
