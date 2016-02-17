@@ -15,23 +15,34 @@ class Index {
 		Manager.cnx = null;
 		sys.FileSystem.deleteFile(Index.DBPATH);
 		dbInit();
+		
+		new SurveyStatus("aberta").insert();
+		new SurveyStatus("completa").insert();
+		new SurveyStatus("verificada").insert();
+		new SurveyStatus("CT").insert();
+		new SurveyStatus("aceita").insert();
+		new SurveyStatus("recusada").insert();
+		new SurveyStatus("sobjudice").insert();
 
 		var arthur = new User("arthur@sapo", "Arthur Dent");
 		var ford = new User("ford@sapo", "Ford Prefect");
 		arthur.insert();
 		ford.insert();
 
-		var survey1 = new Survey(ford, "Arthur's house");
-		var survey2 = new Survey(arthur, "Betelgeuse, or somewhere near that planet");
+		var survey1 = new Survey(ford, "Arthur's house", 945634);
+		var survey2 = new Survey(arthur, "Betelgeuse, or somewhere near that planet", 6352344);
 		survey1.insert();
 		survey2.insert();
 
-		var ticket1 = new Ticket(survey1, arthur);
+		var ticket1 = new Ticket(survey1, arthur, "Overpass???");
 		ticket1.insert();
 		new TicketMessage(ticket1, arthur, "Hey, I was distrought over they wanting to build an overpass over my house").insert();
-		var ticket2 = new Ticket(survey2, ford);
+		
+		var ticket2 = new Ticket(survey2, ford, "About Time...");
 		ticket2.insert();
-		new TicketMessage(ticket2, ford, "Don't panic!").insert();
+		new TicketMessage(ticket2, ford, "Time is an illusion, lunchtime doubly so. ").insert();
+
+		
 	}
 
 	static function dbInit()
@@ -42,7 +53,7 @@ class Index {
 		// later windows can't close the connection in wal mode...
 		// an issue with sqlite.ndll perhaps?
 		if (Sys.systemName() != "Windows") Manager.cnx.request("PRAGMA journal_mode=wal");
-		var managers:Array<Manager<Dynamic>> = [User.manager, Survey.manager, Ticket.manager, TicketMessage.manager];
+		var managers:Array<Manager<Dynamic>> = [User.manager, Survey.manager, Ticket.manager, TicketMessage.manager, SurveyStatus.manager];
 		for (m in managers)
 			if (!TableCreate.exists(m))
 				TableCreate.create(m);

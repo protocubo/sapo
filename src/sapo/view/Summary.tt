@@ -21,9 +21,11 @@
 	<!-- BUSCA -->
 	
 	<!-- TICKETS -->
-	(: for t in Ticket.manager.all() :)
-		(: Util.ticket() :)
-	(: end :)
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" style="margin-top: 60px;">
+		(: for t in Ticket.manager.all() :)
+			(: Util.ticket(t) :)
+		(: end :)
+	</div>
 	
 	
 	
