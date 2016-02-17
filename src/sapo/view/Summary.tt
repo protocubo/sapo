@@ -3,7 +3,9 @@
 (: static function render() :)
 <!DOCTYPE html>
 <html>
+<head>
 (: Util.head("SAPO [tink_template] – Summary") :)
+</head>
 <body>
 	(: Util.navbar() :)
 	
@@ -27,10 +29,7 @@
 		(: end :)
 	</div>
 	
-	
-	
-	
-	
+
 	<table>
 		<tr><td>#</td><td>Opened</td><td>Closed</td></tr>
 		(: for t in Ticket.manager.all() :)

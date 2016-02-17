@@ -23,9 +23,15 @@ class Index {
 		new SurveyStatus("aceita").insert();
 		new SurveyStatus("recusada").insert();
 		new SurveyStatus("sobjudice").insert();
+		
+		var au = new AccessLevel("super");
+		var at = new AccessLevel("telefonista");
+		var as = new AccessLevel("supervisor");
+		var ap = new AccessLevel("pesquisador");
+		au.insert(); at.insert(); as.insert(); ap.insert();
 
-		var arthur = new User("arthur@sapo", "Arthur Dent");
-		var ford = new User("ford@sapo", "Ford Prefect");
+		var arthur = new User("arthur@sapo", "Arthur Dent", ap);
+		var ford = new User("ford@sapo", "Ford Prefect", as);
 		arthur.insert();
 		ford.insert();
 
@@ -54,7 +60,7 @@ class Index {
 		// later windows can't close the connection in wal mode...
 		// an issue with sqlite.ndll perhaps?
 		if (Sys.systemName() != "Windows") Manager.cnx.request("PRAGMA journal_mode=wal");
-		var managers:Array<Manager<Dynamic>> = [User.manager, Survey.manager, Ticket.manager, TicketMessage.manager, SurveyStatus.manager];
+		var managers:Array<Manager<Dynamic>> = [User.manager, Survey.manager, Ticket.manager, TicketMessage.manager, SurveyStatus.manager, AccessLevel.manager];
 		for (m in managers)
 			if (!TableCreate.exists(m))
 				TableCreate.create(m);

@@ -8,11 +8,13 @@ class User extends sys.db.Object {
 	public var id:SId;
 	public var email:String;
 	public var name:String;
+	@:relation(access_id) public var accessLevel:AccessLevel;
 
-	public function new(email, name)
+	public function new(email, name, accessLevel)
 	{
 		this.email = email;
 		this.name = name;
+		this.accessLevel = accessLevel;
 		super();
 	}
 }
@@ -77,6 +79,17 @@ class TicketMessage extends sys.db.Object {
 		this.recipient = recipient;
 		this.text = text;
 		this.posted_at = now;
+		super();
+	}
+}
+
+class AccessLevel extends sys.db.Object 
+{
+	public var id:SId;
+	public var name:String;
+	public function new(status)
+	{
+		this.name = status;
 		super();
 	}
 }
