@@ -65,14 +65,16 @@ class TicketMessage extends sys.db.Object {
 	public var id:SId;
 	@:relation(ticket_id) public var ticket:Ticket;
 	@:relation(author_id) public var author:User;
+	@:relation(recipient_id) public var recipient:User;
 	public var text:String;
 	public var posted_at:HaxeTimestamp;
 
-	public function new(ticket, author, text, ?now)
+	public function new(ticket, author, recipient, text, ?now)
 	{
 		if (now == null) now = Date.now();
 		this.ticket = ticket;
 		this.author = author;
+		this.recipient = recipient;
 		this.text = text;
 		this.posted_at = now;
 		super();

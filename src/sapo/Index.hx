@@ -36,12 +36,13 @@ class Index {
 
 		var ticket1 = new Ticket(survey1, arthur, "Overpass???");
 		ticket1.insert();
-		new TicketMessage(ticket1, arthur, "Hey, I was distrought over they wanting to build an overpass over my house").insert();
+		new TicketMessage(ticket1, arthur, ford, "Hey, I was distrought over they wanting to build an overpass over my house").insert();
+		new TicketMessage(ticket1, ford, arthur, "Don't panic... don't panic...").insert();
 		
 		var ticket2 = new Ticket(survey2, ford, "About Time...");
 		ticket2.insert();
-		new TicketMessage(ticket2, ford, "Time is an illusion, lunchtime doubly so. ").insert();
-
+		new TicketMessage(ticket2, ford, arthur, "Time is an illusion, lunchtime doubly so. ").insert();
+		new TicketMessage(ticket2, arthur, ford, "Very deep. You should send that in to the Reader's Digest. They've got a page for people like you.").insert();
 		
 	}
 

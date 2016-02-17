@@ -1,3 +1,4 @@
+(: import sapo.Spod:)
 (: static function head(title:String) :)
 <head>
 	<!-- TITLE -->
@@ -101,18 +102,20 @@
 	<div id="BodyTicket(: ticket.id :)" class="panel-collapse collapse" role="tabpanel" aria-labelledby="HeadTicket(: ticket.id :)">
 		<div class="panel-body">
 			<div class="row">
+				(: for message in Spod.TicketMessage.manager.search($ticket == ticket) :)
 				<div class="col-md-7 barraderolagem">
 					<strong>
 						<!-- DATETIME + DE + PARA (class: super, telefonista, supervisor e pesquisador) -->
-						01/01/2016 12:00 - <span class="super">FulanoT@LOGIT</span> - <span class="supervisor">FulanoT@LOGIT</span> :
+						(: message.posted_at :) - <span class="super">(: message.author.name :)@LOGIT</span> - <span class="supervisor">(: message.recipient.name :)@LOGIT</span> :
 					</strong>
 					<!-- MENSAGEM -->
-					Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+					(: message.text :)
 				</div>
+				(: end :)							
 				<div class="col-md-5 barraderolagem">
 					<!-- DADOS DA PESQUISA -->
-					<p><b>Endereço:</b> (:survey.adress :) </p>
-					<p><b>Contato:</b> Marcelo - (11) 888888888 <b>Senha:</b> (:survey.code :)</p>
+					<p><b>Endereço:</b> (:ticket.survey.address :) </p>
+					<p><b>Contato:</b> Marcelo - (11) 888888888 <b>Senha:</b> (:ticket.survey.code :)</p>
 					<p><b>Moradores:</b></p>
 					<p>Maria (25): Residência - Trabalho - Residência</p>
 					<p><b>Conferência:</b> 3 carros</p>
