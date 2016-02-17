@@ -33,7 +33,7 @@ class Morador extends Object
 	public var quemResponde_id : SNull<SInt>;
 	public var situacaoFamiliar_id : SNull<SInt>;
 	public var atividadeMorador_id : SNull<SInt>;
-	public var possuiHabilitacao_id : SNull<SInt>;
+	public var possuiHabilitacao_id : SNull<SBool>;
 	public var portadorNecessidadesEspeciais_id : SNull<SInt>;
 	
 	public var motivoSemViagem_id : SNull<SInt>;

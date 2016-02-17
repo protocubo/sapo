@@ -13,9 +13,9 @@ class Session extends Object
 	public var tentativa_id : SNull<Int>;
 	
 	public var lastPageVisited : SNull<SString<255>>;
-	public var isValid : Int;
+	public var isValid : SBool;
 	
-	public var isRestored : SInt;
+	public var isRestored : SBool;
 	
 	public var date_create : SDateTime;
 	public var date_finished : SNull<SDateTime>;
