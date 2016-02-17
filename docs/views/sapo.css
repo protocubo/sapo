@@ -29,6 +29,16 @@ body {
     overflow: auto;
     max-height: 300px;
 }
+.bloco {
+    display: inline-block;
+    margin-right: 30px;
+    margin-top: 10px;
+}
+.viagem {
+    display: block;
+    margin-left: 194px;
+    margin-top: 10px;
+}
 
 /*CORES GRUPOS*/
 

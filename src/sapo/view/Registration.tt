@@ -67,7 +67,7 @@
 			<!-- LINHA: usuário, nome, e-mail, supervisor, editar, desativar -->
 			(: for user in Spod.User.manager.all() :)
 			<tr>
-				<td><b class="pesquisador">(:user.name:)@(:user.accessLevel.name:)</b></td>
+				<td><b class="pesquisador">(:user.name:)@(:user.group:)</b></td>
 				<td>(:user.name:)</td>
 				<td>(:user.email:)</td>
 				<td><b class="supervisor">ToDo</b></td>

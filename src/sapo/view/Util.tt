@@ -104,7 +104,7 @@
 				<div class="col-md-7 barraderolagem">
 					<strong>
 						<!-- DATETIME + DE + PARA (class: super, telefonista, supervisor e pesquisador) -->
-						(: message.posted_at :) - <span class="(: message.author.accessLevel.name:)">(: message.author.name :)@(: message.author.accessLevel.name:)</span> - <span class="(: message.recipient.accessLevel.name:)">(: message.recipient.name :)@(: message.recipient.accessLevel.name:)</span> :
+						(: message.posted_at :) - <span class="(: message.author.group.group_name:)">(: message.author.name :)@(: message.author.group.group_name:)</span> - <span class="(: message.recipient.group.group_name:)">(: message.recipient.name :)@(: message.recipient.group.group_name:)</span> :
 					</strong>
 					<!-- MENSAGEM -->
 					(: message.text :)

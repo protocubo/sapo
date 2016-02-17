@@ -3,6 +3,7 @@ package sapo;
 import haxe.web.Dispatch;
 import neko.Web;
 import sapo.Spod;
+import common.db.MoreTypes;
 import sys.db.*;
 
 class Index {
@@ -24,14 +25,13 @@ class Index {
 		new SurveyStatus("recusada").insert();
 		new SurveyStatus("sobjudice").insert();
 		
-		var au = new AccessLevel("super");
-		var at = new AccessLevel("telefonista");
-		var as = new AccessLevel("supervisor");
-		var ap = new AccessLevel("pesquisador");
-		au.insert(); at.insert(); as.insert(); ap.insert();
 
-		var arthur = new User("arthur@sapo", "Arthur Dent", ap);
-		var ford = new User("ford@sapo", "Ford Prefect", as);
+		var superGroup = new Group(new AccessName("super"), PSuper);
+		superGroup.insert();
+
+		var arthur = new User(new AccessName("arthur"), superGroup, "Arthur Dent", new EmailAddress("arthur@sapo"));
+		var ford = new User(new AccessName("ford"), superGroup, "Ford Prefect", new EmailAddress("ford@sapo"));
+
 		arthur.insert();
 		ford.insert();
 
@@ -60,7 +60,7 @@ class Index {
 		// later windows can't close the connection in wal mode...
 		// an issue with sqlite.ndll perhaps?
 		if (Sys.systemName() != "Windows") Manager.cnx.request("PRAGMA journal_mode=wal");
-		var managers:Array<Manager<Dynamic>> = [User.manager, Survey.manager, Ticket.manager, TicketMessage.manager, SurveyStatus.manager, AccessLevel.manager];
+		var managers:Array<Manager<Dynamic>> = [User.manager, Survey.manager, Ticket.manager, TicketMessage.manager, SurveyStatus.manager, Group.manager];
 		for (m in managers)
 			if (!TableCreate.exists(m))
 				TableCreate.create(m);
