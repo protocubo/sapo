@@ -1,16 +1,39 @@
 package sapo;
 
+// TODO move surveys (and related stuff) and tickets (and related stuff) to
+// separated spod modules
+
 import common.db.MoreTypes;
 import sys.db.Types;
 
+// necessary only because we need mentions to groups
+@:index(group_name, unique)
+class Group extends sys.db.Object {
+	public var id:SId;
+	public var group_name:AccessName;
+	public var privilege:SEnum<Privilege>;
+
+	public function new(group_name, privilege)
+	{
+		this.group_name = group_name;
+		this.privilege = privilege;
+		super();
+	}
+}
+
+@:index(user_name, unique)
 @:index(email, unique)
 class User extends sys.db.Object {
 	public var id:SId;
-	public var email:String;
+	public var user_name:AccessName;
+	@:relation(group_id) public var group:Group;
 	public var name:String;
+	public var email:EmailAddress;
 
-	public function new(email, name)
+	public function new(user_name, group, name, email)
 	{
+		this.user_name = user_name;
+		this.group = group;
 		this.email = email;
 		this.name = name;
 		super();

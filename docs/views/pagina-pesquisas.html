@@ -1,0 +1,192 @@
+﻿<!DOCTYPE html>
+
+<html lang="pt-br">
+
+<head>
+    <meta charset="utf-8" />
+
+    <!-- TITLE -->
+    <title></title>
+
+    <!-- JQUERY -->
+    <script src="https://code.jquery.com/jquery-2.2.0.min.js" crossorigin="anonymous"></script>
+
+    <!-- BOOTSTRAP -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+    <!-- GOOGLE FONTS ROBOTO CONDENSED -->
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400,700,300italic,400italic,700italic' rel='stylesheet' type='text/css'>
+
+    <!-- SAPO -->
+    <link href="sapo.css" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <div class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button><img src="sapo_logo.png" style="height:50px;">
+            </div>
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">SAPO</a></li>
+                    <li><a href="#">TICKETS</a></li> <!-- @LOGIT @Telefonista @Supervisor -->
+                    <li><a href="#">PESQUISAS</a></li> <!-- @LOGIT @Telefonista @Supervisor -->
+                    <li><a href="#">SUMÁRIO</a></li> <!-- @LOGIT @Telefonista @Supervisor -->
+                    <li><a href="#">PAGAMENTOS</a></li> <!-- @Pesquisador -->
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">ADMINISTRAÇÃO <b class="caret"></b></a> <!-- @LOGIT -->
+                        <ul class="dropdown-menu">
+                            <li><a href="#">CADASTRO</a></li>
+                            <li><a href="#">PAGAMENTOS</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <!-- (class: super, telefonista, supervisor e pesquisador) -->
+                    <li><a><b class="super">Nome@Grupo</b></a></li> <!-- pós login -->
+                    <li><a href="#">Sair</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- PESQUISAS -->
+    <div class="container">
+
+        <!-- HEAD -->
+        <h2>TICKETS</h2>
+        <hr />
+
+        <!-- FILTROS -->
+        <h3>Filtros:</h3>
+        <div class="row">
+            <div class="col-md-2"><h4>GRUPO:</h4></div>
+            <div class="col-md-2">
+                <select class="form-control">
+                    <option>Selecione</option>
+                    <option>Pesquisador</option>
+                    <option>Supervisor</option>
+                </select>
+            </div>
+            <div class="col-md-2"><h4>USUÁRIO</h4></div>
+            <div class="col-md-2">
+                <select class="form-control">
+                    <option>Selecione</option>
+                    <!-- pegar grupo: listar usuários da lista anterior -->
+                </select>
+            </div>
+            <div class="col-md-2"><h4>VÁLIDA</h4></div>
+            <div class="col-md-2">
+                <select class="form-control">
+                    <option>Sim</option>
+                    <option>Não</option>
+                    <option>Todas</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2"><h4>PAGA</h4></div>
+            <div class="col-md-2">
+                <select class="form-control">
+                    <option>Todas</option>
+                    <option>Não</option>
+                    <option>Sim</option>
+                </select>
+            </div>
+            <div class="col-md-2"><h4>STATUS</h4></div>
+            <div class="col-md-2">
+                <select class="form-control">
+                    <option>Abertas</option>
+                    <option>Completas</option>
+                    <option>Verificadas</option>
+                    <option>Aceitas</option>
+                </select>
+            </div>
+            <div class="col-md-2 col-md-offset-2">
+                <button type="button" class="btn btn-primary">APLICAR</button>
+            </div>
+        </div>
+        <hr />
+
+        <!-- BUSCA -->
+        <h3>Busca:</h3>
+        <div class="row">
+            <div class="col-md-2"><h4>Nº DA PESQUISA</h4></div>
+            <div class="col-md-2">
+                <input type="text" class="form-control" placeholder="Número da Pesquisa">
+            </div>
+            <div class="col-md-2 col-md-offset-6">
+                <button type="button" class="btn btn-primary">BUSCAR</button>
+            </div>
+        </div>
+        <hr />
+
+        <!-- PESQUISAS -->
+        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" style="margin-top: 60px;">
+
+            <!-- PESQUISA -->
+            <div class="panel panel-default">
+                <!-- HEAD PESQUISA : id = HeadPesquisa1234 -->
+                <div class="panel-heading" role="tab" id="HeadPesquisa1234">
+                    <div class="row">
+                        <div class="col-md-6 panel-title">
+                            <!-- Nº do Ticket, Data da criação do Ticket, Hora da criação do Ticket, Assunto : href="#BodyPesquisa1234" , aria-controls="BodyPesquisa1234" -->
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyPesquisa1234" aria-expanded="true" aria-controls="BodyPesquisa1234">
+                                Pesquisa #12345 - 01/01/2016 - <b class="pesquisador">Nome</b> - <b class="supervisor">Fulano</b>
+                            </a>
+                        </div>
+                        <div class="col-md-5 panel-title">
+                            <!-- Número da peqsuisa, data da pesquisa, Nome do pesquisador (class: super, telefonista, supervisor e pesquisador) -->
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyPesquisa1234" aria-expanded="true" aria-controls="BodyPesquisa1234">
+                                R. Itamirindiba, 3 - São Paulo/SP 
+                            </a>
+                        </div>
+                        <div class="col-md-1 panel-title">
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyPesquisa1234" aria-expanded="true" aria-controls="BodyPesquisa1234">
+                                <!-- STATUS (class: aberta, completa, verificada, CT, aceita, recusada, sobjudice) -->
+                                <b class="completa">COMPLETA</b>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- BODY TICKET : id="BodyPesquisa1234" , aria-labelledby="HeadPesquisa1234" -->
+                <div id="BodyPesquisa1234" class="panel-collapse collapse" role="tabpanel" aria-labelledby="HeadPesquisa1234">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12 barraderolagem">
+                                <!-- DADOS DA PESQUISA -->
+                                <p><b>Endereço:</b> Lorem Ipsum</p>
+                                <p><b>Contato:</b> Marcelo - (11) 888888888 <b>Senha:</b> 9841321687</p>
+                                <p><b>Moradores:</b></p>
+                                <p>Maria (25): Residência - Trabalho - Residência</p>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 30px;">
+                            <div class="col-md-2 col-md-offset-10"><button type="button" class="btn btn-default btn-sm">VER PESQUISAS</button></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- FIM TICKET -->
+
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <h3 class="text-muted">SAPO OD DF 2016</h3>
+        </div>
+    </footer>
+
+</body>
+</html>
