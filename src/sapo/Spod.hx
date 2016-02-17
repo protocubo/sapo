@@ -29,6 +29,7 @@ class User extends sys.db.Object {
 	@:relation(group_id) public var group:Group;
 	public var name:String;
 	public var email:EmailAddress;
+	// public var password:Password;
 
 	public function new(user_name, group, name, email)
 	{

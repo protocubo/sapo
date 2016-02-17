@@ -1,12 +1,26 @@
 package common.crypto;
 
+import haxe.io.*;
+
 class StdRandomInput extends Input {
-	override public function readByte()
+	override public inline function readByte()
 		return Std.random(256);
 }
 
-class Random {
-	static var gen:haxe.io.Input;
+class Random extends Input {
+	static var gen:Input;
+
+	override public inline function readByte()
+		return gen.readByte();
+
+	public function readHex(len:Int):String
+	{
+		var b = new Bytes(len);
+		var got = 0;
+		while (got < len)
+			got += readBytes(b, got, len - got);
+		return b.toHex();
+	}
 
 	static function __init__()
 	{
