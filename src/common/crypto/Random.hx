@@ -15,19 +15,20 @@ class Random extends Input {
 	function new(gen:Input)
 		this.gen = gen;
 
-	public static var global(default,null):Input;
+	public static var global(default,null):Random;
 
 	override public inline function readByte()
 		return gen.readByte();
 
-	public function readHex(len:Int):String
+	public function readSimpleBytes(len:Int):Bytes
 	{
 		var b = Bytes.alloc(len);
-		var got = 0;
-		while (got < len)
-			got += readBytes(b, got, len - got);
-		return b.toHex();
+		gen.readFullBytes(b, 0, len);
+		return b;
 	}
+
+	public function readHex(len:Int):String
+		return readSimpleBytes(len).toHex();
 
 	static function __init__()
 	{

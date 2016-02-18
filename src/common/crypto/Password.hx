@@ -1,10 +1,10 @@
 package common.crypto;
 
-import haxe.io.Bytes;
 import haxe.crypto.*;
+import haxe.io.Bytes;
 
 // use the best you can
-enum PasswordStorage {
+enum PasswordStore {
 	// for testing purposes only
 	PSPlain;
 	// Dumb (iterated) salted SHA1:
@@ -32,6 +32,33 @@ abstract Password(String) to String {
 		return res;
 	}
 
+	static function saltedSha(sha:Bytes->Bytes, plain:Bytes, salt:Bytes, it:Int):String
+	{
+		var hash = plain;
+		do {
+			hash = sha(concatBytes(hash, salt));
+		} while (--it > 0);
+		return hash.toHex();
+	}
+
+	static function pwdString(plain:Bytes, store:PasswordStore)
+	{
+		return switch store {
+		case PSSaltedSha1(salt, it):
+			'sha1$$$it$$${salt.toHex()}$$${saltedSha(Sha1.make, plain, salt, it)}';
+		case PSSaltedSha256(salt, it):
+			'sha256$$$it$$${salt.toHex()}$$${saltedSha(Sha256.make, plain, salt, it)}';
+		case PSPlain:
+			'plain$$${plain.toString()}';
+		}
+	}
+
+	static function decodeHex(s:String)
+	{
+		var dec = new BaseCode(Bytes.ofString("0123456789abcdef"));
+		return dec.decodeBytes(Bytes.ofString(s));
+	}
+
 	static function slowStringEquals(a:String, b:String)
 	{
 		var len = a.length;
@@ -42,15 +69,6 @@ abstract Password(String) to String {
 		return res;
 	}
 
-	static function saltedSha(sha:Bytes->Bytes, plain:Bytes, salt:Bytes, it:Int):String
-	{
-		var hash = null;
-		do {
-			hash = sha(concatBytes(hash, salt));
-		} while (--it > 0);
-		return hash.toHex();
-	}
-
 	public function matches(plain:String)
 	{
 		if (this == null) return false;
@@ -58,9 +76,9 @@ abstract Password(String) to String {
 		var pbytes = Bytes.ofString(plain);
 		return switch this.split("$") {
 		case ["sha1", it, salt, hash]:
-			slowStringEquals(hash, saltedSha(Sha1.make, pbytes, Bytes.ofString(salt), Std.parseInt(it)));
+			slowStringEquals(hash, saltedSha(Sha1.make, pbytes, decodeHex(salt), Std.parseInt(it)));
 		case ["sha256", it, salt, hash]:
-			slowStringEquals(hash, saltedSha(Sha256.make, pbytes, Bytes.ofString(salt), Std.parseInt(it)));
+			slowStringEquals(hash, saltedSha(Sha256.make, pbytes, decodeHex(salt), Std.parseInt(it)));
 		case ["plain", p]:
 			slowStringEquals(p, plain);
 		case _:
@@ -72,27 +90,14 @@ abstract Password(String) to String {
 	public function new(pwd)
 		this = pwd;
 
-	public static function make(plain:String)
+	public static function make(plain:String, ?store:PasswordStore)
 	{
-		// viable (not sensible) defaults
-		var salt = Bytes.alloc(16);
-		var saltLen = 0;
-		while (saltLen < 16)
-			saltLen += Random.global.readBytes(salt, 0, 16 - saltLen);
-		var store = PSSaltedSha256(salt, 42);
-		return new Password(makeRaw(Bytes.ofString(plain), store));
-	}
-
-	public static function makeRaw(plain:Bytes, store:PasswordStorage)
-	{
-		return switch store {
-		case PSSaltedSha1(salt, it):
-			'sha1$$$it$$${salt.toHex()}$$${saltedSha(Sha1.make, plain, salt, it)}';
-		case PSSaltedSha256(salt, it):
-			'sha256$$$it$$${salt.toHex()}$$${saltedSha(Sha256.make, plain, salt, it)}';
-		case PSPlain:
-			'plain$$${plain.toHex()}';
+		if (store == null) {
+			// viable (not sensible) defaults
+			var salt = Random.global.readSimpleBytes(5);
+			store = PSSaltedSha256(salt, 42);
 		}
+		return new Password(pwdString(Bytes.ofString(plain), store));
 	}
 }
 
