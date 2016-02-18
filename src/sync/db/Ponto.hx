@@ -36,6 +36,7 @@ class Ponto extends Object
 	public var complement_two_id : SNull<SInt>;
 	public var complement2_str : SNull<SString<255>>;
 	public var ref_id : SNull<SInt>;
+	public var ref_str : SNull<SString<255>>;
 	
 	public var motivoID : SInt;
 	public var motivoOutraPessoaID : SNull<SInt>;

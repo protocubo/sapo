@@ -18,6 +18,7 @@ import sys.FileSystem;
 import sys.io.File;
 import sync.db.statics.Statics;
 
+
 /**
  * ...
  * @author Caio
@@ -26,9 +27,14 @@ import sync.db.statics.Statics;
  using Lambda;
 class MainSync 
 {
+
 	public static var targetCnx : Connection;
 	static function main() 
 	{
+		
+		InitDB.run();
+		Manager.cnx.startTransaction();
+		
 		if (!FileSystem.exists("./private/cnxstring"))
 		{
 			trace("No cnxstring file!");
@@ -45,8 +51,24 @@ class MainSync
 		var serverTimestamp = Date.now();
 		#end
 		
-		InitDB.run();
-		Manager.cnx.startTransaction();
+		//Ref Tables -> key - Table, value: OldVal<NewVal> onde OldVal é o ID da tabela de ref. do Anderson e o NewVal é o meu valor de enum;
+		var refValue = new Map<String, Map<Int,Int>>();
+		/*for (c in CompileTime.getAllClasses("sync.db.statics", true, EnumTable))
+		{
+			$type(c);
+			var tempmap = new Map<Int,Int>();
+			
+			var res = c.manager.all().map(function(v) {
+				return [v.val , v.id];
+			});
+			for (r in res) 
+			{
+				tempmap.set(r[0], r[1]);
+			}
+			var name = Type.getClassName(c).split("_")[0];
+			refValue.set(name, tempmap);
+		}*/
+		
 		
 		
 		// Query -> ../../extras/main.sql
@@ -151,11 +173,12 @@ class MainSync
 						case "numeroResidentes":
 							new_familia.numeroResidentes = f.numeroResidentes;
 						case "ocupacaoDomicilio_id":
-							new_familia.ocupacaoDomicilio_id = f.ocupacaoDomicilio_id;
+							new_familia.ocupacaoDomicilio =  Macros.getStaticEnum(OcupacaoDomicilio, f.ocupacaoDomicilio_id);
 						case "condicaoMoradia_id":
-							new_familia.condicaoMoradia_id = f.condicaoMoradia_id;
+							new_familia.condicaoMoradia = Macros.getStaticEnum(CondicaoMoradia, f.condicaoMoradia_id);
 						case "tipoImovel_id":
-							new_familia.tipoImovel_id = f.tipoImovel_id;
+							new_familia.tipoImovel = Macros.getStaticEnum(TipoImovel, f.tipoImovel_id);
+						//TODO: Perguntar pro Anderson WTH is going on nesse campo (existe em session)
 						case "tentativa_id":
 							new_familia.tentativa_id = f.tentativa_id;
 						case "banheiros":
@@ -169,17 +192,17 @@ class MainSync
 						case "motos":
 							new_familia.motos = f.motos;
 						case "aguaEncanada_id":
-							new_familia.aguaEncanada_id = f.aguaEncanada_id;
+							new_familia.aguaEncanada =  Macros.getStaticEnum(AguaEncanada, f.aguaEncanada_id);
 						case "ruaPavimentada_id":
-							new_familia.ruaPavimentada_id = f.ruaPavimentada_id;
+							new_familia.ruaPavimentada_id = (f.ruaPavimentada_id == 1);
 						case "vagaPropriaEstacionamento_id":
-							new_familia.vagaPropriaEstacionamento_id = f.vagaPropriaEstacionamento_id;
+							new_familia.vagaPropriaEstacionamento_id = (f.vagaPropriaEstacionamento_id == 3) ? null : (f.vagaPropriaEstacionamento_id == 1);
 						case "anoVeiculoMaisRecente_id":
-							new_familia.anoVeiculoMaisRecente_id = f.anoVeiculoMaisRecente_id;
+							new_familia.anoVeiculoMaisRecente = Macros.getStaticEnum(AnoVeiculo, f.anoVeiculoMaisRecente_id);
 						case "empregadosDomesticos_id":
-							new_familia.empregadosDomesticos_id = f.empregadosDomesticos_id;
+							new_familia.empregadosDomesticos = Macros.getStaticEnum(Empregado, f.empregadosDomesticos_id);
 						case "tvCabo_id":
-							new_familia.tvCabo_id = f.tvCabo_id;
+							new_familia.tvCabo = (f.tvCabo_id != 3) ? (f.tvCabo == 1) : null;
 						case "editedNumeroResidentes":
 							new_familia.editedNumeroResidentes = f.editedNumeroResidentes;
 						case "editsNumeroResidentes":
@@ -189,9 +212,9 @@ class MainSync
 						case "telefoneContato":
 							new_familia.telefoneContato = f.telefoneContato;
 						case "rendaDomiciliar_id":
-							new_familia.rendaDomiciliar_id = f.rendaDomiciliar_id;
+							new_familia.rendaDomiciliar = Macros.getStaticEnum(Renda, f.rendaDomiciliar_id);
 						case "recebeBolsaFamilia_id":
-							new_familia.recebeBolsaFamilia_id = f.recebeBolsaFamilia_id;
+							new_familia.recebeBolsaFamilia = (f.recebeBolsaFamilia_id == 1);
 						case "codigoReagendamento":
 							new_familia.codigoReagendamento = f.codigoReagendamento;
 						case "gps_id":
@@ -339,9 +362,11 @@ class MainSync
 								new_point.tempo_saida = p.tempo_saida;
 							case "tempo_chegada":
 								new_point.tempo_chegada = p.tempo_chegada;
+							case "ref_str":
+								new_point.ref_str = p.ref_str;
 							case "copiedFrom_id":
 								new_point.copiedFrom_id = p.copiedFrom_id;
-							case "gps_id", "anterior_id", "posterior_id", "ordem", "city_str", "regadm_str", "street_str", "complement_str", "complement_two_str", "ref_str":
+							case "gps_id", "anterior_id", "posterior_id", "ordem", "city_str", "regadm_str", "street_str", "complement_str", "complement_two_str":
 								continue;
 							default:
 								trace(f);
@@ -496,5 +521,7 @@ class MainSync
 			throw e;
 		}
 		http.request();
+		
 	}
+
 }

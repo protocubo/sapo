@@ -1,6 +1,6 @@
 -cp src
 -D spod_macro
-
+-lib compiletime
 -neko bin/Sync.n
 -main sync.MainSync
 
