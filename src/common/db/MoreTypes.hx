@@ -1,7 +1,5 @@
 package common.db;
 
-import common.crypto.Password;
-
 abstract HaxeTimestamp(Float) from Float to Float {
 	inline function new(t)
 		this = t;

@@ -3,6 +3,7 @@ package sapo;
 // TODO move surveys (and related stuff) and tickets (and related stuff) to
 // separated spod modules
 
+import common.crypto.Password;
 import common.db.MoreTypes;
 import sys.db.Types;
 
@@ -29,7 +30,7 @@ class User extends sys.db.Object {
 	@:relation(group_id) public var group:Group;
 	public var name:String;
 	public var email:EmailAddress;
-	// public var password:Password;
+	public var password:Null<Password>;
 
 	public function new(user_name, group, name, email)
 	{

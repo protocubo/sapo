@@ -1,0 +1,9 @@
+-cp src
+-lib utest
+
+--each
+
+-neko bin/unit-tests.n
+-main unit.Main
+-cmd neko bin/unit-tests.n
+
