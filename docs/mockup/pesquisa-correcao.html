@@ -1,0 +1,539 @@
+﻿<!DOCTYPE html>
+
+<html lang="pt-br">
+
+<head>
+    <meta charset="utf-8" />
+
+    <!-- TITLE -->
+    <title></title>
+
+    <!-- JQUERY -->
+    <script src="https://code.jquery.com/jquery-2.2.0.min.js" crossorigin="anonymous"></script>
+
+    <!-- BOOTSTRAP -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+    <!-- GOOGLE FONTS ROBOTO CONDENSED -->
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400,700,300italic,400italic,700italic' rel='stylesheet' type='text/css'>
+
+    <!-- SAPO -->
+    <link href="sapo.css" rel="stylesheet" type="text/css" />
+
+
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <div class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button><img src="sapo_logo.png" style="height:50px;">
+            </div>
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="index.html">SAPO</a></li>
+                    <li><a href="ticket.html">TICKETS</a></li> <!-- @LOGIT @Telefonista @Supervisor -->
+                    <li class="active"><a href="pesquisas.html">PESQUISAS</a></li> <!-- @LOGIT @Telefonista @Supervisor -->
+                    <li class="dropdown">
+                        <!-- @LOGIT @Telefonista @Supervisor -->
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">SUMÁRIO <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="sumario.html">GERAL:STATUS</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">ADMINISTRAÇÃO <b class="caret"></b></a> <!-- @LOGIT -->
+                        <ul class="dropdown-menu">
+                            <li><a href="cadastro.html">CADASTRO</a></li>
+                            <li><a href="pagar.html">PAGAMENTOS</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <!-- (class: super, telefonista, supervisor e pesquisador) -->
+                    <li><a><b class="super">MartimRufino@CT</b></a></li> <!-- pós login -->
+                    <li><a href="index.html">Sair</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- PESQUISA -->
+    <div class="container">
+
+        <!-- HEAD -->
+        <div class="row">
+            <div class="col-md-3">
+                <h2>
+                    PESQUISA #846
+                </h2>
+            </div>
+            <div class="col-md-3">
+                <h2>TICKET (A:1 / F:3)</h2>
+            </div>
+            <div class="col-md-3 text-right">
+                <h2>
+                    <a href="#"><span class="glyphicon glyphicon-print" aria-hidden="true"></span></a>
+                </h2>
+            </div>
+            <div class="col-md-3 text-right">
+                <h2>
+                    <span class="glyphicon glyphicon-earphone" aria-hidden="true"></span>
+                    <span class="glyphicon glyphicon-minus supervisor" aria-hidden="true"></span>
+                    <span class="glyphicon glyphicon-ok telefonista" aria-hidden="true"></span>
+                    <span class="glyphicon glyphicon-remove super" aria-hidden="true"></span>
+                </h2>
+            </div>
+        </div>
+        <hr />
+
+        <!-- ACTIONS -->
+
+        <div class="row">
+
+            <div class="col-md-2 col-md-offset-2">
+                <a href="pesquisa.html" class="btn btn-danger">CORRIGIR</a>
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#pesquisa_ticket">ABRIR TICKET</button>
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-warning">VER TICKETS</button>
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#pesquisa_status">MUDAR STATUS</button>
+            </div>
+        </div>
+        <hr />
+
+        <div class="row">
+            <div class="col-md-12">
+                <h3><span class="glyphicon glyphicon-file" aria-hidden="true"></span> INFORMAÇÕES DA PESQUISA</h3>
+                <div class="bloco">
+                    <b>1ºVisita:</b> 17/03/2016
+                </div>
+                <div class="bloco">
+                    <b>Completada:</b> 17/03/2016
+                </div>
+                <div class="bloco">
+                    <b>Senha: </b>ALNVD86960
+                </div>
+                <div class="bloco">
+                    <b class="pesquisador">Pesquisador:</b> Filipe Horácio
+                </div>
+                <div class="bloco">
+                    <b class="supervisor">Supervisor:</b> Rúben Fabricio
+                </div>
+
+
+            </div>
+        </div>
+        <hr />
+
+        <!-- BODY - DOMICÍLIO -->
+        <div class="row">
+            <div class="col-md-12">
+                <h3><span class="glyphicon glyphicon-home" aria-hidden="true"></span> DOMICÍLIO / FAMÍLIA</h3>
+
+                <!-- BLOCK - botão de edit, <b>campo, info do campo -->
+                <div class="bloco">
+                    <b>Endereço:</b> SCLN 214 BL. A LJ. 9/11 - Asa Norte, Brasília
+                </div>
+                <div class="bloco">
+                    <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                    <b>Número de residentes:</b> 2
+                </div>
+                <div class="bloco">
+                    <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                    <b>Tipo de ocupação do Domicílio:</b> Unifamiliar
+                </div>
+                <div class="bloco">
+                    <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                    <b>Condições de Moradia:</b> Própria
+                </div>
+                <div class="bloco">
+                    <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                    <b>Tipo de Imóvel:</b> Apartamento
+                </div>
+                <div class="bloco">
+                    <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                    <b>Água encanada:</b> Sim, em pelo menos um dos cômodos
+                </div>
+                <div class="bloco">
+                    <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                    <b>Rua pavimentada:</b> Terra, cascalho
+                </div>
+                <div class="bloco">
+                    <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                    <b>Empregados domésticos:</b> Sim, mensalista
+                </div>
+                <div class="bloco">
+                    <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                    <b>TV a Cabo/por assinatura:</b> Possui
+                </div>
+                <div class="bloco">
+                    <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                    <b>Quantidade de banheiros:</b> 1
+                </div>
+                <div class="bloco">
+                    <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                    <b>Quantidade de quartos:</b> 1
+                </div>
+                <div class="bloco">
+                    <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                    <b>Número de Automóveis:</b>  1
+                </div>
+                <div class="bloco">
+                    <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                    <b>Ano do Automóvel mais novo:</b>  2005/2009
+                </div>
+                <div class="bloco">
+                    <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                    <b>Vaga própria para estacionamento:</b>  Possui
+                </div>
+                <div class="bloco">
+                    <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                    <b>Número de Motocicletas:</b> 1
+                </div>
+                <div class="bloco">
+                    <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                    <b>Número de Bicicletas:</b> 1
+                </div>
+
+                <!-- FIM DO BLOCK -->
+
+            </div>
+        </div>
+        <hr />
+
+        <!-- BODY - MORADOR -->
+        <div class="row">
+            <div class="col-md-12">
+                <h3>
+                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                    MORADOR / Maria (25)
+                </h3>
+
+                <!-- BLOCK - botão de edit, <b>campo, info do campo -->
+                <div class="bloco">
+                    <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                    <b>Nome:</b> Maria
+                </div>
+                <div class="bloco">
+                    <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                    <b>Quem está respondendo:</b> Maria
+                </div>
+                <div class="bloco">
+                    <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                    <b>Situação familiar:</b>  Pessoa responsável
+                </div>
+                <div class="bloco">
+                    <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                    <b>Idade:</b>  23 a 28 anos
+                </div>
+                <div class="bloco">
+                    <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                    <b>Sexo:</b> Feminino
+                </div>
+                <div class="bloco">
+                    <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                    <b>Possui habilitação:</b> Não
+                </div>
+                <div class="bloco">
+                    <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                    <b>Grau de instrução:</b>  2º Grau
+                </div>
+                <div class="bloco">
+                    <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                    <b>Atividade principal:</b> Comércio
+                </div>
+                <div class="bloco">
+                    <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                    <b>Possui necessidades especiais:</b>  Não se aplica
+                </div>
+                <!-- FIM DO BLOCK -->
+
+                <hr />
+
+                <div class="viagem">
+                    <p>
+                        <a href="#" style="display:none;"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                        <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                        <b><span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Ponto 1 (Residência):</b> SCLN 214 BL. A LJ. 9/11 - Asa Norte, Brasília
+                    </p>
+                    <p>
+                        <a href="#" style="display:none;"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                        <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                        <b><span class="glyphicon glyphicon-time" aria-hidden="true"></span> Saída:</b> 8:00
+                    </p>
+                    <p>
+                        <a href="#" style="display:none;"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                        <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                        <b><span class="glyphicon glyphicon-transfer" aria-hidden="true"></span> Modo (Ônibus convencional):</b> Linha(0.030) - Dinheiro (Não Sabe)
+                    </p>
+                    <p>
+                        <a href="#" style="display:none;"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                        <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                        <b><span class="glyphicon glyphicon-transfer" aria-hidden="true"></span> Modo (Ônibus convencional):</b>  Linha(0.029) - Dinheiro (Não Sabe)
+                    </p>
+                    <p>
+                        <a href="#" style="display:none;"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                        <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                        <b><span class="glyphicon glyphicon-time" aria-hidden="true"></span> Chegada:</b> 8:30
+                    </p>
+                    <p>
+                        <a href="#" style="display:none;"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                        <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                        <b><span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Ponto 2 (Trabalho):</b> Quadra SGAS 915 Ed Advance, Lt 70 A S 346 - Asa Sul - Brasília
+                    </p>
+                    <p>
+                        <a href="#" style="display:none;"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                        <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                        <b><span class="glyphicon glyphicon-time" aria-hidden="true"></span> Saída:</b> 17:00
+                    </p>
+                    <p>
+                        <a href="#" style="display:none;"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                        <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                        <b><span class="glyphicon glyphicon-transfer" aria-hidden="true"></span> Modo (Ônibus convencional):</b> Linha(0.030) - Dinheiro (Não Sabe)
+                    </p>
+                    <p>
+                        <a href="#" style="display:none;"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                        <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                        <b><span class="glyphicon glyphicon-transfer" aria-hidden="true"></span> Modo (Ônibus convencional):</b>  Linha(0.029) - Dinheiro (Não Sabe)
+                    </p>
+                    <p>
+                        <a href="#" style="display:none;"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                        <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                        <b><span class="glyphicon glyphicon-time" aria-hidden="true"></span> Chegada:</b> 17:40
+                    </p>
+                    <p>
+                        <a href="#" style="display:none;"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                        <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                        <b><span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Ponto 3 (Residência):</b> SCLN 214 BL. A LJ. 9/11 - Asa Norte, Brasília
+                    </p>
+                </div>
+            </div>
+        </div>
+        <hr />
+
+        <!-- BODY - MORADOR -->
+        <div class="row">
+            <div class="col-md-12">
+                <h3>
+                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                    MORADOR / João (27)
+                </h3>
+
+                <!-- BLOCK - botão de edit, <b>campo, info do campo -->
+                <div class="bloco">
+                    <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                    <b>Nome:</b> João
+                </div>
+                <div class="bloco">
+                    <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                    <b>Quem está respondendo:</b> Maria
+                </div>
+                <div class="bloco">
+                    <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                    <b>Situação familiar:</b>  Pessoa responsável
+                </div>
+                <div class="bloco">
+                    <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                    <b>Idade:</b>  23 a 28 anos
+                </div>
+                <div class="bloco">
+                    <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                    <b>Sexo:</b> Masculino
+                </div>
+                <div class="bloco">
+                    <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                    <b>Possui habilitação:</b> Sim
+                </div>
+                <div class="bloco">
+                    <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                    <b>Grau de instrução:</b>  2º Grau
+                </div>
+                <div class="bloco">
+                    <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                    <b>Atividade principal:</b> Comércio
+                </div>
+                <div class="bloco">
+                    <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                    <b>Possui necessidades especiais:</b>  Não se aplica
+                </div>
+                <!-- FIM DO BLOCK -->
+
+                <hr />
+
+                <div class="viagem">
+                    <p>
+                        <a href="#" style="display:none;"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                        <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                        <b><span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Ponto 1 (Residência):</b> SCLN 214 BL. A LJ. 9/11 - Asa Norte, Brasília
+                    </p>
+                    <p>
+                        <a href="#" style="display:none;"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                        <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                        <b><span class="glyphicon glyphicon-time" aria-hidden="true"></span> Saída:</b> 8:00
+                    </p>
+                    <p>
+                        <a href="#" style="display:none;"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                        <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                        <b><span class="glyphicon glyphicon-transfer" aria-hidden="true"></span> Modo (Ônibus convencional):</b> Linha(0.030) - Dinheiro (Não Sabe)
+                    </p>
+                    <p>
+                        <a href="#" style="display:none;"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                        <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                        <b><span class="glyphicon glyphicon-transfer" aria-hidden="true"></span> Modo (Ônibus convencional):</b>  Linha(0.029) - Dinheiro (Não Sabe)
+                    </p>
+                    <p>
+                        <a href="#" style="display:none;"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                        <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                        <b><span class="glyphicon glyphicon-time" aria-hidden="true"></span> Chegada:</b> 8:30
+                    </p>
+                    <p>
+                        <a href="#" style="display:none;"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                        <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                        <b><span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Ponto 2 (Trabalho):</b> Quadra SGAS 486 Ed Advance, Lt 70 A S 346 - Asa Sul - Brasília
+                    </p>
+                    <p>
+                        <a href="#" style="display:none;"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                        <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                        <b><span class="glyphicon glyphicon-time" aria-hidden="true"></span> Saída:</b> 17:00
+                    </p>
+                    <p>
+                        <a href="#" style="display:none;"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                        <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                        <b><span class="glyphicon glyphicon-transfer" aria-hidden="true"></span> Modo (Ônibus convencional):</b> Linha(0.030) - Dinheiro (Não Sabe)
+                    </p>
+                    <p>
+                        <a href="#" style="display:none;"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                        <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                        <b><span class="glyphicon glyphicon-transfer" aria-hidden="true"></span> Modo (Ônibus convencional):</b>  Linha(0.029) - Dinheiro (Não Sabe)
+                    </p>
+                    <p>
+                        <a href="#" style="display:none;"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                        <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                        <b><span class="glyphicon glyphicon-time" aria-hidden="true"></span> Chegada:</b> 17:40
+                    </p>
+                    <p>
+                        <a href="#" style="display:none;"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                        <a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                        <b><span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Ponto 3 (Residência):</b> SCLN 214 BL. A LJ. 9/11 - Asa Norte, Brasília
+                    </p>
+                </div>
+            </div>
+        </div>
+        <hr />
+
+
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <h3 class="text-muted" style="display:inline-block;"> SAPO OD DF 2016</h3>
+            <img src="sapo_logo.png" style="height:60px; float:right;">            
+        </div>
+    </footer>
+
+    <!-- MODAL TICKET -->
+
+    <div class="modal fade" id="pesquisa_ticket" tabindex="-1" role="dialog" aria-labelledby="pesquisa_ticket_label">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="pesquisa_ticket_label">ABRIR TICKET</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-2"><h4>Assunto:</h4></div>
+                        <div class="col-md-10"><input type="text" class="form-control"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2"><h4>Destino:</h4></div>
+                        <div class="col-md-10">
+                            <select class="form-control">
+                                <option disabled selected>Selecione</option>
+                                <option>Supervisor</option>
+                                <option>Telefonista</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2"><h4>Mensagem:</h4></div>
+                        <div class="col-md-10"><textarea class="form-control" style="height: 200px;"></textarea></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="row">
+                        <div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
+                        <div class="col-md-6"><button type="button" class="btn btn-success">ENVIAR</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- MODAL STATUS -->
+
+    <div class="modal fade" id="pesquisa_status" tabindex="-1" role="dialog" aria-labelledby="pesquisa_status_label">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="pesquisa_status_label">MUDAR STATUS</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-2"><h4>SV:</h4></div>
+                        <div class="col-md-10">
+                            <select class="form-control">
+                                <option>COMPLETA</option>
+                                <option>RECUSADA</option>
+                                <option>ACEITA</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2"><h4>CT:</h4></div>
+                        <div class="col-md-10">
+                            <select class="form-control">
+                                <option>COMPLETA</option>
+                                <option>RECUSADA</option>
+                                <option>ACEITA</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2"><h4>CT:</h4></div>
+                        <div class="col-md-10">
+                            <select class="form-control">
+                                <option>COMPLETA</option>
+                                <option>RECUSADA</option>
+                                <option>ACEITA</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="row">
+                        <div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
+                        <div class="col-md-6"><button type="button" class="btn btn-success">MUDAR</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

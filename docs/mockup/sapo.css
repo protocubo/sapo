@@ -1,0 +1,59 @@
+﻿html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-top: 90px;
+    margin-bottom: 60px;
+    font-family: 'Roboto Condensed', sans-serif;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+    background-color: #EEE;
+}
+
+.btn {
+    width: 100%;
+}
+
+.navbar-nav > li > a {
+    font-size: 15px;
+}
+
+.barraderolagem {
+    overflow: auto;
+    max-height: 300px;
+}
+.bloco {
+    display: inline-block;
+    margin-right: 30px;
+    margin-top: 10px;
+}
+.viagem {
+    display: block;
+    margin-left: 194px;
+    margin-top: 10px;
+}
+
+/*CORES GRUPOS*/
+
+.super {
+    color: #337AB7;
+}
+
+.telefonista {
+    color: #666A18;
+}
+
+.supervisor {
+    color: #B78433;
+}
+
+.pesquisador {
+    color: #C34F4A;
+}
