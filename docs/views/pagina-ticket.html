@@ -92,7 +92,7 @@
                 </select>
             </div>
             <div class="col-md-2 col-md-offset-1">
-                <button type="button" class="btn btn-default">APLICAR</button>
+                <button type="button" class="btn btn-primary">APLICAR</button>
             </div>
         </div>
         <hr />
@@ -109,7 +109,7 @@
                 <input type="text" class="form-control" placeholder="Número da Pesquisa">
             </div>
             <div class="col-md-2 col-md-offset-2">
-                <button type="button" class="btn btn-default">BUSCAR</button>
+                <button type="button" class="btn btn-primary">BUSCAR</button>
             </div>
         </div>
         <hr />
@@ -130,17 +130,17 @@
                                 #1234 - 01/01/2016 - 12:00 - Assunto
                             </a>
                         </div>
-                        <div class="col-md-4 panel-title">
+                        <div class="col-md-3 panel-title">
                             <!-- Número da peqsuisa, data da pesquisa, Nome do pesquisador (class: super, telefonista, supervisor e pesquisador) -->
                             <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyTicket1234" aria-expanded="true" aria-controls="BodyTicket1234">
-                                Pesquisa #12345 - 01/01/2016 - <b class="pesquisador">Nome</b>
+                                #12345 - 01/01/2016 - <b class="pesquisador">Nome</b>
                             </a>
                         </div>
-                        <div class="col-md-1 panel-title">
-                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyTicket1234" aria-expanded="true" aria-controls="BodyTicket1234">
-                                <!-- STATUS (class: aberta, completa, verificada, CT, aceita, recusada, sobjudice) -->
-                                <b class="completa">STATUS</b>
-                            </a>
+                        <div class="col-md-2 panel-title text-right">
+                            <span class="glyphicon glyphicon-earphone" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-minus supervisor" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-ok telefonista" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-remove super" aria-hidden="true"></span>
                         </div>
                     </div>
                 </div>
@@ -166,11 +166,11 @@
                             </div>
                         </div>
                         <div class="row" style="margin-top: 30px;">
-                            <div class="col-md-2"><button type="button" class="btn btn-default btn-sm">RESPONDER</button></div>
-                            <div class="col-md-2"><button type="button" class="btn btn-default btn-sm">FECHAR</button></div>
-                            <div class="col-md-2"><button type="button" class="btn btn-default btn-sm">INCLUIR</button></div>
-                            <div class="col-md-2 col-md-offset-1"><button type="button" class="btn btn-default btn-sm">VER PESQUISAS</button></div>
-                            <div class="col-md-2"><button type="button" class="btn btn-default btn-sm">RECUSAR</button></div>
+                            <div class="col-md-2"><button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#ticket_fechar">FECHAR</button></div>
+                            <div class="col-md-2"><button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#ticket_responder">RESPONDER</button></div>
+                            <div class="col-md-2"><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#ticket_incluir">INCLUIR</button></div>
+                            <div class="col-md-2 col-md-offset-1"><button type="button" class="btn btn-primary btn-sm">VER PESQUISA</button></div>
+                            <div class="col-md-2"><button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#ticket_status">MUDAR STATUS</button></div>
                         </div>
                     </div>
                 </div>
@@ -186,6 +186,148 @@
             <h3 class="text-muted">SAPO OD DF 2016</h3>
         </div>
     </footer>
+
+    <!-- MODAL RESPONDER -->
+
+    <div class="modal fade" id="ticket_responder" tabindex="-1" role="dialog" aria-labelledby="ticket_responder_label">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="ticket_responder_label">RESPONDER TICKET</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12"><textarea class="form-control" style="height: 200px;"></textarea></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="row">
+                        <div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
+                        <div class="col-md-6"><button type="button" class="btn btn-success">RESPONDER</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL FECHAR -->
+
+    <div class="modal fade" id="ticket_fechar" tabindex="-1" role="dialog" aria-labelledby="ticket_fechar_label">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="ticket_fechar_label">FECHAR TICKET</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p>Deseja realmente fechar este Ticket?</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="row">
+                        <div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">NÃO</button></div>
+                        <div class="col-md-6"><button type="button" class="btn btn-success">SIM</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL INCLUIR -->
+
+    <div class="modal fade" id="ticket_incluir" tabindex="-1" role="dialog" aria-labelledby="ticket_incluir_label">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="ticket_incluir_label">INCLUIR USUÁRIO OU GRUPO</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-2"><h4>Grupo:</h4></div>
+                        <div class="col-md-10">
+                            <select class="form-control">
+                                <option disabled selected>Selecione</option>
+                                <option>Supervisor</option>
+                                <option>Telefonista</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2"><h4>Usuário:</h4></div>
+                        <div class="col-md-10">
+                            <select class="form-control">
+                                <option disabled selected>Selecione</option>
+                                <option>Assunção Alex</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="row">
+                        <div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
+                        <div class="col-md-6"><button type="button" class="btn btn-success">INCLUIR</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL STATUS -->
+
+    <div class="modal fade" id="ticket_status" tabindex="-1" role="dialog" aria-labelledby="ticket_status_label">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="ticket_status_label">MUDAR STATUS</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-2"><h4>SV:</h4></div>
+                        <div class="col-md-10">
+                            <select class="form-control">
+                                <option>COMPLETA</option>
+                                <option>RECUSADA</option>
+                                <option>ACEITA</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2"><h4>CT:</h4></div>
+                        <div class="col-md-10">
+                            <select class="form-control">
+                                <option>COMPLETA</option>
+                                <option>RECUSADA</option>
+                                <option>ACEITA</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2"><h4>CT:</h4></div>
+                        <div class="col-md-10">
+                            <select class="form-control">
+                                <option>COMPLETA</option>
+                                <option>RECUSADA</option>
+                                <option>ACEITA</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="row">
+                        <div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
+                        <div class="col-md-6"><button type="button" class="btn btn-success">MUDAR</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 </body>
 </html>

@@ -40,7 +40,18 @@
                     <li class="active"><a href="#">SAPO</a></li>
                     <li><a href="#">TICKETS</a></li> <!-- @LOGIT @Telefonista @Supervisor -->
                     <li><a href="#">PESQUISAS</a></li> <!-- @LOGIT @Telefonista @Supervisor -->
-                    <li><a href="#">SUMÁRIO</a></li> <!-- @LOGIT @Telefonista @Supervisor -->
+                    <li class="dropdown">
+                        <!-- @LOGIT @Telefonista @Supervisor -->
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">SUMÁRIO <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">GERAL:STATUS</a></li>
+                            <li><a href="#">GERAL:HISTÓRICO</a></li>
+                            <li><a href="#">GERAL:MAPA</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#">USUÁRIO:STATUS</a></li>
+                            <li><a href="#">USUÁRIO:HISTÓRICO</a></li>
+                        </ul>
+                    </li>
                     <li><a href="#">PAGAMENTOS</a></li> <!-- @Pesquisador -->
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">ADMINISTRAÇÃO <b class="caret"></b></a> <!-- @LOGIT -->
@@ -65,7 +76,7 @@
         <!-- HEAD -->
         <h2>PAGAMENTOS</h2>
         <hr />
-
+        
         <!-- FILTROS -->
         <h3>Filtros:</h3>
         <div class="row">
@@ -113,7 +124,7 @@
         <div class="row">
             <div class="col-md-2"><h4>REF. PAGAMENTO</h4></div>
             <div class="col-md-2">
-                <input type="text" class="form-control" placeholder="Referência de Pagamento">
+                <input type="text" class="form-control" placeholder="Ref. de Pagamento">
             </div>
             <div class="col-md-2"><h4>Nº DA PESQUISA</h4></div>
             <div class="col-md-2">
@@ -153,7 +164,7 @@
                     <td>813518</td>
                     <td>02/02/2016</td>
                     <td align="right">
-                        <button type="button" class="btn btn-success btn-xs" aria-label="Desativar" style="width:auto;">
+                        <button type="button" class="btn btn-success btn-xs" aria-label="Desativar" style="width:auto;" data-toggle="modal" data-target="#pagar_um">
                             <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
                         </button>
                     </td>
@@ -164,7 +175,7 @@
             <tfoot>
                 <tr>
                     <td colspan="7">
-                        <button type="button" class="btn btn-success btn-xs" aria-label="Desativar" style="width:auto;">
+                        <button type="button" class="btn btn-success btn-xs" aria-label="Desativar" style="width:auto;" data-toggle="modal" data-target="#pagar_selecionadas">
                             REGISTRAR PAGAMENTO NAS SELECIONADAS <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
                         </button>
                     </td>
@@ -180,6 +191,56 @@
             <h3 class="text-muted">SAPO OD DF 2016</h3>
         </div>
     </footer>
+
+    <!-- MODAL PAGAR -->
+
+    <div class="modal fade" id="pagar_um" tabindex="-1" role="dialog" aria-labelledby="pagar_um_label">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="pagar_um_label">PAGAR PESQUISA</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4"><h4>Ref. Pagamento:</h4></div>
+                        <div class="col-md-8"><input type="text" class="form-control" /></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="row">
+                        <div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
+                        <div class="col-md-6"><button type="button" class="btn btn-success">PAGAR</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PAGAR -->
+
+    <div class="modal fade" id="pagar_selecionadas" tabindex="-1" role="dialog" aria-labelledby="pagar_selecionadas_label">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="pagar_selecionadas_label">PAGAR PESQUISAS</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4"><h4>Ref. Pagamento:</h4></div>
+                        <div class="col-md-8"><input type="text" class="form-control" /></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="row">
+                        <div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
+                        <div class="col-md-6"><button type="button" class="btn btn-success">PAGAR</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </body>
 </html>
