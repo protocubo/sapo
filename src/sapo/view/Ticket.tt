@@ -1,21 +1,49 @@
 (: import sapo.Spod :)
 
-(: static function render(ticket:Spod.Ticket) :)
+(: static function render() :)
 <!DOCTYPE html>
 <html>
-(: Util.head('SAPO [tink_template] – Ticket #${ticket.id}') :)
+<head>
+(: Util.head("SAPO [tink_template] – Summary") :)
+</head>
 <body>
-<h1>Ticket #(: ticket.id :)</h1>
-(: for m in TicketMessage.manager.search($ticket == ticket) :)
-<article>
-	(: for p in m.text.split("\n\n") :)
-	<p>(: p :)</p>
-	(: end :)
-	<footer>
-		<p>Posted by (: m.author.name :) at (: m.posted_at :)</p>
-	</footer>
-</article>
-(: end :)
+	(: Util.navbar() :)
+	
+	<!-- TICKETS -->
+    <div class="container">
+
+        <!-- HEAD -->
+        <h2>TICKETS</h2>
+        <hr />
+	</div>
+	
+	
+	<!-- FILTROS -->
+	
+	<!-- BUSCA -->
+	
+	<!-- TICKETS -->
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" style="margin-top: 60px;">
+		(: for t in Spod.Ticket.manager.all() :)
+			(: Util.ticket(t) :)
+		(: end :)
+	</div>
+	
+
+	<table>
+		<tr><td>#</td><td>Opened</td><td>Closed</td></tr>
+		(: for t in Spod.Ticket.manager.all() :)
+		<tr><td><a href="tink/ticket/(: t.id :)">#(: t.id :)</a></td><td>(: t.opened_at :)</td><td>(: if t.closed_at != null :)(: t.closed_at :)(: end :)</td></tr>
+		(: end :)
+	</table>
+	<h2>Users</h2>
+	<table>
+		<tr><td>Name</td><td>Email</td></tr>
+		(: for u in User.manager.all() :)
+		<tr><td>(: u.name :)</td><td>(: u.email :)</td></tr>
+		(: end :)
+	</table>
+(: Util.footer() :)
 </body>
 </html>
 (: end :)
