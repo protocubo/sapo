@@ -1,0 +1,15 @@
+{
+	"prepare" : {
+		"dockerfile" : {
+			"type" : "path",
+			"data" : ".robrt.Dockerfile"
+		}
+	},
+	"build" : {
+		"cmds" : [
+			"cd $ROBRT_REPOSITORY_DIR",
+			"cp docs/mockup/* $ROBRT_OUTPUT_DIR/"
+		]
+	}
+}
+
