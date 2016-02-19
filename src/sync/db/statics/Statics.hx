@@ -15,7 +15,7 @@ import sys.db.Types.SString;
  class EnumTable extends Object
  {
 	public var id : SId;
-	public var val : SInt;
+	public var val : SNull<SInt>;
 	public var name : SString<255>;
  }
  
@@ -29,7 +29,7 @@ import sys.db.Types.SString;
  class AguaEncanada_Tbl extends EnumTable
 {}
 
- @dnNullVal(101) enum AnoVeiculo {
+ @dbNullVal(101) enum AnoVeiculo {
 	@dbVal(1) Mais2014;
 	@dbVal(2) De2010;
 	@dbVal(3) De2005;
@@ -227,6 +227,7 @@ import sys.db.Types.SString;
  {
 	@dbVal(1) NaoRealizou;
 	@dbVal(2) NaoSoube;
+	@dbVal(3) NaoRespondeu;
  }
  
   class MotivoSemViagem_Tbl extends EnumTable {
@@ -283,7 +284,7 @@ import sys.db.Types.SString;
 	 
  }
  
- @dnNullVal(0) enum SituacaoFamiliar
+ @dbNullVal(0) enum SituacaoFamiliar
  {
 	@dbVal(1) Responsavel;
 	@dbVal(2) Conjuge;
@@ -301,7 +302,23 @@ import sys.db.Types.SString;
 	 
  }
  
- @dnNullVal(9) enum TempoEstacionamento
+ @dbNullVal(101) enum TipoEstacionamento
+ {
+	@dbVal(1) Propria;
+	@dbVal(2) GratuitoViaPublica;
+	@dbVal(3) GratuitoFora;
+	@dbVal(4) EstPagoMensal;
+	@dbVal(5) EstPagoHora;
+	@dbVal(6) NaoEstacionou;
+	@dbVal(99) Outros;
+	@dbVal(101) NaoRespondeu;
+ }
+ 
+ class TipoEstacionamento_Tbl extends EnumTable {
+	 
+ }
+ 
+ @dbNullVal(9) enum TempoEstacionamento
  {
 	 @dbVal(1) MeiaHora;
 	 @dbVal(2) UmaHora;

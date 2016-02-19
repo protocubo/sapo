@@ -29,7 +29,7 @@ class Familia extends Object
 	
 	public var condicaoMoradia : SNull<SEnum<CondicaoMoradia>>;
 	public var tipoImovel : SNull<SEnum<TipoImovel>>;
-	public var tipoImovel_id : SNull<SInt>;
+	
 	
 	public var tentativa_id : SInt;
 	

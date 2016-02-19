@@ -67,7 +67,7 @@ class InitDB
 		{
 			trace(Type.getClassName(c));
 			var classEnum = Type.resolveEnum(Type.getClassName(c).split("_")[0]);
-			
+			trace(Type.getEnumName(classEnum));
 			var nr = Meta.getType(classEnum).dbNullVal[0];
 			for (field in Reflect.fields(classEnum))
 			{
@@ -81,8 +81,7 @@ class InitDB
 				 
 				Reflect.setField(instance, "id", Type.enumIndex(Reflect.field(classEnum, field)));
 				Reflect.setField(instance, "name", field);
-				if(val != nr || nr == 0)
-					Reflect.setField(instance, "val", val);
+				Reflect.setField(instance, "val", val);
 				instance.insert();
 			}
 		}

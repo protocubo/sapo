@@ -2,12 +2,13 @@ package sync.db;
 import sys.db.Object;
 import sys.db.Types.SBool;
 import sys.db.Types.SDateTime;
+import sys.db.Types.SEnum;
 import sys.db.Types.SFloat;
 import sys.db.Types.SId;
 import sys.db.Types.SInt;
 import sys.db.Types.SNull;
 import sys.db.Types.SString;
-
+import sync.db.statics.Statics;
 
 /**
  * ...
@@ -38,8 +39,8 @@ class Ponto extends Object
 	public var ref_id : SNull<SInt>;
 	public var ref_str : SNull<SString<255>>;
 	
-	public var motivoID : SInt;
-	public var motivoOutraPessoaID : SNull<SInt>;
+	public var motivo : SNull<SEnum<Motivo>>;
+	public var motivoOutraPessoa : SNull<SEnum<Motivo>>;
 	public var tempo_saida : SNull<SString<255>>;
 	public var tempo_chegada : SNull<SString<255>>;
 	
