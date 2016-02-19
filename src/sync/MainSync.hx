@@ -19,8 +19,8 @@ import sys.db.Sqlite;
 import sys.FileSystem;
 import sys.io.File;
 import sync.db.statics.Statics;
-
-
+//DELETAR
+import sync.MainTemp;
 /**
  * ...
  * @author Caio
