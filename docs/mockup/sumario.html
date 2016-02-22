@@ -1,0 +1,269 @@
+﻿<!DOCTYPE html>
+
+<html lang="pt-br">
+
+<head>
+    <meta charset="utf-8" />
+
+    <!-- TITLE -->
+    <title></title>
+
+    <!-- JQUERY -->
+    <script src="https://code.jquery.com/jquery-2.2.0.min.js" crossorigin="anonymous"></script>
+
+    <!-- BOOTSTRAP -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+    <!-- GOOGLE FONTS ROBOTO CONDENSED -->
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400,700,300italic,400italic,700italic' rel='stylesheet' type='text/css'>
+
+    <!-- SAPO -->
+    <link href="sapo.css" rel="stylesheet" type="text/css" />
+
+    <!-- GOOGLE CHARTS -->
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+
+        // Load the Visualization API and the piechart package.
+        google.load('visualization', '1.0', { 'packages': ['corechart'] });
+
+        // Set a callback to run when the Google Visualization API is loaded.
+        google.setOnLoadCallback(drawChart);
+
+        // Callback that creates and populates a data table, instantiates the pie chart, passes in the data and draws it.
+        function drawChart() {
+
+            // Create the data table.
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Status');
+            data.addColumn('number', 'Pesquisas');
+            data.addRows([
+              ['Completas', 29 ],
+              ['Pendentes', 203]
+            ]);
+            // Create the data table.
+
+            var data2 = new google.visualization.DataTable();
+            data2.addColumn('string', 'Data');
+            data2.addColumn('number', 'Pesquisas');
+            data2.addRows([
+              ['07/03/2004', 0],
+              ['08/03/2004', 131],
+              ['09/03/2004', 270],
+              ['10/03/2004', 405],
+              ['11/03/2004', 530],
+              ['12/03/2004', 530],
+              ['13/03/2004', 530],
+              ['14/03/2004', 679],
+              ['15/03/2004', 853],
+              ['16/03/2004', 1012],
+              ['17/03/2004', 1175],
+              ['18/03/2004', 1325],
+              ['19/03/2004', 1502],
+              ['20/03/2004', 1502],
+              ['21/03/2004', 1502],
+              ['22/03/2004', 1653],
+              ['23/03/2004', 1805],
+              ['24/03/2004', 1944],
+              ['25/03/2004', 2099],
+              ['26/03/2004', 2229],
+              ['27/03/2004', 2229],
+              ['28/03/2004', 2229],
+              ['29/03/2004', 2395],
+              ['30/03/2004', 2561],
+              ['31/03/2004', 2707],
+              ['01/04/2004', 2862],
+              ['02/04/2004', 2862],
+              ['03/04/2004', 2862]
+            ]);
+
+            var data3 = new google.visualization.DataTable();
+            data3.addColumn('string', 'Data');
+            data3.addColumn('number', 'Pesquisas');
+            data3.addRows([
+              ['07/03/2004', 0],
+              ['08/03/2004', 13],
+              ['09/03/2004', 27],
+              ['10/03/2004', 40],
+              ['11/03/2004', 53],
+              ['12/03/2004', 53],
+              ['13/03/2004', 53],
+              ['14/03/2004', 67],
+              ['15/03/2004', 85],
+              ['16/03/2004', 101],
+              ['17/03/2004', 117],
+              ['18/03/2004', 132],
+              ['19/03/2004', 150],
+              ['20/03/2004', 150],
+              ['21/03/2004', 150],
+              ['22/03/2004', 165],
+              ['23/03/2004', 180],
+              ['24/03/2004', 194],
+              ['25/03/2004', 209],
+              ['26/03/2004', 222],
+              ['27/03/2004', 222],
+              ['28/03/2004', 222],
+              ['29/03/2004', 239],
+              ['30/03/2004', 256],
+              ['31/03/2004', 270],
+              ['01/04/2004', 286],
+              ['02/04/2004', 286],
+              ['03/04/2004', 286]
+            ]);
+
+            // Set chart options
+            var options = {
+                'width': 555,
+                'height': 333
+            };
+            // Set chart options
+            var options2 = {
+                'hAxis': { textPosition: 'none' },
+                'theme': 'maximized',
+                'width': 555,
+                'height': 333
+            };
+            // Set chart options
+            var options3 = {
+                'hAxis': { textPosition: 'none' },
+                'theme': 'maximized',
+                'width': 555,
+                'height': 333
+            };
+
+            // Instantiate and draw our chart, passing in some options.
+            var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+            chart.draw(data, options);
+            var chart2 = new google.visualization.LineChart(document.getElementById('chart_div2'));
+            chart2.draw(data2, options2);
+            var chart3 = new google.visualization.LineChart(document.getElementById('chart_div3'));
+            chart3.draw(data3, options3);
+
+        }
+    </script>
+
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <div class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button><img src="sapo_logo.png" style="height:50px;">
+            </div>
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li class=""><a href="index.html">SAPO</a></li>
+                    <li><a href="ticket.html">TICKETS</a></li> <!-- @LOGIT @Telefonista @Supervisor -->
+                    <li><a href="pesquisas.html">PESQUISAS</a></li> <!-- @LOGIT @Telefonista @Supervisor -->
+                    <li class="dropdown active">
+                        <!-- @LOGIT @Telefonista @Supervisor -->
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">SUMÁRIO <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="sumario.html">GERAL:STATUS</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">ADMINISTRAÇÃO <b class="caret"></b></a> <!-- @LOGIT -->
+                        <ul class="dropdown-menu">
+                            <li><a href="cadastro.html">CADASTRO</a></li>
+                            <li><a href="pagar.html">PAGAMENTOS</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <!-- (class: super, telefonista, supervisor e pesquisador) -->
+                    <li><a><b class="super">MartimRufino@CT</b></a></li> <!-- pós login -->
+                    <li><a href="index.html">Sair</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- SUMÁRIO -->
+    <div class="container">
+
+        <!-- HEAD -->
+        <h2>SUMÁRIO GERAL:STATUS</h2>
+        <hr />
+        <div class="row">
+            <div class="col-md-6">
+                <h4>
+                    TOTAIS |
+                    <a href="#"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span></a>
+                </h4>
+                <hr />
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>STATUS</th>
+                            <th>Nº de Pesquisas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><b>Completas:</b></td>
+                            <td> 29</td>
+                        </tr>
+                        <tr>
+                            <td><b>Pendentes:</b></td>
+                            <td> 203</td>
+                        </tr>
+                        <tr>
+                            <td><b>Aceitas:</b></td>
+                            <td> 2862</td>
+                        </tr>
+                        <tr>
+                            <td><b>Recusadas:</b></td>
+                            <td> 286</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-6">
+                <h4>
+                    ACEITAS |
+                    <a href="#"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span></a>
+                </h4>
+                <hr />
+                <div id="chart_div2"></div>
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-md-6">
+                <h4>
+                    STATUS |
+                    <a href="#"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span></a>
+                </h4>
+                <hr />
+                <div id="chart_div"></div>
+            </div>
+            <div class="col-md-6">
+                <h4>
+                    RECUSADAS |
+                    <a href="#"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span></a>
+                </h4>
+                <hr />
+                <div id="chart_div3"></div>
+            </div>
+        </div>
+    </div>
+    <hr />
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <h3 class="text-muted" style="display:inline-block;"> SAPO OD DF 2016</h3>
+            <img src="sapo_logo.png" style="height:60px; float:right;">
+        </div>
+    </footer>
+
+</body>
+</html>

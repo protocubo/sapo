@@ -1,0 +1,985 @@
+﻿<!DOCTYPE html>
+
+<html lang="pt-br">
+
+<head>
+    <meta charset="utf-8" />
+
+    <!-- TITLE -->
+    <title></title>
+
+    <!-- JQUERY -->
+    <script src="https://code.jquery.com/jquery-2.2.0.min.js" crossorigin="anonymous"></script>
+
+    <!-- BOOTSTRAP -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+    <!-- GOOGLE FONTS ROBOTO CONDENSED -->
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400,700,300italic,400italic,700italic' rel='stylesheet' type='text/css'>
+
+    <!-- SAPO -->
+    <link href="sapo.css" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <div class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button><img src="sapo_logo.png" style="height:50px;">
+            </div>
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="index.html">SAPO</a></li>
+                    <li class="active"><a href="ticket.html">TICKETS</a></li> <!-- @LOGIT @Telefonista @Supervisor -->
+                    <li><a href="pesquisas.html">PESQUISAS</a></li> <!-- @LOGIT @Telefonista @Supervisor -->
+                    <li class="dropdown">
+                        <!-- @LOGIT @Telefonista @Supervisor -->
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">SUMÁRIO <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="sumario.html">GERAL:STATUS</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">ADMINISTRAÇÃO <b class="caret"></b></a> <!-- @LOGIT -->
+                        <ul class="dropdown-menu">
+                            <li><a href="cadastro.html">CADASTRO</a></li>
+                            <li><a href="pagar.html">PAGAMENTOS</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <!-- (class: super, telefonista, supervisor e pesquisador) -->
+                    <li><a><b class="super">MartimRufino@CT</b></a></li> <!-- pós login -->
+                    <li><a href="index.html">Sair</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- TICKETS -->
+    <div class="container">
+
+        <!-- HEAD -->
+        <h2>TICKETS</h2>
+        <hr />
+
+        <!-- FILTROS -->
+        <h3>Filtros:</h3>
+        <div class="row">
+            <div class="col-md-1"><h4>CAIXA:</h4></div>
+            <div class="col-md-2">
+                <select class="form-control">
+                    <option>Entrada</option>
+                    <option>Enviados</option>
+                </select>
+            </div>
+            <div class="col-md-1"><h4>DESTINO</h4></div>
+            <div class="col-md-2">
+                <select class="form-control">
+                    <option>Todos</option>
+                    <option>Grupo</option>
+                    <option>Individual</option>
+                </select>
+            </div>
+            <div class="col-md-1"><h4>ESTADO</h4></div>
+            <div class="col-md-2">
+                <select class="form-control">
+                    <option>Não Fechadas</option>
+                    <option>Fechadas</option>
+                </select>
+            </div>
+            <div class="col-md-2 col-md-offset-1">
+                <button type="button" class="btn btn-primary">APLICAR</button>
+            </div>
+        </div>
+        <hr />
+
+        <!-- BUSCA -->
+        <h3>Busca:</h3>
+        <div class="row">
+            <div class="col-md-2"><h4>Nº DO TICKET</h4></div>
+            <div class="col-md-2">
+                <input type="text" class="form-control" placeholder="Número do Ticket">
+            </div>
+            <div class="col-md-2"><h4>Nº DA PESQUISA</h4></div>
+            <div class="col-md-2">
+                <input type="text" class="form-control" placeholder="Número da Pesquisa">
+            </div>
+            <div class="col-md-2 col-md-offset-2">
+                <button type="button" class="btn btn-primary">BUSCAR</button>
+            </div>
+        </div>
+        <hr />
+
+        <!-- TICKETS -->
+        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" style="margin-top: 60px;">
+            <!-- TICKET -->
+            <div class="panel panel-default">
+                <!-- HEAD TICKET : id = HeadT1 -->
+                <div class="panel-heading" role="tab" id="HeadT1">
+                    <div class="row">
+                        <div class="col-md-7 panel-title">
+                            <!-- DE/PARA (class: super, telefonista, supervisor e pesquisador) -->
+                            <span class="glyphicon glyphicon glyphicon-stop supervisor" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon glyphicon-stop super" aria-hidden="true"></span>
+                            <!-- Nº do Ticket, Data da criação do Ticket, Hora da criação do Ticket, Assunto : href="#BodyT1" , aria-controls="BodyT1" -->
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyT1" aria-expanded="true" aria-controls="BodyT1">
+                                #97 - 21/03/2016 - 16:18 - Problema com morador
+                            </a>
+                        </div>
+                        <div class="col-md-3 panel-title">
+                            <!-- Número da peqsuisa, data da pesquisa, Nome do pesquisador (class: super, telefonista, supervisor e pesquisador) -->
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyT1" aria-expanded="true" aria-controls="BodyT1">
+                                #487 - 14/03/2016 - <b class="pesquisador">Filipe Horácio</b>
+                            </a>
+                        </div>
+                        <div class="col-md-2 panel-title text-right">
+                            <span class="glyphicon glyphicon-remove supervisor" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-minus telefonista" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-minus super" aria-hidden="true"></span>
+                        </div>
+                    </div>
+                </div>
+                <!-- BODY TICKET : id="BodyT1" , aria-labelledby="HeadT1" -->
+                <div id="BodyT1" class="panel-collapse collapse" role="tabpanel" aria-labelledby="HeadT1">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-7 barraderolagem">
+                                <p>
+                                    <strong>
+                                        <!-- DATETIME + DE + PARA (class: super, telefonista, supervisor e pesquisador) -->
+                                        21/03/2016 - 16:18 - <span class="supervisor">Assunção Alex</span> - <span class="super">SUPER</span> :
+                                    </strong>
+                                    <!-- MENSAGEM -->
+                                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                                </p>
+                                <p>
+                                    <strong>
+                                        <!-- DATETIME + DE + PARA (class: super, telefonista, supervisor e pesquisador) -->
+                                        21/03/2016 - 17:28 - <span class="super">Martim Rufino</span> :
+                                    </strong>
+                                    <!-- MENSAGEM -->
+                                    Donec in lacus ac urna venenatis commodo dapibus eu dolor.
+                                </p>
+                                <p>
+                                    <strong>
+                                        <!-- DATETIME + DE + PARA (class: super, telefonista, supervisor e pesquisador) -->
+                                        21/03/2016 - 16:18 - <span class="supervisor">Assunção Alex</span> :
+                                    </strong>
+                                    <!-- MENSAGEM -->
+                                    OK! Donec in lacus ac urna venenatis commodo dapibus eu dolor.
+                                </p>
+                            </div>
+                            <div class="col-md-5 barraderolagem">
+                                <!-- DADOS DA PESQUISA -->
+                                <p><b>Endereço:</b> Seps 712/912 Edifício Pasteur, s/n Cj B Bl 1 S 202 - Asa Sul - Brasília</p>
+                                <p><b>Contato:</b> João - (61) 3345-4050</p>
+                                <p><b>Senha:</b> 9841321687</p>
+                                <p><b>Moradores:</b></p>
+                                <p>Maria (25): Residência - Trabalho - Residência</p>
+                                <p>João (30): Residência - Trabalho - Residência</p>
+                                <p>Marcelo (6): Residência - Escola - Residência</p>
+                                <p>Mariana (5): Residência - Escola - Residência</p>
+                                <p>Pedro (52): Residência - Trabalho - Lazer - Residência</p>
+                                <p>Tereza (51): Residência - Compras - Residência</p>
+                                <p><b>Conferência:</b> 1 carro</p>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 30px;">
+                            <div class="col-md-2"><button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#ticket_fechar">FECHAR</button></div>
+                            <div class="col-md-2"><button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#ticket_responder">RESPONDER</button></div>
+                            <div class="col-md-2"><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#ticket_incluir">INCLUIR</button></div>
+                            <div class="col-md-2 col-md-offset-1"><a href="pesquisa.html" type="button" class="btn btn-primary btn-sm">VER PESQUISA</a></div>
+                            <div class="col-md-2"><button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#ticket_status">MUDAR STATUS</button></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- FIM TICKET -->
+
+            <!-- TICKET -->
+            <div class="panel panel-default">
+                <!-- HEAD TICKET : id = HeadT2 -->
+                <div class="panel-heading" role="tab" id="HeadT2">
+                    <div class="row">
+                        <div class="col-md-7 panel-title">
+                            <!-- DE/PARA (class: super, telefonista, supervisor e pesquisador) -->
+                            <span class="glyphicon glyphicon glyphicon-stop telefonista" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon glyphicon-stop supervisor" aria-hidden="true"></span>
+                            <!-- Nº do Ticket, Data da criação do Ticket, Hora da criação do Ticket, Assunto : href="#BodyT2" , aria-controls="BodyT2" -->
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyT2" aria-expanded="true" aria-controls="BodyT2">
+                                #101 - 21/03/2016 - 13:59 - Falta morador
+                            </a>
+                        </div>
+                        <div class="col-md-3 panel-title">
+                            <!-- Número da peqsuisa, data da pesquisa, Nome do pesquisador (class: super, telefonista, supervisor e pesquisador) -->
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyT2" aria-expanded="true" aria-controls="BodyT2">
+                                #491 - 15/03/2016 - <b class="pesquisador">Filipe Horácio</b>
+                            </a>
+                        </div>
+                        <div class="col-md-2 panel-title text-right">
+                            <span class="glyphicon glyphicon-earphone" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-ok supervisor" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-remove telefonista" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-minus super" aria-hidden="true"></span>
+                        </div>
+                    </div>
+                </div>
+                <!-- BODY TICKET : id="BodyT2" , aria-labelledby="HeadT2" -->
+                <div id="BodyT2" class="panel-collapse collapse" role="tabpanel" aria-labelledby="HeadT2">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-7 barraderolagem">
+                                <strong>
+                                    <!-- DATETIME + DE + PARA (class: super, telefonista, supervisor e pesquisador) -->
+                                    21/03/2016 - 13:59 - <span class="telefonista">Daniela Enéas</span> - <span class="supervisor">Assunção Alex</span> :
+                                </strong>
+                                <!-- MENSAGEM -->
+                                Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
+                            </div>
+                            <div class="col-md-5 barraderolagem">
+                                <!-- DADOS DA PESQUISA -->
+                                <p><b>Endereço:</b> Seps 712/912 Edifício Pasteur, s/n Cj B Bl 1 S 202 - Asa Sul - Brasília</p>
+                                <p><b>Contato:</b> João - (61) 3345-4050</p>
+                                <p><b>Senha:</b> 9841321687</p>
+                                <p><b>Moradores:</b></p>
+                                <p>João (30): Residência - Trabalho - Residência</p>
+                                <p>Pedro (52): Residência - Trabalho - Lazer - Residência</p>
+                                <p>Tereza (51): Residência - Compras - Residência</p>
+                                <p><b>Conferência:</b> 1 carro</p>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 30px;">
+                            <div class="col-md-2"><button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#ticket_fechar">FECHAR</button></div>
+                            <div class="col-md-2"><button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#ticket_responder">RESPONDER</button></div>
+                            <div class="col-md-2"><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#ticket_incluir">INCLUIR</button></div>
+                            <div class="col-md-2 col-md-offset-1"><a href="pesquisa.html" type="button" class="btn btn-primary btn-sm">VER PESQUISA</a></div>
+                            <div class="col-md-2"><button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#ticket_status">MUDAR STATUS</button></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- FIM TICKET -->
+
+            <!-- TICKET -->
+            <div class="panel panel-default">
+                <!-- HEAD TICKET : id = HeadT3 -->
+                <div class="panel-heading" role="tab" id="HeadT3">
+                    <div class="row">
+                        <div class="col-md-7 panel-title">
+                            <!-- DE/PARA (class: super, telefonista, supervisor e pesquisador) -->
+                            <span class="glyphicon glyphicon glyphicon-stop supervisor" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon glyphicon-stop super" aria-hidden="true"></span>
+                            <!-- Nº do Ticket, Data da criação do Ticket, Hora da criação do Ticket, Falta viagem : href="#BodyT3" , aria-controls="BodyT3" -->
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyT3" aria-expanded="true" aria-controls="BodyT3">
+                                #103 - 21/03/2016 - 7:49 - Ver melhor
+                            </a>
+                        </div>
+                        <div class="col-md-3 panel-title">
+                            <!-- Número da peqsuisa, data da pesquisa, Nome do pesquisador (class: super, telefonista, supervisor e pesquisador) -->
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyT3" aria-expanded="true" aria-controls="BodyT3">
+                                #499 - 15/03/2016 - <b class="pesquisador">Ofélia Carlinhos</b>
+                            </a>
+                        </div>
+                        <div class="col-md-2 panel-title text-right">
+                            <span class="glyphicon glyphicon-ok supervisor" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-ok telefonista" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-minus super" aria-hidden="true"></span>
+                        </div>
+                    </div>
+                </div>
+                <!-- BODY TICKET : id="BodyT3" , aria-labelledby="HeadT3" -->
+                <div id="BodyT3" class="panel-collapse collapse" role="tabpanel" aria-labelledby="HeadT3">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-7 barraderolagem">
+                                <p>
+                                    <strong>
+                                        <!-- DATETIME + DE + PARA (class: super, telefonista, supervisor e pesquisador) -->
+                                        21/03/2016 - 7:49 - <span class="supervisor">Assunção Alex</span> - <span class="super">SUPER</span> :
+                                    </strong>
+                                    <!-- MENSAGEM -->
+                                    3 wolf moon officia aute, non cupidatat skateboard dolor brunch.
+                                </p>
+                                <p>
+                                    <strong>
+                                        <!-- DATETIME + DE + PARA (class: super, telefonista, supervisor e pesquisador) -->
+                                        21/03/2016 - 17:28 - <span class="super">Martim Rufino</span> :
+                                    </strong>
+                                    <!-- MENSAGEM -->
+                                    Donec in lacus ac urna venenatis commodo dapibus eu dolor.
+                                </p>
+                                <p>
+                                    <strong>
+                                        <!-- DATETIME + DE + PARA (class: super, telefonista, supervisor e pesquisador) -->
+                                        21/03/2016 - 16:18 - <span class="supervisor">Assunção Alex</span> :
+                                    </strong>
+                                    <!-- MENSAGEM -->
+                                    OK! Donec in lacus ac urna venenatis commodo dapibus eu dolor.
+                                </p>
+                            </div>
+                            <div class="col-md-5 barraderolagem">
+                                <!-- DADOS DA PESQUISA -->
+                                <p><b>Endereço:</b> Seps 712/912 Edifício Pasteur, s/n Cj B Bl 1 S 202 - Asa Sul - Brasília</p>
+                                <p><b>Contato:</b> João - (61) 3345-4050</p>
+                                <p><b>Senha:</b> 9841321687</p>
+                                <p><b>Moradores:</b></p>
+                                <p>Maria (25): Residência - Trabalho - Residência</p>
+                                <p>João (30): Residência - Trabalho - Residência</p>
+                                <p>Mariana (5): Residência - Escola - Residência</p>
+                                <p>Pedro (52): Residência - Trabalho - Lazer - Residência</p>
+                                <p><b>Conferência:</b> 1 carro</p>
+                            </div>                        </div>
+                        <div class="row" style="margin-top: 30px;">
+                            <div class="col-md-2"><button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#ticket_fechar">FECHAR</button></div>
+                            <div class="col-md-2"><button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#ticket_responder">RESPONDER</button></div>
+                            <div class="col-md-2"><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#ticket_incluir">INCLUIR</button></div>
+                            <div class="col-md-2 col-md-offset-1"><a href="pesquisa.html" type="button" class="btn btn-primary btn-sm">VER PESQUISA</a></div>
+                            <div class="col-md-2"><button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#ticket_status">MUDAR STATUS</button></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- FIM TICKET -->
+
+            <!-- TICKET -->
+            <div class="panel panel-default">
+                <!-- HEAD TICKET : id = HeadT4 -->
+                <div class="panel-heading" role="tab" id="HeadT4">
+                    <div class="row">
+                        <div class="col-md-7 panel-title">
+                            <!-- DE/PARA (class: super, telefonista, supervisor e pesquisador) -->
+                            <span class="glyphicon glyphicon glyphicon-stop supervisor" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon glyphicon-stop super" aria-hidden="true"></span>
+                            <!-- Nº do Ticket, Data da criação do Ticket, Hora da criação do Ticket, Assunto : href="#BodyT4" , aria-controls="BodyT4" -->
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyT4" aria-expanded="true" aria-controls="BodyT4">
+                                #107 - 21/03/2016 - 11:21 - Viagem não termina no domicílio
+                            </a>
+                        </div>
+                        <div class="col-md-3 panel-title">
+                            <!-- Número da peqsuisa, data da pesquisa, Nome do pesquisador (class: super, telefonista, supervisor e pesquisador) -->
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyT4" aria-expanded="true" aria-controls="BodyT4">
+                                #503 - 15/03/2016 - <b class="pesquisador">Ofélia Carlinhos</b>
+                            </a>
+                        </div>
+                        <div class="col-md-2 panel-title text-right">
+                            <span class="glyphicon glyphicon-minus supervisor" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-minus telefonista" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-minus super" aria-hidden="true"></span>
+                        </div>
+                    </div>
+                </div>
+                <!-- BODY TICKET : id="BodyT4" , aria-labelledby="HeadT4" -->
+                <div id="BodyT4" class="panel-collapse collapse" role="tabpanel" aria-labelledby="HeadT4">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-7 barraderolagem">
+                                <p>
+                                    <strong>
+                                        <!-- DATETIME + DE + PARA (class: super, telefonista, supervisor e pesquisador) -->
+                                        21/03/2016 - 11:21 - <span class="supervisor">Assunção Alex</span> - <span class="super">SUPER</span> :
+                                    </strong>
+                                    <!-- MENSAGEM -->
+                                    Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et.
+                                </p>
+                                <p>
+                                    <strong>
+                                        <!-- DATETIME + DE + PARA (class: super, telefonista, supervisor e pesquisador) -->
+                                        21/03/2016 - 17:28 - <span class="super">Martim Rufino</span> :
+                                    </strong>
+                                    <!-- MENSAGEM -->
+                                    Donec in lacus ac urna venenatis commodo dapibus eu dolor.
+                                </p>
+                                <p>
+                                    <strong>
+                                        <!-- DATETIME + DE + PARA (class: super, telefonista, supervisor e pesquisador) -->
+                                        21/03/2016 - 16:18 - <span class="supervisor">Assunção Alex</span> :
+                                    </strong>
+                                    <!-- MENSAGEM -->
+                                    OK! Donec in lacus ac urna venenatis commodo dapibus eu dolor.
+                                </p>
+                            </div>
+                            <div class="col-md-5 barraderolagem">
+                                <!-- DADOS DA PESQUISA -->
+                                <p><b>Endereço:</b> Seps 712/912 Edifício Pasteur, s/n Cj B Bl 1 S 202 - Asa Sul - Brasília</p>
+                                <p><b>Contato:</b> João - (61) 3345-4050</p>
+                                <p><b>Senha:</b> 9841321687</p>
+                                <p><b>Moradores:</b></p>
+                                <p>Maria (25): Residência - Trabalho - Residência</p>
+                                <p>João (30): Residência - Trabalho - Residência</p>
+                                <p>Marcelo (6): Residência - Escola - Residência</p>
+                                <p>Mariana (5): Residência - Escola - Residência</p>
+                                <p>Pedro (52): Residência - Trabalho - Lazer - Residência</p>
+                                <p>Tereza (51): Residência - Compras - Residência</p>
+                                <p><b>Conferência:</b> 1 carro</p>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 30px;">
+                            <div class="col-md-2"><button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#ticket_fechar">FECHAR</button></div>
+                            <div class="col-md-2"><button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#ticket_responder">RESPONDER</button></div>
+                            <div class="col-md-2"><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#ticket_incluir">INCLUIR</button></div>
+                            <div class="col-md-2 col-md-offset-1"><a href="pesquisa.html" type="button" class="btn btn-primary btn-sm">VER PESQUISA</a></div>
+                            <div class="col-md-2"><button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#ticket_status">MUDAR STATUS</button></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- FIM TICKET -->
+
+            <!-- TICKET -->
+            <div class="panel panel-default">
+                <!-- HEAD TICKET : id = HeadT5 -->
+                <div class="panel-heading" role="tab" id="HeadT5">
+                    <div class="row">
+                        <div class="col-md-7 panel-title">
+                            <!-- DE/PARA (class: super, telefonista, supervisor e pesquisador) -->
+                            <span class="glyphicon glyphicon glyphicon-stop supervisor" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon glyphicon-stop super" aria-hidden="true"></span>
+                            <!-- Nº do Ticket, Data da criação do Ticket, Hora da criação do Ticket, Assunto : href="#BodyT5" , aria-controls="BodyT5" -->
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyT5" aria-expanded="true" aria-controls="BodyT5">
+                                #109 - 22/03/2016 - 17:31 - Pesquisador com problemas
+                            </a>
+                        </div>
+                        <div class="col-md-3 panel-title">
+                            <!-- Número da peqsuisa, data da pesquisa, Filipe Horácio do pesquisador (class: super, telefonista, supervisor e pesquisador) -->
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyT5" aria-expanded="true" aria-controls="BodyT5">
+                                #509 - 15/03/2016 - <b class="pesquisador">Filipe Horácio</b>
+                            </a>
+                        </div>
+                        <div class="col-md-2 panel-title text-right">
+                            <span class="glyphicon glyphicon-remove supervisor" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-minus telefonista" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-minus super" aria-hidden="true"></span>
+                        </div>
+                    </div>
+                </div>
+                <!-- BODY TICKET : id="BodyT5" , aria-labelledby="HeadT5" -->
+                <div id="BodyT5" class="panel-collapse collapse" role="tabpanel" aria-labelledby="HeadT5">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-7 barraderolagem">
+                                <strong>
+                                    <!-- DATETIME + DE + PARA (class: super, telefonista, supervisor e pesquisador) -->
+                                    22/03/2016 - 17:31 - <span class="supervisor">Américo Laura</span> - <span class="super">Martim Rufino</span> :
+                                </strong>
+                                <!-- MENSAGEM -->
+                                Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
+                            </div>
+                            <div class="col-md-5 barraderolagem">
+                                <!-- DADOS DA PESQUISA -->
+                                <p><b>Endereço:</b> Seps 712/912 Edifício Pasteur, s/n Cj B Bl 1 S 202 - Asa Sul - Brasília</p>
+                                <p><b>Contato:</b> João - (61) 3345-4050</p>
+                                <p><b>Senha:</b> 9841321687</p>
+                                <p><b>Moradores:</b></p>
+                                <p>João (30): Residência - Trabalho - Residência</p>
+                                <p>Marcelo (6): Residência - Escola - Residência</p>
+                                <p><b>Conferência:</b> 1 carro</p>
+                            </div>                        </div>
+                        <div class="row" style="margin-top: 30px;">
+                            <div class="col-md-2"><button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#ticket_fechar">FECHAR</button></div>
+                            <div class="col-md-2"><button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#ticket_responder">RESPONDER</button></div>
+                            <div class="col-md-2"><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#ticket_incluir">INCLUIR</button></div>
+                            <div class="col-md-2 col-md-offset-1"><a href="pesquisa.html" type="button" class="btn btn-primary btn-sm">VER PESQUISA</a></div>
+                            <div class="col-md-2"><button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#ticket_status">MUDAR STATUS</button></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- FIM TICKET -->
+
+            <!-- TICKET -->
+            <div class="panel panel-default">
+                <!-- HEAD TICKET : id = HeadT6 -->
+                <div class="panel-heading" role="tab" id="HeadT6">
+                    <div class="row">
+                        <div class="col-md-7 panel-title">
+                            <!-- DE/PARA (class: super, telefonista, supervisor e pesquisador) -->
+                            <span class="glyphicon glyphicon glyphicon-stop super" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon glyphicon-stop supervisor" aria-hidden="true"></span>
+                            <!-- Nº do Ticket, Data da criação do Ticket, Hora da criação do Ticket, Assunto : href="#BodyT6" , aria-controls="BodyT6" -->
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyT6" aria-expanded="true" aria-controls="BodyT6">
+                                #113 - 22/03/2016 - 11:32 - Vejam melhor essa pesquisa
+                            </a>
+                        </div>
+                        <div class="col-md-3 panel-title">
+                            <!-- Número da peqsuisa, data da pesquisa, Amando Gonçalo do pesquisador (class: super, telefonista, supervisor e pesquisador) -->
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyT6" aria-expanded="true" aria-controls="BodyT6">
+                                #521 - 16/03/2016 - <b class="pesquisador">Amando Gonçalo</b>
+                            </a>
+                        </div>
+                        <div class="col-md-2 panel-title text-right">
+                            <span class="glyphicon glyphicon-ok supervisor" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-ok telefonista" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-remove super" aria-hidden="true"></span>
+                        </div>
+                    </div>
+                </div>
+                <!-- BODY TICKET : id="BodyT6" , aria-labelledby="HeadT6" -->
+                <div id="BodyT6" class="panel-collapse collapse" role="tabpanel" aria-labelledby="HeadT6">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-7 barraderolagem">
+                                <strong>
+                                    <!-- DATETIME + DE + PARA (class: super, telefonista, supervisor e pesquisador) -->
+                                    22/03/2016 - 11:32 - <span class="super">Martim Rufino</span> - <span class="supervisor">Américo Laura</span> :
+                                </strong>
+                                <!-- MENSAGEM -->
+                                Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                            </div>
+                            <div class="col-md-5 barraderolagem">
+                                <!-- DADOS DA PESQUISA -->
+                                <p><b>Endereço:</b> Seps 712/912 Edifício Pasteur, s/n Cj B Bl 1 S 202 - Asa Sul - Brasília</p>
+                                <p><b>Contato:</b> João - (61) 3345-4050</p>
+                                <p><b>Senha:</b> 9841321687</p>
+                                <p><b>Moradores:</b></p>
+                                <p>Maria (25): Residência - Trabalho - Residência</p>
+                                <p>João (30): Residência - Trabalho - Residência</p>
+                                <p>Pedro (52): Residência - Trabalho - Lazer - Residência</p>
+                                <p>Tereza (51): Residência - Compras - Residência</p>
+                                <p><b>Conferência:</b> 1 carro</p>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 30px;">
+                            <div class="col-md-2"><button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#ticket_fechar">FECHAR</button></div>
+                            <div class="col-md-2"><button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#ticket_responder">RESPONDER</button></div>
+                            <div class="col-md-2"><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#ticket_incluir">INCLUIR</button></div>
+                            <div class="col-md-2 col-md-offset-1"><a href="pesquisa.html" type="button" class="btn btn-primary btn-sm">VER PESQUISA</a></div>
+                            <div class="col-md-2"><button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#ticket_status">MUDAR STATUS</button></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- FIM TICKET -->
+
+            <!-- TICKET -->
+            <div class="panel panel-default">
+                <!-- HEAD TICKET : id = HeadT7 -->
+                <div class="panel-heading" role="tab" id="HeadT7">
+                    <div class="row">
+                        <div class="col-md-7 panel-title">
+                            <!-- DE/PARA (class: super, telefonista, supervisor e pesquisador) -->
+                            <span class="glyphicon glyphicon glyphicon-stop super" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon glyphicon-stop supervisor" aria-hidden="true"></span>
+                            <!-- Nº do Ticket, Data da criação do Ticket, Hora da criação do Ticket, Assunto : href="#BodyT7" , aria-controls="BodyT7" -->
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyT7" aria-expanded="true" aria-controls="BodyT7">
+                                #127 - 22/03/2016 - 12:47 - Supervisor, ligar para pesquisador
+                            </a>
+                        </div>
+                        <div class="col-md-3 panel-title">
+                            <!-- Número da peqsuisa, data da pesquisa, Filipe Horácio do pesquisador (class: super, telefonista, supervisor e pesquisador) -->
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyT7" aria-expanded="true" aria-controls="BodyT7">
+                                #523 - 16/03/2016 - <b class="pesquisador">Filipe Horácio</b>
+                            </a>
+                        </div>
+                        <div class="col-md-2 panel-title text-right">
+                            <span class="glyphicon glyphicon-ok supervisor" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-ok telefonista" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-remove super" aria-hidden="true"></span>
+                        </div>
+                    </div>
+                </div>
+                <!-- BODY TICKET : id="BodyT7" , aria-labelledby="HeadT7" -->
+                <div id="BodyT7" class="panel-collapse collapse" role="tabpanel" aria-labelledby="HeadT7">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-7 barraderolagem">
+                                <strong>
+                                    <!-- DATETIME + DE + PARA (class: super, telefonista, supervisor e pesquisador) -->
+                                    22/03/2016 - 12:47 - <span class="super">Martim Rufino</span> - <span class="supervisor">Américo Laura</span> :
+                                </strong>
+                                <!-- MENSAGEM -->
+                                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                            </div>
+                            <div class="col-md-5 barraderolagem">
+                                <!-- DADOS DA PESQUISA -->
+                                <p><b>Endereço:</b> Seps 712/912 Edifício Pasteur, s/n Cj B Bl 1 S 202 - Asa Sul - Brasília</p>
+                                <p><b>Contato:</b> João - (61) 3345-4050</p>
+                                <p><b>Senha:</b> 9841321687</p>
+                                <p><b>Moradores:</b></p>
+                                <p>Maria (25): Residência - Trabalho - Residência</p>
+                                <p>João (30): Residência - Trabalho - Residência</p>
+                                <p>Mariana (5): Residência - Escola - Residência</p>
+                                <p>Pedro (52): Residência - Trabalho - Lazer - Residência</p>
+                                <p><b>Conferência:</b> 1 carro</p>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 30px;">
+                            <div class="col-md-2"><button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#ticket_fechar">FECHAR</button></div>
+                            <div class="col-md-2"><button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#ticket_responder">RESPONDER</button></div>
+                            <div class="col-md-2"><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#ticket_incluir">INCLUIR</button></div>
+                            <div class="col-md-2 col-md-offset-1"><a href="pesquisa.html" type="button" class="btn btn-primary btn-sm">VER PESQUISA</a></div>
+                            <div class="col-md-2"><button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#ticket_status">MUDAR STATUS</button></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- FIM TICKET -->
+
+            <!-- TICKET -->
+            <div class="panel panel-default">
+                <!-- HEAD TICKET : id = HeadT8 -->
+                <div class="panel-heading" role="tab" id="HeadT8">
+                    <div class="row">
+                        <div class="col-md-7 panel-title">
+                            <!-- DE/PARA (class: super, telefonista, supervisor e pesquisador) -->
+                            <span class="glyphicon glyphicon glyphicon-stop super" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon glyphicon-stop telefonista" aria-hidden="true"></span>
+                            <!-- Nº do Ticket, Data da criação do Ticket, Hora da criação do Ticket, Assunto : href="#BodyT8" , aria-controls="BodyT8" -->
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyT8" aria-expanded="true" aria-controls="BodyT8">
+                                #131 - 22/03/2016 - 12:59 - Inconsistente
+                            </a>
+                        </div>
+                        <div class="col-md-3 panel-title">
+                            <!-- Número da peqsuisa, data da pesquisa, Nome do pesquisador (class: super, telefonista, supervisor e pesquisador) -->
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyT8" aria-expanded="true" aria-controls="BodyT8">
+                                #541 - 17/03/2016 - <b class="pesquisador">Filipe Horácio</b>
+                            </a>
+                        </div>
+                        <div class="col-md-2 panel-title text-right">
+                            <span class="glyphicon glyphicon-ok supervisor" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-ok telefonista" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-remove super" aria-hidden="true"></span>
+                        </div>
+                    </div>
+                </div>
+                <!-- BODY TICKET : id="BodyT8" , aria-labelledby="HeadT8" -->
+                <div id="BodyT8" class="panel-collapse collapse" role="tabpanel" aria-labelledby="HeadT8">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-7 barraderolagem">
+                                <strong>
+                                    <!-- DATETIME + DE + PARA (class: super, telefonista, supervisor e pesquisador) -->
+                                    22/03/2016 - 12:59 - <span class="super">Martim Rufino</span> - <span class="telefonista">TELEFONISTA</span> :
+                                </strong>
+                                <!-- MENSAGEM -->
+                                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                            </div>
+                            <div class="col-md-5 barraderolagem">
+                                <!-- DADOS DA PESQUISA -->
+                                <p><b>Endereço:</b> Seps 712/912 Edifício Pasteur, s/n Cj B Bl 1 S 202 - Asa Sul - Brasília</p>
+                                <p><b>Contato:</b> João - (61) 3345-4050</p>
+                                <p><b>Senha:</b> 9841321687</p>
+                                <p><b>Moradores:</b></p>
+                                <p>Maria (25): Residência - Trabalho - Residência</p>
+                                <p>João (30): Residência - Trabalho - Residência</p>
+                                <p>Mariana (5): Residência - Escola - Residência</p>
+                                <p><b>Conferência:</b> 1 carro</p>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 30px;">
+                            <div class="col-md-2"><button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#ticket_fechar">FECHAR</button></div>
+                            <div class="col-md-2"><button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#ticket_responder">RESPONDER</button></div>
+                            <div class="col-md-2"><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#ticket_incluir">INCLUIR</button></div>
+                            <div class="col-md-2 col-md-offset-1"><a href="pesquisa.html" type="button" class="btn btn-primary btn-sm">VER PESQUISA</a></div>
+                            <div class="col-md-2"><button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#ticket_status">MUDAR STATUS</button></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- FIM TICKET -->
+
+            <!-- TICKET -->
+            <div class="panel panel-default">
+                <!-- HEAD TICKET : id = HeadT9 -->
+                <div class="panel-heading" role="tab" id="HeadT9">
+                    <div class="row">
+                        <div class="col-md-7 panel-title">
+                            <!-- DE/PARA (class: super, telefonista, supervisor e pesquisador) -->
+                            <span class="glyphicon glyphicon glyphicon-stop super" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon glyphicon-stop telefonista" aria-hidden="true"></span>
+                            <!-- Nº do Ticket, Data da criação do Ticket, Hora da criação do Ticket, Assunto : href="#BodyT9" , aria-controls="BodyT9" -->
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyT9" aria-expanded="true" aria-controls="BodyT9">
+                                #137 - 22/03/2016 - 13:48 - Ligar para confirmar morador
+                            </a>
+                        </div>
+                        <div class="col-md-3 panel-title">
+                            <!-- Número da peqsuisa, data da pesquisa, Nome do pesquisador (class: super, telefonista, supervisor e pesquisador) -->
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyT9" aria-expanded="true" aria-controls="BodyT9">
+                                #547 - 17/03/2016 - <b class="pesquisador">Ofélia Carlinhos</b>
+                            </a>
+                        </div>
+                        <div class="col-md-2 panel-title text-right">
+                            <span class="glyphicon glyphicon-earphone" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-ok supervisor" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-ok telefonista" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-remove super" aria-hidden="true"></span>
+                        </div>
+                    </div>
+                </div>
+                <!-- BODY TICKET : id="BodyT9" , aria-labelledby="HeadT9" -->
+                <div id="BodyT9" class="panel-collapse collapse" role="tabpanel" aria-labelledby="HeadT9">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-7 barraderolagem">
+                                <strong>
+                                    <!-- DATETIME + DE + PARA (class: super, telefonista, supervisor e pesquisador) -->
+                                    22/03/2016 - 13:48 - <span class="super">Martim Rufino</span> - <span class="telefonista">TELEFONISTA</span> :
+                                </strong>
+                                <!-- MENSAGEM -->
+                                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                            </div>
+                            <div class="col-md-5 barraderolagem">
+                                <!-- DADOS DA PESQUISA -->
+                                <p><b>Endereço:</b> Seps 712/912 Edifício Pasteur, s/n Cj B Bl 1 S 202 - Asa Sul - Brasília</p>
+                                <p><b>Contato:</b> João - (61) 3345-4050</p>
+                                <p><b>Senha:</b> 9841321687</p>
+                                <p><b>Moradores:</b></p>
+                                <p>João (30): Residência - Trabalho - Residência</p>
+                                <p>Marcelo (6): Residência - Escola - Residência</p>
+                                <p>Mariana (5): Residência - Escola - Residência</p>
+                                <p>Pedro (52): Residência - Trabalho - Lazer - Residência</p>
+                                <p><b>Conferência:</b> 1 carro</p>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 30px;">
+                            <div class="col-md-2"><button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#ticket_fechar">FECHAR</button></div>
+                            <div class="col-md-2"><button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#ticket_responder">RESPONDER</button></div>
+                            <div class="col-md-2"><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#ticket_incluir">INCLUIR</button></div>
+                            <div class="col-md-2 col-md-offset-1"><a href="pesquisa.html" type="button" class="btn btn-primary btn-sm">VER PESQUISA</a></div>
+                            <div class="col-md-2"><button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#ticket_status">MUDAR STATUS</button></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- FIM TICKET -->
+
+            <!-- TICKET -->
+            <div class="panel panel-default">
+                <!-- HEAD TICKET : id = HeadT10 -->
+                <div class="panel-heading" role="tab" id="HeadT10">
+                    <div class="row">
+                        <div class="col-md-7 panel-title">
+                            <!-- DE/PARA (class: super, telefonista, supervisor e pesquisador) -->
+                            <span class="glyphicon glyphicon glyphicon-stop supervisor" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon glyphicon-stop telefonista" aria-hidden="true"></span>
+                            <!-- Nº do Ticket, Data da criação do Ticket, Hora da criação do Ticket, Assunto : href="#BodyT10" , aria-controls="BodyT10" -->
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyT10" aria-expanded="true" aria-controls="BodyT10">
+                                #139 - 23/03/2016 - 14:22 - Ver número de moradores
+                            </a>
+                        </div>
+                        <div class="col-md-3 panel-title">
+                            <!-- Número da peqsuisa, data da pesquisa, Nome do pesquisador (class: super, telefonista, supervisor e pesquisador) -->
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyT10" aria-expanded="true" aria-controls="BodyT10">
+                                #557 - 18/03/2016 - <b class="pesquisador">Filipe Horácio</b>
+                            </a>
+                        </div>
+                        <div class="col-md-2 panel-title text-right">
+                            <span class="glyphicon glyphicon-remove supervisor" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-remove telefonista" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-remove super" aria-hidden="true"></span>
+                        </div>
+                    </div>
+                </div>
+                <!-- BODY TICKET : id="BodyT10" , aria-labelledby="HeadT10" -->
+                <div id="BodyT10" class="panel-collapse collapse" role="tabpanel" aria-labelledby="HeadT10">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-7 barraderolagem">
+                                <strong>
+                                    <!-- DATETIME + DE + PARA (class: super, telefonista, supervisor e pesquisador) -->
+                                    23/03/2016 - 14:22 - <span class="supervisor">Assunção Alex</span> - <span class="telefonista">TELEFONISTA</span> :
+                                </strong>
+                                <!-- MENSAGEM -->
+                                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                            </div>
+                            <div class="col-md-5 barraderolagem">
+                                <!-- DADOS DA PESQUISA -->
+                                <p><b>Endereço:</b> Seps 712/912 Edifício Pasteur, s/n Cj B Bl 1 S 202 - Asa Sul - Brasília</p>
+                                <p><b>Contato:</b> João - (61) 3345-4050</p>
+                                <p><b>Senha:</b> 9841321687</p>
+                                <p><b>Moradores:</b></p>
+                                <p>Maria (25): Residência - Trabalho - Residência</p>
+                                <p>João (30): Residência - Trabalho - Residência</p>
+                                <p>Marcelo (6): Residência - Escola - Residência</p>
+                                <p>Mariana (5): Residência - Escola - Residência</p>
+                                <p>Tereza (51): Residência - Compras - Residência</p>
+                                <p><b>Conferência:</b> 1 carro</p>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 30px;">
+                            <div class="col-md-2"><button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#ticket_fechar">FECHAR</button></div>
+                            <div class="col-md-2"><button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#ticket_responder">RESPONDER</button></div>
+                            <div class="col-md-2"><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#ticket_incluir">INCLUIR</button></div>
+                            <div class="col-md-2 col-md-offset-1"><a href="pesquisa.html" type="button" class="btn btn-primary btn-sm">VER PESQUISA</a></div>
+                            <div class="col-md-2"><button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#ticket_status">MUDAR STATUS</button></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- FIM TICKET -->
+
+        </div>
+
+        <hr />
+
+        <!-- PAGINATION -->
+        <div class="row">
+            <div class="col-md-2 col-md-offset-10">
+                <button class="btn btn-primary">PRÓXIMA PÁGINA</button>
+            </div>
+        </div>
+
+        <hr />
+
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <h3 class="text-muted" style="display:inline-block;"> SAPO OD DF 2016</h3>
+            <img src="sapo_logo.png" style="height:60px; float:right;">
+        </div>
+    </footer>
+
+    <!-- MODAL RESPONDER -->
+
+    <div class="modal fade" id="ticket_responder" tabindex="-1" role="dialog" aria-labelledby="ticket_responder_label">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="ticket_responder_label">RESPONDER TICKET</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12"><textarea class="form-control" style="height: 200px;"></textarea></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="row">
+                        <div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
+                        <div class="col-md-6"><button type="button" class="btn btn-success">RESPONDER</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL FECHAR -->
+
+    <div class="modal fade" id="ticket_fechar" tabindex="-1" role="dialog" aria-labelledby="ticket_fechar_label">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="ticket_fechar_label">FECHAR TICKET</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p>Deseja realmente fechar este Ticket?</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="row">
+                        <div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">NÃO</button></div>
+                        <div class="col-md-6"><button type="button" class="btn btn-success">SIM</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL INCLUIR -->
+
+    <div class="modal fade" id="ticket_incluir" tabindex="-1" role="dialog" aria-labelledby="ticket_incluir_label">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="ticket_incluir_label">INCLUIR USUÁRIO OU GRUPO</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-2"><h4>Grupo:</h4></div>
+                        <div class="col-md-10">
+                            <select class="form-control">
+                                <option disabled selected>Selecione</option>
+                                <option>Supervisor</option>
+                                <option>Telefonista</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2"><h4>Usuário:</h4></div>
+                        <div class="col-md-10">
+                            <select class="form-control">
+                                <option disabled selected>Selecione</option>
+                                <option>Assunção Alex</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="row">
+                        <div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
+                        <div class="col-md-6"><button type="button" class="btn btn-success">INCLUIR</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL STATUS -->
+
+    <div class="modal fade" id="ticket_status" tabindex="-1" role="dialog" aria-labelledby="ticket_status_label">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="ticket_status_label">MUDAR STATUS</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-2"><h4>SV:</h4></div>
+                        <div class="col-md-10">
+                            <select class="form-control">
+                                <option>COMPLETA</option>
+                                <option>RECUSADA</option>
+                                <option>ACEITA</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2"><h4>CT:</h4></div>
+                        <div class="col-md-10">
+                            <select class="form-control">
+                                <option>COMPLETA</option>
+                                <option>RECUSADA</option>
+                                <option>ACEITA</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2"><h4>CT:</h4></div>
+                        <div class="col-md-10">
+                            <select class="form-control">
+                                <option>COMPLETA</option>
+                                <option>RECUSADA</option>
+                                <option>ACEITA</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="row">
+                        <div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
+                        <div class="col-md-6"><button type="button" class="btn btn-success">MUDAR</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+</html>

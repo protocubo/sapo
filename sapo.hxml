@@ -6,3 +6,8 @@
 -neko www/index.n
 -main sapo.Index
 
+--next
+
+-neko www/SapoodJS.js
+-main js.MainJs
+

@@ -71,27 +71,30 @@
                 <h2>TICKET (A:1 / F:3)</h2>
             </div>
             <div class="col-md-3 text-right">
-                <h2 class="completa">COMPLETA</h2>
+                <h2>
+                    <span class="glyphicon glyphicon-earphone" aria-hidden="true"></span>
+                    <span class="glyphicon glyphicon-minus supervisor" aria-hidden="true"></span>
+                    <span class="glyphicon glyphicon-ok telefonista" aria-hidden="true"></span>
+                    <span class="glyphicon glyphicon-remove super" aria-hidden="true"></span>
+                </h2>
             </div>
         </div>
         <hr />
 
         <!-- ACTIONS -->
         <div class="row">
-            <div class="col-md-2 col-md-offset-1">
-                <button type="button" class="btn btn-danger">RECUSAR</button>
-            </div>
-            <div class="col-md-2">
+
+            <div class="col-md-2 col-md-offset-2">
                 <button type="button" class="btn btn-danger">CORRIGIR</button>
             </div>
             <div class="col-md-2">
-                <button type="button" class="btn btn-warning">ABRIR TICKET</button>
+                <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#pesquisa_ticket">ABRIR TICKET</button>
             </div>
             <div class="col-md-2">
                 <button type="button" class="btn btn-warning">VER TICKETS</button>
             </div>
             <div class="col-md-2">
-                <button type="button" class="btn btn-success">VERIFICAR</button>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#pesquisa_status">MUDAR STATUS</button>
             </div>
         </div>
         <hr />
@@ -99,7 +102,7 @@
         <!-- BODY - DOMICÍLIO -->
         <div class="row">
             <div class="col-md-12">
-                <h3>DOMICÍLIO / FAMÍLIA</h3>
+                <h3><span class="glyphicon glyphicon-home" aria-hidden="true"></span> DOMICÍLIO / FAMÍLIA</h3>
 
                 <!-- BLOCK - botão de edit, <b>campo, info do campo -->
                 <div class="bloco">
@@ -115,7 +118,8 @@
         <!-- BODY - MORADOR -->
         <div class="row">
             <div class="col-md-12">
-                <h3>MORADOR / Maria (25)</h3>
+                <h3><span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                MORADOR / Maria (25)</h3>
 
                 <!-- BLOCK - botão de edit, <b>campo, info do campo -->
                 <div class="bloco">
@@ -124,11 +128,22 @@
                 </div>
                 <!-- FIM DO BLOCK -->
 
-                <div class="viagem">
-                    <a href="#" style="display:none;"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
-                    <b>Ponto 1 (Residência):</b> SCLN 214 BL. A LJ. 9/11 - Asa Norte, Brasília
-                </div>
+                <hr />
 
+                <div class="viagem">
+                    <p>
+                        <a href="#" style="display:none;"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                        <b><span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Ponto 1 (Residência):</b> SCLN 214 BL. A LJ. 9/11 - Asa Norte, Brasília
+                    </p>
+                    <p>
+                        <a href="#" style="display:none;"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                        <b><span class="glyphicon glyphicon-time" aria-hidden="true"></span> Saída:</b> 10:00
+                    </p>
+                    <p>
+                        <a href="#" style="display:none;"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                        <b><span class="glyphicon glyphicon-transfer" aria-hidden="true"></span> Modo (Ônibus):</b> blá blá blá
+                    </p>
+                </div>
             </div>
         </div>
         <hr />
@@ -141,6 +156,97 @@
             <h3 class="text-muted">SAPO OD DF 2016</h3>
         </div>
     </footer>
+
+    <!-- MODAL TICKET -->
+
+    <div class="modal fade" id="pesquisa_ticket" tabindex="-1" role="dialog" aria-labelledby="pesquisa_ticket_label">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="pesquisa_ticket_label">ABRIR TICKET</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-2"><h4>Assunto:</h4></div>
+                        <div class="col-md-10"><input type="text" class="form-control"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2"><h4>Destino:</h4></div>
+                        <div class="col-md-10">
+                            <select class="form-control">
+                                <option disabled selected>Selecione</option>
+                                <option>Supervisor</option>
+                                <option>Telefonista</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2"><h4>Mensagem:</h4></div>
+                        <div class="col-md-10"><textarea class="form-control" style="height: 200px;"></textarea></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="row">
+                        <div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
+                        <div class="col-md-6"><button type="button" class="btn btn-success">ENVIAR</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- MODAL STATUS -->
+
+    <div class="modal fade" id="pesquisa_status" tabindex="-1" role="dialog" aria-labelledby="pesquisa_status_label">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="pesquisa_status_label">MUDAR STATUS</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-2"><h4>SV:</h4></div>
+                        <div class="col-md-10">
+                            <select class="form-control">
+                                <option>COMPLETA</option>
+                                <option>RECUSADA</option>
+                                <option>ACEITA</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2"><h4>CT:</h4></div>
+                        <div class="col-md-10">
+                            <select class="form-control">
+                                <option>COMPLETA</option>
+                                <option>RECUSADA</option>
+                                <option>ACEITA</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2"><h4>CT:</h4></div>
+                        <div class="col-md-10">
+                            <select class="form-control">
+                                <option>COMPLETA</option>
+                                <option>RECUSADA</option>
+                                <option>ACEITA</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="row">
+                        <div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
+                        <div class="col-md-6"><button type="button" class="btn btn-success">MUDAR</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </body>
 </html>

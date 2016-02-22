@@ -1,0 +1,642 @@
+﻿<!DOCTYPE html>
+
+<html lang="pt-br">
+
+<head>
+    <meta charset="utf-8" />
+
+    <!-- TITLE -->
+    <title></title>
+
+    <!-- JQUERY -->
+    <script src="https://code.jquery.com/jquery-2.2.0.min.js" crossorigin="anonymous"></script>
+
+    <!-- BOOTSTRAP -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+    <!-- GOOGLE FONTS ROBOTO CONDENSED -->
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400,700,300italic,400italic,700italic' rel='stylesheet' type='text/css'>
+
+    <!-- SAPO -->
+    <link href="sapo.css" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <div class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button><img src="sapo_logo.png" style="height:50px;">
+            </div>
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="index.html">SAPO</a></li>
+                    <li><a href="ticket.html">TICKETS</a></li> <!-- @LOGIT @Telefonista @Supervisor -->
+                    <li class="active"><a href="pesquisas.html">PESQUISAS</a></li> <!-- @LOGIT @Telefonista @Supervisor -->
+                    <li class="dropdown">
+                        <!-- @LOGIT @Telefonista @Supervisor -->
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">SUMÁRIO <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="sumario.html">GERAL:STATUS</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">ADMINISTRAÇÃO <b class="caret"></b></a> <!-- @LOGIT -->
+                        <ul class="dropdown-menu">
+                            <li><a href="cadastro.html">CADASTRO</a></li>
+                            <li><a href="pagar.html">PAGAMENTOS</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <!-- (class: super, telefonista, supervisor e pesquisador) -->
+                    <li><a><b class="super">MartimRufino@CT</b></a></li> <!-- pós login -->
+                    <li><a href="index.html">Sair</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- PESQUISAS -->
+    <div class="container">
+
+        <!-- HEAD -->
+        <h2>PESQUISAS</h2>
+        <hr />
+
+        <!-- FILTROS -->
+        <h3>Filtros:</h3>
+        <div class="row">
+            <div class="col-md-2"><h4>GRUPO:</h4></div>
+            <div class="col-md-2">
+                <select class="form-control">
+                    <option>Selecione</option>
+                    <option>Pesquisador</option>
+                    <option>Supervisor</option>
+                </select>
+            </div>
+            <div class="col-md-2"><h4>USUÁRIO</h4></div>
+            <div class="col-md-2">
+                <select class="form-control">
+                    <option>Selecione</option>
+                    <!-- pegar grupo: listar usuários da lista anterior -->
+                </select>
+            </div>
+            <div class="col-md-2"><h4>VÁLIDA</h4></div>
+            <div class="col-md-2">
+                <select class="form-control">
+                    <option>Sim</option>
+                    <option>Não</option>
+                    <option>Todas</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2"><h4>PAGA</h4></div>
+            <div class="col-md-2">
+                <select class="form-control">
+                    <option>Todas</option>
+                    <option>Não</option>
+                    <option>Sim</option>
+                </select>
+            </div>
+            <div class="col-md-2"><h4>STATUS</h4></div>
+            <div class="col-md-2">
+                <select class="form-control">
+                    <option>Todas</option>
+                    <option>Completas</option>
+                    <option>Recusadas</option>
+                    <option>Aceitas</option>
+                </select>
+            </div>
+            <div class="col-md-2"><h4>ORDEM</h4></div>
+            <div class="col-md-2">
+                <select class="form-control">
+                    <option>Data Crescente</option>
+                    <option>Data Decrescente</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2 col-md-offset-10">
+                <button type="button" class="btn btn-primary">APLICAR</button>
+            </div>
+        </div>
+        <hr />
+
+        <!-- BUSCA -->
+        <h3>Busca:</h3>
+        <div class="row">
+            <div class="col-md-2"><h4>Nº DA PESQUISA</h4></div>
+            <div class="col-md-2">
+                <input type="text" class="form-control" placeholder="Número da Pesquisa">
+            </div>
+            <div class="col-md-2 col-md-offset-6">
+                <button type="button" class="btn btn-primary">BUSCAR</button>
+            </div>
+        </div>
+        <hr />
+
+        <!-- PESQUISAS -->
+        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" style="margin-top: 60px;">
+
+            <!-- PESQUISA -->
+            <div class="panel panel-default">
+                <!-- HEAD PESQUISA : id = HeadP1 -->
+                <div class="panel-heading" role="tab" id="HeadP1">
+                    <div class="row">
+                        <div class="col-md-4 panel-title">
+                            <!-- Nº do Ticket, Data da criação do Ticket, Hora da criação do Ticket, Assunto : href="#BodyP1" , aria-controls="BodyP1" -->
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyP1" aria-expanded="true" aria-controls="BodyP1">
+                                #41 - 16/03/2016 - <b class="pesquisador">Filipe Horácio</b> - <b class="supervisor">Rúben Fabricio</b>
+                            </a>
+                        </div>
+                        <div class="col-md-6 panel-title">
+                            <!-- Número da peqsuisa, data da pesquisa, Nome do pesquisador (class: super, telefonista, supervisor e pesquisador) -->
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyP1" aria-expanded="true" aria-controls="BodyP1">
+                                Seps 712/912 Edifício Pasteur, s/n Cj B Bl 1 S 202 - Asa Sul - Brasília 
+                            </a>
+                        </div>
+                        <div class="col-md-2 panel-title text-right">
+                            <span class="glyphicon glyphicon-ok supervisor" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-ok telefonista" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-minus super" aria-hidden="true"></span>
+                        </div>
+                    </div>
+                </div>
+                <!-- BODY TICKET : id="BodyP1" , aria-labelledby="HeadP1" -->
+                <div id="BodyP1" class="panel-collapse collapse" role="tabpanel" aria-labelledby="HeadP1">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12 barraderolagem">
+                                <!-- DADOS DA PESQUISA -->
+                                <p><b>Endereço:</b> Seps 712/912 Edifício Pasteur, s/n Cj B Bl 1 S 202 - Asa Sul - Brasília </p>
+                                <p><b>Contato:</b> Marcelo - (61) 98765432</p>
+                                <p><b>Senha:</b> 9841321687</p> 
+                                <p><b>Moradores:</b></p>
+                                <p>Marcelo (25): Residência - Trabalho - Residência</p>
+                                <p>João (18): Residência - Escola - Residência</p>
+                                <p>Juliana (37): Residência - Trabalho - Residência</p>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 30px;">
+                            <div class="col-md-2 col-md-offset-10"><a href="pesquisa.html" type="button" class="btn btn-primary btn-sm">VER PESQUISA</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- FIM TICKET -->
+
+            <!-- PESQUISA -->
+            <div class="panel panel-default">
+                <!-- HEAD PESQUISA : id = HeadP2 -->
+                <div class="panel-heading" role="tab" id="HeadP2">
+                    <div class="row">
+                        <div class="col-md-4 panel-title">
+                            <!-- Nº do Ticket, Data da criação do Ticket, Hora da criação do Ticket, Assunto : href="#BodyP2" , aria-controls="BodyP2" -->
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyP2" aria-expanded="true" aria-controls="BodyP2">
+                                #43 - 17/03/2016 - <b class="pesquisador">Ofélia Carlinhos</b> - <b class="supervisor">Rúben Fabricio</b>
+                            </a>
+                        </div>
+                        <div class="col-md-6 panel-title">
+                            <!-- Número da peqsuisa, data da pesquisa, Nome do pesquisador (class: super, telefonista, supervisor e pesquisador) -->
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyP2" aria-expanded="true" aria-controls="BodyP2">
+                                CSB 02 - Alameda Shopping, Lt 01/04 S 722/724 T B, Taguatinga Sul - Taguatinga
+                            </a>
+                        </div>
+                        <div class="col-md-2 panel-title text-right">
+                            <span class="glyphicon glyphicon-ok supervisor" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-ok telefonista" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-ok super" aria-hidden="true"></span>
+                        </div>
+                    </div>
+                </div>
+                <!-- BODY TICKET : id="BodyP2" , aria-labelledby="HeadP2" -->
+                <div id="BodyP2" class="panel-collapse collapse" role="tabpanel" aria-labelledby="HeadP2">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12 barraderolagem">
+                                <!-- DADOS DA PESQUISA -->
+                                <p><b>Endereço:</b> CSB 02 - Alameda Shopping, Lt 01/04 S 722/724 T B, Taguatinga Sul - Taguatinga </p>
+                                <p><b>Contato:</b> Marcelo - (61) 98765432</p>
+                                <p><b>Senha:</b> 9841321687</p>
+                                <p><b>Moradores:</b></p>
+                                <p>Marcelo (25): Residência - Trabalho - Residência</p>
+                                <p>João (18): Residência - Escola - Residência</p>
+                                <p>Tereza (78): Residência - Lazer - Residência</p>
+                            </div>
+                        <div class="row" style="margin-top: 30px;">
+                            <div class="col-md-2 col-md-offset-10"><a href="pesquisa.html" type="button" class="btn btn-primary btn-sm">VER PESQUISA</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- FIM TICKET -->
+
+            <!-- PESQUISA -->
+            <div class="panel panel-default">
+                <!-- HEAD PESQUISA : id = HeadP3 -->
+                <div class="panel-heading" role="tab" id="HeadP3">
+                    <div class="row">
+                        <div class="col-md-4 panel-title">
+                            <!-- Nº do Ticket, Data da criação do Ticket, Hora da criação do Ticket, Assunto : href="#BodyP3" , aria-controls="BodyP3" -->
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyP3" aria-expanded="true" aria-controls="BodyP3">
+                                #47 - 17/03/2016 - <b class="pesquisador">Ofélia Carlinhos</b> - <b class="supervisor">Rúben Fabricio</b>
+                            </a>
+                        </div>
+                        <div class="col-md-6 panel-title">
+                            <!-- Número da peqsuisa, data da pesquisa, Nome do pesquisador (class: super, telefonista, supervisor e pesquisador) -->
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyP3" aria-expanded="true" aria-controls="BodyP3">
+                                Quadra SGAS 915 Ed Advance, Lt 70 A S 346 - Asa Sul - Brasília
+                            </a>
+                        </div>
+                        <div class="col-md-2 panel-title text-right">
+                            <span class="glyphicon glyphicon-ok supervisor" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-remove telefonista" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-minus super" aria-hidden="true"></span>
+                        </div>
+                    </div>
+                </div>
+                <!-- BODY TICKET : id="BodyP3" , aria-labelledby="HeadP3" -->
+                <div id="BodyP3" class="panel-collapse collapse" role="tabpanel" aria-labelledby="HeadP3">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12 barraderolagem">
+                                <!-- DADOS DA PESQUISA -->
+                                <p><b>Endereço:</b> Quadra SGAS 915 Ed Advance, Lt 70 A S 346 - Asa Sul - Brasília </p>
+                                <p><b>Contato:</b> Marcelo - (61) 98765432</p>
+                                <p><b>Senha:</b> 9841321687</p>
+                                <p><b>Moradores:</b></p>
+                                <p>Marcelo (25): Residência - Trabalho - Residência</p>
+                                <p>Cristiano (57): Residência - Lazer - Residência</p>
+                                <p>Tereza (78): Residência - Lazer - Residência</p>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 30px;">
+                            <div class="col-md-2 col-md-offset-10"><a href="pesquisa.html" type="button" class="btn btn-primary btn-sm">VER PESQUISA</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- FIM TICKET -->
+
+            <!-- PESQUISA -->
+            <div class="panel panel-default">
+                <!-- HEAD PESQUISA : id = HeadP4 -->
+                <div class="panel-heading" role="tab" id="HeadP4">
+                    <div class="row">
+                        <div class="col-md-4 panel-title">
+                            <!-- Nº do Ticket, Data da criação do Ticket, Hora da criação do Ticket, Assunto : href="#BodyP4" , aria-controls="BodyP4" -->
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyP4" aria-expanded="true" aria-controls="BodyP4">
+                                #53 - 17/03/2016 - <b class="pesquisador">Filipe Horácio</b> - <b class="supervisor">Rúben Fabricio</b>
+                            </a>
+                        </div>
+                        <div class="col-md-6 panel-title">
+                            <!-- Número da peqsuisa, data da pesquisa, Nome do pesquisador (class: super, telefonista, supervisor e pesquisador) -->
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyP4" aria-expanded="true" aria-controls="BodyP4">
+                                Setor SCN QD. 02 Torre A Shopping Liberty Mall, SL 212 Asa Norte - Brasília
+                            </a>
+                        </div>
+                        <div class="col-md-2 panel-title text-right">
+                            <span class="glyphicon glyphicon-earphone" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-ok supervisor" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-ok telefonista" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-ok super" aria-hidden="true"></span>
+                        </div>
+                    </div>
+                </div>
+                <!-- BODY TICKET : id="BodyP4" , aria-labelledby="HeadP4" -->
+                <div id="BodyP4" class="panel-collapse collapse" role="tabpanel" aria-labelledby="HeadP4">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12 barraderolagem">
+                                <!-- DADOS DA PESQUISA -->
+                                <p><b>Endereço:</b> Setor SCN QD. 02 Torre A Shopping Liberty Mall, SL 212 Asa Norte - Brasília </p>
+                                <p><b>Contato:</b> Marcelo - (61) 98765432</p>
+                                <p><b>Senha:</b> 9841321687</p>
+                                <p><b>Moradores:</b></p>
+                                <p>Marcelo (25): Residência - Trabalho - Residência</p>
+                                <p>Maria (23): Residência - Trabalho - Residência</p>
+                                <p>Cristiano (57): Residência - Lazer - Residência</p>
+                                <p>Tereza (78): Residência - Lazer - Residência</p>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 30px;">
+                            <div class="col-md-2 col-md-offset-10"><a href="pesquisa.html" type="button" class="btn btn-primary btn-sm">VER PESQUISA</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- FIM TICKET -->
+
+            <!-- PESQUISA -->
+            <div class="panel panel-default">
+                <!-- HEAD PESQUISA : id = HeadP5 -->
+                <div class="panel-heading" role="tab" id="HeadP5">
+                    <div class="row">
+                        <div class="col-md-4 panel-title">
+                            <!-- Nº do Ticket, Data da criação do Ticket, Hora da criação do Ticket, Assunto : href="#BodyP5" , aria-controls="BodyP5" -->
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyP5" aria-expanded="true" aria-controls="BodyP5">
+                                #59 - 17/03/2016 - <b class="pesquisador">Amando Gonçalo</b> - <b class="supervisor">Rúben Fabricio</b>
+                            </a>
+                        </div>
+                        <div class="col-md-6 panel-title">
+                            <!-- Número da peqsuisa, data da pesquisa, Nome do pesquisador (class: super, telefonista, supervisor e pesquisador) -->
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyP5" aria-expanded="true" aria-controls="BodyP5">
+                                SMHN Quadra 2 (DIDF), Ed Dr. Crispim An 7º S 704 - Asa Norte - Brasília
+                            </a>
+                        </div>
+                        <div class="col-md-2 panel-title text-right">
+                            <span class="glyphicon glyphicon-earphone" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-ok supervisor" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-minus telefonista" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-minus super" aria-hidden="true"></span>
+                        </div>
+                    </div>
+                </div>
+                <!-- BODY TICKET : id="BodyP5" , aria-labelledby="HeadP5" -->
+                <div id="BodyP5" class="panel-collapse collapse" role="tabpanel" aria-labelledby="HeadP5">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12 barraderolagem">
+                                <!-- DADOS DA PESQUISA -->
+                                <p><b>Endereço:</b> SMHN Quadra 2 (DIDF), Ed Dr. Crispim An 7º S 704 - Asa Norte - Brasília </p>
+                                <p><b>Contato:</b> Marcelo - (61) 98765432</p>
+                                <p><b>Senha:</b> 9841321687</p>
+                                <p><b>Moradores:</b></p>
+                                <p>Marcelo (25): Residência - Trabalho - Residência</p>
+                                <p>Tereza (78): Residência - Lazer - Residência</p>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 30px;">
+                            <div class="col-md-2 col-md-offset-10"><a href="pesquisa.html" type="button" class="btn btn-primary btn-sm">VER PESQUISA</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- FIM TICKET -->
+
+            <!-- PESQUISA -->
+            <div class="panel panel-default">
+                <!-- HEAD PESQUISA : id = HeadP6 -->
+                <div class="panel-heading" role="tab" id="HeadP6">
+                    <div class="row">
+                        <div class="col-md-4 panel-title">
+                            <!-- Nº do Ticket, Data da criação do Ticket, Hora da criação do Ticket, Assunto : href="#BodyP6" , aria-controls="BodyP6" -->
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyP6" aria-expanded="true" aria-controls="BodyP6">
+                                #61 - 17/03/2016 - <b class="pesquisador">Filipe Horácio</b> - <b class="supervisor">Assunção Alex</b>
+                            </a>
+                        </div>
+                        <div class="col-md-6 panel-title">
+                            <!-- Número da peqsuisa, data da pesquisa, Nome do pesquisador (class: super, telefonista, supervisor e pesquisador) -->
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyP6" aria-expanded="true" aria-controls="BodyP6">
+                                STN - Ao lado Boulevard Shopping, Cj O S 223 Ed Life Center - Asa Norte - Brasília
+                            </a>
+                        </div>
+                        <div class="col-md-2 panel-title text-right">
+                            <span class="glyphicon glyphicon-ok supervisor" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-minus telefonista" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-minus super" aria-hidden="true"></span>
+                        </div>
+                    </div>
+                </div>
+                <!-- BODY TICKET : id="BodyP6" , aria-labelledby="HeadP6" -->
+                <div id="BodyP6" class="panel-collapse collapse" role="tabpanel" aria-labelledby="HeadP6">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12 barraderolagem">
+                                <!-- DADOS DA PESQUISA -->
+                                <p><b>Endereço:</b> STN - Ao lado Boulevard Shopping, Cj O S 223 Ed Life Center - Asa Norte - Brasília </p>
+                                <p><b>Contato:</b> Marcelo - (61) 98765432</p>
+                                <p><b>Senha:</b> 9841321687</p>
+                                <p><b>Moradores:</b></p>
+                                <p>Marcelo (25): Residência - Trabalho - Residência</p>
+                                <p>Maria (23): Residência - Trabalho - Residência</p>
+                                <p>Cristiano (57): Residência - Lazer - Residência</p>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 30px;">
+                            <div class="col-md-2 col-md-offset-10"><a href="pesquisa.html" type="button" class="btn btn-primary btn-sm">VER PESQUISA</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- FIM TICKET -->
+
+            <!-- PESQUISA -->
+            <div class="panel panel-default">
+                <!-- HEAD PESQUISA : id = HeadP7 -->
+                <div class="panel-heading" role="tab" id="HeadP7">
+                    <div class="row">
+                        <div class="col-md-4 panel-title">
+                            <!-- Nº do Ticket, Data da criação do Ticket, Hora da criação do Ticket, Assunto : href="#BodyP7" , aria-controls="BodyP7" -->
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyP7" aria-expanded="true" aria-controls="BodyP7">
+                                #67 - 17/03/2016 - <b class="pesquisador">Filipe Horácio</b> - <b class="supervisor">Assunção Alex</b>
+                            </a>
+                        </div>
+                        <div class="col-md-6 panel-title">
+                            <!-- Número da peqsuisa, data da pesquisa, Nome do pesquisador (class: super, telefonista, supervisor e pesquisador) -->
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyP7" aria-expanded="true" aria-controls="BodyP7">
+                                SHIN CA1, s/n Bl A S 316 Shopping Deck Norte - Lago Norte - Brasília
+                            </a>
+                        </div>
+                        <div class="col-md-2 panel-title text-right">
+                            <span class="glyphicon glyphicon-ok supervisor" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-ok telefonista" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-ok super" aria-hidden="true"></span>
+                        </div>
+                    </div>
+                </div>
+                <!-- BODY TICKET : id="BodyP7" , aria-labelledby="HeadP7" -->
+                <div id="BodyP7" class="panel-collapse collapse" role="tabpanel" aria-labelledby="HeadP7">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12 barraderolagem">
+                                <!-- DADOS DA PESQUISA -->
+                                <p><b>Endereço:</b> SHIN CA1, s/n Bl A S 316 Shopping Deck Norte - Lago Norte - Brasília </p>
+                                <p><b>Contato:</b> Marcelo - (61) 98765432</p>
+                                <p><b>Senha:</b> 9841321687</p>
+                                <p><b>Moradores:</b></p>
+                                <p>Marcelo (25): Residência - Trabalho - Residência</p>
+                                <p>Cristiano (57): Residência - Lazer - Residência</p>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 30px;">
+                            <div class="col-md-2 col-md-offset-10"><a href="pesquisa.html" type="button" class="btn btn-primary btn-sm">VER PESQUISA</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- FIM TICKET -->
+
+            <!-- PESQUISA -->
+            <div class="panel panel-default">
+                <!-- HEAD PESQUISA : id = HeadP8 -->
+                <div class="panel-heading" role="tab" id="HeadP8">
+                    <div class="row">
+                        <div class="col-md-4 panel-title">
+                            <!-- Nº do Ticket, Data da criação do Ticket, Hora da criação do Ticket, Assunto : href="#BodyP8" , aria-controls="BodyP8" -->
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyP8" aria-expanded="true" aria-controls="BodyP8">
+                                #71 - 17/03/2016 - <b class="pesquisador">Filipe Horácio</b> - <b class="supervisor">Assunção Alex</b>
+                            </a>
+                        </div>
+                        <div class="col-md-6 panel-title">
+                            <!-- Número da peqsuisa, data da pesquisa, Nome do pesquisador (class: super, telefonista, supervisor e pesquisador) -->
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyP8" aria-expanded="true" aria-controls="BodyP8">
+                                Seps 712/912 Edifício Pasteur, s/n Cj B Bl 1 S 202 - Asa Sul - Brasília
+                            </a>
+                        </div>
+                        <div class="col-md-2 panel-title text-right">
+                            <span class="glyphicon glyphicon-ok supervisor" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-minus telefonista" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-minus super" aria-hidden="true"></span>
+                        </div>
+                    </div>
+                </div>
+                <!-- BODY TICKET : id="BodyP8" , aria-labelledby="HeadP8" -->
+                <div id="BodyP8" class="panel-collapse collapse" role="tabpanel" aria-labelledby="HeadP8">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12 barraderolagem">
+                                <!-- DADOS DA PESQUISA -->
+                                <p><b>Endereço:</b> Seps 712/912 Edifício Pasteur, s/n Cj B Bl 1 S 202 - Asa Sul - Brasília </p>
+                                <p><b>Contato:</b> Marcelo - (61) 98765432</p>
+                                <p><b>Senha:</b> 9841321687</p>
+                                <p><b>Moradores:</b></p>
+                                <p>Marcelo (25): Residência - Trabalho - Residência</p>
+                                <p>Maria (23): Residência - Trabalho - Residência</p>
+                                <p>Cristiano (57): Residência - Lazer - Residência</p>
+                                <p>Tereza (78): Residência - Lazer - Residência</p>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 30px;">
+                            <div class="col-md-2 col-md-offset-10"><a href="pesquisa.html" type="button" class="btn btn-primary btn-sm">VER PESQUISA</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- FIM TICKET -->
+
+            <!-- PESQUISA -->
+            <div class="panel panel-default">
+                <!-- HEAD PESQUISA : id = HeadP9 -->
+                <div class="panel-heading" role="tab" id="HeadP9">
+                    <div class="row">
+                        <div class="col-md-4 panel-title">
+                            <!-- Nº do Ticket, Data da criação do Ticket, Hora da criação do Ticket, Assunto : href="#BodyP9" , aria-controls="BodyP9" -->
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyP9" aria-expanded="true" aria-controls="BodyP9">
+                                #73 - 18/03/2016 - <b class="pesquisador">Filipe Horácio</b> - <b class="supervisor">Rúben Fabricio</b>
+                            </a>
+                        </div>
+                        <div class="col-md-6 panel-title">
+                            <!-- Número da peqsuisa, data da pesquisa, Nome do pesquisador (class: super, telefonista, supervisor e pesquisador) -->
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyP9" aria-expanded="true" aria-controls="BodyP9">
+                                CSB 02 - Alameda Shopping, Lt 01/04 S 722/724 T B, Taguatinga Sul - Taguatinga
+                            </a>
+                        </div>
+                        <div class="col-md-2 panel-title text-right">
+                            <span class="glyphicon glyphicon-remove supervisor" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-minus telefonista" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-minus super" aria-hidden="true"></span>
+                        </div>
+                    </div>
+                </div>
+                <!-- BODY TICKET : id="BodyP9" , aria-labelledby="HeadP9" -->
+                <div id="BodyP9" class="panel-collapse collapse" role="tabpanel" aria-labelledby="HeadP9">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12 barraderolagem">
+                                <!-- DADOS DA PESQUISA -->
+                                <p><b>Endereço:</b> CSB 02 - Alameda Shopping, Lt 01/04 S 722/724 T B, Taguatinga Sul - Taguatinga </p>
+                                <p><b>Contato:</b> Marcelo - (61) 98765432</p>
+                                <p><b>Senha:</b> 9841321687</p>
+                                <p><b>Moradores:</b></p>
+                                <p>Marcelo (25): Residência - Trabalho - Residência</p>
+                                <p>Cristiano (57): Residência - Lazer - Residência</p>
+                                <p>Tereza (78): Residência - Lazer - Residência</p>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 30px;">
+                            <div class="col-md-2 col-md-offset-10"><a href="pesquisa.html" type="button" class="btn btn-primary btn-sm">VER PESQUISA</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- FIM TICKET -->
+
+            <!-- PESQUISA -->
+            <div class="panel panel-default">
+                <!-- HEAD PESQUISA : id = HeadP10 -->
+                <div class="panel-heading" role="tab" id="HeadP10">
+                    <div class="row">
+                        <div class="col-md-4 panel-title">
+                            <!-- Nº do Ticket, Data da criação do Ticket, Hora da criação do Ticket, Assunto : href="#BodyP10" , aria-controls="BodyP10" -->
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyP10" aria-expanded="true" aria-controls="BodyP10">
+                                #79 - 18/03/2016 - <b class="pesquisador">Amando Gonçalo</b> - <b class="supervisor">Rúben Fabricio</b>
+                            </a>
+                        </div>
+                        <div class="col-md-6 panel-title">
+                            <!-- Número da peqsuisa, data da pesquisa, Nome do pesquisador (class: super, telefonista, supervisor e pesquisador) -->
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyP10" aria-expanded="true" aria-controls="BodyP10">
+                                Quadra SGAS 915 Ed Advance, Lt 70 A S 346 - Asa Sul - Brasília
+                            </a>
+                        </div>
+                        <div class="col-md-2 panel-title text-right">
+                            <span class="glyphicon glyphicon-remove supervisor" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-remove telefonista" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-remove super" aria-hidden="true"></span>
+                        </div>
+                    </div>
+                </div>
+                <!-- BODY TICKET : id="BodyP10" , aria-labelledby="HeadP10" -->
+                <div id="BodyP10" class="panel-collapse collapse" role="tabpanel" aria-labelledby="HeadP10">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12 barraderolagem">
+                                <!-- DADOS DA PESQUISA -->
+                                <p><b>Endereço:</b> Quadra SGAS 915 Ed Advance, Lt 70 A S 346 - Asa Sul - Brasília </p>
+                                <p><b>Contato:</b> Cristiano - (61) 98765432</p>
+                                <p><b>Senha:</b> 9841321687</p>
+                                <p><b>Moradores:</b></p>
+                                <p>Cristiano (57): Residência - Lazer - Residência</p>
+                                <p>Tereza (78): Residência - Lazer - Residência</p>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 30px;">
+                            <div class="col-md-2 col-md-offset-10"><a href="pesquisa.html" type="button" class="btn btn-primary btn-sm">VER PESQUISA</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- FIM TICKET -->
+
+        </div>
+        <hr />
+
+        <!-- PAGINATION -->
+        <div class="row">
+            <div class="col-md-2 col-md-offset-10">
+                <button class="btn btn-primary">PRÓXIMA PÁGINA</button>
+            </div>
+        </div>
+        <hr />
+
+    </div>
+
+        <!-- FOOTER -->
+        <footer class="footer">
+            <div class="container">
+                <h3 class="text-muted" style="display:inline-block;"> SAPO OD DF 2016</h3>
+                <img src="sapo_logo.png" style="height:60px; float:right;">
+            </div>
+        </footer>
+
+</body>
+</html>

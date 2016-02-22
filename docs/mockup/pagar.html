@@ -1,0 +1,593 @@
+﻿<!DOCTYPE html>
+
+<html lang="pt-br">
+
+<head>
+    <meta charset="utf-8" />
+
+    <!-- TITLE -->
+    <title></title>
+
+    <!-- JQUERY -->
+    <script src="https://code.jquery.com/jquery-2.2.0.min.js" crossorigin="anonymous"></script>
+
+    <!-- BOOTSTRAP -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+    <!-- GOOGLE FONTS ROBOTO CONDENSED -->
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400,700,300italic,400italic,700italic' rel='stylesheet' type='text/css'>
+
+    <!-- SAPO -->
+    <link href="sapo.css" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <div class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button><img src="sapo_logo.png" style="height:50px;">
+            </div>
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li class=""><a href="index.html">SAPO</a></li>
+                    <li><a href="ticket.html">TICKETS</a></li> <!-- @LOGIT @Telefonista @Supervisor -->
+                    <li><a href="pesquisas.html">PESQUISAS</a></li> <!-- @LOGIT @Telefonista @Supervisor -->
+                    <li class="dropdown">
+                        <!-- @LOGIT @Telefonista @Supervisor -->
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">SUMÁRIO <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="sumario.html">GERAL:STATUS</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown active">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">ADMINISTRAÇÃO <b class="caret"></b></a> <!-- @LOGIT -->
+                        <ul class="dropdown-menu">
+                            <li><a href="cadastro.html">CADASTRO</a></li>
+                            <li><a href="pagar.html">PAGAMENTOS</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <!-- (class: super, telefonista, supervisor e pesquisador) -->
+                    <li><a><b class="super">MartimRufino@CT</b></a></li> <!-- pós login -->
+                    <li><a href="index.html">Sair</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGAR -->
+    <div class="container">
+
+        <!-- HEAD -->
+        <h2>PAGAMENTOS</h2>
+        <hr />
+        
+        <!-- FILTROS -->
+        <h3>Filtros:</h3>
+        <div class="row">
+            <div class="col-md-2"><h4>PESQUISADOR:</h4></div>
+            <div class="col-md-2">
+                <select class="form-control">
+                    <option>Selecione</option>
+                    <!-- lista de pesquisadores por ordem alfabética -->
+                </select>
+            </div>
+            <div class="col-md-2"><h4>VÁLIDA</h4></div>
+            <div class="col-md-2">
+                <select class="form-control">
+                    <option>Sim</option>
+                    <option>Não</option>
+                    <option>Todas</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2"><h4>PAGA</h4></div>
+            <div class="col-md-2">
+                <select class="form-control">
+                    <option>Não</option>
+                    <option>Sim</option>
+                </select>
+            </div>
+            <div class="col-md-2"><h4>STATUS</h4></div>
+            <div class="col-md-2">
+                <select class="form-control">
+                    <option>Abertas</option>
+                    <option>Completas</option>
+                    <option>Verificadas</option>
+                    <option>Aceitas</option>
+                </select>
+            </div>
+            <div class="col-md-2 col-md-offset-2">
+                <button type="button" class="btn btn-primary">APLICAR</button>
+            </div>
+        </div>
+        <hr />
+
+        <!-- BUSCA -->
+        <h3>Busca:</h3>
+        <div class="row">
+            <div class="col-md-2"><h4>REF. PAGAMENTO</h4></div>
+            <div class="col-md-2">
+                <input type="text" class="form-control" placeholder="Ref. de Pagamento">
+            </div>
+            <div class="col-md-2"><h4>Nº DA PESQUISA</h4></div>
+            <div class="col-md-2">
+                <input type="text" class="form-control" placeholder="Número da Pesquisa">
+            </div>
+            <div class="col-md-2 col-md-offset-2">
+                <button type="button" class="btn btn-primary">BUSCAR</button>
+            </div>
+        </div>
+        <hr />
+
+        <!-- PAGAMENTOS -->
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <!-- HEAD -->
+                    <th width="40px">
+                        <input type="checkbox" />
+                    </th>
+                    <th>Pesquisador</th>
+                    <th>Nº da Pesquisa</th>
+                    <th>Data</th>
+                    <th>RefPagto</th>
+                    <th>Data Pgto</th>
+                    <th width="40px"></th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <!-- LINHA: checkbox, nome do pesquisador, número da pesquisa, data da pesquisa, refpagto, datapagto, pagar -->
+                <tr>
+                    <td>
+                        <input type="checkbox" />
+                    </td>
+                    <td>Filipe Horácio</td>
+                    <td>246</td>
+                    <td>21/03/2016</td>
+                    <td></td>
+                    <td></td>
+                    <td align="right">
+                        <button type="button" class="btn btn-success btn-xs" aria-label="Desativar" style="width:auto;" data-toggle="modal" data-target="#pagar_um">
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                        </button>
+                    </td>
+                </tr>
+                <!-- FIM LINHA -->
+
+                <!-- LINHA: checkbox, nome do pesquisador, número da pesquisa, data da pesquisa, refpagto, datapagto, pagar -->
+                <tr>
+                    <td>
+                        <input type="checkbox" />
+                    </td>
+                    <td>Ofélia Carlinhos</td>
+                    <td>345</td>
+                    <td>21/03/2016</td>
+                    <td></td>
+                    <td></td>
+                    <td align="right">
+                        <button type="button" class="btn btn-success btn-xs" aria-label="Desativar" style="width:auto;" data-toggle="modal" data-target="#pagar_um">
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                        </button>
+                    </td>
+                </tr>
+                <!-- FIM LINHA -->
+
+                <!-- LINHA: checkbox, nome do pesquisador, número da pesquisa, data da pesquisa, refpagto, datapagto, pagar -->
+                <tr>
+                    <td>
+                        <input type="checkbox" />
+                    </td>
+                    <td>Ofélia Carlinhos</td>
+                    <td>125</td>
+                    <td>21/03/2016</td>
+                    <td></td>
+                    <td></td>
+                    <td align="right">
+                        <button type="button" class="btn btn-success btn-xs" aria-label="Desativar" style="width:auto;" data-toggle="modal" data-target="#pagar_um">
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                        </button>
+                    </td>
+                </tr>
+                <!-- FIM LINHA -->
+
+                <!-- LINHA: checkbox, nome do pesquisador, número da pesquisa, data da pesquisa, refpagto, datapagto, pagar -->
+                <tr>
+                    <td>
+                        <input type="checkbox" />
+                    </td>
+                    <td>Filipe Horácio</td>
+                    <td>345</td>
+                    <td>21/03/2016</td>
+                    <td></td>
+                    <td></td>
+                    <td align="right">
+                        <button type="button" class="btn btn-success btn-xs" aria-label="Desativar" style="width:auto;" data-toggle="modal" data-target="#pagar_um">
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                        </button>
+                    </td>
+                </tr>
+                <!-- FIM LINHA -->
+
+                <!-- LINHA: checkbox, nome do pesquisador, número da pesquisa, data da pesquisa, refpagto, datapagto, pagar -->
+                <tr>
+                    <td>
+                        <input type="checkbox" />
+                    </td>
+                    <td>Filipe Horácio</td>
+                    <td>536</td>
+                    <td>21/03/2016</td>
+                    <td></td>
+                    <td></td>
+                    <td align="right">
+                        <button type="button" class="btn btn-success btn-xs" aria-label="Desativar" style="width:auto;" data-toggle="modal" data-target="#pagar_um">
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                        </button>
+                    </td>
+                </tr>
+                <!-- FIM LINHA -->
+
+                <!-- LINHA: checkbox, nome do pesquisador, número da pesquisa, data da pesquisa, refpagto, datapagto, pagar -->
+                <tr>
+                    <td>
+                        <input type="checkbox" />
+                    </td>
+                    <td>Filipe Horácio</td>
+                    <td>45</td>
+                    <td>21/03/2016</td>
+                    <td></td>
+                    <td></td>
+                    <td align="right">
+                        <button type="button" class="btn btn-success btn-xs" aria-label="Desativar" style="width:auto;" data-toggle="modal" data-target="#pagar_um">
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                        </button>
+                    </td>
+                </tr>
+                <!-- FIM LINHA -->
+
+                <!-- LINHA: checkbox, nome do pesquisador, número da pesquisa, data da pesquisa, refpagto, datapagto, pagar -->
+                <tr>
+                    <td>
+                        <input type="checkbox" />
+                    </td>
+                    <td>Amando Gonçalo</td>
+                    <td>75</td>
+                    <td>21/03/2016</td>
+                    <td></td>
+                    <td></td>
+                    <td align="right">
+                        <button type="button" class="btn btn-success btn-xs" aria-label="Desativar" style="width:auto;" data-toggle="modal" data-target="#pagar_um">
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                        </button>
+                    </td>
+                </tr>
+                <!-- FIM LINHA -->
+
+                <!-- LINHA: checkbox, nome do pesquisador, número da pesquisa, data da pesquisa, refpagto, datapagto, pagar -->
+                <tr>
+                    <td>
+                        <input type="checkbox" />
+                    </td>
+                    <td>Filipe Horácio</td>
+                    <td>753</td>
+                    <td>20/03/2016</td>
+                    <td></td>
+                    <td></td>
+                    <td align="right">
+                        <button type="button" class="btn btn-success btn-xs" aria-label="Desativar" style="width:auto;" data-toggle="modal" data-target="#pagar_um">
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                        </button>
+                    </td>
+                </tr>
+                <!-- FIM LINHA -->
+
+                <!-- LINHA: checkbox, nome do pesquisador, número da pesquisa, data da pesquisa, refpagto, datapagto, pagar -->
+                <tr>
+                    <td>
+                        <input type="checkbox" />
+                    </td>
+                    <td>Ofélia Carlinhos</td>
+                    <td>127</td>
+                    <td>20/03/2016</td>
+                    <td></td>
+                    <td></td>
+                    <td align="right">
+                        <button type="button" class="btn btn-success btn-xs" aria-label="Desativar" style="width:auto;" data-toggle="modal" data-target="#pagar_um">
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                        </button>
+                    </td>
+                </tr>
+                <!-- FIM LINHA -->
+
+                <!-- LINHA: checkbox, nome do pesquisador, número da pesquisa, data da pesquisa, refpagto, datapagto, pagar -->
+                <tr>
+                    <td>
+                        <input type="checkbox" />
+                    </td>
+                    <td>Amando Gonçalo</td>
+                    <td>186</td>
+                    <td>20/03/2016</td>
+                    <td></td>
+                    <td></td>
+                    <td align="right">
+                        <button type="button" class="btn btn-success btn-xs" aria-label="Desativar" style="width:auto;" data-toggle="modal" data-target="#pagar_um">
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                        </button>
+                    </td>
+                </tr>
+                <!-- FIM LINHA -->
+
+                <!-- LINHA: checkbox, nome do pesquisador, número da pesquisa, data da pesquisa, refpagto, datapagto, pagar -->
+                <tr>
+                    <td>
+                        <input type="checkbox" />
+                    </td>
+                    <td>Amando Gonçalo</td>
+                    <td>356</td>
+                    <td>20/03/2016</td>
+                    <td></td>
+                    <td></td>
+                    <td align="right">
+                        <button type="button" class="btn btn-success btn-xs" aria-label="Desativar" style="width:auto;" data-toggle="modal" data-target="#pagar_um">
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                        </button>
+                    </td>
+                </tr>
+                <!-- FIM LINHA -->
+
+                <!-- LINHA: checkbox, nome do pesquisador, número da pesquisa, data da pesquisa, refpagto, datapagto, pagar -->
+                <tr>
+                    <td>
+                        <input type="checkbox" />
+                    </td>
+                    <td>Filipe Horácio</td>
+                    <td>243</td>
+                    <td>20/03/2016</td>
+                    <td></td>
+                    <td></td>
+                    <td align="right">
+                        <button type="button" class="btn btn-success btn-xs" aria-label="Desativar" style="width:auto;" data-toggle="modal" data-target="#pagar_um">
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                        </button>
+                    </td>
+                </tr>
+                <!-- FIM LINHA -->
+
+                <!-- LINHA: checkbox, nome do pesquisador, número da pesquisa, data da pesquisa, refpagto, datapagto, pagar -->
+                <tr>
+                    <td>
+                        <input type="checkbox" />
+                    </td>
+                    <td>Filipe Horácio</td>
+                    <td>98</td>
+                    <td>20/03/2016</td>
+                    <td></td>
+                    <td></td>
+                    <td align="right">
+                        <button type="button" class="btn btn-success btn-xs" aria-label="Desativar" style="width:auto;" data-toggle="modal" data-target="#pagar_um">
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                        </button>
+                    </td>
+                </tr>
+                <!-- FIM LINHA -->
+
+                <!-- LINHA: checkbox, nome do pesquisador, número da pesquisa, data da pesquisa, refpagto, datapagto, pagar -->
+                <tr>
+                    <td>
+                        <input type="checkbox" />
+                    </td>
+                    <td>Amando Gonçalo</td>
+                    <td>89</td>
+                    <td>20/03/2016</td>
+                    <td></td>
+                    <td></td>
+                    <td align="right">
+                        <button type="button" class="btn btn-success btn-xs" aria-label="Desativar" style="width:auto;" data-toggle="modal" data-target="#pagar_um">
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                        </button>
+                    </td>
+                </tr>
+                <!-- FIM LINHA -->
+
+                <!-- LINHA: checkbox, nome do pesquisador, número da pesquisa, data da pesquisa, refpagto, datapagto, pagar -->
+                <tr>
+                    <td>
+                        <input type="checkbox" />
+                    </td>
+                    <td>Ofélia Carlinhos</td>
+                    <td>375</td>
+                    <td>19/03/2016</td>
+                    <td></td>
+                    <td></td>
+                    <td align="right">
+                        <button type="button" class="btn btn-success btn-xs" aria-label="Desativar" style="width:auto;" data-toggle="modal" data-target="#pagar_um">
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                        </button>
+                    </td>
+                </tr>
+                <!-- FIM LINHA -->
+
+                <!-- LINHA: checkbox, nome do pesquisador, número da pesquisa, data da pesquisa, refpagto, datapagto, pagar -->
+                <tr>
+                    <td>
+                        <input type="checkbox" />
+                    </td>
+                    <td>Filipe Horácio</td>
+                    <td>96</td>
+                    <td>19/03/2016</td>
+                    <td></td>
+                    <td></td>
+                    <td align="right">
+                        <button type="button" class="btn btn-success btn-xs" aria-label="Desativar" style="width:auto;" data-toggle="modal" data-target="#pagar_um">
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                        </button>
+                    </td>
+                </tr>
+                <!-- FIM LINHA -->
+
+                <!-- LINHA: checkbox, nome do pesquisador, número da pesquisa, data da pesquisa, refpagto, datapagto, pagar -->
+                <tr>
+                    <td>
+                        <input type="checkbox" />
+                    </td>
+                    <td>Filipe Horácio</td>
+                    <td>52</td>
+                    <td>19/03/2016</td>
+                    <td></td>
+                    <td></td>
+                    <td align="right">
+                        <button type="button" class="btn btn-success btn-xs" aria-label="Desativar" style="width:auto;" data-toggle="modal" data-target="#pagar_um">
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                        </button>
+                    </td>
+                </tr>
+                <!-- FIM LINHA -->
+
+                <!-- LINHA: checkbox, nome do pesquisador, número da pesquisa, data da pesquisa, refpagto, datapagto, pagar -->
+                <tr>
+                    <td>
+                        <input type="checkbox" />
+                    </td>
+                    <td>Amando Gonçalo</td>
+                    <td>48</td>
+                    <td>19/03/2016</td>
+                    <td></td>
+                    <td></td>
+                    <td align="right">
+                        <button type="button" class="btn btn-success btn-xs" aria-label="Desativar" style="width:auto;" data-toggle="modal" data-target="#pagar_um">
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                        </button>
+                    </td>
+                </tr>
+                <!-- FIM LINHA -->
+
+                <!-- LINHA: checkbox, nome do pesquisador, número da pesquisa, data da pesquisa, refpagto, datapagto, pagar -->
+                <tr>
+                    <td>
+                        <input type="checkbox" />
+                    </td>
+                    <td>Ofélia Carlinhos</td>
+                    <td>37</td>
+                    <td>19/03/2016</td>
+                    <td></td>
+                    <td></td>
+                    <td align="right">
+                        <button type="button" class="btn btn-success btn-xs" aria-label="Desativar" style="width:auto;" data-toggle="modal" data-target="#pagar_um">
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                        </button>
+                    </td>
+                </tr>
+                <!-- FIM LINHA -->
+
+                <!-- LINHA: checkbox, nome do pesquisador, número da pesquisa, data da pesquisa, refpagto, datapagto, pagar -->
+                <tr>
+                    <td>
+                        <input type="checkbox" />
+                    </td>
+                    <td>Amando Gonçalo</td>
+                    <td>153</td>
+                    <td>19/03/2016</td>
+                    <td></td>
+                    <td></td>
+                    <td align="right">
+                        <button type="button" class="btn btn-success btn-xs" aria-label="Desativar" style="width:auto;" data-toggle="modal" data-target="#pagar_um">
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                        </button>
+                    </td>
+                </tr>
+                <!-- FIM LINHA -->
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="7" align="right">
+                        <button type="button" class="btn btn-success btn-xs" aria-label="Desativar" style="width:auto;" data-toggle="modal" data-target="#pagar_selecionadas">
+                            REGISTRAR PAGAMENTO NAS SELECIONADAS <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                        </button>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+        <hr />
+
+        <!-- PAGINATION -->
+        <div class="row">
+            <div class="col-md-2 col-md-offset-10">
+                <button class="btn btn-primary">PRÓXIMA PÁGINA</button>
+            </div>
+        </div>
+        <hr />
+
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <h3 class="text-muted" style="display:inline-block;"> SAPO OD DF 2016</h3>
+            <img src="sapo_logo.png" style="height:60px; float:right;">
+        </div>
+    </footer>
+
+    <!-- MODAL PAGAR -->
+
+    <div class="modal fade" id="pagar_um" tabindex="-1" role="dialog" aria-labelledby="pagar_um_label">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="pagar_um_label">PAGAR PESQUISA</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4"><h4>Ref. Pagamento:</h4></div>
+                        <div class="col-md-8"><input type="text" class="form-control" /></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="row">
+                        <div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
+                        <div class="col-md-6"><button type="button" class="btn btn-success">PAGAR</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PAGAR -->
+
+    <div class="modal fade" id="pagar_selecionadas" tabindex="-1" role="dialog" aria-labelledby="pagar_selecionadas_label">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="pagar_selecionadas_label">PAGAR PESQUISAS</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4"><h4>Ref. Pagamento:</h4></div>
+                        <div class="col-md-8"><input type="text" class="form-control" /></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="row">
+                        <div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
+                        <div class="col-md-6"><button type="button" class="btn btn-success">PAGAR</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
