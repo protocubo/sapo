@@ -20,23 +20,18 @@ import sys.io.File;
  */
 class InitDB
 {
-	
-	
+	static var DBPATH = Sys.getEnv("SAPO_DB");
+
 	public static function run()
 	{
-		
 		Manager.initialize();
-		
-		//TODO: Implementar cnxstring do nosso server!
-		#if Debug
-		if (FileSystem.exists("db.db3"))
-			FileSystem.deleteFile("./db.db3")
-		#end
-		Manager.cnx = Sqlite.open("db.db3");
-		Manager.cnx.request("PRAGMA journal_mode=WAL");
+
+		Manager.cnx = Sqlite.open(DBPATH);
 		Manager.cnx.request("PRAGMA page_size = 4096");
-		
-		
+		// later windows can't close the connection in wal mode...
+		// an issue with sqlite.ndll perhaps?
+		if (Sys.systemName() != "Windows") Manager.cnx.request("PRAGMA journal_mode=wal");
+
 		if (!TableCreate.exists(Modo.manager))
 		{
 			TableCreate.create(Familia.manager);
@@ -44,23 +39,23 @@ class InitDB
 			TableCreate.create(Morador.manager);
 			TableCreate.create(Ponto.manager);
 			TableCreate.create(Session.manager);
-			
+
 			/******/
 			TableCreate.create(Referencias.manager);
 			TableCreate.create(UF.manager);
-			
+
 			//Porrada de Enums
 			var classes = CompileTime.getAllClasses("common.spod", true, EnumTable);
 			for (c in classes)
 			{
 				TableCreate.create(Reflect.field(c, "manager"));
 			}
-			
+
 			populateEnumTable();
 			//TODO:Populate statics
 		}
 	}
-	
+
 	public static function populateEnumTable()
 	{
 		var classes = CompileTime.getAllClasses("common.db", true, EnumTable);
@@ -80,14 +75,14 @@ class InitDB
 				if (obj == null)
 					continue;
 				var val = obj.dbVal[0];
-				 
+
 				Reflect.setField(instance, "id", Type.enumIndex(Reflect.field(classEnum, field)));
 				Reflect.setField(instance, "name", field);
 				Reflect.setField(instance, "val", val);
 				instance.insert();
 			}
 		}
-			
-		
+
+
 	}
 }

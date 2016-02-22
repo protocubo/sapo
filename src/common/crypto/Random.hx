@@ -34,7 +34,7 @@ class Random extends Input {
 	{
 		var gen = switch Sys.systemName() {
 		case "Windows":
-			trace("WARNING no real random generator used on Windows");
+			Sys.stderr().writeString("WARNING no real random generator used on Windows\n");
 			new StdRandomInput();
 		case _:
 			sys.io.File.read("/dev/urandom", true);

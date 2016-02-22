@@ -1,0 +1,38 @@
+(: import sapo.Spod :)
+
+(: static function render(?ofUser:User) :)
+<!DOCTYPE html>
+<html>
+<head>
+(: Util.head("SAPO - Tickets") :)
+</head>
+<body>
+	(: Util.navbar() :)
+	
+	<!-- TICKETS -->
+    <div class="container">
+
+        <!-- HEAD -->
+        <h2>TICKETS</h2>
+        <hr />
+	
+		
+		<!-- FILTROS -->
+		
+		<!-- BUSCA -->
+		
+		<!-- TICKETS -->
+		<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" style="margin-top: 60px;">
+			(:* gostaria disso: var users = Spod.Ticket.manager.search( (ofUser == null|| $author == ofUser) ) *:)
+			(: var users:List<Spod.Ticket> = Spod.Ticket.manager.search((ofUser!=null ? $author==ofUser : 1==1)) :)
+			(: for t in users :)
+				(: Util.ticket(t) :)
+			(: end :)
+		</div>
+	</div>
+	
+(: Util.footer() :)
+</body>
+</html>
+(: end :)
+

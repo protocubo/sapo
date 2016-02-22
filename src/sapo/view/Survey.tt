@@ -1,0 +1,89 @@
+(: import sapo.Spod :)
+(: static function render(survey:Spod.Survey) :)
+<!DOCTYPE html>
+<html>
+<head>
+(: Util.head("SAPO - Pesquisa #"+survey.id) :)
+</head>
+<body>
+(: Util.navbar() :)
+
+<!-- PESQUISA -->
+<div class="container">
+
+	<!-- HEAD -->
+	<div class="row">
+		<div class="col-md-6">
+			<h2>PESQUISA #(:survey.id:)</h2>
+		</div>
+		<div class="col-md-3">
+			<h2>TICKET (A:1 / F:3)</h2>
+		</div>
+		<div class="col-md-3 text-right">
+			<h2 class="completa">COMPLETA</h2>
+		</div>
+	</div>
+	<hr />
+
+	<!-- ACTIONS -->
+	<div class="row">
+		<div class="col-md-2 col-md-offset-1">
+			<button type="button" class="btn btn-danger">RECUSAR</button>
+		</div>
+		<div class="col-md-2">
+			<button type="button" class="btn btn-danger">CORRIGIR</button>
+		</div>
+		<div class="col-md-2">
+			<button type="button" class="btn btn-warning">ABRIR TICKET</button>
+		</div>
+		<div class="col-md-2">
+			<button type="button" class="btn btn-warning">VER TICKETS</button>
+		</div>
+		<div class="col-md-2">
+			<button type="button" class="btn btn-success">VERIFICAR</button>
+		</div>
+	</div>
+	<hr />
+
+	<!-- BODY - DOMICÍLIO -->
+	<div class="row">
+		<div class="col-md-12">
+			<h3>DOMICÍLIO / FAMÍLIA</h3>
+
+			<!-- BLOCK - botão de edit, <b>campo, info do campo -->
+			<div class="bloco">
+				<a href="#" style="display:none;"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+				<b>Endereço:</b> SCLN 214 BL. A LJ. 9/11 - Asa Norte, Brasília
+			</div>
+			<!-- FIM DO BLOCK -->
+
+		</div>
+	</div>
+	<hr />
+
+	<!-- BODY - MORADOR -->
+	<div class="row">
+		<div class="col-md-12">
+			<h3>MORADOR / Maria (25)</h3>
+
+			<!-- BLOCK - botão de edit, <b>campo, info do campo -->
+			<div class="bloco">
+				<a href="#" style="display:none;"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+				<b>Nome:</b> Maria
+			</div>
+			<!-- FIM DO BLOCK -->
+
+			<div class="viagem">
+				<a href="#" style="display:none;"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+				<b>Ponto 1 (Residência):</b> SCLN 214 BL. A LJ. 9/11 - Asa Norte, Brasília
+			</div>
+
+		</div>
+	</div>
+	<hr />
+</div>
+
+(: Util.footer() :)
+</body>
+</html>
+(: end :)
