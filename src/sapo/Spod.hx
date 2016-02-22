@@ -48,7 +48,7 @@ class Survey extends sys.db.Object {
 	public var closed_at:HaxeTimestamp;
 	public var address:String;
 	public var code:Int;
-	@:relation(status_id) public var status : SurveyStatus;
+	public var status : String;
 
 	public function new(surveyor, address, code)
 	{
@@ -58,7 +58,7 @@ class Survey extends sys.db.Object {
 		this.address = address;
 		this.code = code;
 		closed_at = Date.now();
-		status = SurveyStatus.manager.get(1);
+		status = TicketStatus.TOpen.getName();
 		super();
 	}
 }
@@ -117,14 +117,20 @@ class AccessLevel extends sys.db.Object
 	}
 }
 
-class SurveyStatus extends sys.db.Object 
+enum TicketStatus 
 {
-	public var id:SId;
-	public var name:String;
-	public function new(status)
-	{
-		this.name = status;
-		super();
-	}
+	TOpen;
+	TClosed;
+}
+
+enum SurveyStatus 
+{
+	SOpen;
+	sClosed;
+	Sverified;
+	SCT;
+	SAccepted;
+	SRejected;
+	SSubJudice;	
 }
 

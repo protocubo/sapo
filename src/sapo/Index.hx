@@ -20,13 +20,7 @@ class Index {
 		InitDB.run();
 		dbInit();
 		
-		new SurveyStatus("aberta").insert();
-		new SurveyStatus("completa").insert();
-		new SurveyStatus("verificada").insert();
-		new SurveyStatus("CT").insert();
-		new SurveyStatus("aceita").insert();
-		new SurveyStatus("recusada").insert();
-		new SurveyStatus("sobjudice").insert();
+		
 		
 
 		var superGroup = new Group(new AccessName("super"), PSuper);
@@ -62,7 +56,7 @@ class Index {
 		// later windows can't close the connection in wal mode...
 		// an issue with sqlite.ndll perhaps?
 		if (Sys.systemName() != "Windows") Manager.cnx.request("PRAGMA journal_mode=wal");
-		var managers:Array<Manager<Dynamic>> = [User.manager, Survey.manager, Ticket.manager, TicketMessage.manager, SurveyStatus.manager, Group.manager];
+		var managers:Array<Manager<Dynamic>> = [User.manager, Survey.manager, Ticket.manager, TicketMessage.manager, Group.manager];
 		for (m in managers)
 			if (!TableCreate.exists(m))
 				TableCreate.create(m);
