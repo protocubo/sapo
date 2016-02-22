@@ -1,5 +1,6 @@
-package sync.db;
-import sync.db.statics.Statics;
+package common.spod;
+
+import common.spod.EnumSPOD;
 import sys.db.Object;
 import sys.db.Types.SBool;
 import sys.db.Types.SDateTime;
@@ -29,7 +30,7 @@ class Familia extends Object
 	
 	public var condicaoMoradia : SNull<SEnum<CondicaoMoradia>>;
 	public var tipoImovel : SNull<SEnum<TipoImovel>>;
-	public var tipoImovel_id : SNull<SInt>;
+	
 	
 	public var tentativa_id : SInt;
 	
@@ -43,7 +44,7 @@ class Familia extends Object
 	public var ruaPavimentada_id : SNull<SBool>;
 	public var vagaPropriaEstacionamento_id : SNull<SBool>;
 	public var anoVeiculoMaisRecente : SNull<SEnum<AnoVeiculo>>;
-	public var empregadosDomesticos : SNull<SEnum<Empregado>>;
+	public var empregadosDomesticos : SNull<SEnum<EmpregadosDomesticos>>;
 	public var tvCabo : SNull<SBool>;
 	
 	public var editedNumeroResidentes : SNull<SInt>;
@@ -52,7 +53,7 @@ class Familia extends Object
 	
 	public var nomeContato : SNull<SString<255>>;
 	public var telefoneContato : SNull<SString<255>>;
-	public var rendaDomiciliar : SNull<SEnum<Renda>>;
+	public var rendaDomiciliar : SNull<SEnum<RendaDomiciliar>>;
 	public var recebeBolsaFamilia : SNull<SBool>;
 	
 	public var codigoReagendamento : SNull<SString<255>>;

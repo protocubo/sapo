@@ -1,14 +1,15 @@
 package sapo;
 
+import common.db.MoreTypes;
+import common.spod.InitDB;
 import haxe.PosInfos;
 import haxe.web.Dispatch;
 import neko.Web;
 import sapo.Spod;
-import common.db.MoreTypes;
 import sys.db.*;
 
 class Index {
-	static inline var DBPATH = ".sapo.db3";
+	static var DBPATH = Sys.getEnv("SAPO_DB");
 
 	public static function dbReset()
 	{
@@ -72,7 +73,7 @@ class Index {
 	{		
 		try {
 			dbInit();
-
+			InitDB.run();
 			var uri = Web.getURI();
 			var params = Web.getParams();
 			if (uri == "/favicon.ico") return;
