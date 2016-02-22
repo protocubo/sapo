@@ -24,7 +24,7 @@
     <option noInlineOnDebug="False" />
     <option mainClass="sync.MainSync" />
     <option enabledebug="False" />
-    <option additional="dce no" />
+    <option additional="" />
   </build>
   <!-- haxelib libraries -->
   <haxelib>

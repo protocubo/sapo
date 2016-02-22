@@ -1,5 +1,6 @@
 package sapo;
 
+import common.spod.InitDB;
 import haxe.web.Dispatch;
 import neko.Web;
 import sapo.Spod;
@@ -56,7 +57,7 @@ class Index {
 	{
 		try {
 			dbInit();
-
+			InitDB.run();
 			var uri = Web.getURI();
 			var params = Web.getParams();
 			if (uri == "/favicon.ico") return;

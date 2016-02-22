@@ -1,19 +1,21 @@
 package sync;
+import common.spod.EnumSPOD;
+import common.spod.Familia;
+import common.spod.Morador;
+import common.spod.Session;
 import haxe.Http;
 import haxe.Json;
 import haxe.Log;
 import haxe.PosInfos;
-import sync.db.Familia;
-import sync.db.InitDB;
-import sync.db.Morador;
-import sync.db.Session;
-import sync.db.statics.Statics.EnumTable;
+import common.spod.InitDB;
+
 import sys.db.Connection;
 import sys.db.Manager;
 import sys.db.Mysql;
 import sys.db.Types.SFloat;
 import sys.FileSystem;
 import sys.io.File;
+import common.stringTools.Tools;
 
 /**
  * ...
@@ -27,6 +29,9 @@ class MainTemp
 	
 	static var maxtimestamp : SFloat;
 	
+	static var sessHash : Map<Int, Session>;
+	static var famHash : Map<Int, Familia>;
+	static var morHash : Map<Int, Morador>;
 	
 	public static function main()
 	{
@@ -72,17 +77,18 @@ class MainTemp
 		#end
 		
 		//Hash old_id -> new instance
-		var sessHash = new Map<Int, Session>();
-		var famHash = new Map<Int, Familia>();
-		var morHash = new Map<Int, Morador>();
+		sessHash = new Map<Int, Session>();
+		famHash = new Map<Int, Familia>();
+		morHash = new Map<Int, Morador>();
+		
 		for (u in updateVars)
 		{
-			processSession(u, sessHash);
+			processSession(u);
 			
 		}
 	}
 	
-	static function processSession(sid : Int, hash : Map<Int, Session>)
+	static function processSession(sid : Int)
 	{
 		var dbSession = targetCnx.request("SELECT * FROM Session WHERE id = " + sid).results().first();
 		
@@ -109,15 +115,40 @@ class MainTemp
 		new_sess.syncTimestamp = maxtimestamp;
 		
 		Macros.validateEntry(Session, ["syncTimestamp", "id"], [ { key : "old_session_id", value : new_sess.old_session_id } ], new_sess);
-		hash.set(new_sess.old_session_id, new_sess);
+		sessHash.set(new_sess.old_session_id, new_sess);
 	}
 	
-	static function processFamilia(old_sid : Int, new_sid : Int, hash : Map<Int,Familia>)
+	static function processFamilia(old_sid : Int, new_sid : Int)
 	{
 		var dbFam = targetCnx.request("SELECT * FROM Familia WHERE session_id = " + old_sid).results();
+		var new_familia = new Familia();
 		for (f in dbFam)
 		{
-			//TODO:Parei aqui
+			for (field in Reflect.fields(f))
+			{
+				switch(field)
+				{
+					case "id":
+						new_familia.old_id = f.id;
+					case "session_id":
+						new_familia.session = sessHash.get(f.session_id);
+						new_familia.old_session_id = f.session_id;
+					//Fields ctrl+c ctrl+v
+					case "date", "numeroResidentes", "banheiros", "quartos", "veiculos", "bicicletas", "motos", "editedNumeroResidentes", "editsNumeroResidentes", "nomeContato", "telefoneContato", "codigoReagendamento":
+						Reflect.setField(new_familia, field, Reflect.field(f, field));
+					//Bool simples
+					case "isDeleted","ruaPavimentada_id", "recebeBolsaFamilia_id":
+						Reflect.setField(new_familia, field, Reflect.field(f, field) == 1);
+					//Conversao enum -> bool
+					case "tvCabo_id","vagaPropriaEstacionamento_id":
+						var v = Reflect.field(f, field);
+						Reflect.setField(new_familia, field, (v != 3) ? (v == 1) : null);
+					case "gps_id":
+						continue;
+					default:
+						Macros.warnTable(Familia, field, Reflect.field(f, field));					
+				}
+			}
 		}
 	}
 	
@@ -125,7 +156,7 @@ class MainTemp
 	static function populateHash() : Map<String,Map<Int,Int>>
 	{
 		var t = new Map<String,Map<Int,Int>>();
-		for (c in CompileTime.getAllClasses("sync.db.statics", false, EnumTable))
+		for (c in CompileTime.getAllClasses("common.db", false, EnumTable))
 		{
 			var tempmap = new Map<Int,Int>();
 			var res = (untyped c.manager : Manager<EnumTable>).all().map(function(v) { return [v.val, v.id]; } ).array();

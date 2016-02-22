@@ -1,13 +1,13 @@
 package sync;
-
+import common.spod.EnumSPOD;
+import common.spod.Familia;
+import common.spod.InitDB;
+import common.spod.Modo;
+import common.spod.Morador;
+import common.spod.Ponto;
+import common.spod.Session;
 import haxe.Log;
 import haxe.PosInfos;
-import sync.db.Familia;
-import sync.db.InitDB;
-import sync.db.Modo;
-import sync.db.Morador;
-import sync.db.Ponto;
-import sync.db.Session;
 import haxe.Http;
 import haxe.Json;
 import haxe.remoting.HttpConnection;
@@ -18,7 +18,7 @@ import sys.db.Mysql;
 import sys.db.Sqlite;
 import sys.FileSystem;
 import sys.io.File;
-import sync.db.statics.Statics;
+
 //DELETAR
 import sync.MainTemp;
 /**
@@ -63,7 +63,7 @@ class MainSync
 		//Ref Tables -> key - Table, value: OldVal<NewVal> onde OldVal é o ID da tabela de ref. do Anderson e o NewVal é o meu valor de enum;
 		var refValue = new Map<String, Map<Int,Int>>();
 
-		for (c in CompileTime.getAllClasses("sync.db.statics", true, EnumTable))
+		for (c in CompileTime.getAllClasses("common.spod", true, EnumTable))
 		{
 			var tempmap = new Map<Int,Int>();
 			var manager = Reflect.getProperty(c, "manager");
@@ -214,8 +214,8 @@ class MainSync
 							if(Macros.checkEnumValue(AnoVeiculo, f.anoVeiculoMaisRecente_id))
 								new_familia.anoVeiculoMaisRecente = Macros.getStaticEnum(AnoVeiculo, f.anoVeiculoMaisRecente_id);
 						case "empregadosDomesticos_id":
-							if(Macros.checkEnumValue(Empregado, f.empregadosDomesticos_id))
-								new_familia.empregadosDomesticos = Macros.getStaticEnum(Empregado, f.empregadosDomesticos_id);
+							if(Macros.checkEnumValue(EmpregadosDomesticos, f.empregadosDomesticos_id))
+								new_familia.empregadosDomesticos = Macros.getStaticEnum(EmpregadosDomesticos, f.empregadosDomesticos_id);
 						case "tvCabo_id":
 							new_familia.tvCabo = (f.tvCabo_id != 3) ? (f.tvCabo == 1) : null;
 						case "editedNumeroResidentes":
@@ -227,8 +227,8 @@ class MainSync
 						case "telefoneContato":
 							new_familia.telefoneContato = f.telefoneContato;
 						case "rendaDomiciliar_id":
-							if(Macros.checkEnumValue(Renda, f.rendaDomiciliar_id))
-								new_familia.rendaDomiciliar = Macros.getStaticEnum(Renda, f.rendaDomiciliar_id);
+							if(Macros.checkEnumValue(RendaDomiciliar, f.rendaDomiciliar_id))
+								new_familia.rendaDomiciliar = Macros.getStaticEnum(RendaDomiciliar, f.rendaDomiciliar_id);
 						case "recebeBolsaFamilia_id":
 							new_familia.recebeBolsaFamilia = (f.recebeBolsaFamilia_id == 1);
 						case "codigoReagendamento":
