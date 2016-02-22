@@ -1,0 +1,35 @@
+(: import sapo.Spod :)
+(: static function render() :)
+<!DOCTYPE html>
+<html>
+<head>
+(: Util.head("SAPO - Login") :)
+</head>
+<body>
+(: Util.navbar() :)
+
+
+<!-- PESQUISAS -->
+<div class="container">
+
+	<!-- HEAD -->
+	<h2>PESQUISAS</h2>
+	<hr />
+
+	<!-- FILTROS -->
+	
+
+	<!-- BUSCA -->
+	
+	<!-- PESQUISAS -->
+	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" style="margin-top: 60px;">
+		(: for s in Spod.Survey.manager.all() :)
+			(: Util.survey(s) :)
+		(: end :)	
+	</div>
+</div>
+
+(: Util.footer() :)
+</body>
+</html>
+(: end :)
