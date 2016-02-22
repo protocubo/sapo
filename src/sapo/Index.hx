@@ -16,9 +16,9 @@ class Index {
 		Manager.cleanup();
 		Manager.cnx.close();
 		Manager.cnx = null;
-		sys.FileSystem.deleteFile(Index.DBPATH);
-		dbInit();
+		sys.FileSystem.deleteFile(DBPATH);
 		InitDB.run();
+		dbInit();
 		
 		new SurveyStatus("aberta").insert();
 		new SurveyStatus("completa").insert();
@@ -58,8 +58,6 @@ class Index {
 
 	static function dbInit()
 	{
-		Manager.initialize();
-		Manager.cnx = Sqlite.open(DBPATH);
 		Manager.cnx.request("PRAGMA page_size=4096");
 		// later windows can't close the connection in wal mode...
 		// an issue with sqlite.ndll perhaps?
@@ -79,8 +77,8 @@ class Index {
 		}
 
 		try {
-			dbInit();
 			InitDB.run();
+			dbInit();
 			var uri = Web.getURI();
 			var params = Web.getParams();
 			if (uri == "/favicon.ico") return;
