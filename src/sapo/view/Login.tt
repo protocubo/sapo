@@ -7,8 +7,7 @@
 </head>
 <body>
 (: Util.navbar() :)
-<p>Do you want to see a <a href='ticket'><code>tink_template</code></a> template example?</p>
-<p>You can also <a href='reset'>reset</a> your db</a></p>
+
 (: Util.footer() :)
 </body>
 </html>

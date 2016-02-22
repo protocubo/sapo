@@ -34,9 +34,9 @@
                 <ul class="nav navbar-nav">
                     <li class="active"><a href="#">SAPO</a></li>
                     <li><a href="ticket">TICKETS</a></li> <!-- @LOGIT @Telefonista @Supervisor -->
-                    <li><a href="payment">PESQUISAS</a></li> <!-- @LOGIT @Telefonista @Supervisor -->
+                    <li><a href="surveys">PESQUISAS</a></li> <!-- @LOGIT @Telefonista @Supervisor -->
                     <li><a href="#">SUMÁRIO</a></li> <!-- @LOGIT @Telefonista @Supervisor -->
-                    <li><a href="#">PAGAMENTOS</a></li> <!-- @Pesquisador -->
+                    <li><a href="payment">PAGAMENTOS</a></li> <!-- @Pesquisador -->
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">ADMINISTRAÇÃO <b class="caret"></b></a> <!-- @LOGIT -->
                         <ul class="dropdown-menu">
@@ -123,11 +123,60 @@
 				<div class="col-md-2"><button type="button" class="btn btn-default btn-sm">RESPONDER</button></div>
 				<div class="col-md-2"><button type="button" class="btn btn-default btn-sm">FECHAR</button></div>
 				<div class="col-md-2"><button type="button" class="btn btn-default btn-sm">INCLUIR</button></div>
-				<div class="col-md-2 col-md-offset-1"><button type="button" class="btn btn-default btn-sm">VER PESQUISAS</button></div>
+				<div class="col-md-2 col-md-offset-1"><a href="survey/(: ticket.survey.id :)" class="btn btn-default btn-sm" role="button">VER PESQUISA</a></div>														
 				<div class="col-md-2"><button type="button" class="btn btn-default btn-sm">RECUSAR</button></div>
 			</div>
 		</div>
 	</div>
 </div>
 <!-- FIM TICKET -->
+(: end :)
+
+
+(: static function survey(survey:Spod.Survey) :)
+
+	<!-- PESQUISA -->
+	<div class="panel panel-default">
+		<!-- HEAD PESQUISA : id = HeadPesquisa1234 -->
+		<div class="panel-heading" role="tab" id="HeadPesquisa(: survey.id :)">
+			<div class="row">
+				<div class="col-md-6 panel-title">
+					<!-- Nº do Ticket, Data da criação do Ticket, Hora da criação do Ticket, Assunto : href="#BodyPesquisa1234" , aria-controls="BodyPesquisa1234" -->
+					<a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyPesquisa(: survey.id :)" aria-expanded="true" aria-controls="BodyPesquisa(: survey.id :)">
+						Pesquisa #12345 - 01/01/2016 - <b class="pesquisador">Nome</b> - <b class="supervisor">Fulano</b>
+					</a>
+				</div>
+				<div class="col-md-5 panel-title">
+					<!-- Número da peqsuisa, data da pesquisa, Nome do pesquisador (class: super, telefonista, supervisor e pesquisador) -->
+					<a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyPesquisa(: survey.id :)" aria-expanded="true" aria-controls="BodyPesquisa(: survey.id :)">
+						R. Itamirindiba, 3 - São Paulo/SP 
+					</a>
+				</div>
+				<div class="col-md-1 panel-title">
+					<a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyPesquisa(: survey.id :)" aria-expanded="true" aria-controls="BodyPesquisa(: survey.id :)">
+						<!-- STATUS (class: aberta, completa, verificada, CT, aceita, recusada, sobjudice) -->
+						<b class="completa">COMPLETA</b>
+					</a>
+				</div>
+			</div>
+		</div>
+		<!-- BODY TICKET : id="BodyPesquisa1234" , aria-labelledby="HeadPesquisa1234" -->
+		<div id="BodyPesquisa(: survey.id :)" class="panel-collapse collapse" role="tabpanel" aria-labelledby="HeadPesquisa(: survey.id :)">
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-md-12 barraderolagem">
+						<!-- DADOS DA PESQUISA -->
+						<p><b>Endereço:</b> Lorem Ipsum</p>
+						<p><b>Contato:</b> Marcelo - (11) 888888888 <b>Senha:</b> 9841321687</p>
+						<p><b>Moradores:</b></p>
+						<p>Maria (25): Residência - Trabalho - Residência</p>
+					</div>
+				</div>
+				<div class="row" style="margin-top: 30px;">
+					<div class="col-md-2 col-md-offset-10"><button type="button" class="btn btn-default btn-sm">VER PESQUISAS</button></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- FIM PESQUISA -->
 (: end :)

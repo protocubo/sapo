@@ -1,5 +1,6 @@
 package sapo;
 
+import haxe.PosInfos;
 import haxe.web.Dispatch;
 import neko.Web;
 import sapo.Spod;
@@ -51,6 +52,7 @@ class Index {
 		new TicketMessage(ticket2, arthur, ford, "Very deep. You should send that in to the Reader's Digest. They've got a page for people like you.").insert();
 		
 	}
+	
 
 	static function dbInit()
 	{
@@ -67,7 +69,7 @@ class Index {
 	}
 
 	static function main()
-	{
+	{		
 		try {
 			dbInit();
 

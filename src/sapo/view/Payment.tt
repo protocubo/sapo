@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-(: Util.head("SAPO - Login") :)
+(: Util.head("SAPO - Pagamento") :)
 </head>
 <body>
 
