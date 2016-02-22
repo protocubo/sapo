@@ -20,22 +20,15 @@ import sys.io.File;
  */
 class InitDB
 {
-	
+	static var DBPATH = Sys.getEnv("SAPO_DB");
 	
 	public static function run()
 	{
-		
 		Manager.initialize();
-		
-		//TODO: Implementar cnxstring do nosso server!
-		#if Debug
-		if (FileSystem.exists("db.db3"))
-			FileSystem.deleteFile("./db.db3")
-		#end
-		Manager.cnx = Sqlite.open("db.db3");
-		Manager.cnx.request("PRAGMA journal_mode=WAL");
+
+		Manager.cnx = Sqlite.open(DBPATH);
 		Manager.cnx.request("PRAGMA page_size = 4096");
-		
+		if (Sys.systemName() != "Windows") Manager.cnx.request("PRAGMA journal_mode=wal");
 		
 		if (!TableCreate.exists(Modo.manager))
 		{

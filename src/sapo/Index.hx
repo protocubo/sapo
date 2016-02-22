@@ -9,7 +9,7 @@ import sapo.Spod;
 import sys.db.*;
 
 class Index {
-	static inline var DBPATH = ".sapo.db3";
+	static var DBPATH = Sys.getEnv("SAPO_DB");
 
 	public static function dbReset()
 	{

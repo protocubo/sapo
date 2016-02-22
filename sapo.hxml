@@ -1,10 +1,11 @@
 -cp src
--lib tink_template
 
 --each
 
 -neko www/index.n
 -main sapo.Index
+-lib tink_template
+-lib compiletime
 
 --next
 

@@ -1,6 +1,9 @@
 package common;
 
 @:enum abstract EnvVars(String) to String {
+	// Location of the main Sapo db (Sqlite)
+	var SAPO_DB = "SAPO_DB";
+
 	// Location of the local Sqlite db for the communication system
 	var COMN_DB = "COMN_DB";
 
