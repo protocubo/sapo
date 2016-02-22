@@ -1,4 +1,5 @@
 package sync;
+import common.stringTools.Tools;
 import haxe.macro.Expr;
 class Macros {
 	public static macro function getStaticEnum(target : Expr, old_value : Expr)
@@ -11,6 +12,15 @@ class Macros {
 		}
 	}
 	
+	public static macro function setEnumField(field : Expr, new_entry : Expr, old_entry : Expr)
+	{
+		return macro {
+			var norm_field = $field.split("_")[0];
+			var e = Type.resolveEnum(Tools.capitalize(norm_field));
+			if (Macros.checkEnumValue(e, Reflect.field($old_entry, $field)))
+				Reflect.setField($new_entry, norm_field, Macros.getStaticEnum(e, Reflect.field($old_entry, $field)));
+		}
+	}
 	public static macro function checkEnumValue(target : Expr, old_value : Expr)
 	{
 		return macro {

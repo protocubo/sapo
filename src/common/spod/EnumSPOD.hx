@@ -29,7 +29,7 @@ import sys.db.Types.SString;
  class AguaEncanada_Tbl extends EnumTable
 {}
 
- @dbNullVal(101) enum AnoVeiculo {
+ @dbNullVal(101) enum AnoVeiculoMaisRecente {
 	@dbVal(1) Mais2014;
 	@dbVal(2) De2010;
 	@dbVal(3) De2005;
@@ -41,7 +41,7 @@ import sys.db.Types.SString;
 	@dbVal(101) NaoRespondeu;
 }
 
- class AnoVeiculo_Tbl extends EnumTable
+ class AnoVeiculoMaisRecente_Tbl extends EnumTable
 {}
 
 @dbNullVal(101) enum AtividadeMorador

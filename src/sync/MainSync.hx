@@ -211,8 +211,8 @@ class MainSync
 						case "vagaPropriaEstacionamento_id":
 							new_familia.vagaPropriaEstacionamento_id = (f.vagaPropriaEstacionamento_id == 3) ? null : (f.vagaPropriaEstacionamento_id == 1);
 						case "anoVeiculoMaisRecente_id":
-							if(Macros.checkEnumValue(AnoVeiculo, f.anoVeiculoMaisRecente_id))
-								new_familia.anoVeiculoMaisRecente = Macros.getStaticEnum(AnoVeiculo, f.anoVeiculoMaisRecente_id);
+							if(Macros.checkEnumValue(AnoVeiculoMaisRecente, f.anoVeiculoMaisRecente_id))
+								new_familia.anoVeiculoMaisRecente = Macros.getStaticEnum(AnoVeiculoMaisRecente, f.anoVeiculoMaisRecente_id);
 						case "empregadosDomesticos_id":
 							if(Macros.checkEnumValue(EmpregadosDomesticos, f.empregadosDomesticos_id))
 								new_familia.empregadosDomesticos = Macros.getStaticEnum(EmpregadosDomesticos, f.empregadosDomesticos_id);

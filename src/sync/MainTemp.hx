@@ -32,6 +32,7 @@ class MainTemp
 	static var sessHash : Map<Int, Session>;
 	static var famHash : Map<Int, Familia>;
 	static var morHash : Map<Int, Morador>;
+	static var refValue : Map<String,Map<Int,Int>>;
 	
 	public static function main()
 	{
@@ -64,7 +65,7 @@ class MainTemp
 		
 		//Todos os valores de enums -> usa as keys "EnumName" e "Old_val" => "New_val" para conversão das entradas originais para as novas
 		//A estrutura é Map<String,Map<Int,Int>>
-		var refValues = populateHash();
+		refValue = populateHash();
 		
 		// Query -> ../../extras/main.sql
 		//Session_id only 
@@ -84,6 +85,8 @@ class MainTemp
 		for (u in updateVars)
 		{
 			processSession(u);
+			processFamilia(u);
+			
 			
 		}
 	}
@@ -118,10 +121,11 @@ class MainTemp
 		sessHash.set(new_sess.old_session_id, new_sess);
 	}
 	
-	static function processFamilia(old_sid : Int, new_sid : Int)
+	static function processFamilia(old_sid : Int)
 	{
-		var dbFam = targetCnx.request("SELECT * FROM Familia WHERE session_id = " + old_sid).results();
+		var dbFam = targetCnx.request("SELECT * FROM Familia WHERE session_id = " + old_sid + " ORDER BY id").results();
 		var new_familia = new Familia();
+		
 		for (f in dbFam)
 		{
 			for (field in Reflect.fields(f))
@@ -133,6 +137,8 @@ class MainTemp
 					case "session_id":
 						new_familia.session = sessHash.get(f.session_id);
 						new_familia.old_session_id = f.session_id;
+					case "ocupacaoDomicilio_id", "condicaoMoradia_id", "tipoImovel_id", "aguaEncanada_id", "anoVeiculoMaisRecente_id", "empregadosDomesticos_id", "rendaDomiciliar_id":
+						Macros.setEnumField(field, new_familia, f);
 					//Fields ctrl+c ctrl+v
 					case "date", "numeroResidentes", "banheiros", "quartos", "veiculos", "bicicletas", "motos", "editedNumeroResidentes", "editsNumeroResidentes", "nomeContato", "telefoneContato", "codigoReagendamento":
 						Reflect.setField(new_familia, field, Reflect.field(f, field));
@@ -149,9 +155,18 @@ class MainTemp
 						Macros.warnTable(Familia, field, Reflect.field(f, field));					
 				}
 			}
+			
+			Macros.validateEntry(Familia, ["syncTimestamp", "id"], [ { key : "old_id" , value : new_familia.old_id }, { key : "old_session_id", value : new_familia.old_session_id } ], new_familia); 
+			
+			famHash.set(new_familia.old_id, new_familia);
 		}
 	}
 	
+	
+	static function processMorador(old_session : Int)
+	{
+		var dbMorador = targetCnx.request("SELECT * FROM Morador WHERE sesion_id = " + old_session);
+	}
 	
 	static function populateHash() : Map<String,Map<Int,Int>>
 	{
