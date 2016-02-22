@@ -1,4 +1,5 @@
-package sync.db;
+package common.spod;
+import common.spod.EnumSPOD;
 import sys.db.Object;
 import sys.db.Types.SBool;
 import sys.db.Types.SDateTime;
@@ -8,7 +9,7 @@ import sys.db.Types.SId;
 import sys.db.Types.SInt;
 import sys.db.Types.SNull;
 import sys.db.Types.SString;
-import sync.db.statics.Statics;
+
 /**
  * ...
  * @author Caio

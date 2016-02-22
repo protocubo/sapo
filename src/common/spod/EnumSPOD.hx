@@ -1,4 +1,4 @@
-package sync.db.statics;
+package common.spod;
 import haxe.Template;
 import sys.db.Object;
 import sys.db.Types.SEnum;
@@ -78,12 +78,16 @@ import sys.db.Types.SString;
 }
   class CondicaoMoradia_Tbl extends EnumTable{}
  
-  @dbNullVal(5) enum Empregado {
+  @dbNullVal(5) enum EmpregadosDomesticos {
 	@dbVal(1) Residente;
 	@dbVal(2) Mensalista;
 	@dbVal(3) Diarista;
 	@dbVal(4) NaoPossui;
 	@dbVal(5) NaoRespondeu;
+ }
+ 
+ class EmpregadosDomesticos_Tbl extends EnumTable {
+	 
  }
    
  class EstacaoMetro extends Object
@@ -263,7 +267,7 @@ import sys.db.Types.SString;
  }
  
  
- @dbNullVal(13) enum Renda
+ @dbNullVal(13) enum RendaDomiciliar
  {
 	@dbVal(1) Sem;
 	@dbVal(2) De0;
@@ -280,7 +284,7 @@ import sys.db.Types.SString;
 	@dbVal(13) NaoRespondeu;
  }
  
-  class Renda_Tbl extends EnumTable {
+  class RendaDomiciliar_Tbl extends EnumTable {
 	 
  }
  

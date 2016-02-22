@@ -1,5 +1,5 @@
-package sync.db;
-import sync.db.statics.Statics.EstacaoMetro;
+package common.spod;
+import common.spod.EnumSPOD;
 import sys.db.Object;
 import sys.db.Types.SBool;
 import sys.db.Types.SDateTime;
@@ -7,7 +7,7 @@ import sys.db.Types.SEnum;
 import sys.db.Types.SFloat;
 import sys.db.Types.SId;
 import sys.db.Types.SInt;
-import sync.db.statics.Statics;
+
 import sys.db.Types.SNull;
 
 /**
