@@ -8,6 +8,6 @@
 
 --next
 
--neko www/SapoodJS.js
--main js.MainJs
+-js www/SapoodJS.js
+-main js.MainJS
 
