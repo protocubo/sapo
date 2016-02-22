@@ -1,11 +1,13 @@
 package sync;
-
-import sync.db.Familia;
-import sync.db.InitDB;
-import sync.db.Modo;
-import sync.db.Morador;
-import sync.db.Ponto;
-import sync.db.Session;
+import common.spod.EnumSPOD;
+import common.spod.Familia;
+import common.spod.InitDB;
+import common.spod.Modo;
+import common.spod.Morador;
+import common.spod.Ponto;
+import common.spod.Session;
+import haxe.Log;
+import haxe.PosInfos;
 import haxe.Http;
 import haxe.Json;
 import haxe.remoting.HttpConnection;
@@ -16,9 +18,9 @@ import sys.db.Mysql;
 import sys.db.Sqlite;
 import sys.FileSystem;
 import sys.io.File;
-import sync.db.statics.Statics;
 
-
+//DELETAR
+import sync.MainTemp;
 /**
  * ...
  * @author Caio
@@ -31,7 +33,14 @@ class MainSync
 	public static var targetCnx : Connection;
 	static function main() 
 	{
-		
+		Log.trace = function(txt : Dynamic, ?posInfos : PosInfos)
+		{
+			var v = File.append("traces.txt");
+			v.writeString(txt + "\n");
+			v.close();
+			
+			Sys.println(txt);
+		}
 		InitDB.run();
 		Manager.cnx.startTransaction();
 		
@@ -53,23 +62,23 @@ class MainSync
 		
 		//Ref Tables -> key - Table, value: OldVal<NewVal> onde OldVal é o ID da tabela de ref. do Anderson e o NewVal é o meu valor de enum;
 		var refValue = new Map<String, Map<Int,Int>>();
-		/*for (c in CompileTime.getAllClasses("sync.db.statics", true, EnumTable))
+
+		for (c in CompileTime.getAllClasses("common.spod", true, EnumTable))
 		{
-			$type(c);
 			var tempmap = new Map<Int,Int>();
+			var manager = Reflect.getProperty(c, "manager");
 			
-			var res = c.manager.all().map(function(v) {
+			var res = (untyped c.manager:Manager<EnumTable>).all();
+			var res1 = Lambda.map(res,function(v) {
 				return [v.val , v.id];
-			});
-			for (r in res) 
+			}).array();
+			for(r in res1)
 			{
 				tempmap.set(r[0], r[1]);
 			}
 			var name = Type.getClassName(c).split("_")[0];
 			refValue.set(name, tempmap);
-		}*/
-		
-		
+		}
 		
 		// Query -> ../../extras/main.sql
 		//Session_id only 
@@ -154,7 +163,7 @@ class MainSync
 			for (f in familias)
 			{
 				var new_familia = new Familia();
-				trace("processing fam " + Std.string(f.id));
+				//trace("processing fam " + Std.string(f.id));
 				for (field in Reflect.fields(f))
 				{
 					switch(field)
@@ -173,11 +182,14 @@ class MainSync
 						case "numeroResidentes":
 							new_familia.numeroResidentes = f.numeroResidentes;
 						case "ocupacaoDomicilio_id":
-							new_familia.ocupacaoDomicilio =  Macros.getStaticEnum(OcupacaoDomicilio, f.ocupacaoDomicilio_id);
+							if(Macros.checkEnumValue(OcupacaoDomicilio, f.ocupacaoDomicilio_id))
+								new_familia.ocupacaoDomicilio =  Macros.getStaticEnum(OcupacaoDomicilio, f.ocupacaoDomicilio_id);
 						case "condicaoMoradia_id":
-							new_familia.condicaoMoradia = Macros.getStaticEnum(CondicaoMoradia, f.condicaoMoradia_id);
+							if(Macros.checkEnumValue(CondicaoMoradia, f.condicaoMoradia_id))
+								new_familia.condicaoMoradia = Macros.getStaticEnum(CondicaoMoradia, f.condicaoMoradia_id);
 						case "tipoImovel_id":
-							new_familia.tipoImovel = Macros.getStaticEnum(TipoImovel, f.tipoImovel_id);
+							if(Macros.checkEnumValue(TipoImovel, f.tipoImovel_id))
+								new_familia.tipoImovel = Macros.getStaticEnum(TipoImovel, f.tipoImovel_id);
 						//TODO: Perguntar pro Anderson WTH is going on nesse campo (existe em session)
 						case "tentativa_id":
 							new_familia.tentativa_id = f.tentativa_id;
@@ -192,15 +204,18 @@ class MainSync
 						case "motos":
 							new_familia.motos = f.motos;
 						case "aguaEncanada_id":
-							new_familia.aguaEncanada =  Macros.getStaticEnum(AguaEncanada, f.aguaEncanada_id);
+							if(Macros.checkEnumValue(AguaEncanada, f.aguaEncanada_id))
+								new_familia.aguaEncanada =  Macros.getStaticEnum(AguaEncanada, f.aguaEncanada_id);
 						case "ruaPavimentada_id":
 							new_familia.ruaPavimentada_id = (f.ruaPavimentada_id == 1);
 						case "vagaPropriaEstacionamento_id":
 							new_familia.vagaPropriaEstacionamento_id = (f.vagaPropriaEstacionamento_id == 3) ? null : (f.vagaPropriaEstacionamento_id == 1);
 						case "anoVeiculoMaisRecente_id":
-							new_familia.anoVeiculoMaisRecente = Macros.getStaticEnum(AnoVeiculo, f.anoVeiculoMaisRecente_id);
+							if(Macros.checkEnumValue(AnoVeiculo, f.anoVeiculoMaisRecente_id))
+								new_familia.anoVeiculoMaisRecente = Macros.getStaticEnum(AnoVeiculo, f.anoVeiculoMaisRecente_id);
 						case "empregadosDomesticos_id":
-							new_familia.empregadosDomesticos = Macros.getStaticEnum(Empregado, f.empregadosDomesticos_id);
+							if(Macros.checkEnumValue(EmpregadosDomesticos, f.empregadosDomesticos_id))
+								new_familia.empregadosDomesticos = Macros.getStaticEnum(EmpregadosDomesticos, f.empregadosDomesticos_id);
 						case "tvCabo_id":
 							new_familia.tvCabo = (f.tvCabo_id != 3) ? (f.tvCabo == 1) : null;
 						case "editedNumeroResidentes":
@@ -212,7 +227,8 @@ class MainSync
 						case "telefoneContato":
 							new_familia.telefoneContato = f.telefoneContato;
 						case "rendaDomiciliar_id":
-							new_familia.rendaDomiciliar = Macros.getStaticEnum(Renda, f.rendaDomiciliar_id);
+							if(Macros.checkEnumValue(RendaDomiciliar, f.rendaDomiciliar_id))
+								new_familia.rendaDomiciliar = Macros.getStaticEnum(RendaDomiciliar, f.rendaDomiciliar_id);
 						case "recebeBolsaFamilia_id":
 							new_familia.recebeBolsaFamilia = (f.recebeBolsaFamilia_id == 1);
 						case "codigoReagendamento":
@@ -245,7 +261,7 @@ class MainSync
 				var moradores = targetCnx.request("SELECT * FROM Morador WHERE session_id = " + id + " AND familia_id = " + new_familia.old_id).results();
 				for (m in moradores)
 				{
-					trace("processing morador m "  + Std.string(m.id));
+					//trace("processing morador m "  + Std.string(m.id));
 					var new_morador = new Morador();
 					for (f in Reflect.fields(m))
 					{
@@ -269,25 +285,31 @@ class MainSync
 							case "proprioMorador_id":
 								new_morador.proprioMorador_id = (m.proprioMorador_id == 2);
 							case "idade_id":
-								new_morador.idade_id = m.idade_id;
+								Macros.checkEnumValue(Idade, m.idade_id);
+								new_morador.idade = Macros.getStaticEnum(Idade, m.idade_id);
 							case "genero_id":
 								new_morador.genero_id = m.genero_id;
 							case "grauInstrucao_id":
-								new_morador.grauInstrucao_id = m.grauInstrucao_id;
+								Macros.checkEnumValue(GrauInstrucao, m.grauInstrucao_id);
+								new_morador.grauInstrucao = Macros.getStaticEnum(GrauInstrucao, m.grauInstrucao_id);
 							case "codigoReagendamento":
 								new_morador.codigoReagendamento = m.codigoReagendamento;
 							case "quemResponde_id":
 								new_morador.quemResponde_id = m.quemResponde_id;
 							case "situacaoFamiliar_id":
-								new_morador.situacaoFamiliar_id = m.situacaoFamiliar_id;
+								Macros.checkEnumValue(SituacaoFamiliar, m.situacaoFamiliar_id);
+								new_morador.situacaoFamiliar = Macros.getStaticEnum(SituacaoFamiliar, m.situacaoFamiliar_id);
 							case "atividadeMorador_id":
-								new_morador.atividadeMorador_id = m.atividadeMorador_id;
+								Macros.checkEnumValue(AtividadeMorador, m.atividadeMorador_id);
+								new_morador.atividadeMorador = Macros.getStaticEnum(AtividadeMorador, m.atividadeMorador_id);
 							case "possuiHabilitacao_id":
 								new_morador.possuiHabilitacao_id = (m.possuiHabilitacao != null) ? (m.possuiHabilitacao == 1) : null;
 							case "portadorNecessidadesEspeciais_id":
-								new_morador.portadorNecessidadesEspeciais_id = m.portadorNecessidadesEspeciais_id;
+								Macros.checkEnumValue(PortadorNecessidadesEspeciais, m.portadorNecessidadesEspeciais);
+								new_morador.portadorNecessidadesEspeciais = Macros.getStaticEnum(PortadorNecessidadesEspeciais, m.portadorNecessidadesEspeciais_id);
 							case "motivoSemViagem_id":
-								new_morador.motivoSemViagem_id = m.motivoSemViagem_id;
+								Macros.checkEnumValue(MotivoSemViagem, m.motivoSemViagem_id);
+								new_morador.motivoSemViagem = Macros.getStaticEnum(MotivoSemViagem, m.motivoSemViagem_id);
 							case "gps_id":
 								continue;
 							default:
@@ -318,6 +340,7 @@ class MainSync
 				//Convertido para array para pegar points[i-1]
 				var points = targetCnx.request("SELECT * FROM Ponto WHERE session_id = " + id + " AND morador_id = " + new_morador.old_id + " ORDER BY anterior_id").results();
 				
+				var pointMap = new Map<Int, Ponto>();
 				for(p in points)
 				{
 					var new_point = new Ponto();
@@ -339,7 +362,7 @@ class MainSync
 							case "isDeleted":
 								new_point.isDeleted = (p.isDeleted == 1);
 							case "uf_id":
-								new_point.uf_id = p.id;
+								new_point.uf_id = p.uf_id;
 							case "city_id":
 								new_point.city_id = p.city_id;
 							case "regadm_id":
@@ -355,9 +378,11 @@ class MainSync
 							case "ref_id":
 								new_point.ref_id = p.ref_id;
 							case "motivoID":
-								new_point.motivoID = p.motivoID;
+								Macros.checkEnumValue(Motivo, m.motivoID);
+								new_point.motivo = Macros.getStaticEnum(Motivo, m.motivoID);
 							case "motivoOutraPessoaID":
-								new_point.motivoOutraPessoaID = p.motivoOutraPessoaID;
+								Macros.checkEnumValue(Motivo, m.motivoOutraPessoaID);
+								new_point.motivoOutraPessoa = Macros.getStaticEnum(Motivo, m.motivoOutraPessoaID);
 							case "tempo_saida":
 								new_point.tempo_saida = p.tempo_saida;
 							case "tempo_chegada":
@@ -369,7 +394,7 @@ class MainSync
 							case "gps_id", "anterior_id", "posterior_id", "ordem", "city_str", "regadm_str", "street_str", "complement_str", "complement_two_str":
 								continue;
 							default:
-								trace(f);
+								//trace(f);
 								//TODO:Throw smthing
 							
 						}
@@ -390,6 +415,7 @@ class MainSync
 						new_point.insert();
 					else
 						new_point = old_point;
+					pointMap.set(new_point.old_id, new_point);
 					
 					//TODO: Implementar checks (não são intuitivos se considerar entradas isDeleted)
 					var modos = targetCnx.request("Select * FROM Modo WHERE morador_id = " +new_morador.old_id + " AND firstpoint_id = " +new_point.old_id + " ORDER BY anterior_id").results();
@@ -415,7 +441,8 @@ class MainSync
 								case "isEdited":
 									new_modo.isEdited = mo.isEdited;
 								case "meiotransporte_id":
-									new_modo.meiotransporte_id = mo.meiotransporte_id;
+									Macros.checkEnumValue(MeioTransporte, mo.meiotransporte_id);
+									new_modo.meiotransporte = Macros.getStaticEnum(MeioTransporte, mo.meiotransporte_id);
 								case "linhaOnibus_id":
 									new_modo.linhaOnibus_id = mo.linhaOnibus_id;
 								case "estacaoEmbarque_id":
@@ -423,9 +450,11 @@ class MainSync
 								case "estacaoDesembarque_id":
 									new_modo.estacaoDesembarque_id = mo.estacaoDesembarque_id;
 								case "formaPagamento_id":
-									new_modo.formaPagamento_id = mo.formaPagamento_id;
+									if(Macros.checkEnumValue(FormaPagamento, mo.formaPagamento_id))
+									new_modo.formaPagamento = Macros.getStaticEnum(FormaPagamento, mo.formaPagamento_id);
 								case "tipoEstacionamento_id":
-									new_modo.tipoEstacionamento_id = mo.tipoEstacionamento_id;
+									Macros.checkEnumValue(TipoEstacionamento, mo.tipoEstacionamento_id);
+									new_modo.tipoEstacionamento = Macros.getStaticEnum(TipoEstacionamento, mo.tipoEstacionamento_id);
 								case "firstpoint_id":
 									new_modo.firstpoint_id = mo.firstpoint_id;
 								case "secondpoint_id":
@@ -439,7 +468,7 @@ class MainSync
 								case "anterior_id", "posterior_id", "gps_id", "linhaOnibus_str","estacaoEmbarque_str", "estacaoDesembarque_str":
 									continue;
 								default:
-									trace(f);
+									//trace(f);
 									//TODO: Throw smthing
 							}
 						}

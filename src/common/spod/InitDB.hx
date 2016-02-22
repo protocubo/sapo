@@ -1,9 +1,11 @@
-package sync.db;
+package common.spod;
+import common.spod.Familia;
+import common.spod.Modo;
 import haxe.Json;
 import haxe.rtti.Meta;
-import sync.db.statics.Referencias;
-import sync.db.statics.Statics.EnumTable;
-import sync.db.statics.UF;
+import common.spod.statics.Referencias;
+import common.spod.EnumSPOD;
+import common.spod.statics.UF;
 import sys.db.Connection;
 import sys.db.Manager;
 import sys.db.Mysql;
@@ -48,7 +50,7 @@ class InitDB
 			TableCreate.create(UF.manager);
 			
 			//Porrada de Enums
-			var classes = CompileTime.getAllClasses("sync.db.statics", true, EnumTable);
+			var classes = CompileTime.getAllClasses("common.spod", true, EnumTable);
 			for (c in classes)
 			{
 				TableCreate.create(Reflect.field(c, "manager"));
@@ -61,13 +63,13 @@ class InitDB
 	
 	public static function populateEnumTable()
 	{
-		var classes = CompileTime.getAllClasses("sync.db.statics", true, EnumTable);
+		var classes = CompileTime.getAllClasses("common.db", true, EnumTable);
 		trace(classes.length);
 		for (c in classes)
 		{
 			trace(Type.getClassName(c));
 			var classEnum = Type.resolveEnum(Type.getClassName(c).split("_")[0]);
-			
+			trace(Type.getEnumName(classEnum));
 			var nr = Meta.getType(classEnum).dbNullVal[0];
 			for (field in Reflect.fields(classEnum))
 			{
@@ -81,8 +83,7 @@ class InitDB
 				 
 				Reflect.setField(instance, "id", Type.enumIndex(Reflect.field(classEnum, field)));
 				Reflect.setField(instance, "name", field);
-				if(val != nr || nr == 0)
-					Reflect.setField(instance, "val", val);
+				Reflect.setField(instance, "val", val);
 				instance.insert();
 			}
 		}

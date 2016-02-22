@@ -1,4 +1,4 @@
-package sync.db.statics;
+package common.spod.statics;
 import sys.db.Object;
 import sys.db.Types.SId;
 import sys.db.Types.SString;
