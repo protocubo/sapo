@@ -18,6 +18,7 @@ class Index {
 		Manager.cnx = null;
 		sys.FileSystem.deleteFile(Index.DBPATH);
 		dbInit();
+		InitDB.run();
 		
 		new SurveyStatus("aberta").insert();
 		new SurveyStatus("completa").insert();
@@ -71,6 +72,12 @@ class Index {
 
 	static function main()
 	{		
+		haxe.Log.trace = function (msg, ?pos:haxe.PosInfos) {
+			if (pos.customParams != null) msg += "\n{" + pos.customParams.join(" ") + "}";
+			msg += '  @${pos.className}:${pos.methodName}  (${pos.fileName}:${pos.lineNumber})';
+			Web.logMessage(msg);
+		}
+
 		try {
 			dbInit();
 			InitDB.run();
