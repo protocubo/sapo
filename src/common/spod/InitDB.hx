@@ -58,8 +58,12 @@ class InitDB
 
 	public static function populateEnumTable()
 	{
-		var classes = CompileTime.getAllClasses("common.db", true, EnumTable);
+		var classes = CompileTime.getAllClasses("common.spod", true, EnumTable);
 		trace(classes.length);
+		if (classes.length == 0)
+		{
+			throw "No classes found!";
+		}
 		for (c in classes)
 		{
 			trace(Type.getClassName(c));
