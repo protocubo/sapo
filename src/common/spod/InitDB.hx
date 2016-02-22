@@ -32,27 +32,31 @@ class InitDB
 		// an issue with sqlite.ndll perhaps?
 		if (Sys.systemName() != "Windows") Manager.cnx.request("PRAGMA journal_mode=wal");
 
-		if (!TableCreate.exists(Modo.manager))
-		{
-			TableCreate.create(Familia.manager);
-			TableCreate.create(Modo.manager);
-			TableCreate.create(Morador.manager);
-			TableCreate.create(Ponto.manager);
-			TableCreate.create(Session.manager);
+		if (!TableCreate.exists(Modo.manager)) {
+			Manager.cnx.request("BEGIN");
+			try {
+				TableCreate.create(Familia.manager);
+				TableCreate.create(Modo.manager);
+				TableCreate.create(Morador.manager);
+				TableCreate.create(Ponto.manager);
+				TableCreate.create(Session.manager);
 
-			/******/
-			TableCreate.create(Referencias.manager);
-			TableCreate.create(UF.manager);
+				/******/
+				TableCreate.create(Referencias.manager);
+				TableCreate.create(UF.manager);
 
-			//Porrada de Enums
-			var classes = CompileTime.getAllClasses("common.spod", true, EnumTable);
-			for (c in classes)
-			{
-				TableCreate.create(Reflect.field(c, "manager"));
+				//Porrada de Enums
+				var classes = CompileTime.getAllClasses("common.spod", true, EnumTable);
+				for (c in classes)
+					TableCreate.create(Reflect.field(c, "manager"));
+				populateEnumTable();
+				//TODO:Populate statics
+
+			} catch (e:Dynamic) {
+				Manager.cnx.request("COMMIT");
+				neko.Lib.rethrow(e);
 			}
-
-			populateEnumTable();
-			//TODO:Populate statics
+			Manager.cnx.request("COMMIT");
 		}
 	}
 

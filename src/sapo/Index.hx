@@ -20,39 +20,45 @@ class Index {
 		InitDB.run();
 		dbInit();
 
-		new SurveyStatus("aberta").insert();
-		new SurveyStatus("completa").insert();
-		new SurveyStatus("verificada").insert();
-		new SurveyStatus("CT").insert();
-		new SurveyStatus("aceita").insert();
-		new SurveyStatus("recusada").insert();
-		new SurveyStatus("sobjudice").insert();
+		Manager.cnx.request("BEGIN");
+		try {
+			new SurveyStatus("aberta").insert();
+			new SurveyStatus("completa").insert();
+			new SurveyStatus("verificada").insert();
+			new SurveyStatus("CT").insert();
+			new SurveyStatus("aceita").insert();
+			new SurveyStatus("recusada").insert();
+			new SurveyStatus("sobjudice").insert();
 
 
-		var superGroup = new Group(new AccessName("super"), PSuper);
-		superGroup.insert();
+			var superGroup = new Group(new AccessName("super"), PSuper);
+			superGroup.insert();
 
-		var arthur = new User(new AccessName("arthur"), superGroup, "Arthur Dent", new EmailAddress("arthur@sapo"));
-		var ford = new User(new AccessName("ford"), superGroup, "Ford Prefect", new EmailAddress("ford@sapo"));
+			var arthur = new User(new AccessName("arthur"), superGroup, "Arthur Dent", new EmailAddress("arthur@sapo"));
+			var ford = new User(new AccessName("ford"), superGroup, "Ford Prefect", new EmailAddress("ford@sapo"));
 
-		arthur.insert();
-		ford.insert();
+			arthur.insert();
+			ford.insert();
 
-		var survey1 = new Survey(ford, "Arthur's house", 945634);
-		var survey2 = new Survey(arthur, "Betelgeuse, or somewhere near that planet", 6352344);
-		survey1.insert();
-		survey2.insert();
+			var survey1 = new Survey(ford, "Arthur's house", 945634);
+			var survey2 = new Survey(arthur, "Betelgeuse, or somewhere near that planet", 6352344);
+			survey1.insert();
+			survey2.insert();
 
-		var ticket1 = new Ticket(survey1, arthur, "Overpass???");
-		ticket1.insert();
-		new TicketMessage(ticket1, arthur, ford, "Hey, I was distrought over they wanting to build an overpass over my house").insert();
-		new TicketMessage(ticket1, ford, arthur, "Don't panic... don't panic...").insert();
+			var ticket1 = new Ticket(survey1, arthur, "Overpass???");
+			ticket1.insert();
+			new TicketMessage(ticket1, arthur, ford, "Hey, I was distrought over they wanting to build an overpass over my house").insert();
+			new TicketMessage(ticket1, ford, arthur, "Don't panic... don't panic...").insert();
 
-		var ticket2 = new Ticket(survey2, ford, "About Time...");
-		ticket2.insert();
-		new TicketMessage(ticket2, ford, arthur, "Time is an illusion, lunchtime doubly so. ").insert();
-		new TicketMessage(ticket2, arthur, ford, "Very deep. You should send that in to the Reader's Digest. They've got a page for people like you.").insert();
-
+			var ticket2 = new Ticket(survey2, ford, "About Time...");
+			ticket2.insert();
+			new TicketMessage(ticket2, ford, arthur, "Time is an illusion, lunchtime doubly so. ").insert();
+			new TicketMessage(ticket2, arthur, ford, "Very deep. You should send that in to the Reader's Digest. They've got a page for people like you.").insert();
+		} catch (e:Dynamic) {
+			Manager.cnx.request("COMMIT");
+			neko.Lib.rethrow(e);
+		}
+		Manager.cnx.request("COMMIT");
 	}
 
 
