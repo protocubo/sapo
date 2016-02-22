@@ -18,12 +18,15 @@ class Modo extends Object
 {
 	public var id : SId;
 	public var session_id : SInt;
+	@:relation(session_id) public var session : Session;
 	public var morador_id : SInt;
+	@:relation(morador_id) public var morador : Morador;
 	
 	public var firstpoint_id : SInt;
-	@:relation(firstpoint_id) public var firstPoint : Ponto;
+	@:relation(firstpoint_id) public var firstpoint : Ponto;
 	
 	public var secondpoint_id : SInt;
+	@:relation(secondpoint_id) public var secondpoint : Ponto;
 	
 	public var date : SDateTime;
 	

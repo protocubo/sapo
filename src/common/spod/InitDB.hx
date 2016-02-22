@@ -64,6 +64,7 @@ class InitDB
 		{
 			throw "No classes found!";
 		}
+		
 		for (c in classes)
 		{
 			trace(Type.getClassName(c));
