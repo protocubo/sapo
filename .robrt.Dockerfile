@@ -7,9 +7,8 @@ RUN add-apt-repository ppa:haxe/snapshots -y
 LABEL haxe_regen=0
 RUN apt-get update && apt-get install -y neko haxe && haxelib setup /usr/share/haxe/lib
 LABEL haxelib_regen=0
-RUN haxelib git hxssl https://github.com/tong/hxssl
-RUN haxelib --always install sapo.hxml
-RUN haxelib --always install unit.hxml
-RUN haxelib --always install comn.hxml
-RUN haxelib --always install sync.hxml
+RUN haxelib --always git hxssl https://github.com/tong/hxssl
+RUN haxelib --always install compiletime
+RUN haxelib --always install tink_template
+RUN haxelib --always install utest
 
