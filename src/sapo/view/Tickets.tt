@@ -37,7 +37,7 @@
 			<div class="col-md-1"><h4>ESTADO</h4></div>
 			<div class="col-md-2">
 				<select class="form-control">
-					<option>Não Fechadas</option>
+					<option>NÃ£o Fechadas</option>
 					<option>Fechadas</option>
 				</select>
 			</div>
@@ -50,13 +50,13 @@
 		<!-- BUSCA -->
 		<h3>Busca:</h3>
 		<div class="row">
-			<div class="col-md-2"><h4>Nº DO TICKET</h4></div>
+			<div class="col-md-2"><h4>NÂº DO TICKET</h4></div>
 			<div class="col-md-2">
-				<input type="text" class="form-control" placeholder="Número do Ticket">
+				<input type="text" class="form-control" placeholder="NÃºmero do Ticket">
 			</div>
-			<div class="col-md-2"><h4>Nº DA PESQUISA</h4></div>
+			<div class="col-md-2"><h4>NÂº DA PESQUISA</h4></div>
 			<div class="col-md-2">
-				<input type="text" class="form-control" placeholder="Número da Pesquisa">
+				<input type="text" class="form-control" placeholder="NÃºmero da Pesquisa">
 			</div>
 			<div class="col-md-2 col-md-offset-2">
 				<button type="button" class="btn btn-primary">BUSCAR</button>
@@ -73,7 +73,13 @@
 			(: end :)
 		</div>
 	</div>
-	
+	(: for t in users :)
+	(: Modal.modalticketfechar(t) :)
+	(: Modal.modalticketresponder(t) :)
+	(: Modal.modalticketincluir(t) :)
+	(: Modal.modalticketstatus(t) :)
+	(: end :)
+
 (: Util.footer() :)
 </body>
 </html>

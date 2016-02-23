@@ -75,7 +75,7 @@
     <footer class="footer">
         <div class="container">
             <h3 class="text-muted" style="display:inline-block;"> SAPO OD DF 2016</h3>
-            <img src="sapo_logo.png" style="height:60px; float:right;">
+            <img src="/resources/sapo_logo.png" style="height:60px; float:right;">
         </div>
     </footer>
 (: end :)
@@ -102,21 +102,17 @@
 					(:ticket.survey.id:) - (:ticket.survey.closed_at:) - <b class="pesquisador">(:ticket.survey.surveyor.name:)</b>
 				</a>
 			</div>
-			<div class="col-md-2 panel-title">
-				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyTicket(: ticket.id :)" aria-expanded="true" aria-controls="BodyTicket(: ticket.id :)">
-					<!-- se:foi ligado -->
-					<span class="glyphicon glyphicon-earphone" aria-hidden="true"></span>
-					<!-- class: supervisor, telefonista, super. status: minus -> ok ou remove -->
-					<span class="glyphicon glyphicon-minus supervisor" aria-hidden="true"></span>
-					<span class="glyphicon glyphicon-ok telefonista" aria-hidden="true"></span>
-					<span class="glyphicon glyphicon-remove super" aria-hidden="true"></span>
-
-					(:*
-					<!-- STATUS (class: aberta, completa, verificada, CT, aceita, recusada, sobjudice) -->
-					<b class="(:ticket.survey.status.name:)">(:ticket.survey.status.name:)</b>
-					*:)
-
-				</a>
+			<div class="col-md-2 panel-title text-right">
+				<!-- se:foi ligado -->
+				<span class="glyphicon glyphicon-earphone" aria-hidden="true"></span>
+				<!-- class: supervisor, telefonista, super. status: minus -> ok ou remove -->
+				<span class="glyphicon glyphicon-minus supervisor" aria-hidden="true"></span>
+				<span class="glyphicon glyphicon-ok telefonista" aria-hidden="true"></span>
+				<span class="glyphicon glyphicon-remove super" aria-hidden="true"></span>
+				(:*
+				<!-- STATUS (class: aberta, completa, verificada, CT, aceita, recusada, sobjudice) -->
+				<b class="(:ticket.survey.status.name:)">(:ticket.survey.status.name:)</b>
+				*:)
 			</div>
 		</div>
 	</div>
@@ -145,11 +141,11 @@
 			</div>
 			<!-- AÇÕES -->
 			<div class="row" style="margin-top: 30px;">
-				<div class="col-md-2"><button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#ticket_fechar">FECHAR</button></div>
-				<div class="col-md-2"><button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#ticket_responder">RESPONDER</button></div>
-				<div class="col-md-2"><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#ticket_incluir">INCLUIR</button></div>
+				<div class="col-md-2"><button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_fechar">FECHAR</button></div>
+				<div class="col-md-2"><button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_responder">RESPONDER</button></div>
+				<div class="col-md-2"><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_incluir">INCLUIR</button></div>
 				<div class="col-md-2 col-md-offset-1"><a href="survey/(: ticket.survey.id :)" type="button" class="btn btn-primary btn-sm">VER PESQUISA</a></div>
-				<div class="col-md-2"><button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#ticket_status">MUDAR STATUS</button></div>
+				<div class="col-md-2"><button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_status">MUDAR STATUS</button></div>
 			</div>
 		</div>
 	</div>
