@@ -16,6 +16,8 @@ class Macros {
 	{
 		return macro {
 			var norm_field = $field.split("_")[0];
+			trace(norm_field);
+			trace(Tools.capitalize(norm_field));
 			var e = Type.resolveEnum(Tools.capitalize(norm_field));
 			if (Macros.checkEnumValue(e, Reflect.field($old_entry, $field)))
 				Reflect.setField($new_entry, norm_field, Macros.getStaticEnum(e, Reflect.field($old_entry, $field)));
@@ -44,7 +46,9 @@ class Macros {
 	public static macro function validateEntry(tableClass : Expr, ignoreParams : Expr, whereParams : Expr, curEntry : Expr)
 	{
 		return macro {
-			var tblname = Type.getClassName($tableClass);
+			var fulltblname = Type.getClassName($tableClass).split(".");
+			var tblname = fulltblname[fulltblname.length -1];
+			
 			
 			var str = " WHERE ";
 			

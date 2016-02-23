@@ -18,7 +18,11 @@ class Tools
 		for (s in splited)
 		{
 			var reg = ~/^\D/;
-			s = reg.replace(s, reg.matched(1).toUpperCase());
+			if (reg.match(s))
+			{
+				trace(reg.matched(0));
+				s = reg.replace(s, reg.matched(0).toUpperCase());
+			}
 		}
 		
 		return splited.join(" ");
