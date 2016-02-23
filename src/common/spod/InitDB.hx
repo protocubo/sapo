@@ -21,43 +21,54 @@ import sys.io.File;
 class InitDB
 {
 	static var DBPATH = Sys.getEnv("SAPO_DB");
-	
+
 	public static function run()
 	{
 		Manager.initialize();
 
 		Manager.cnx = Sqlite.open(DBPATH);
 		Manager.cnx.request("PRAGMA page_size = 4096");
+		// later windows can't close the connection in wal mode...
+		// an issue with sqlite.ndll perhaps?
 		if (Sys.systemName() != "Windows") Manager.cnx.request("PRAGMA journal_mode=wal");
-		
-		if (!TableCreate.exists(Modo.manager))
-		{
-			TableCreate.create(Familia.manager);
-			TableCreate.create(Modo.manager);
-			TableCreate.create(Morador.manager);
-			TableCreate.create(Ponto.manager);
-			TableCreate.create(Session.manager);
-			
-			/******/
-			TableCreate.create(Referencias.manager);
-			TableCreate.create(UF.manager);
-			
-			//Porrada de Enums
-			var classes = CompileTime.getAllClasses("common.spod", true, EnumTable);
-			for (c in classes)
-			{
-				TableCreate.create(Reflect.field(c, "manager"));
+
+		if (!TableCreate.exists(Modo.manager)) {
+			Manager.cnx.request("BEGIN");
+			try {
+				TableCreate.create(Familia.manager);
+				TableCreate.create(Modo.manager);
+				TableCreate.create(Morador.manager);
+				TableCreate.create(Ponto.manager);
+				TableCreate.create(Session.manager);
+
+				/******/
+				TableCreate.create(Referencias.manager);
+				TableCreate.create(UF.manager);
+
+				//Porrada de Enums
+				var classes = CompileTime.getAllClasses("common.spod", true, EnumTable);
+				for (c in classes)
+					TableCreate.create(Reflect.field(c, "manager"));
+				populateEnumTable();
+				//TODO:Populate statics
+
+			} catch (e:Dynamic) {
+				Manager.cnx.request("COMMIT");
+				neko.Lib.rethrow(e);
 			}
-			
-			populateEnumTable();
-			//TODO:Populate statics
+			Manager.cnx.request("COMMIT");
 		}
 	}
-	
+
 	public static function populateEnumTable()
 	{
-		var classes = CompileTime.getAllClasses("common.db", true, EnumTable);
+		var classes = CompileTime.getAllClasses("common.spod", true, EnumTable);
 		trace(classes.length);
+		if (classes.length == 0)
+		{
+			throw "No classes found!";
+		}
+		
 		for (c in classes)
 		{
 			trace(Type.getClassName(c));
@@ -73,14 +84,14 @@ class InitDB
 				if (obj == null)
 					continue;
 				var val = obj.dbVal[0];
-				 
+
 				Reflect.setField(instance, "id", Type.enumIndex(Reflect.field(classEnum, field)));
 				Reflect.setField(instance, "name", field);
 				Reflect.setField(instance, "val", val);
 				instance.insert();
 			}
 		}
-			
-		
+
+
 	}
 }
