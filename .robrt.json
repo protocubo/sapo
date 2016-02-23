@@ -8,7 +8,11 @@
 	"build" : {
 		"cmds" : [
 			"cd $ROBRT_REPOSITORY_DIR",
-			"cp docs/mockup/* $ROBRT_OUTPUT_DIR/"
+			"haxe sapo.hxml",
+			"haxe comn.hxml",
+			"haxe sync.hxml",
+			"cp -r www/* $ROBRT_OUTPUT_DIR",
+			"cp -r docs/mockup $ROBRT_OUTPUT_DIR/"
 		]
 	}
 }
