@@ -8,7 +8,6 @@
 <body>
 (: Util.navbar() :)
 
-
 <!-- CADASTRO -->
 <div class="container">
 
@@ -16,7 +15,6 @@
 	<h2>ADMINISTRAÇÃO/CADASTRO</h2>
 	<hr />
 
-	
 	<div class="row">
 		<div class="col-md-6">
 			<h3>Filtros:</h3>
@@ -47,15 +45,14 @@
 
 	</div>
 	<hr />
-
 	<!-- TABELA DE USUÁRIOS -->
-
 	<table class="table">
 		<thead>
 			<tr>
 				<!-- HEAD -->
-				<th>Usuário</th>
+				(:* <th>Usuário</th> *:)
 				<th>Nome</th>
+				<th>Grupo</th>
 				<th>E-mail</th>
 				<th>Supervisor</th>
 				<th width="40px"></th>
@@ -63,12 +60,12 @@
 			</tr>
 		</thead>
 		<tbody>
-			
-			<!-- LINHA: usuário, nome, e-mail, supervisor, editar, desativar -->
+			<!-- LINHA: nome, grupo, e-mail, supervisor, editar, desativar -->
 			(: for user in Spod.User.manager.all() :)
 			<tr>
-				<td><b class="pesquisador">(:user.name:)@(:user.group:)</b></td>
-				<td>(:user.name:)</td>
+				(:* <td><b class="pesquisador">(:user.name:)@</b></td> *:)
+				<td><b class="(:user.group:)">(:user.name:)</b></td>
+				<td><b class="(:user.group:)">(:user.group:)</b></td>
 				<td>(:user.email:)</td>
 				<td><b class="supervisor">ToDo</b></td>
 				<td>
@@ -85,10 +82,24 @@
 			<!-- FIM LINHA -->
 			(: end :)
 		</tbody>
+		<tfoot>
+			<tr>
+				<td colspan="6"></td>
+			</tr>
+		</tfoot>
 	</table>
 
+	<!-- PAGINATION -->
+	<div class="row">
+		<div class="col-md-2">
+			<button class="btn btn-primary">PÁGINA ANTERIOR</button>
+		</div>
+		<div class="col-md-2 col-md-offset-8">
+			<button class="btn btn-primary">PRÓXIMA PÁGINA</button>
+		</div>
+	</div>
+	<hr />
 </div>
-
 
 (: Util.footer() :)
 </body>

@@ -7,9 +7,8 @@
 </head>
 <body>
 
-
-		<!-- PAGAMENTOS / PESQUISADOR -->
-		<div class="container">
+	<!-- PAGAMENTOS / PESQUISADOR -->
+	<div class="container">
 
 		<!-- HEAD -->
 		<h2>PAGAMENTOS</h2>
@@ -47,10 +46,13 @@
 				<!-- FIM LINHA -->
 
 			</tbody>
+			<tfoot>
+				<tr>
+					<td colspan="6"></td>
+				</tr>
+			</tfoot>
 		</table>
-
-		</div>
-
+	</div>
 
 </body>
 </html>
