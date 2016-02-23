@@ -73,11 +73,14 @@ class Index {
 			InitDB.run();
 			dbInit();
 			var uri = Web.getURI();
-			var params = Web.getParams();
 			if (uri == "/favicon.ico") return;
 
-			var d = new Dispatch(uri, params);
+			// treat visibly empty params as missing
+			var params = Web.getParams();
+			var cparams = [ for (k in params.keys()) if (StringTools.trim(params.get(k)).length > 0) k => params.get(k) ];
+			var d = new Dispatch(uri, cparams);
 			d.dispatch(new Routes());
+
 			Manager.cnx.close();
 			Manager.cnx = null;
 		} catch (e:Dynamic) {
