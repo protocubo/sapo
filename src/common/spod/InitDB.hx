@@ -53,7 +53,7 @@ class InitDB
 				//TODO:Populate statics
 
 			} catch (e:Dynamic) {
-				Manager.cnx.request("COMMIT");
+				Manager.cnx.request("ROLLBACK");
 				neko.Lib.rethrow(e);
 			}
 			Manager.cnx.request("COMMIT");

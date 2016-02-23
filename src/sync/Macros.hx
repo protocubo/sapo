@@ -1,5 +1,5 @@
 package sync;
-import common.stringTools.Tools;
+import common.tools.StringTools;
 import haxe.macro.Expr;
 class Macros {
 	
@@ -7,8 +7,8 @@ class Macros {
 	{
 		return macro {
 			var norm_field = $field.split("_")[0];
-			//trace(Tools.capitalize(norm_field));
-			var e = Type.resolveEnum("common.spod." + Tools.capitalize(norm_field));
+			//trace(StringTools.capitalize(norm_field));
+			var e = Type.resolveEnum("common.spod." + StringTools.capitalize(norm_field));
 			if (Macros.checkEnumValue(e, Reflect.field($old_entry, $field)))
 				Reflect.setField($new_entry, norm_field, Macros.getStaticEnum(e, Reflect.field($old_entry, $field)));
 		}
