@@ -15,16 +15,16 @@ class Tools
 	public static function capitalize(target: String) : String
 	{
 		var splited = target.split(' ');
-		for (s in splited)
+		var i = 0;
+		while (i < splited.length)
 		{
 			var reg = ~/^\D/;
-			if (reg.match(s))
+			if (reg.match(splited[i]))
 			{
-				trace(reg.matched(0));
-				s = reg.replace(s, reg.matched(0).toUpperCase());
+				splited[i] = reg.replace(splited[i], reg.matched(0).toUpperCase());
+				i++;
 			}
 		}
-		
 		return splited.join(" ");
 	}
 }

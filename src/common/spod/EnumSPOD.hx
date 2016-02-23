@@ -322,7 +322,7 @@ import sys.db.Types.SString;
 	 
  }
  
- @dbNullVal(9) enum TempoEstacionamento
+ @dbNullVal(9) enum TempoPermanenciaEstacionamento
  {
 	 @dbVal(1) MeiaHora;
 	 @dbVal(2) UmaHora;
@@ -335,7 +335,7 @@ import sys.db.Types.SString;
 	 @dbVal(9) NaoRespondeu;
  }
  
-  class TempoEstacionamento_Tbl extends EnumTable {
+  class TempoPermanenciaEstacionamento_Tbl extends EnumTable {
 	 
  }
  

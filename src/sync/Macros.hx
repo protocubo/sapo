@@ -2,6 +2,19 @@ package sync;
 import common.stringTools.Tools;
 import haxe.macro.Expr;
 class Macros {
+	
+	public static macro function setEnumField(field : Expr, new_entry : Expr, old_entry : Expr)
+	{
+		return macro {
+			var norm_field = $field.split("_")[0];
+			//trace(Tools.capitalize(norm_field));
+			var e = Type.resolveEnum("common.spod." + Tools.capitalize(norm_field));
+			if (Macros.checkEnumValue(e, Reflect.field($old_entry, $field)))
+				Reflect.setField($new_entry, norm_field, Macros.getStaticEnum(e, Reflect.field($old_entry, $field)));
+		}
+	}
+	
+	
 	public static macro function getStaticEnum(target : Expr, old_value : Expr)
 	{
 		return macro {
@@ -12,21 +25,13 @@ class Macros {
 		}
 	}
 	
-	public static macro function setEnumField(field : Expr, new_entry : Expr, old_entry : Expr)
-	{
-		return macro {
-			var norm_field = $field.split("_")[0];
-			trace(norm_field);
-			trace(Tools.capitalize(norm_field));
-			var e = Type.resolveEnum(Tools.capitalize(norm_field));
-			if (Macros.checkEnumValue(e, Reflect.field($old_entry, $field)))
-				Reflect.setField($new_entry, norm_field, Macros.getStaticEnum(e, Reflect.field($old_entry, $field)));
-		}
-	}
+	
 	public static macro function checkEnumValue(target : Expr, old_value : Expr)
 	{
 		return macro {
 			var name = Type.getEnumName($target);
+			
+			//trace("refValue " + refValue.get(name));
 			if (refValue.get(name) == null)
 			{
 				Macros.warnTable(name, null, null);
@@ -46,9 +51,9 @@ class Macros {
 	public static macro function validateEntry(tableClass : Expr, ignoreParams : Expr, whereParams : Expr, curEntry : Expr)
 	{
 		return macro {
+			
 			var fulltblname = Type.getClassName($tableClass).split(".");
 			var tblname = fulltblname[fulltblname.length -1];
-			
 			
 			var str = " WHERE ";
 			
@@ -61,7 +66,7 @@ class Macros {
 				i++;
 			}
 			
-			var old_entry = $tableClass.manager.unsafeObject("SELECT * FROM " + tblname + " ORDER BY syncTimestamp DESC LIMIT 1", false);
+			var old_entry = $tableClass.manager.unsafeObject("SELECT * FROM " + tblname + str+" ORDER BY syncTimestamp DESC LIMIT 1", false);
 			
 			var shouldInsert = false;
 			
@@ -72,15 +77,27 @@ class Macros {
 				if ($ignoreParams.indexOf(field) == -1 && Std.string(Reflect.field($curEntry, field)) != Std.string(Reflect.field(old_entry, field)))
 					shouldInsert = true;
 			}
-			
+			try{
 			if (shouldInsert)
 				$curEntry.insert();
 			else
 				$curEntry = old_entry;
+			}
+			catch (e : Dynamic)
+			{
+				Macros.criticalError(tblname, e);
+			}
 		}
 	}
 	
-	
+	public static macro function criticalError(table : Expr, error : Expr)
+	{
+		return macro {
+				trace("Critical error on table " + $table + " : " + $error);
+				trace("Press enter");
+				Sys.stdin().readLine();
+		}
+	}
 	public static macro function warnTable(table : Expr, field : Expr, val : Expr)
 	{
 		return macro {
