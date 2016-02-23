@@ -35,7 +35,7 @@
                 <ul class="nav navbar-nav">
 				    <!-- adicionar ~class="active"~ no <li> ativo; sem logar: só SAPO; logado (pesquisador): só pagamentos; logado (resto) todos menos pagamentos -->
                     <li><a href="#">SAPO</a></li>
-                    <li><a href="ticket">TICKETS</a></li> 
+                    <li><a href="tickets">TICKETS</a></li> 
                     <li><a href="surveys">PESQUISAS</a></li> 
                     <li><a href="#">SUMÁRIO</a></li> 
 					<li class="dropdown">
