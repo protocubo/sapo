@@ -46,7 +46,7 @@ class Index {
 			new TicketMessage(ticket2, ford, arthur, "Time is an illusion, lunchtime doubly so. ").insert();
 			new TicketMessage(ticket2, arthur, ford, "Very deep. You should send that in to the Reader's Digest. They've got a page for people like you.").insert();
 		} catch (e:Dynamic) {
-			Manager.cnx.request("COMMIT");
+			Manager.cnx.request("ROLLBACK");
 			neko.Lib.rethrow(e);
 		}
 		Manager.cnx.request("COMMIT");
