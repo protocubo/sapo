@@ -33,7 +33,7 @@
 	<table>
 		<tr><td>#</td><td>Opened</td><td>Closed</td></tr>
 		(: for t in Ticket.manager.all() :)
-		<tr><td><a href="tink/ticket/(: t.id :)">#(: t.id :)</a></td><td>(: t.opened_at :)</td><td>(: if t.closed_at != null :)(: t.closed_at :)(: end :)</td></tr>
+		<tr><td><a href="tink/tickets/(: t.id :)">#(: t.id :)</a></td><td>(: t.opened_at :)</td><td>(: if t.closed_at != null :)(: t.closed_at :)(: end :)</td></tr>
 		(: end :)
 	</table>
 	<h2>Users</h2>

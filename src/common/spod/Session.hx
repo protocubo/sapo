@@ -1,4 +1,4 @@
-package sync.db;
+package common.spod;
 import sys.db.Object;
 import sys.db.Types;
 

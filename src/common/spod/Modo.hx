@@ -1,10 +1,13 @@
-package sync.db;
+package common.spod;
+import common.spod.EnumSPOD;
 import sys.db.Object;
 import sys.db.Types.SBool;
 import sys.db.Types.SDateTime;
+import sys.db.Types.SEnum;
 import sys.db.Types.SFloat;
 import sys.db.Types.SId;
 import sys.db.Types.SInt;
+
 import sys.db.Types.SNull;
 
 /**
@@ -27,13 +30,18 @@ class Modo extends Object
 	public var isEdited : SInt;
 	public var isDeleted : SBool;
 	
-	public var meiotransporte_id : SInt;
-	public var linhaOnibus_id : SNull<SInt>;
-	public var estacaoEmbarque_id : SNull<SInt>;
-	public var estacaoDesembarque_id : SNull<SInt>;
+	public var meiotransporte : SEnum<MeioTransporte>;
 	
-	public var formaPagamento_id : SNull<SInt>;
-	public var tipoEstacionamento_id : SNull<SFloat>;
+	public var linhaOnibus_id : SNull<SInt>;
+	@:relation(linhaOnibus_id) public var linhaOnibus : SNull<LinhaOnibus>;
+	
+	public var estacaoEmbarque_id : SNull<SInt>;
+	@:relation(estacaoEmbarque_id) public var estacaoEmbarque : SNull<EstacaoMetro>;
+	public var estacaoDesembarque_id : SNull<SInt>;
+	@:relation(estacaoDesembarque_id) public var estacaoDesembarque : SNull<EstacaoMetro>;
+	
+	public var formaPagamento : SNull<SEnum<FormaPagamento>>;
+	public var tipoEstacionamento : SNull<SEnum<TipoEstacionamento>>;
 	
 	//Coisas resumidas:
 	

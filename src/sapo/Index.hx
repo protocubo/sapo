@@ -1,21 +1,23 @@
 package sapo;
 
+import common.db.MoreTypes;
+import common.spod.InitDB;
 import haxe.PosInfos;
 import haxe.web.Dispatch;
 import neko.Web;
 import sapo.Spod;
-import common.db.MoreTypes;
 import sys.db.*;
 
 class Index {
-	static inline var DBPATH = ".sapo.db3";
+	static var DBPATH = Sys.getEnv("SAPO_DB");
 
 	public static function dbReset()
 	{
 		Manager.cleanup();
 		Manager.cnx.close();
 		Manager.cnx = null;
-		sys.FileSystem.deleteFile(Index.DBPATH);
+		sys.FileSystem.deleteFile(DBPATH);
+		InitDB.run();
 		dbInit();
 		
 		new SurveyStatus("aberta").insert();
@@ -56,8 +58,6 @@ class Index {
 
 	static function dbInit()
 	{
-		Manager.initialize();
-		Manager.cnx = Sqlite.open(DBPATH);
 		Manager.cnx.request("PRAGMA page_size=4096");
 		// later windows can't close the connection in wal mode...
 		// an issue with sqlite.ndll perhaps?
@@ -70,9 +70,15 @@ class Index {
 
 	static function main()
 	{		
-		try {
-			dbInit();
+		haxe.Log.trace = function (msg, ?pos:haxe.PosInfos) {
+			if (pos.customParams != null) msg += "\n{" + pos.customParams.join(" ") + "}";
+			msg += '  @${pos.className}:${pos.methodName}  (${pos.fileName}:${pos.lineNumber})';
+			Web.logMessage(msg);
+		}
 
+		try {
+			InitDB.run();
+			dbInit();
 			var uri = Web.getURI();
 			var params = Web.getParams();
 			if (uri == "/favicon.ico") return;

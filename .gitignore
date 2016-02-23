@@ -1,5 +1,7 @@
 *.db3
 *.db3*
+*.js
 *.n
 bin
 
+/dump/

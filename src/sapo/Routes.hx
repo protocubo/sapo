@@ -5,8 +5,11 @@ import neko.Web;
 import sapo.Spod;
 
 class TinkRoutes {
-	public function doTicket()
-		Sys.println(sapo.view.Ticket.render());
+	public function doTickets(?args:{ ?ofUser:User })
+	{
+		if (args == null) args = {};
+		Sys.println(sapo.view.Tickets.render(args.ofUser));
+	}
 		
 	public function doLogin()
 		Sys.println(sapo.view.Login.render());
@@ -23,7 +26,7 @@ class TinkRoutes {
 	public function doSurveys()
 		Sys.println(sapo.view.Surveys.render());
 	
-	public function doSurvey(s: sapo.Survey)
+	public function doSurvey(s:sapo.Survey)
 		Sys.println(sapo.view.Survey.render(s));
 
 	public function new() {}
