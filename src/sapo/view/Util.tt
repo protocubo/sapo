@@ -1,4 +1,4 @@
-(: import sapo.Spod:)
+(: import sapo.Spod :)
 (: static function head(title:String) :)
 <!-- TITLE -->
 <meta charset="utf-8">
@@ -163,7 +163,7 @@
 			<div class="col-md-4 panel-title">
 				<!-- Nº da Pesquisa, Data da Pesquisa -->
 				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyPesquisa(: survey.id :)" aria-expanded="true" aria-controls="BodyPesquisa(: survey.id :)">
-					Pesquisa #12345 - 01/01/2016 - <b class="pesquisador">Nome</b> - <b class="supervisor">Fulano</b>
+					(: survey.id :) - 01/01/2016 - <b class="pesquisador">Nome</b> - <b class="supervisor">Fulano</b>
 				</a>
 			</div>
 			<div class="col-md-6 panel-title">
@@ -172,15 +172,13 @@
 					R. Itamirindiba, 3 - São Paulo/SP 
 				</a>
 			</div>
-			<div class="col-md-2 panel-title">
-				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyPesquisa(: survey.id :)" aria-expanded="true" aria-controls="BodyPesquisa(: survey.id :)">
-					<!-- se:foi ligado -->
-					<span class="glyphicon glyphicon-earphone" aria-hidden="true"></span>
-					<!-- class: supervisor, telefonista, super. status: minus -> ok ou remove -->
-					<span class="glyphicon glyphicon-minus supervisor" aria-hidden="true"></span>
-					<span class="glyphicon glyphicon-ok telefonista" aria-hidden="true"></span>
-					<span class="glyphicon glyphicon-remove super" aria-hidden="true"></span>
-				</a>
+			<div class="col-md-2 panel-title text-right">
+				<!-- se:foi ligado -->
+				<span class="glyphicon glyphicon-earphone" aria-hidden="true"></span>
+				<!-- class: supervisor, telefonista, super. status: minus -> ok ou remove -->
+				<span class="glyphicon glyphicon-minus supervisor" aria-hidden="true"></span>
+				<span class="glyphicon glyphicon-ok telefonista" aria-hidden="true"></span>
+				<span class="glyphicon glyphicon-remove super" aria-hidden="true"></span>
 			</div>
 		</div>
 	</div>
@@ -201,15 +199,10 @@
 				</div>
 			</div>
 			<div class="row" style="margin-top: 30px;">
-				<div class="col-md-2 col-md-offset-10"><button type="button" class="btn btn-default btn-sm">VER PESQUISAS</button></div>
+				<div class="col-md-2 col-md-offset-10"><button type="button" class="btn btn-primary btn-sm">VER PESQUISAS</button></div>
 			</div>
 		</div>
 	</div>
-<<<<<<< HEAD
 	<!-- FIM PESQUISA -->
-(: end :)
-=======
 </div>
-<!-- FIM PESQUISA -->
 (: end :)
->>>>>>> origin/layout
