@@ -86,7 +86,8 @@ class Ticket extends sys.db.Object {
 	}
 }
 
-class TicketMessage extends sys.db.Object {
+class TicketMessage extends sys.db.Object 
+{
 	public var id:SId;
 	@:relation(ticket_id) public var ticket:Ticket;
 	@:relation(author_id) public var author:User;

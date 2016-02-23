@@ -16,58 +16,63 @@
         <h2>TICKETS</h2>
         <hr />
 		
-		<!-- FILTROS -->
+		<!-- FILTROS -->		
 		<h3>Filtros:</h3>
-		<div class="row">
-			<div class="col-md-1"><h4>CAIXA:</h4></div>
-			<div class="col-md-2">
-				<select class="form-control">
-					<option>Entrada</option>
-					<option>Enviados</option>
-				</select>
+		<form method="get">
+			<div class="row">
+				<div class="col-md-1"><h4>CAIXA:</h4></div>
+				<div class="col-md-2">
+					<select class="form-control" name="inbox">
+						<option value="in">Entrada</option>
+						<option value="out">Enviados</option>
+					</select>
+				</div>
+				<div class="col-md-1"><h4>DESTINO</h4></div>
+				<div class="col-md-2">
+					<select class="form-control" name="recipient">
+						<option value="all">Todos</option>
+						<option value="group">Grupo</option>
+						<option value="individual">Individual</option>
+					</select>
+				</div>
+				<div class="col-md-1"><h4>ESTADO</h4></div>
+				<div class="col-md-2">
+					<select class="form-control" name="state">
+						<option value="open">Não Fechadas</option>
+						<option value="closed">Fechadas</option>
+					</select>
+				</div>
+				<div class="col-md-2 col-md-offset-1">
+					<button type="submit" value="submit" class="btn btn-primary">APLICAR</button>
+				</div>
 			</div>
-			<div class="col-md-1"><h4>DESTINO</h4></div>
-			<div class="col-md-2">
-				<select class="form-control">
-					<option>Todos</option>
-					<option>Grupo</option>
-					<option>Individual</option>
-				</select>
-			</div>
-			<div class="col-md-1"><h4>ESTADO</h4></div>
-			<div class="col-md-2">
-				<select class="form-control">
-					<option>Não Fechadas</option>
-					<option>Fechadas</option>
-				</select>
-			</div>
-			<div class="col-md-2 col-md-offset-1">
-				<button type="button" class="btn btn-primary">APLICAR</button>
-			</div>
-		</div>
+		</form>
 		<hr />
 
 		<!-- BUSCA -->
 		<h3>Busca:</h3>
-		<div class="row">
-			<div class="col-md-2"><h4>Nº DO TICKET</h4></div>
-			<div class="col-md-2">
-				<input type="text" class="form-control" placeholder="Número do Ticket">
+		<form action="/tink/tickets/search" method="get">
+			<div class="row">
+				<div class="col-md-2"><h4>Nº DO TICKET</h4></div>
+				<div class="col-md-2">
+					<input type="text" name="ticket" class="form-control" placeholder="Número do Ticket">
+				</div>
+				<div class="col-md-2"><h4>Nº DA PESQUISA</h4></div>
+				<div class="col-md-2">
+					<input type="text" name="survey" class="form-control" placeholder="Número da Pesquisa">
+				</div>
+				<div class="col-md-2 col-md-offset-2">
+					<button type="submit" value="submit" class="btn btn-primary">BUSCAR</button>
+				</div>
 			</div>
-			<div class="col-md-2"><h4>Nº DA PESQUISA</h4></div>
-			<div class="col-md-2">
-				<input type="text" class="form-control" placeholder="Número da Pesquisa">
-			</div>
-			<div class="col-md-2 col-md-offset-2">
-				<button type="button" class="btn btn-primary">BUSCAR</button>
-			</div>
-		</div>
+		</form>
 		<hr />
 
 		<!-- TICKETS -->
 		<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" style="margin-top: 60px;">
 			(:* gostaria disso: var users = Spod.Ticket.manager.search( (ofUser == null|| $author == ofUser) ) *:)
-			(: var users:List<Spod.Ticket> = Spod.Ticket.manager.search((ofUser!=null ? $author==ofUser : 1==1)) :)
+			(: var users:List<Spod.Ticket> = Spod.Ticket.manager.search((ofUser!=null ? $author==ofUser : 1==1)) 
+			:)
 			(: for t in users :)
 				(: Util.ticket(t) :)
 			(: end :)
