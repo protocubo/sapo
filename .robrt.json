@@ -8,6 +8,7 @@
 	"build" : {
 		"cmds" : [
 			"cd $ROBRT_REPOSITORY_DIR",
+			"haxelib list",
 			"haxe sapo.hxml",
 			"haxe comn.hxml",
 			"haxe sync.hxml",
