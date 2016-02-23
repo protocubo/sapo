@@ -43,7 +43,7 @@ class Familia extends Object
 	public var aguaEncanada : SNull<SEnum<AguaEncanada>>;
 	public var ruaPavimentada_id : SNull<SBool>;
 	public var vagaPropriaEstacionamento_id : SNull<SBool>;
-	public var anoVeiculoMaisRecente : SNull<SEnum<AnoVeiculo>>;
+	public var anoVeiculoMaisRecente : SNull<SEnum<AnoVeiculoMaisRecente>>;
 	public var empregadosDomesticos : SNull<SEnum<EmpregadosDomesticos>>;
 	public var tvCabo : SNull<SBool>;
 	

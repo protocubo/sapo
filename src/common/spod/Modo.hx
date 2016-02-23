@@ -17,13 +17,13 @@ import sys.db.Types.SNull;
 class Modo extends Object
 {
 	public var id : SId;
-	public var session_id : SInt;
-	public var morador_id : SInt;
+
+	@:relation(session_id) public var session : Session;
+	@:relation(morador_id) public var morador : Morador;
 	
-	public var firstpoint_id : SInt;
-	@:relation(firstpoint_id) public var firstPoint : Ponto;
+	@:relation(firstpoint_id) public var firstpoint : Ponto;
 	
-	public var secondpoint_id : SInt;
+	@:relation(secondpoint_id) public var secondpoint : Ponto;
 	
 	public var date : SDateTime;
 	
@@ -36,9 +36,9 @@ class Modo extends Object
 	@:relation(linhaOnibus_id) public var linhaOnibus : SNull<LinhaOnibus>;
 	
 	public var estacaoEmbarque_id : SNull<SInt>;
-	@:relation(estacaoEmbarque_id) public var estacaoEmbarque : SNull<EstacaoMetro>;
+	//@:relation(estacaoEmbarque_id) public var estacaoEmbarque : SNull<EstacaoMetro>;
 	public var estacaoDesembarque_id : SNull<SInt>;
-	@:relation(estacaoDesembarque_id) public var estacaoDesembarque : SNull<EstacaoMetro>;
+	//@:relation(estacaoDesembarque_id) public var estacaoDesembarque : SNull<EstacaoMetro>;
 	
 	public var formaPagamento : SNull<SEnum<FormaPagamento>>;
 	public var tipoEstacionamento : SNull<SEnum<TipoEstacionamento>>;

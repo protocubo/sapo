@@ -19,7 +19,10 @@ class Ponto extends Object
 {
 	public var id : SId;
 	public var session_id : SInt;
+	@:relation(session_id) public var session : Session;
 	public var morador_id : SInt;
+	@:relation(morador_id) public var morador : Morador;
+	
 	public var date : SDateTime;
 	
 	public var isEdited : SInt;
@@ -46,6 +49,7 @@ class Ponto extends Object
 	public var tempo_chegada : SNull<SString<255>>;
 	
 	public var copiedFrom_id : SNull<SInt>;
+	@:relation(copiedFrom_id) public var copiedFrom : SNull<Ponto>;
 	
 	public var old_id : SInt;
 	public var syncTimestamp : SFloat;

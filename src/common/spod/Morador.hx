@@ -18,7 +18,10 @@ class Morador extends Object
 {
 	public var id : SId;
 	public var session_id : SInt;
+	@:relation(session_id) public var session : Session;
+	
 	public var familia_id : SInt;
+	@:relation(familia_id) public var familia : Familia;
 	public var date : SDateTime;
 	public var isDeleted : SBool;
 	public var isEdited : SInt;
@@ -33,6 +36,8 @@ class Morador extends Object
 	public var codigoReagendamento : SNull<SString<255>>;
 	
 	public var quemResponde_id : SNull<SInt>;
+	@:relation(quemResponde_id) public var quemResponde : SNull<Morador>;
+	
 	public var situacaoFamiliar : SNull<SEnum<SituacaoFamiliar>>;
 	public var atividadeMorador : SNull<SEnum<AtividadeMorador>>;
 	public var possuiHabilitacao_id : SNull<SBool>;
