@@ -8,8 +8,8 @@ LABEL haxe_regen=0
 RUN apt-get update && apt-get install -y neko haxe && haxelib setup /usr/share/haxe/lib
 LABEL haxelib_regen=0
 RUN haxelib git hxssl https://github.com/tong/hxssl
-RUN haxelib install sapo.hxml
-RUN haxelib install unit.hxml
-RUN haxelib install comn.hxml
-RUN haxelib install sync.hxml
+RUN haxelib --always install sapo.hxml
+RUN haxelib --always install unit.hxml
+RUN haxelib --always install comn.hxml
+RUN haxelib --always install sync.hxml
 
