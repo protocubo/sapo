@@ -40,17 +40,17 @@ class MainTemp
 	
 	public static function main()
 	{
-		Log.trace = function(txt : Dynamic, ?infos : PosInfos)
+		/*Log.trace = function(txt : Dynamic, ?infos : PosInfos)
 		{
 			var v = File.append("Log.txt");
 			v.writeString(txt + '\n');
 			v.close();
 			
-			Sys.println(txt);
-		}
+			Sys.println(infos + " " + txt);
+		}*/
 		
 		InitDB.run();
-		Manager.cnx.startTransaction();
+		
 		if (!FileSystem.exists("./private/cnxstring"))
 		{
 			trace("No cnxstring file!");
@@ -137,6 +137,7 @@ class MainTemp
 		{
 			for (field in Reflect.fields(f))
 			{
+				//trace(field);
 				switch(field)
 				{
 					case "id":
@@ -147,7 +148,7 @@ class MainTemp
 					case "ocupacaoDomicilio_id", "condicaoMoradia_id", "tipoImovel_id", "aguaEncanada_id", "anoVeiculoMaisRecente_id", "empregadosDomesticos_id", "rendaDomiciliar_id":
 						Macros.setEnumField(field, new_familia, f);
 					//Fields ctrl+c ctrl+v
-					case "date", "numeroResidentes", "banheiros", "quartos", "veiculos", "bicicletas", "motos", "editedNumeroResidentes", "editsNumeroResidentes", "nomeContato", "telefoneContato", "codigoReagendamento":
+					case "date","isEdited", "numeroResidentes", "banheiros", "quartos", "veiculos", "bicicletas", "motos", "editedNumeroResidentes", "editsNumeroResidentes", "nomeContato", "telefoneContato", "codigoReagendamento","tentativa_id":
 						Reflect.setField(new_familia, field, Reflect.field(f, field));
 					//Bool simples
 					case "isDeleted","ruaPavimentada_id", "recebeBolsaFamilia_id":
@@ -159,7 +160,7 @@ class MainTemp
 					case "gps_id":
 						continue;
 					default:
-						Macros.warnTable(Familia, field, Reflect.field(f, field));					
+						Macros.warnTable("Familia", field, Reflect.field(f, field));					
 				}
 			}
 			new_familia.syncTimestamp = maxtimestamp;
@@ -173,7 +174,7 @@ class MainTemp
 	
 	static function processMorador(old_session : Int)
 	{
-		var dbMorador = targetCnx.request("SELECT * FROM Morador WHERE sesion_id = " + old_session + " ORDER BY familia_id").results();
+		var dbMorador = targetCnx.request("SELECT * FROM Morador WHERE session_id = " + old_session + " ORDER BY familia_id").results();
 		for (m in dbMorador)
 		{
 			var new_morador = new Morador();
@@ -203,7 +204,7 @@ class MainTemp
 					case "gps_id":
 						continue;
 					default:
-						Macros.warnTable(Morador, field, Reflect.field(m, field));	
+						Macros.warnTable("Morador", field, Reflect.field(m, field));	
 				}
 			}
 			
@@ -241,17 +242,17 @@ class MainTemp
 						Reflect.setField(new_point, field, Reflect.field(p, field));
 					//Enums
 					case "motivoID", "motivoOutraPessoaID":
-						Macros.setEnumField(field, new_point, p);
+						Macros.setEnumField("motivo", new_point, p);
 					case "gps_id", "anterior_id", "posterior_id", "ordem", "city_str", "regadm_str", "street_str", "complement_str", "complement_two_str":
 						continue;
 					default:
-						Macros.warnTable(Ponto, field, Reflect.field(p, field));						
+						Macros.warnTable("Ponto", field, Reflect.field(p, field));						
 				}
 			}
 			
 			new_point.syncTimestamp = maxtimestamp;
 			
-			Macros.validateEntry(Ponto, ["session_id", "id", "syncTimestamp"], [ { key : "old_id", value : p.old_id } ], new_point);
+			Macros.validateEntry(Ponto, [ "id", "syncTimestamp"], [ { key : "old_id", value : p.old_id } ], new_point);
 			pointhash.set(new_point.old_id, new_point);
 		}
 	}
@@ -264,6 +265,7 @@ class MainTemp
 			var new_modo = new Modo();
 			for(f in Reflect.fields(m))
 			{
+				//trace(f);
 				//TODO: Syncar Tabela do Anderson de LINHA
 				switch(f)
 				{
@@ -276,8 +278,7 @@ class MainTemp
 						new_modo.morador = morHash.get(m.morador_id);
 						new_modo.old_morador_id = m.morador_id;
 					case "firstpoint_id", "secondpoint_id":
-						var fieldobj = f.split("_")[0];
-						Reflect.setField(new_modo, fieldobj, pointhash.get(Reflect.field(m, f)));
+						Reflect.setField(new_modo, f, (pointhash.get(Reflect.field(m, f)) != null) ? pointhash.get(Reflect.field(m,f)).id : null );
 					case "meiotransporte_id":
 						if (Macros.checkEnumValue(MeioTransporte, m.meiotransporte_id))
 							new_modo.meiotransporte = Macros.getStaticEnum(MeioTransporte, m.meiotransporte_id);
@@ -298,20 +299,19 @@ class MainTemp
 					case "anterior_id", "posterior_id", "gps_id", "linhaOnibus_str","estacaoEmbarque_str", "estacaoDesembarque_str":
 						continue;
 					default:
-						Macros.warnTable(Modo, f, Reflect.field(m, f));
-				}
-				
-				new_modo.syncTimestamp = maxtimestamp;
-				
-				Macros.validateEntry(Modo, ["id", "syncTimestamp"], [ { key : "old_id" , value : new_modo.old_id } ], new_modo);
+						Macros.warnTable("Modo", f, Reflect.field(m, f));
+				}	
 			}
+			
+			new_modo.syncTimestamp = maxtimestamp;
+			Macros.validateEntry(Modo, ["id", "syncTimestamp"], [ { key : "old_id" , value : new_modo.old_id } ], new_modo);
 		}
 	}
 	
 	static function populateHash() : Map<String,Map<Int,Int>>
 	{
 		var t = new Map<String,Map<Int,Int>>();
-		for (c in CompileTime.getAllClasses("common.db", false, EnumTable))
+		for (c in CompileTime.getAllClasses("common.spod", true, EnumTable))
 		{
 			var tempmap = new Map<Int,Int>();
 			var res = (untyped c.manager : Manager<EnumTable>).all().map(function(v) { return [v.val, v.id]; } ).array();
@@ -323,6 +323,7 @@ class MainTemp
 			//Minha nomenclatura de tabelas estáticas é EnumName_Tbl
 			var name = Type.getClassName(c).split("_")[0];
 			t.set(name, tempmap);
+			//trace(name);
 		}
 		
 		return t;
