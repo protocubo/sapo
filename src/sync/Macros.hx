@@ -1,5 +1,5 @@
 package sync;
-import common.stringTools.Tools;
+import common.tools.StringTools;
 import haxe.macro.Expr;
 class Macros {
 	
@@ -7,9 +7,10 @@ class Macros {
 	{
 		return macro {
 			var norm_field = $field.split("_")[0];
-			var e = Type.resolveEnum("common.spod." + Tools.capitalize(norm_field));
+			//trace(StringTools.capitalize(norm_field));
+			var e = Type.resolveEnum("common.spod." + StringTools.capitalize(norm_field));
 			if (Macros.checkEnumValue(e, Reflect.field($old_entry, $field)))
-				Reflect.setProperty($new_entry, norm_field, Macros.getStaticEnum(e, Reflect.field($old_entry, $field)));
+				Reflect.setField($new_entry, norm_field, Macros.getStaticEnum(e, Reflect.field($old_entry, $field)));
 		}
 	}
 	
@@ -30,6 +31,7 @@ class Macros {
 		return macro {
 			var name = Type.getEnumName($target);
 			
+			//trace("refValue " + refValue.get(name));
 			if (refValue.get(name) == null)
 			{
 				Macros.warnTable(name, null, null);
@@ -72,19 +74,12 @@ class Macros {
 			{
 				var field = info.name;
 				
-				
-				if ($ignoreParams.indexOf(field) == -1 && Std.string(Reflect.getProperty($curEntry, field)) != Std.string(Reflect.getProperty(old_entry, field)))
-				{
+				if ($ignoreParams.indexOf(field) == -1 && Std.string(Reflect.field($curEntry, field)) != Std.string(Reflect.field(old_entry, field)))
 					shouldInsert = true;
-				}
 			}
 			try{
 			if (shouldInsert)
-			{
 				$curEntry.insert();
-				var v = ours.get(tblname) != null ? ours.get(tblname) : 0;
-				ours.set(tblname, v +1);
-			}
 			else
 				$curEntry = old_entry;
 			}
@@ -92,9 +87,6 @@ class Macros {
 			{
 				Macros.criticalError(tblname, e);
 			}
-			
-			var v = syncex.get(tblname) != null ? syncex.get(tblname) : 0;
-			syncex.set(tblname, v + 1);
 		}
 	}
 	
@@ -102,9 +94,8 @@ class Macros {
 	{
 		return macro {
 				trace("Critical error on table " + $table + " : " + $error);
-				//TODO: THROW!
-				//trace("Press enter");
-				//Sys.stdin().readLine();
+				trace("Press enter");
+				Sys.stdin().readLine();
 		}
 	}
 	public static macro function warnTable(table : Expr, field : Expr, val : Expr)
@@ -117,7 +108,6 @@ class Macros {
 				trace("Table " + $table + " doesn't have field " + $field);
 			else
 				trace("Table " + $table + " doesn't exist!");
-			warning++;
 		};
 	}
 	
@@ -126,7 +116,6 @@ class Macros {
 		//TODO: Implementar comunicacao
 		return macro {
 			trace("Enum " + $enumName + " doesn't have val " + $value);
-			warning++;
 		}
 	}
 }

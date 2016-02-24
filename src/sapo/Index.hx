@@ -22,15 +22,6 @@ class Index {
 
 		Manager.cnx.request("BEGIN");
 		try {
-			new SurveyStatus("aberta").insert();
-			new SurveyStatus("completa").insert();
-			new SurveyStatus("verificada").insert();
-			new SurveyStatus("CT").insert();
-			new SurveyStatus("aceita").insert();
-			new SurveyStatus("recusada").insert();
-			new SurveyStatus("sobjudice").insert();
-
-
 			var superGroup = new Group(new AccessName("super"), PSuper);
 			superGroup.insert();
 
@@ -55,7 +46,7 @@ class Index {
 			new TicketMessage(ticket2, ford, arthur, "Time is an illusion, lunchtime doubly so. ").insert();
 			new TicketMessage(ticket2, arthur, ford, "Very deep. You should send that in to the Reader's Digest. They've got a page for people like you.").insert();
 		} catch (e:Dynamic) {
-			Manager.cnx.request("COMMIT");
+			Manager.cnx.request("ROLLBACK");
 			neko.Lib.rethrow(e);
 		}
 		Manager.cnx.request("COMMIT");
@@ -64,7 +55,7 @@ class Index {
 
 	static function dbInit()
 	{
-		var managers:Array<Manager<Dynamic>> = [User.manager, Survey.manager, Ticket.manager, TicketMessage.manager, SurveyStatus.manager, Group.manager];
+		var managers:Array<Manager<Dynamic>> = [User.manager, Survey.manager, Ticket.manager, TicketMessage.manager, Group.manager];
 		for (m in managers)
 			if (!TableCreate.exists(m))
 				TableCreate.create(m);
@@ -82,11 +73,14 @@ class Index {
 			InitDB.run();
 			dbInit();
 			var uri = Web.getURI();
-			var params = Web.getParams();
 			if (uri == "/favicon.ico") return;
 
-			var d = new Dispatch(uri, params);
+			// treat visibly empty params as missing
+			var params = Web.getParams();
+			var cparams = [ for (k in params.keys()) if (StringTools.trim(params.get(k)).length > 0) k => params.get(k) ];
+			var d = new Dispatch(uri, cparams);
 			d.dispatch(new Routes());
+
 			Manager.cnx.close();
 			Manager.cnx = null;
 		} catch (e:Dynamic) {
