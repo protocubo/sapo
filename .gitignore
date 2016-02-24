@@ -5,3 +5,4 @@
 bin
 
 /dump/
+!/www/js/localstorage.js
