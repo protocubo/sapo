@@ -40,14 +40,14 @@ class MainTemp
 	
 	public static function main()
 	{
-		/*Log.trace = function(txt : Dynamic, ?infos : PosInfos)
+		Log.trace = function(txt : Dynamic, ?infos : PosInfos)
 		{
 			var v = File.append("Log.txt");
 			v.writeString(txt + '\n');
 			v.close();
 			
-			Sys.println(infos + " " + txt);
-		}*/
+			Sys.println(infos.className + " " + infos.lineNumber + ": " + txt);
+		}
 		
 		InitDB.run();
 		
@@ -74,7 +74,7 @@ class MainTemp
 		// Query -> ../../extras/main.sql
 		//Session_id only 
 		var updateVars = targetCnx.request("SELECT DISTINCT session_id FROM ((SELECT ep.session_id as session_id FROM SyncMap sm join EnderecoProp ep ON sm.tbl = 'EnderecoProp' AND sm.new_id = ep.id /*AND sm.timestamp > x*/) UNION ALL (SELECT  s.id as session_id FROM SyncMap sm JOIN Session s ON sm.tbl = 'Session' AND sm.new_id = s.id /*AND sm.timestamp > x*/) UNION ALL ( select f.session_id as session_id FROM SyncMap sm JOIN Familia f ON f.id = sm.new_id AND sm.tbl = 'Familia'  /*AND sm.timestamp > x*/) UNION ALL (select  m.session_id as session_id FROM SyncMap sm JOIN Morador m ON m.id = sm.new_id AND sm.tbl = 'Morador'  /*AND sm.timestamp > x*/) UNION ( select  p.session_id as session_id FROM SyncMap sm JOIN Ponto p ON  sm.tbl = 'Ponto' AND p.id = sm.new_id  /*AND sm.timestamp > x*/) UNION ALL (select m.session_id as session_id FROM SyncMap sm JOIN Modo m ON m.id = sm.new_id AND sm.tbl = 'Modo'  /*AND sm.timestamp > x*/)	) ack WHERE session_id IS NOT NULL ORDER BY session_id ASC").results().map(function(v) { return v.session_id; } ).array();
-		
+		//var updateVars = targetCnx.request("SELECT id as session_id FROM Session WHERE id < 100").results().map(function(v) { return v.session_id; } ).array();
 		#if debug
 		maxtimestamp = Date.now().getTime();
 		#else
@@ -96,6 +96,10 @@ class MainTemp
 			processModo(u);
 			
 		}
+		
+		Manager.cleanup();
+		Manager.cnx.close();
+		targetCnx.close();
 	}
 	
 	static function processSession(sid : Int)
@@ -145,16 +149,19 @@ class MainTemp
 					case "session_id":
 						new_familia.session = sessHash.get(f.session_id);
 						new_familia.old_session_id = f.session_id;
-					case "ocupacaoDomicilio_id", "condicaoMoradia_id", "tipoImovel_id", "aguaEncanada_id", "anoVeiculoMaisRecente_id", "empregadosDomesticos_id", "rendaDomiciliar_id":
+					case "ocupacaoDomicilio_id", "condicaoMoradia_id", "tipoImovel_id",
+					"aguaEncanada_id", "anoVeiculoMaisRecente_id", "empregadosDomesticos_id", "rendaDomiciliar_id":
 						Macros.setEnumField(field, new_familia, f);
 					//Fields ctrl+c ctrl+v
-					case "date","isEdited", "numeroResidentes", "banheiros", "quartos", "veiculos", "bicicletas", "motos", "editedNumeroResidentes", "editsNumeroResidentes", "nomeContato", "telefoneContato", "codigoReagendamento","tentativa_id":
+					case "date", "isEdited", "numeroResidentes", "banheiros", "quartos", 
+					"veiculos", "bicicletas", "motos", "editedNumeroResidentes", 
+					"editsNumeroResidentes", "nomeContato", "telefoneContato", "codigoReagendamento","tentativa_id":
 						Reflect.setField(new_familia, field, Reflect.field(f, field));
 					//Bool simples
 					case "isDeleted","ruaPavimentada_id", "recebeBolsaFamilia_id":
-						Reflect.setField(new_familia, field, Reflect.field(f, field) == 1);
+						Reflect.setProperty(new_familia, field, Reflect.field(f, field) == 1);
 					//Conversao enum -> bool
-					case "tvCabo_id","vagaPropriaEstacionamento_id":
+					case "tvCabo_id","vagaPropriaEstacionamento_id, ruaPavimentada_id":
 						var v = Reflect.field(f, field);
 						Reflect.setField(new_familia, field, (v != 3) ? (v == 1) : null);
 					case "gps_id":
@@ -170,7 +177,6 @@ class MainTemp
 			famHash.set(new_familia.old_id, new_familia);
 		}
 	}
-	
 	
 	static function processMorador(old_session : Int)
 	{
@@ -252,7 +258,7 @@ class MainTemp
 			
 			new_point.syncTimestamp = maxtimestamp;
 			
-			Macros.validateEntry(Ponto, [ "id", "syncTimestamp"], [ { key : "old_id", value : p.old_id } ], new_point);
+			Macros.validateEntry(Ponto, [ "id", "syncTimestamp"], [ { key : "old_id", value : new_point.old_id } ], new_point);
 			pointhash.set(new_point.old_id, new_point);
 		}
 	}
@@ -260,6 +266,7 @@ class MainTemp
 	static function processModo(session_id : Int)
 	{
 		var dbModos = targetCnx.request("SELECT * FROM Modo WHERE session_id = " + session_id + " ORDER BY morador_id, firstpoint_id, anterior_id").results();
+		//trace("SELECT * FROM Modo WHERE session_id = " + session_id + " ORDER BY morador_id, firstpoint_id, anterior_id");
 		for (m in dbModos)
 		{
 			var new_modo = new Modo();
@@ -278,7 +285,7 @@ class MainTemp
 						new_modo.morador = morHash.get(m.morador_id);
 						new_modo.old_morador_id = m.morador_id;
 					case "firstpoint_id", "secondpoint_id":
-						Reflect.setField(new_modo, f, (pointhash.get(Reflect.field(m, f)) != null) ? pointhash.get(Reflect.field(m,f)).id : null );
+						Reflect.setProperty(new_modo, f, (pointhash.get(Reflect.field(m, f)) != null) ? pointhash.get(Reflect.field(m,f)).id : null );
 					case "meiotransporte_id":
 						if (Macros.checkEnumValue(MeioTransporte, m.meiotransporte_id))
 							new_modo.meiotransporte = Macros.getStaticEnum(MeioTransporte, m.meiotransporte_id);
@@ -306,6 +313,17 @@ class MainTemp
 			new_modo.syncTimestamp = maxtimestamp;
 			Macros.validateEntry(Modo, ["id", "syncTimestamp"], [ { key : "old_id" , value : new_modo.old_id } ], new_modo);
 		}
+	}
+	
+	
+	static function doSumary(syncexVars : { sessions : Int, familias : Int, moradores : Int, ponto : Int, modo : Int }, 
+	updatedars : { sessions: Int, familias : Int, moradores : Int, ponto : Int, modo : Int } )
+	{
+		trace("SyncexSessions detected : " + syncexVars.sessions + "; Updated : " + updatedars.sessions + "\n");
+		trace("SyncexFamilias detected : " + syncexVars.familias + "; Updated : " + updatedars.familias + "\n");
+		trace("SyncexMoradores detected : " + syncexVars.moradores + "; Updated : " + updatedars.moradores + "\n");
+		trace("SyncexPontos detected : " + syncexVars.ponto + "; Updated : " + updatedars.ponto + "\n");
+		trace("SyncexModos detected : " + syncexVars.modo + "; Updated : " + updatedars.modo + "\n");
 	}
 	
 	static function populateHash() : Map<String,Map<Int,Int>>

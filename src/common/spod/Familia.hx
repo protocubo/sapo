@@ -45,7 +45,7 @@ class Familia extends Object
 	public var vagaPropriaEstacionamento_id : SNull<SBool>;
 	public var anoVeiculoMaisRecente : SNull<SEnum<AnoVeiculoMaisRecente>>;
 	public var empregadosDomesticos : SNull<SEnum<EmpregadosDomesticos>>;
-	public var tvCabo : SNull<SBool>;
+	public var tvCabo_id : SNull<SBool>;
 	
 	public var editedNumeroResidentes : SNull<SInt>;
 	//?

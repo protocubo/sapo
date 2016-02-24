@@ -42,7 +42,7 @@ class MainSync
 			Sys.println(txt);
 		}
 		InitDB.run();
-		Manager.cnx.startTransaction();
+		//Manager.cnx.startTransaction();
 		
 		if (!FileSystem.exists("./private/cnxstring"))
 		{
@@ -126,8 +126,7 @@ class MainSync
 					default:
 						//TODO:Warn
 						continue;
-				}
-				
+				}				
 			}
 			new_sess.syncTimestamp = maxTimeStamp;
 			

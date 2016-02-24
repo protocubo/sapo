@@ -10,7 +10,7 @@ class Macros {
 			//trace(Tools.capitalize(norm_field));
 			var e = Type.resolveEnum("common.spod." + Tools.capitalize(norm_field));
 			if (Macros.checkEnumValue(e, Reflect.field($old_entry, $field)))
-				Reflect.setField($new_entry, norm_field, Macros.getStaticEnum(e, Reflect.field($old_entry, $field)));
+				Reflect.setProperty($new_entry, norm_field, Macros.getStaticEnum(e, Reflect.field($old_entry, $field)));
 		}
 	}
 	
@@ -74,8 +74,11 @@ class Macros {
 			{
 				var field = info.name;
 				
-				if ($ignoreParams.indexOf(field) == -1 && Std.string(Reflect.field($curEntry, field)) != Std.string(Reflect.field(old_entry, field)))
+				
+				if ($ignoreParams.indexOf(field) == -1 && Std.string(Reflect.getProperty($curEntry, field)) != Std.string(Reflect.getProperty(old_entry, field)))
+				{
 					shouldInsert = true;
+				}
 			}
 			try{
 			if (shouldInsert)
@@ -94,8 +97,9 @@ class Macros {
 	{
 		return macro {
 				trace("Critical error on table " + $table + " : " + $error);
-				trace("Press enter");
-				Sys.stdin().readLine();
+				//TODO: THROW!
+				//trace("Press enter");
+				//Sys.stdin().readLine();
 		}
 	}
 	public static macro function warnTable(table : Expr, field : Expr, val : Expr)
