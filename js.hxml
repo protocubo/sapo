@@ -1,3 +1,0 @@
--cp ./src
--js www/Sapood.js 
--main js.MainJS

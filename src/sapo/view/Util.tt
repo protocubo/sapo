@@ -1,5 +1,5 @@
 (: import sapo.Spod :)
-(: static function head(title:String) :)
+(: static function head(title:String, ?use:{ formCache:Bool }) :)
 <!-- TITLE -->
 <meta charset="utf-8">
 <title>(: title :)</title>
@@ -16,6 +16,7 @@
 
 <!-- SAPO -->
 <link href="/css/sapo.css" rel="stylesheet" type="text/css" />
+(: if use != null && use.formCache :)<script src="/js/formcache.js"></script>(: end :)
 (: end :)
 
 

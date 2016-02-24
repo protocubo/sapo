@@ -4,8 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-(: Util.head("SAPO - Tickets") :)
-<script src="/js/localstorage.js"></script>
+(: Util.head("SAPO - Tickets", {formCache:true}) :)
 </head>
 <body>
 	(: Util.navbar() :)

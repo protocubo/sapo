@@ -3,6 +3,5 @@
 *.js
 *.n
 bin
+dump
 
-/dump/
-!/www/js/localstorage.js
