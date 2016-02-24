@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-(: Util.head("SAPO - Tickets") :)
+(: Util.head("SAPO - Tickets", {formCache:true}) :)
 </head>
 <body>
 	(: Util.navbar() :)
@@ -18,7 +18,7 @@
 		
 		<!-- FILTROS -->		
 		<h3>Filtros:</h3>
-		<form method="get">
+		<form method="get" name="filter">
 			<div class="row">
 				<div class="col-md-1"><h4>CAIXA:</h4></div>
 				<div class="col-md-2">
