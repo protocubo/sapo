@@ -1,0 +1,92 @@
+(: import sapo.Spod :)
+
+(: static function render() :)
+<!DOCTYPE html>
+<html>
+<head>
+(: Util.head("SAPO - Pagamento") :)
+</head>
+<body>
+(: Util.navbar() :)
+
+<!-- PAGAMENTOS / PESQUISADOR -->
+<div class="container">
+
+	<!-- HEAD -->
+	<h2>PAGAMENTOS</h2>
+	<hr />
+
+	<!-- PESQUISAS -->
+	<h3>Pesquisas:</h3>
+	<hr />
+
+	<!-- TABELA DE USUÁRIOS -->
+
+	<table class="table">
+		<thead>
+			<tr>
+				<!-- HEAD -->
+				<th width="40px">
+					<input type="checkbox" />
+				</th>
+				<th>Pesquisador</th>
+				<th>Nº da Pesquisa</th>
+				<th>Data</th>
+				<th>RefPagto</th>
+				<th>Data Pgto</th>
+				<th width="40px"></th>
+			</tr>
+		</thead>
+		<tbody>
+
+			(: for p in Spod.Survey.manager.all() :)
+				(: Util.payments(p) :)
+			(: end :)
+
+		</tbody>
+		<tfoot>
+			<tr>
+				<td colspan="7" align="right">
+					<button type="button" class="btn btn-success btn-xs" aria-label="Desativar" style="width:auto;" data-toggle="modal" data-target="#pagar_selecionadas">
+						REGISTRAR PAGAMENTO NAS SELECIONADAS <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+					</button>
+				</td>
+			</tr>
+		</tfoot>
+	</table>
+</div>
+
+(: Util.footer() :)
+
+	(: for m in Spod.Survey.manager.all() :)
+	(: Modal.modalpagamentospagar(m) :)
+	(: end :)
+
+
+<!-- MODAL PAGAR -->
+<div class="modal fade" id="pagar_selecionadas" tabindex="-1" role="dialog" aria-labelledby="pagar_selecionadas_label">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="pagar_selecionadas_label">PAGAR PESQUISAS</h4>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-md-4"><h4>Ref. Pagamento:</h4></div>
+					<div class="col-md-8"><input type="text" class="form-control" /></div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<div class="row">
+					<div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
+					<div class="col-md-6"><button type="button" class="btn btn-success">PAGAR</button></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+</body>
+</html>
+(: end :)

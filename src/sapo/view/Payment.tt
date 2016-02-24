@@ -35,20 +35,10 @@
 				</tr>
 			</thead>
 			<tbody>
-
-				<!-- LINHA: número da pesquisa, data da pesquisa, endereço, refpagto, datapagto, status -->
-				<tr>
-					<td>1234</td>
-					<td>01/01/2016</td>
-					<td>R. Itamirindiba, 3 - São Paulo/SP</td>
-					<td>813518</td>
-					<td>02/02/2016</td>
-					<td class="text-right">
-						<!-- class: completa, pendente, recusada, aceita -->
-						<b class="aceita">Aceita</b>
-					</td>
-				</tr>
-				<!-- FIM LINHA -->
+				
+				(: for p in Spod.Survey.manager.all() :)
+					(: Util.payment(p) :)
+				(: end :)
 
 			</tbody>
 			<tfoot>
@@ -57,6 +47,7 @@
 				</tr>
 			</tfoot>
 		</table>
+
 	</div>
 
 (: Util.footer() :)

@@ -22,7 +22,10 @@ class TinkRoutes {
 		
 	public function doPayment()
 		Sys.println(sapo.view.Payment.render());
-		
+	
+	public function doPayments()
+		Sys.println(sapo.view.Payments.render());
+	
 	public function doSurveys()
 		Sys.println(sapo.view.Surveys.render());
 	

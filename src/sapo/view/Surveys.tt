@@ -93,7 +93,7 @@
 	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" style="margin-top: 60px;">
 		(: for s in Spod.Survey.manager.all() :)
 			(: Util.survey(s) :)
-		(: end :)	
+		(: end :)
 	</div>
 </div>
 
