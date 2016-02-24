@@ -6,7 +6,7 @@ import sys.db.Types;
  * ...
  * @author Caio
  */
-class Session extends Object
+class Survey extends Object
 {
 	public var id : SId;
 	public var user_id : SInt;
@@ -21,6 +21,6 @@ class Session extends Object
 	public var date_finished : SNull<SDateTime>;
 	
 	
-	public var old_session_id : SInt;
+	public var old_survey_id : SInt;
 	public var syncTimestamp : SFloat;
 }

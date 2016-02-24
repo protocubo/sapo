@@ -4,7 +4,7 @@ import common.spod.Familia;
 import common.spod.Modo;
 import common.spod.Morador;
 import common.spod.Ponto;
-import common.spod.Session;
+import common.spod.Survey;
 import haxe.Http;
 import haxe.Json;
 import haxe.Log;
@@ -31,7 +31,7 @@ class MainSync
 	
 	static var maxtimestamp : SFloat;
 	
-	static var sessHash : Map<Int, Session>;
+	static var sessHash : Map<Int, Survey>;
 	static var famHash : Map<Int, Familia>;
 	static var morHash : Map<Int, Morador>;
 	static var pointhash : Map<Int,Ponto>;
@@ -91,7 +91,7 @@ class MainSync
 		#end
 		
 		//Hash old_id -> new instance
-		sessHash = new Map<Int, Session>();
+		sessHash = new Map<Int, Survey>();
 		famHash = new Map<Int, Familia>();
 		morHash = new Map<Int, Morador>();
 		pointhash = new Map<Int, Ponto>();
@@ -124,13 +124,13 @@ class MainSync
 	{
 		var dbSession = targetCnx.request("SELECT * FROM Session WHERE id = " + sid).results().first();
 		
-		var new_sess = new Session();
+		var new_sess = new Survey();
 		for (f in Reflect.fields(dbSession))
 		{
 			switch(f)
 			{
 				case "id":
-					new_sess.old_session_id = dbSession.id;
+					new_sess.old_survey_id = dbSession.id;
 				//Conversao de bool (hoorray)
 				case "isValid", "isRestored":
 					Reflect.setField(new_sess, f, (Reflect.field(dbSession, f) == 1));
@@ -140,14 +140,14 @@ class MainSync
 				case "client_ip", "location", "ponto", "gps_id":
 					continue;
 				default:
-					Macros.warnTable("Session", f, null);
+					Macros.warnTable("Survey", f, null);
 			}
 		}
 		
 		new_sess.syncTimestamp = maxtimestamp;
 		
-		Macros.validateEntry(Session, ["syncTimestamp", "id"], [ { key : "old_session_id", value : new_sess.old_session_id } ], new_sess);
-		sessHash.set(new_sess.old_session_id, new_sess);
+		Macros.validateEntry(Survey, ["syncTimestamp", "id"], [ { key : "old_survey_id", value : new_sess.old_survey_id } ], new_sess);
+		sessHash.set(new_sess.old_survey_id, new_sess);
 	}
 	
 	static function processFamilia(old_sid : Int)
@@ -164,8 +164,8 @@ class MainSync
 					case "id":
 						new_familia.old_id = f.id;
 					case "session_id":
-						new_familia.session = sessHash.get(f.session_id);
-						new_familia.old_session_id = f.session_id;
+						new_familia.survey = sessHash.get(f.session_id);
+						new_familia.old_survey_id = f.session_id;
 					case "ocupacaoDomicilio_id", "condicaoMoradia_id", "tipoImovel_id",
 					"aguaEncanada_id", "anoVeiculoMaisRecente_id", "empregadosDomesticos_id", "rendaDomiciliar_id":
 						Macros.setEnumField(field, new_familia, f);
@@ -189,7 +189,7 @@ class MainSync
 			}
 			new_familia.syncTimestamp = maxtimestamp;
 			
-			Macros.validateEntry(Familia, ["syncTimestamp", "id"], [ { key : "old_id" , value : new_familia.old_id }, { key : "old_session_id", value : new_familia.old_session_id } ], new_familia); 
+			Macros.validateEntry(Familia, ["syncTimestamp", "id"], [ { key : "old_id" , value : new_familia.old_id }, { key : "old_survey_id", value : new_familia.old_survey_id } ], new_familia); 
 			
 			famHash.set(new_familia.old_id, new_familia);
 		}
@@ -208,8 +208,8 @@ class MainSync
 					case "id":
 						new_morador.old_id = m.id;
 					case "session_id":
-						new_morador.session = sessHash.get(m.session_id);
-						new_morador.old_session_id = m.session_id;
+						new_morador.survey = sessHash.get(m.session_id);
+						new_morador.old_survey_id = m.session_id;
 					case "familia_id":
 						new_morador.familia = famHash.get(m.familia_id);
 					case "quemResponde_id":
@@ -233,7 +233,7 @@ class MainSync
 			
 			new_morador.syncTimestamp = maxtimestamp;
 			
-			Macros.validateEntry(Morador, ["syncTimestamp", "id"], [ { key : "old_id", value : new_morador.old_id }, { key: "old_session_id" , value : new_morador.old_session_id } ], new_morador);
+			Macros.validateEntry(Morador, ["syncTimestamp", "id"], [ { key : "old_id", value : new_morador.old_id }, { key: "old_survey_id" , value : new_morador.old_survey_id } ], new_morador);
 			
 			morHash.set(new_morador.old_id , new_morador);
 		}
@@ -252,8 +252,8 @@ class MainSync
 					case "id":
 						new_point.old_id = p.id;
 					case "session_id":
-						new_point.session = sessHash.get(p.session_id);
-						new_point.old_session_id = p.session_id;
+						new_point.survey = sessHash.get(p.session_id);
+						new_point.old_survey_id = p.session_id;
 					case "morador_id":
 						new_point.morador = morHash.get(p.morador_id);
 					case "copiedFrom_id":
@@ -295,8 +295,8 @@ class MainSync
 					case "id":
 						new_modo.old_id = m.id;
 					case "session_id":
-						new_modo.old_session_id = m.session_id;
-						new_modo.session = sessHash.get(m.session_id);
+						new_modo.old_survey_id = m.session_id;
+						new_modo.survey = sessHash.get(m.session_id);
 					case "morador_id":
 						new_modo.morador = morHash.get(m.morador_id);
 						new_modo.old_morador_id = m.morador_id;

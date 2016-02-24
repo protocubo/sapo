@@ -18,8 +18,7 @@ import sys.db.Types.SString;
 class Familia extends Object
 {
 	public var id : SId;
-	public var session_id : SInt;
-	@:relation(session_id) public var session : Session;
+	@:relation(survey_id) public var survey : Survey;
 	
 	public var date : SDateTime;
 	public var isDeleted : SBool;
@@ -60,7 +59,7 @@ class Familia extends Object
 	
 	public var syncTimestamp : SFloat;
 	public var old_id : SInt;
-	public var old_session_id : SInt;
+	public var old_survey_id : SInt;
 	
 	
 }
