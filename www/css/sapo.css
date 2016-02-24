@@ -43,17 +43,32 @@ body {
 /*CORES GRUPOS*/
 
 .super {
-    color: #337AB7;
+    color: #4C57B7;
 }
 
 .telefonista {
-    color: #666A18;
+    color: #316A3F;
 }
 
 .supervisor {
-    color: #B78433;
+    color: #B79E47;
 }
 
 .pesquisador {
-    color: #C34F4A;
+    color: #C35150;
+}
+
+/*CORES STATUS*/
+
+.completa {
+    color: #0010B7;
+}
+.pendente {
+    color: #B78F00;
+}
+.recusada {
+    color: #C30200;
+}
+.aceita {
+    color: #006A1F;
 }

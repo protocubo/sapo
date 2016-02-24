@@ -4,12 +4,10 @@ import haxe.web.Dispatch;
 import neko.Web;
 import sapo.Spod;
 
-class TinkRoutes {
-	public function doTickets(?args:{ ?ofUser:User })
-	{
-		if (args == null) args = {};
-		Sys.println(sapo.view.Tickets.render(args.ofUser));
-	}
+class TinkRoutes 
+{
+	public function doTickets(d:Dispatch)
+		d.dispatch(new TicketRoutes());
 		
 	public function doLogin()
 		Sys.println(sapo.view.Login.render());
@@ -32,7 +30,25 @@ class TinkRoutes {
 	public function new() {}
 }
 
-class Routes {
+class TicketRoutes
+{
+	public function doDefault(?args:{ ?ofUser:User, ?inbox:String, ?recipient:String, ?state:String })
+	{
+		if (args == null) args = { };
+		Sys.println(sapo.view.Tickets.render(args.ofUser));
+	}
+	
+	public function doSearch(?args:{ ?ofUser:User, ?ticket:Ticket, ?survey:Survey })
+	{
+		if (args == null) args = { };
+		Sys.println(sapo.view.Tickets.render(args.ofUser));
+	}
+	
+	public function new() {}
+}
+
+class Routes 
+{
 	public function doDefault()
 	{
 		Web.redirect("/tink/login");

@@ -1,4 +1,5 @@
 (: import sapo.Spod :)
+
 (: static function render() :)
 <!DOCTYPE html>
 <html>
@@ -6,6 +7,7 @@
 (: Util.head("SAPO - Pagamento") :)
 </head>
 <body>
+	(: Util.navbar() :)
 
 	<!-- PAGAMENTOS / PESQUISADOR -->
 	<div class="container">
@@ -13,6 +15,8 @@
 		<!-- HEAD -->
 		<h2>PAGAMENTOS</h2>
 		<hr />
+
+		<!-- PESQUISAS -->
 		<h3>Pesquisas:</h3>
 		<hr />
 
@@ -27,7 +31,7 @@
 					<th>Endereço</th>
 					<th>RefPagto</th>
 					<th>Data Pgto</th>
-					<th style="text-align:right;">Status</th>
+					<th class="text-right">Status</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -39,7 +43,8 @@
 					<td>R. Itamirindiba, 3 - São Paulo/SP</td>
 					<td>813518</td>
 					<td>02/02/2016</td>
-					<td align="right">
+					<td class="text-right">
+						<!-- class: completa, pendente, recusada, aceita -->
 						<b class="aceita">Aceita</b>
 					</td>
 				</tr>
@@ -54,6 +59,7 @@
 		</table>
 	</div>
 
+(: Util.footer() :)
 </body>
 </html>
 (: end :)
