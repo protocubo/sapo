@@ -1,6 +1,6 @@
 (: import sapo.Spod :)
 
-(: static function render(?ofUser:User) :)
+(: static function render(?ofUser:User, ?inbox:String, ?recipient:String, ?state:String ) :)
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,14 +22,15 @@
 			<div class="row">
 				<div class="col-md-1"><h4>CAIXA:</h4></div>
 				<div class="col-md-2">
-					<select class="form-control" name="inbox">
+					<select class="form-control" name="inbox" onchange="disableRecipients(this.value)">
+					<option value="all">Todos</option>
 						<option value="in">Entrada</option>
 						<option value="out">Enviados</option>
 					</select>
 				</div>
 				<div class="col-md-1"><h4>DESTINO</h4></div>
 				<div class="col-md-2">
-					<select class="form-control" name="recipient">
+					<select class="form-control" id="recipientID" name="recipient">
 						<option value="all">Todos</option>
 						<option value="group">Grupo</option>
 						<option value="individual">Individual</option>
@@ -47,8 +48,20 @@
 				</div>
 			</div>
 		</form>
-
 		<hr />
+		
+		<script>
+			//Disable 'group' and 'all' options when inbox 'out' is selected
+			var shouldDisable = true;
+			function disableRecipients(s) {
+				if(s == "out")
+					document.getElementById('recipientID').selectedIndex = 2;
+				else
+					shouldDisable = false; 
+				for (i = 0; i < 2; i++)
+					document.getElementById("recipientID").options[i].disabled = shouldDisable;
+			}
+		</script>
 
 		<!-- BUSCA -->
 		<h3>Busca:</h3>
@@ -69,6 +82,36 @@
 		</form>
 		<hr />
 
+		
+		(:* var users:List<Spod.Ticket> = Spod.Ticket.manager.search( 
+		if(inbox=="in")
+		{
+			switch recipient{
+			case in: $author==ofUser;
+			case out: $recipien==ofUser;
+			default: 1==1;
+		}
+		else
+		{
+			
+			
+		}
+		switch inbox {
+			case in: $author==ofUser;
+			case out: $recipient==ofUser;
+			default: 1==1;
+		}
+		&& switch recipient{
+			case in: $author==ofUser;
+			case out: $recipien==ofUser;
+			default: 1==1;
+		}
+		
+		
+		
+		
+		
+		) *:)
 		<!-- TICKETS -->
 		<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" style="margin-top: 60px;">
 			(:* gostaria disso: var users = Spod.Ticket.manager.search( (ofUser == null|| $author == ofUser) ) *:)
