@@ -38,6 +38,12 @@ class MainSync
 	
 	static var refValue : Map<String,Map<Int,Int>>;
 	
+	
+	static var syncex : Map<String,Int>;
+	
+	static var ours : Map<String,Int>;
+	static var warning : Int = 0;
+	
 	public static function main()
 	{
 		Log.trace = function(txt : Dynamic, ?infos : PosInfos)
@@ -48,6 +54,9 @@ class MainSync
 			
 			Sys.println(infos.className + " " + infos.lineNumber + ": " + txt);
 		}
+		
+		syncex = new Map();
+		ours = new Map();
 		
 		InitDB.run();
 		
@@ -73,8 +82,8 @@ class MainSync
 		
 		// Query -> ../../extras/main.sql
 		//Session_id only 
-		var updateVars = targetCnx.request("SELECT DISTINCT session_id FROM ((SELECT ep.session_id as session_id FROM SyncMap sm join EnderecoProp ep ON sm.tbl = 'EnderecoProp' AND sm.new_id = ep.id /*AND sm.timestamp > x*/) UNION ALL (SELECT  s.id as session_id FROM SyncMap sm JOIN Session s ON sm.tbl = 'Session' AND sm.new_id = s.id /*AND sm.timestamp > x*/) UNION ALL ( select f.session_id as session_id FROM SyncMap sm JOIN Familia f ON f.id = sm.new_id AND sm.tbl = 'Familia'  /*AND sm.timestamp > x*/) UNION ALL (select  m.session_id as session_id FROM SyncMap sm JOIN Morador m ON m.id = sm.new_id AND sm.tbl = 'Morador'  /*AND sm.timestamp > x*/) UNION ( select  p.session_id as session_id FROM SyncMap sm JOIN Ponto p ON  sm.tbl = 'Ponto' AND p.id = sm.new_id  /*AND sm.timestamp > x*/) UNION ALL (select m.session_id as session_id FROM SyncMap sm JOIN Modo m ON m.id = sm.new_id AND sm.tbl = 'Modo'  /*AND sm.timestamp > x*/)	) ack WHERE session_id IS NOT NULL ORDER BY session_id ASC").results().map(function(v) { return v.session_id; } ).array();
-		//var updateVars = targetCnx.request("SELECT id as session_id FROM Session WHERE id < 100").results().map(function(v) { return v.session_id; } ).array();
+		//var updateVars = targetCnx.request("SELECT DISTINCT session_id FROM ((SELECT ep.session_id as session_id FROM SyncMap sm join EnderecoProp ep ON sm.tbl = 'EnderecoProp' AND sm.new_id = ep.id /*AND sm.timestamp > x*/) UNION ALL (SELECT  s.id as session_id FROM SyncMap sm JOIN Session s ON sm.tbl = 'Session' AND sm.new_id = s.id /*AND sm.timestamp > x*/) UNION ALL ( select f.session_id as session_id FROM SyncMap sm JOIN Familia f ON f.id = sm.new_id AND sm.tbl = 'Familia'  /*AND sm.timestamp > x*/) UNION ALL (select  m.session_id as session_id FROM SyncMap sm JOIN Morador m ON m.id = sm.new_id AND sm.tbl = 'Morador'  /*AND sm.timestamp > x*/) UNION ( select  p.session_id as session_id FROM SyncMap sm JOIN Ponto p ON  sm.tbl = 'Ponto' AND p.id = sm.new_id  /*AND sm.timestamp > x*/) UNION ALL (select m.session_id as session_id FROM SyncMap sm JOIN Modo m ON m.id = sm.new_id AND sm.tbl = 'Modo'  /*AND sm.timestamp > x*/)	) ack WHERE session_id IS NOT NULL ORDER BY session_id ASC").results().map(function(v) { return v.session_id; } ).array();
+		var updateVars = targetCnx.request("SELECT id as session_id FROM Session WHERE id < 100").results().map(function(v) { return v.session_id; } ).array();
 		#if debug
 		maxtimestamp = Date.now().getTime();
 		#else
@@ -93,13 +102,22 @@ class MainSync
 			processFamilia(u);
 			processMorador(u);
 			processPonto(u);
-			processModo(u);
-			
+			processModo(u);			
 		}
 		
 		Manager.cleanup();
 		Manager.cnx.close();
 		targetCnx.close();
+		
+		//TODO: Mandar mensagem
+		for (k in syncex.keys())
+		{
+			var v = ours.get(k);
+			v = (v != null) ? v : 0;
+			trace("Table " + k + ": Syncex had " + syncex.get(k) + " entries. Updated : " + v);
+		}
+		
+		trace("Done with only " + warning + " warnings!");
 	}
 	
 	static function processSession(sid : Int)
@@ -141,7 +159,6 @@ class MainSync
 		{
 			for (field in Reflect.fields(f))
 			{
-				//trace(field);
 				switch(field)
 				{
 					case "id":
@@ -266,13 +283,12 @@ class MainSync
 	static function processModo(session_id : Int)
 	{
 		var dbModos = targetCnx.request("SELECT * FROM Modo WHERE session_id = " + session_id + " ORDER BY morador_id, firstpoint_id, anterior_id").results();
-		//trace("SELECT * FROM Modo WHERE session_id = " + session_id + " ORDER BY morador_id, firstpoint_id, anterior_id");
+		
 		for (m in dbModos)
 		{
 			var new_modo = new Modo();
 			for(f in Reflect.fields(m))
 			{
-				//trace(f);
 				//TODO: Syncar Tabela do Anderson de LINHA
 				switch(f)
 				{
@@ -315,17 +331,6 @@ class MainSync
 		}
 	}
 	
-	
-	static function doSumary(syncexVars : { sessions : Int, familias : Int, moradores : Int, ponto : Int, modo : Int }, 
-	updatedars : { sessions: Int, familias : Int, moradores : Int, ponto : Int, modo : Int } )
-	{
-		trace("SyncexSessions detected : " + syncexVars.sessions + "; Updated : " + updatedars.sessions + "\n");
-		trace("SyncexFamilias detected : " + syncexVars.familias + "; Updated : " + updatedars.familias + "\n");
-		trace("SyncexMoradores detected : " + syncexVars.moradores + "; Updated : " + updatedars.moradores + "\n");
-		trace("SyncexPontos detected : " + syncexVars.ponto + "; Updated : " + updatedars.ponto + "\n");
-		trace("SyncexModos detected : " + syncexVars.modo + "; Updated : " + updatedars.modo + "\n");
-	}
-	
 	static function populateHash() : Map<String,Map<Int,Int>>
 	{
 		var t = new Map<String,Map<Int,Int>>();
@@ -341,7 +346,6 @@ class MainSync
 			//Minha nomenclatura de tabelas estáticas é EnumName_Tbl
 			var name = Type.getClassName(c).split("_")[0];
 			t.set(name, tempmap);
-			//trace(name);
 		}
 		
 		return t;

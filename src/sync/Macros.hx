@@ -7,7 +7,6 @@ class Macros {
 	{
 		return macro {
 			var norm_field = $field.split("_")[0];
-			//trace(Tools.capitalize(norm_field));
 			var e = Type.resolveEnum("common.spod." + Tools.capitalize(norm_field));
 			if (Macros.checkEnumValue(e, Reflect.field($old_entry, $field)))
 				Reflect.setProperty($new_entry, norm_field, Macros.getStaticEnum(e, Reflect.field($old_entry, $field)));
@@ -31,7 +30,6 @@ class Macros {
 		return macro {
 			var name = Type.getEnumName($target);
 			
-			//trace("refValue " + refValue.get(name));
 			if (refValue.get(name) == null)
 			{
 				Macros.warnTable(name, null, null);
@@ -82,7 +80,11 @@ class Macros {
 			}
 			try{
 			if (shouldInsert)
+			{
 				$curEntry.insert();
+				var v = ours.get(tblname) != null ? ours.get(tblname) : 0;
+				ours.set(tblname, v +1);
+			}
 			else
 				$curEntry = old_entry;
 			}
@@ -90,6 +92,9 @@ class Macros {
 			{
 				Macros.criticalError(tblname, e);
 			}
+			
+			var v = syncex.get(tblname) != null ? syncex.get(tblname) : 0;
+			syncex.set(tblname, v + 1);
 		}
 	}
 	
@@ -112,6 +117,7 @@ class Macros {
 				trace("Table " + $table + " doesn't have field " + $field);
 			else
 				trace("Table " + $table + " doesn't exist!");
+			warning++;
 		};
 	}
 	
@@ -120,6 +126,7 @@ class Macros {
 		//TODO: Implementar comunicacao
 		return macro {
 			trace("Enum " + $enumName + " doesn't have val " + $value);
+			warning++;
 		}
 	}
 }
