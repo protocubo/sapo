@@ -1,7 +1,14 @@
 package common.crypto;
 
+import Std.parseInt;
 import haxe.crypto.*;
 import haxe.io.Bytes;
+#if hxBitcoin
+import com.fundoware.engine.crypto.hash.FunSHA2_256 in FwSha256;
+import com.fundoware.engine.crypto.hmac.FunHMAC_SHA256 in FwHmac;
+import com.fundoware.engine.crypto.pbe.FunPBKDF2_HMAC_SHA256 in FwPbkdf2;
+import com.fundoware.engine.crypto.scrypt.FunScrypt in FwScrypt;
+#end
 
 // use the best you can
 enum PasswordStore {
@@ -16,10 +23,10 @@ enum PasswordStore {
 #if hxBitcoin
 	// Scrypt tuned for intereactive logins
 	//  - hash will always be HMAC-SHA256
-	//  - N: general work factor
+	//  - n: general work factor
 	//  - r: blocksize in use for underlying hash
 	//  - p: parallezition factor
-	PSScrypt(salt:Bytes, N:Int, r:Int, p:Int, dkLen:Int);
+	PSScrypt(salt:Bytes, n:Int, r:Int, p:Int, dkLen:Int);
 #end
 }
 
@@ -41,6 +48,14 @@ abstract Password(String) to String {
 		return hash.toHex();
 	}
 
+#if hxBitcoin
+	static function scrypt(plain:Bytes, salt:Bytes, n:Int, r:Int, p:Int, dkLen:Int):String
+	{
+		var impl = new FwScrypt(n, r, p, new FwPbkdf2(new FwHmac(new FwSha256())));
+		return impl.run(plain, salt, 1, dkLen).toHex();
+	}
+#end
+
 	static function pwdString(plain:Bytes, store:PasswordStore)
 	{
 		return switch store {
@@ -50,6 +65,10 @@ abstract Password(String) to String {
 			'sha256$$$it$$${salt.toHex()}$$${saltedSha(Sha256.make, plain, salt, it)}';
 		case PSPlain:
 			'plain$$${plain.toString()}';
+#if hxBitcoin
+		case PSScrypt(salt, n, r, p, dkLen):
+			'scrypt$$$n$$$r$$$p$$$dkLen$$${salt.toHex()}$$${scrypt(plain, salt, n, r, p, dkLen)}';
+#end
 		}
 	}
 
@@ -76,13 +95,17 @@ abstract Password(String) to String {
 		var pbytes = Bytes.ofString(plain);
 		return switch this.split("$") {
 		case ["sha1", it, salt, hash]:
-			slowStringEquals(hash, saltedSha(Sha1.make, pbytes, decodeHex(salt), Std.parseInt(it)));
+			slowStringEquals(hash, saltedSha(Sha1.make, pbytes, decodeHex(salt), parseInt(it)));
 		case ["sha256", it, salt, hash]:
-			slowStringEquals(hash, saltedSha(Sha256.make, pbytes, decodeHex(salt), Std.parseInt(it)));
+			slowStringEquals(hash, saltedSha(Sha256.make, pbytes, decodeHex(salt), parseInt(it)));
 		case ["plain", p]:
 			slowStringEquals(p, plain);
+#if hxBitcoin
+		case ["scrypt", n, r, p, dkLen, salt, hash]:
+			slowStringEquals(hash, scrypt(pbytes, decodeHex(salt), parseInt(n), parseInt(r), parseInt(p), parseInt(dkLen)));
+#end
 		case _:
-			trace('unsupported pwd string "${this.substr(0, 4)}..."');
+			trace('unsupported pwd string "${this.substr(0, 10)}..."');
 			false;
 		}
 	}
@@ -95,7 +118,11 @@ abstract Password(String) to String {
 		if (store == null) {
 			// viable (not sensible) defaults
 			var salt = Random.global.readSimpleBytes(5);
+#if hxBitcoin
+			store = PSScrypt(salt, 256, 8, 1, 64);
+#else
 			store = PSSaltedSha256(salt, 42);
+#end
 		}
 		return new Password(pwdString(Bytes.ofString(plain), store));
 	}
