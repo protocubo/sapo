@@ -155,7 +155,7 @@
 (: end :)
 
 
-(: static function survey(survey:Spod.Survey) :)
+(: static function survey(survey:Spod.NewSurvey) :)
 <!-- PESQUISA -->
 <div class="panel panel-default">
 	<!-- HEAD PESQUISA -->

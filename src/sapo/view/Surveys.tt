@@ -91,7 +91,7 @@
 
 	<!-- PESQUISAS -->
 	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" style="margin-top: 60px;">
-		(: for s in Spod.Survey.manager.all() :)
+		(: for s in Spod.NewSurvey.manager.all() :)
 			(: Util.survey(s) :)
 		(: end :)	
 	</div>

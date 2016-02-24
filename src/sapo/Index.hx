@@ -7,6 +7,7 @@ import haxe.web.Dispatch;
 import neko.Web;
 import sapo.Spod;
 import sys.db.*;
+import sapo.Context;
 
 class Index {
 	static var DBPATH = Sys.getEnv("SAPO_DB");
@@ -31,8 +32,8 @@ class Index {
 			arthur.insert();
 			ford.insert();
 
-			var survey1 = new Survey(ford, "Arthur's house", 945634);
-			var survey2 = new Survey(arthur, "Betelgeuse, or somewhere near that planet", 6352344);
+			var survey1 = new NewSurvey(ford, "Arthur's house", 945634);
+			var survey2 = new NewSurvey(arthur, "Betelgeuse, or somewhere near that planet", 6352344);
 			survey1.insert();
 			survey2.insert();
 
@@ -55,7 +56,7 @@ class Index {
 
 	static function dbInit()
 	{
-		var managers:Array<Manager<Dynamic>> = [User.manager, Survey.manager, Ticket.manager, TicketMessage.manager, Group.manager];
+		var managers:Array<Manager<Dynamic>> = [User.manager, NewSurvey.manager, Ticket.manager, TicketMessage.manager, Group.manager];
 		for (m in managers)
 			if (!TableCreate.exists(m))
 				TableCreate.create(m);
