@@ -35,13 +35,20 @@ class TicketRoutes
 	public function doDefault(?args:{ ?ofUser:User, ?inbox:String, ?recipient:String, ?state:String })
 	{
 		if (args == null) args = { };
-		Sys.println(sapo.view.Tickets.render(args.ofUser));
+		var tickets : List<Spod.Ticket> = new List();
+		
+		Sys.println(sapo.view.Tickets.render(tickets));
 	}
 	
 	public function doSearch(?args:{ ?ofUser:User, ?ticket:Ticket, ?survey:Survey })
 	{
 		if (args == null) args = { };
-		Sys.println(sapo.view.Tickets.render(args.ofUser));
+		var tickets : List<Ticket> = new List();
+		if (args.ticket != null)
+			tickets.push(args.ticket);
+		else if (Survey != null)
+			tickets = Ticket.manager.search($survey == args.survey);
+		Sys.println(sapo.view.Tickets.render(tickets));
 	}
 	
 	public function new() {}
