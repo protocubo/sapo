@@ -25,6 +25,9 @@ class TinkRoutes {
 	
 	public function doPayments()
 		Sys.println(sapo.view.Payments.render());
+
+	public function doSummary()
+		Sys.println(sapo.view.Summary.render());
 	
 	public function doSurveys()
 		Sys.println(sapo.view.Surveys.render());

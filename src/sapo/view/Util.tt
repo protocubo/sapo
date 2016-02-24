@@ -35,27 +35,24 @@
                 <ul class="nav navbar-nav">
 				    <!-- adicionar ~class="active"~ no <li> ativo; sem logar: só SAPO; logado (pesquisador): só pagamentos; logado (resto) todos menos pagamentos -->
                     <li><a href="#">SAPO</a></li>
-                    <li><a href="tickets">TICKETS</a></li> 
-                    <li><a href="surveys">PESQUISAS</a></li> 
-                    <li><a href="#">SUMÁRIO</a></li> 
+                    <li><a href="/tink/tickets">TICKETS</a></li> 
+                    <li><a href="/tink/surveys">PESQUISAS</a></li> 
 					<li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">SUMÁRIO <span class="caret"></span></a>
                         <ul class="dropdown-menu">
 						    <!-- todos os sumários -->
-                            <li><a href="#">GERAL:STATUS</a></li>
-                            <li><a href="#">GERAL:STATUS</a></li>
-                            <li><a href="#">GERAL:STATUS</a></li>
+                            <li><a href="/tink/summary">GERAL:STATUS</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">ADMINISTRAÇÃO <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="registration">CADASTRO</a></li>
-                            <li><a href="payments">PAGAMENTOS</a></li>
+                            <li><a href="/tink/registration">CADASTRO</a></li>
+                            <li><a href="/tink/payments">PAGAMENTOS</a></li>
                         </ul>
                     </li>
 					<!-- só o pesquisador verá essa aba, e somente esta -->
-                    <li><a href="payment">PAGAMENTOS</a></li> 
+                    <li><a href="/tink/payment">PAGAMENTOS</a></li> 
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <!-- sem logar: vazio; logado: nome do usuário + @ + grupo - (class: super, telefonista, supervisor e pesquisador) -->
@@ -119,12 +116,14 @@
 			<div class="row">
 				<div class="col-md-7 barraderolagem">
 				(: for message in Spod.TicketMessage.manager.search($ticket == ticket) :)
-					<strong>
-						<!-- DATETIME + DE + PARA (class: super, telefonista, supervisor e pesquisador) -->
-						(: message.posted_at :) - <span class="(: message.author.group.group_name:)">(: message.author.name :)@(: message.author.group.group_name:)</span> - <span class="(: message.recipient.group.group_name:)">(: message.recipient.name :)@(: message.recipient.group.group_name:)</span> :
-					</strong>
+					<p>
+						<strong>
+							<!-- DATETIME + DE + PARA (class: super, telefonista, supervisor e pesquisador) -->
+							(: message.posted_at :) - <span class="(: message.author.group.group_name:)">(: message.author.name :)@(: message.author.group.group_name:)</span> - <span class="(: message.recipient.group.group_name:)">(: message.recipient.name :)@(: message.recipient.group.group_name:)</span> :
+						</strong>
 					<!-- MENSAGEM -->
-					(: message.text :)
+						(: message.text :)
+					</p>
 				(: end :)
 				</div>
 				<div class="col-md-5 barraderolagem">
@@ -195,7 +194,7 @@
 				</div>
 			</div>
 			<div class="row" style="margin-top: 30px;">
-				<div class="col-md-2 col-md-offset-10"><button type="button" class="btn btn-primary btn-sm">VER PESQUISAS</button></div>
+				<div class="col-md-2 col-md-offset-10"><a href="survey/(: survey.id :)" class="btn btn-primary btn-sm">VER PESQUISAS</a></div>
 			</div>
 		</div>
 	</div>

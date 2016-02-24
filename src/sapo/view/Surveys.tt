@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-(: Util.head("SAPO - Login") :)
+(: Util.head("SAPO - Pesquisas") :)
 </head>
 <body>
 (: Util.navbar() :)
