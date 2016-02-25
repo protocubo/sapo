@@ -56,27 +56,35 @@ class Context {
 
 		Manager.cnx.request("BEGIN");
 		try {
+			// some groups
 			var superGroup = new Group(new AccessName("super"), PSuper);
 			superGroup.insert();
+			// more
+			new Group(new AccessName("Telefonista"), PPhoneOperator).insert();
+			new Group(new AccessName("Supervisor"), PSupervisor).insert();
+			new Group(new AccessName("Pesquisador"), PSurveyor).insert();
 
-			var arthur = new User(new AccessName("arthur"), superGroup, "Arthur Dent", new EmailAddress("arthur@sapo"));
+			// some users
+			var arthur = new User(new AccessName("arthur"), superGroup,
+					"Arthur Dent", new EmailAddress("arthur@sapo"));
 			arthur.password = Password.make("secret");
-			var ford = new User(new AccessName("ford"), superGroup, "Ford Prefect", new EmailAddress("ford@sapo"));
+			var ford = new User(new AccessName("ford"), superGroup,
+					"Ford Prefect", new EmailAddress("ford@sapo"));
 			ford.password = Password.make("secret");
-
 			arthur.insert();
 			ford.insert();
 
+			// some surveys
 			var survey1 = new NewSurvey(ford, "Arthur's house", 945634);
 			var survey2 = new NewSurvey(arthur, "Betelgeuse, or somewhere near that planet", 6352344);
 			survey1.insert();
 			survey2.insert();
 
+			// some tickets
 			var ticket1 = new Ticket(survey1, arthur, "Overpass???");
 			ticket1.insert();
 			new TicketMessage(ticket1, arthur, ford, "Hey, I was distrought over they wanting to build an overpass over my house").insert();
 			new TicketMessage(ticket1, ford, arthur, "Don't panic... don't panic...").insert();
-
 			var ticket2 = new Ticket(survey2, ford, "About Time...");
 			ticket2.insert();
 			new TicketMessage(ticket2, ford, arthur, "Time is an illusion, lunchtime doubly so. ").insert();

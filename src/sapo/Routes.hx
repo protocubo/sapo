@@ -30,7 +30,27 @@ class TicketRoutes {
 	public function new() {}
 }
 
-class Routes {
+class SurveysRoutes
+{
+	public function doDefault()
+	{
+		var surveys = NewSurvey.manager.all();
+		Sys.println(sapo.view.Surveys.render(surveys));
+	}
+	public function doSearch(?args:{ ?survey:NewSurvey })
+	{
+		if (args == null) args = { };
+		var surveys : List<NewSurvey> = new List();
+		if (args.survey != null)
+			surveys.add(args.survey);
+		Sys.println(sapo.view.Surveys.render( surveys ));
+	}
+
+	public function new() {}
+}
+
+class Routes
+{
 	public function doDefault()
 	{
 		if (Context.loop.session == null) Web.redirect("/login");
@@ -52,8 +72,8 @@ class Routes {
 	public function doSummary()
 		Sys.println(sapo.view.Summary.render());
 
-	public function doSurveys()
-		Sys.println(sapo.view.Surveys.render());
+	public function doSurveys(d:Dispatch)
+		d.dispatch(new SurveysRoutes());
 
 	public function doSurvey(s:sapo.NewSurvey)
 		Sys.println(sapo.view.Survey.render(s));
