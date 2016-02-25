@@ -25,6 +25,9 @@ class Index {
 		try {
 			var superGroup = new Group(new AccessName("super"), PSuper);
 			superGroup.insert();
+			new Group(new AccessName("Telefonista"), PPhoneOperator).insert();
+			new Group(new AccessName("Supervisor"), PSupervisor).insert();
+			new Group(new AccessName("Pesquisador"), PSurveyor).insert();
 
 			var arthur = new User(new AccessName("arthur"), superGroup, "Arthur Dent", new EmailAddress("arthur@sapo"));
 			var ford = new User(new AccessName("ford"), superGroup, "Ford Prefect", new EmailAddress("ford@sapo"));
