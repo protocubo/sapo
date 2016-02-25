@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-(: Util.head("SAPO - Login") :)
+(: Util.head("SAPO - Pesquisas") :)
 </head>
 <body>
 (: Util.navbar() :)
@@ -93,7 +93,7 @@
 	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" style="margin-top: 60px;">
 		(: for s in Spod.NewSurvey.manager.all() :)
 			(: Util.survey(s) :)
-		(: end :)	
+		(: end :)
 	</div>
 </div>
 

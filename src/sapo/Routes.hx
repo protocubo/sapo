@@ -20,7 +20,13 @@ class TinkRoutes
 		
 	public function doPayment()
 		Sys.println(sapo.view.Payment.render());
-		
+	
+	public function doPayments()
+		Sys.println(sapo.view.Payments.render());
+
+	public function doSummary()
+		Sys.println(sapo.view.Summary.render());
+	
 	public function doSurveys()
 		Sys.println(sapo.view.Surveys.render());
 	
@@ -35,13 +41,20 @@ class TicketRoutes
 	public function doDefault(?args:{ ?ofUser:User, ?inbox:String, ?recipient:String, ?state:String })
 	{
 		if (args == null) args = { };
-		Sys.println(sapo.view.Tickets.render(args.ofUser));
+		var tickets : List<Spod.Ticket> = new List();
+		
+		Sys.println(sapo.view.Tickets.render(tickets));
 	}
 	
 	public function doSearch(?args:{ ?ofUser:User, ?ticket:Ticket, ?survey:NewSurvey })
 	{
 		if (args == null) args = { };
-		Sys.println(sapo.view.Tickets.render(args.ofUser));
+		var tickets : List<Ticket> = new List();
+		if (args.ticket != null)
+			tickets.push(args.ticket);
+		else if (args.survey != null)
+			tickets = Ticket.manager.search($survey == args.survey);
+		Sys.println(sapo.view.Tickets.render(tickets));
 	}
 	
 	public function new() {}

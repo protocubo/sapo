@@ -1,4 +1,5 @@
 (: import sapo.Spod :)
+
 (: static function head(title:String, ?use:{ formCache:Bool }) :)
 <!-- TITLE -->
 <meta charset="utf-8">
@@ -19,7 +20,6 @@
 (: if use != null && use.formCache :)<script src="/js/formcache.js"></script>(: end :)
 (: end :)
 
-
 (: static function navbar() :)
 <!-- NAVBAR -->
     <div class="navbar navbar-default navbar-fixed-top">
@@ -36,27 +36,24 @@
                 <ul class="nav navbar-nav">
 				    <!-- adicionar ~class="active"~ no <li> ativo; sem logar: só SAPO; logado (pesquisador): só pagamentos; logado (resto) todos menos pagamentos -->
                     <li><a href="#">SAPO</a></li>
-                    <li><a href="tickets">TICKETS</a></li> 
-                    <li><a href="surveys">PESQUISAS</a></li> 
-                    <li><a href="#">SUMÁRIO</a></li> 
+                    <li><a href="/tink/tickets">TICKETS</a></li> 
+                    <li><a href="/tink/surveys">PESQUISAS</a></li> 
 					<li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">SUMÁRIO <span class="caret"></span></a>
                         <ul class="dropdown-menu">
 						    <!-- todos os sumários -->
-                            <li><a href="#">GERAL:STATUS</a></li>
-                            <li><a href="#">GERAL:STATUS</a></li>
-                            <li><a href="#">GERAL:STATUS</a></li>
+                            <li><a href="/tink/summary">GERAL:STATUS</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">ADMINISTRAÇÃO <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="registration">CADASTRO</a></li>
-                            <li><a href="#">PAGAMENTOS</a></li>
+                            <li><a href="/tink/registration">CADASTRO</a></li>
+                            <li><a href="/tink/payments">PAGAMENTOS</a></li>
                         </ul>
                     </li>
 					<!-- só o pesquisador verá essa aba, e somente esta -->
-                    <li><a href="payment">PAGAMENTOS</a></li> 
+                    <li><a href="/tink/payment">PAGAMENTOS</a></li> 
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <!-- sem logar: vazio; logado: nome do usuário + @ + grupo - (class: super, telefonista, supervisor e pesquisador) -->
@@ -69,8 +66,6 @@
     </div>
 (: end :)
 
-
-
 (: static function footer() :)
 <!-- FOOTER -->
     <footer class="footer">
@@ -80,7 +75,6 @@
         </div>
     </footer>
 (: end :)
-
 
 (: static function ticket(ticket:Spod.Ticket) :)
 <!-- TICKET -->
@@ -121,16 +115,18 @@
 	<div id="BodyTicket(: ticket.id :)" class="panel-collapse collapse" role="tabpanel" aria-labelledby="HeadTicket(: ticket.id :)">
 		<div class="panel-body">
 			<div class="row">
-				(: for message in Spod.TicketMessage.manager.search($ticket == ticket) :)
 				<div class="col-md-7 barraderolagem">
-					<strong>
-						<!-- DATETIME + DE + PARA (class: super, telefonista, supervisor e pesquisador) -->
-						(: message.posted_at :) - <span class="(: message.author.group.group_name:)">(: message.author.name :)@(: message.author.group.group_name:)</span> - <span class="(: message.recipient.group.group_name:)">(: message.recipient.name :)@(: message.recipient.group.group_name:)</span> :
-					</strong>
+				(: for message in Spod.TicketMessage.manager.search($ticket == ticket) :)
+					<p>
+						<strong>
+							<!-- DATETIME + DE + PARA (class: super, telefonista, supervisor e pesquisador) -->
+							(: message.posted_at :) - <span class="(: message.author.group.group_name:)">(: message.author.name :)@(: message.author.group.group_name:)</span> - <span class="(: message.recipient.group.group_name:)">(: message.recipient.name :)@(: message.recipient.group.group_name:)</span> :
+						</strong>
 					<!-- MENSAGEM -->
-					(: message.text :)
+						(: message.text :)
+					</p>
+				(: end :)
 				</div>
-				(: end :)							
 				<div class="col-md-5 barraderolagem">
 					<!-- DADOS DA PESQUISA -->
 					<p><b>Endereço:</b> (:ticket.survey.address :) </p>
@@ -153,7 +149,6 @@
 </div>
 <!-- FIM TICKET -->
 (: end :)
-
 
 (: static function survey(survey:Spod.NewSurvey) :)
 <!-- PESQUISA -->
@@ -200,10 +195,46 @@
 				</div>
 			</div>
 			<div class="row" style="margin-top: 30px;">
-				<div class="col-md-2 col-md-offset-10"><button type="button" class="btn btn-primary btn-sm">VER PESQUISAS</button></div>
+				<div class="col-md-2 col-md-offset-10"><a href="survey/(: survey.id :)" class="btn btn-primary btn-sm">VER PESQUISAS</a></div>
 			</div>
 		</div>
 	</div>
 	<!-- FIM PESQUISA -->
 </div>
+(: end :)
+
+(: static function payments(payments:Spod.NewSurvey) :)
+<!-- LINHA: checkbox, nome do pesquisador, número da pesquisa, data da pesquisa, refpagto, datapagto, pagar -->
+<tr>
+	<td>
+		<input type="checkbox" />
+	</td>
+	<td>Filipe Horácio</td>
+	<td>(: payments.id :)</td>
+	<td>21/03/2016</td>
+	<td></td>
+	<td></td>
+	<td align="right">
+		<button type="button" class="btn btn-success btn-xs" aria-label="Desativar" style="width:auto;" data-toggle="modal" data-target="#pagar(: payments.id :)_um">
+			<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+		</button>
+	</td>
+</tr>
+<!-- FIM LINHA -->
+(: end :)
+
+(: static function payment(payment:Spod.NewSurvey) :)
+<!-- LINHA: número da pesquisa, data da pesquisa, endereço, refpagto, datapagto, status -->
+<tr>
+	<td>(: payment.id:)</td>
+	<td>(: payment.closed_at :)</td>
+	<td>(: payment.address :)</td>
+	<td>813518</td>
+	<td>02/02/2016</td>
+	<td class="text-right">
+		<!-- class: completa, pendente, recusada, aceita -->
+		<b class="aceita">Aceita</b>
+	</td>
+</tr>
+<!-- FIM LINHA -->
 (: end :)

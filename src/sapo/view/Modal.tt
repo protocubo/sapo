@@ -1,140 +1,240 @@
 (: import sapo.Spod:)
 
 (: static function modalticketfechar(ticket:Spod.Ticket) :)
-    <div class="modal fade" id="ticket(: ticket.id :)_fechar" tabindex="-1" role="dialog" aria-labelledby="ticket(: ticket.id :)_fechar_label">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="ticket(: ticket.id :)_fechar_label">FECHAR TICKET</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <p>Deseja realmente fechar este Ticket?</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <div class="row">
-                        <div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">NÃO</button></div>
-                        <div class="col-md-6"><button type="button" class="btn btn-success">SIM</button></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="modal fade" id="ticket(: ticket.id :)_fechar" tabindex="-1" role="dialog" aria-labelledby="ticket(: ticket.id :)_fechar_label">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="ticket(: ticket.id :)_fechar_label">FECHAR TICKET</h4>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-12">
+							<p>Deseja realmente fechar este Ticket?</p>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div class="row">
+						<div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">NÃO</button></div>
+						<div class="col-md-6"><button type="button" class="btn btn-success">SIM</button></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 (: end :)
 
 (: static function modalticketresponder(ticket:Spod.Ticket) :)
-    <div class="modal fade" id="ticket(: ticket.id :)_responder" tabindex="-1" role="dialog" aria-labelledby="ticket(: ticket.id :)_responder_label">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="ticket(: ticket.id :)_responder_label">RESPONDER TICKET</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-12"><textarea class="form-control" style="height: 200px;"></textarea></div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <div class="row">
-                        <div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
-                        <div class="col-md-6"><button type="button" class="btn btn-success">RESPONDER</button></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="modal fade" id="ticket(: ticket.id :)_responder" tabindex="-1" role="dialog" aria-labelledby="ticket(: ticket.id :)_responder_label">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="ticket(: ticket.id :)_responder_label">RESPONDER TICKET</h4>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-12"><textarea class="form-control" style="height: 200px;"></textarea></div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div class="row">
+						<div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
+						<div class="col-md-6"><button type="button" class="btn btn-success">RESPONDER</button></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 (: end :)
 
 (: static function modalticketincluir(ticket:Spod.Ticket) :)
-    <div class="modal fade" id="ticket(: ticket.id :)_incluir" tabindex="-1" role="dialog" aria-labelledby="ticket(: ticket.id :)_incluir_label">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="ticket(: ticket.id :)_incluir_label">INCLUIR USUÁRIO OU GRUPO</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-2"><h4>Grupo:</h4></div>
-                        <div class="col-md-10">
-                            <select class="form-control">
-                                <option disabled selected>Selecione</option>
-                                <option>Supervisor</option>
-                                <option>Telefonista</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-2"><h4>Usuário:</h4></div>
-                        <div class="col-md-10">
-                            <select class="form-control">
-                                <option disabled selected>Selecione</option>
+	<div class="modal fade" id="ticket(: ticket.id :)_incluir" tabindex="-1" role="dialog" aria-labelledby="ticket(: ticket.id :)_incluir_label">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="ticket(: ticket.id :)_incluir_label">INCLUIR USUÁRIO OU GRUPO</h4>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-2"><h4>Grupo:</h4></div>
+						<div class="col-md-10">
+							<select class="form-control">
+								<option disabled selected>Selecione</option>
+								<option>Supervisor</option>
+								<option>Telefonista</option>
+							</select>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-2"><h4>Usuário:</h4></div>
+						<div class="col-md-10">
+							<select class="form-control">
+								<option disabled selected>Selecione</option>
 								(:* foreach *:)
-                                <option>Assunção Alex</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <div class="row">
-                        <div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
-                        <div class="col-md-6"><button type="button" class="btn btn-success">INCLUIR</button></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+								<option>Assunção Alex</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div class="row">
+						<div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
+						<div class="col-md-6"><button type="button" class="btn btn-success">INCLUIR</button></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 (: end :)
 
 (: static function modalticketstatus(ticket:Spod.Ticket) :)
 <div class="modal fade" id="ticket(: ticket.id :)_status" tabindex="-1" role="dialog" aria-labelledby="ticket(: ticket.id :)_status_label">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="ticket(: ticket.id :)_status_label">MUDAR STATUS</h4>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-2"><h4>SV:</h4></div>
+						<div class="col-md-10">
+							<select class="form-control">
+								<option>COMPLETA</option>
+								<option>RECUSADA</option>
+								<option>ACEITA</option>
+							</select>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-2"><h4>CT:</h4></div>
+						<div class="col-md-10">
+							<select class="form-control">
+								<option>COMPLETA</option>
+								<option>RECUSADA</option>
+								<option>ACEITA</option>
+							</select>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-2"><h4>CQ:</h4></div>
+						<div class="col-md-10">
+							<select class="form-control">
+								<option>COMPLETA</option>
+								<option>RECUSADA</option>
+								<option>ACEITA</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div class="row">
+						<div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
+						<div class="col-md-6"><button type="button" class="btn btn-success">MUDAR</button></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+(: end :)
+	
+(: static function modalcadastroeditar(cadastro:Spod.User) :)
+	<div class="modal fade" id="cadastro(: cadastro.id :)_editar" tabindex="-1" role="dialog" aria-labelledby="cadastro(: cadastro.id :)_editar_label">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="cadastro(: cadastro.id :)_editar_label">EDITAR USUÁRIO</h4>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-2"><h4>Nome:</h4></div>
+						<div class="col-md-10"><input type="text" class="form-control" value="Filipe Horácio"></div>
+					</div>
+					<div class="row">
+						<div class="col-md-2"><h4>E-mail:</h4></div>
+						<div class="col-md-10"><input type="text" class="form-control" value="filipehoracio@e-mail.com"></div>
+					</div>
+					<div class="row">
+						<div class="col-md-2"><h4>Grupo:</h4></div>
+						<div class="col-md-10">
+							<select class="form-control">
+								<option disabled>Selecione</option>
+								<option selected>Pesquisador</option>
+								<option>Supervisor</option>
+								<option>Telefonista</option>
+							</select>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-2"><h4>Supervisor:</h4></div>
+						<div class="col-md-10">
+							<select class="form-control">
+								<option disabled>Selecione</option>
+								<option selected>Assunção Alex</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div class="row">
+						<div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
+						<div class="col-md-6"><button type="button" class="btn btn-success">EDITAR</button></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+(: end :)
+
+(: static function modalcadastrodesativar(cadastro:Spod.User) :)
+	<div class="modal fade" id="cadastro(: cadastro.id :)_desativar" tabindex="-1" role="dialog" aria-labelledby="cadastro(: cadastro.id :)_desativar_label">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="cadastro(: cadastro.id :)_desativar_label">DESATIVAR USUÁRIO</h4>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-12">
+							<p>Deseja realmente desativar o usuário <b class="pesquisador">Filipe Horácio</b>?</p>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div class="row">
+						<div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">NÃO</button></div>
+						<div class="col-md-6"><button type="button" class="btn btn-success">SIM</button></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+(: end :)
+
+(: static function modalpagamentospagar(pagamentos:Spod.NewSurvey) :)
+    <div class="modal fade" id="pagar(: pagamentos.id :)_um" tabindex="-1" role="dialog" aria-labelledby="pagar(: pagamentos.id :)_um_label">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="ticket(: ticket.id :)_status_label">MUDAR STATUS</h4>
+                    <h4 class="modal-title" id="pagar(: pagamentos.id :)_um_label">PAGAR PESQUISA</h4>
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-md-2"><h4>SV:</h4></div>
-                        <div class="col-md-10">
-                            <select class="form-control">
-                                <option>COMPLETA</option>
-                                <option>RECUSADA</option>
-                                <option>ACEITA</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-2"><h4>CT:</h4></div>
-                        <div class="col-md-10">
-                            <select class="form-control">
-                                <option>COMPLETA</option>
-                                <option>RECUSADA</option>
-                                <option>ACEITA</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-2"><h4>CQ:</h4></div>
-                        <div class="col-md-10">
-                            <select class="form-control">
-                                <option>COMPLETA</option>
-                                <option>RECUSADA</option>
-                                <option>ACEITA</option>
-                            </select>
-                        </div>
+                        <div class="col-md-4"><h4>Ref. Pagamento:</h4></div>
+                        <div class="col-md-8"><input type="text" class="form-control" /></div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <div class="row">
                         <div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
-                        <div class="col-md-6"><button type="button" class="btn btn-success">MUDAR</button></div>
+                        <div class="col-md-6"><button type="button" class="btn btn-success">PAGAR</button></div>
                     </div>
                 </div>
             </div>
