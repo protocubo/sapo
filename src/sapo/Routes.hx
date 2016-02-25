@@ -24,7 +24,7 @@ class TinkRoutes
 	public function doSurveys()
 		Sys.println(sapo.view.Surveys.render());
 	
-	public function doSurvey(s:sapo.Survey)
+	public function doSurvey(s:sapo.NewSurvey)
 		Sys.println(sapo.view.Survey.render(s));
 
 	public function new() {}
@@ -38,7 +38,7 @@ class TicketRoutes
 		Sys.println(sapo.view.Tickets.render(args.ofUser));
 	}
 	
-	public function doSearch(?args:{ ?ofUser:User, ?ticket:Ticket, ?survey:Survey })
+	public function doSearch(?args:{ ?ofUser:User, ?ticket:Ticket, ?survey:NewSurvey })
 	{
 		if (args == null) args = { };
 		Sys.println(sapo.view.Tickets.render(args.ofUser));
