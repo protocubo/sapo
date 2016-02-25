@@ -16,7 +16,9 @@ body {
     height: 60px;
     background-color: #EEE;
 }
-
+a:focus, a:hover {
+    text-decoration: none;
+}
 .btn {
     width: 100%;
 }
