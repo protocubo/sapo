@@ -5,10 +5,30 @@
 <head>
 (: Util.head("SAPO - Pesquisa #"+survey.id) :)
 
+<!-- CORRIGIR TOGGLE -->
 <style type="text/css">
-	.escondido {
-		display: none;
+.escondido {
+ display: none;
+}
+</style>
+<script>
+$(document).ready(function () {
+	$("#corrigir").click(function () {
+		$(".corrigir").toggleClass("escondido");
+	});
+});
+</script>
+
+<!-- IMPRIMIR -->
+<script>
+function imprimir() {
+	window.print();
 	}
+</script>
+<style type="text/css">
+@media print {
+	.apagar { display: none;}
+}
 </style>
 
 </head>
@@ -22,18 +42,18 @@
 	<div class="row">
 		<div class="col-md-3">
 			<h2>
-				PESQUISA #846
+				PESQUISA #(:survey.id:)
 			</h2>
 		</div>
-		<div class="col-md-3">
+		<div class="col-md-3 apagar">
 			<h2>TICKET (A:1 / F:3)</h2>
 		</div>
-		<div class="col-md-3 text-right">
+		<div class="col-md-3 text-right apagar">
 			<h2>
-				<a href="#"><span class="glyphicon glyphicon-print" aria-hidden="true"></span></a>
+				<a href="#" onclick="imprimir()"><span class="glyphicon glyphicon-print" aria-hidden="true"></span></a>
 			</h2>
 		</div>
-		<div class="col-md-3 text-right">
+		<div class="col-md-3 text-right apagar">
 			<h2>
 				<span class="glyphicon glyphicon-earphone" aria-hidden="true"></span>
 				<span class="glyphicon glyphicon-minus supervisor" aria-hidden="true"></span>
@@ -42,12 +62,15 @@
 			</h2>
 		</div>
 	</div>
+</div>
+
+<div class="container apagar">
 	<hr />
 
 	<!-- ACTIONS -->
 	<div class="row">
 		<div class="col-md-2 col-md-offset-2">
-			<button type="button" class="btn btn-danger">CORRIGIR</button>
+			<button type="button" class="btn btn-danger" id="corrigir">CORRIGIR</button>
 		</div>
 		<div class="col-md-2">
 			<button type="button" class="btn btn-warning" data-toggle="modal" data-target="#pesquisa_ticket">ABRIR TICKET</button>
@@ -60,29 +83,31 @@
 		</div>
 	</div>
 	<hr />
+</div>
 
+<div class="container">
 	<!-- BODY - PESQUISA -->
 	<div class="row">
 		<div class="col-md-12">
 			<h3><span class="glyphicon glyphicon-file" aria-hidden="true"></span> INFORMAÇÕES DA PESQUISA</h3>
 			<div class="bloco">
-				<a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+				<a href="#" class="corrigir escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
 				<b>1ºVisita:</b> 17/03/2016
 			</div>
 			<div class="bloco">
-				<a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+				<a href="#" class="corrigir escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
 				<b>Completada:</b> 17/03/2016
 			</div>
 			<div class="bloco">
-				<a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+				<a href="#" class="corrigir escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
 				<b>Senha: </b>ALNVD86960
 			</div>
 			<div class="bloco">
-				<a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+				<a href="#" class="corrigir escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
 				<b class="pesquisador">Pesquisador:</b> Filipe Horácio
 			</div>
 			<div class="bloco">
-				<a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+				<a href="#" class="corrigir escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
 				<b class="supervisor">Supervisor:</b> Rúben Fabricio
 			</div>
 		</div>
@@ -96,7 +121,7 @@
 
 			<!-- BLOCK - botão de edit, <b>campo, info do campo -->
 			<div class="bloco">
-				<a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+				<a href="#" class="corrigir escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
 				<b>#Campo:</b> #Dado
 			</div>
 			<!-- FIM DO BLOCK -->
@@ -111,7 +136,7 @@
 
 			<!-- BLOCK - botão de edit, <b>campo, info do campo -->
 			<div class="bloco">
-				<a href="#" class="escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+				<a href="#" class="corrigir escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
 				<b>#Campo:</b> #Dado
 			</div>
 			<!-- FIM DO BLOCK -->
@@ -122,22 +147,22 @@
 			<div class="viagem">
 				<!-- PONTO -->
 				<p>
-					<a href="#" style="display:none;"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+					<a href="#" class="corrigir escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
 					<b><span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Ponto (#Ponto1):</b> #DadosDoPonto
 				</p>
 				<!-- SAÍDA -->
 				<p>
-					<a href="#" style="display:none;"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+					<a href="#" class="corrigir escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
 					<b><span class="glyphicon glyphicon-time" aria-hidden="true"></span> Saída:</b> #Saída
 				</p>
 				<!-- MODO-->
 				<p>
-					<a href="#" style="display:none;"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+					<a href="#" class="corrigir escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
 					<b><span class="glyphicon glyphicon-transfer" aria-hidden="true"></span> Modo (#Modo1):</b> #DadosDoModo
 				</p>
 				<!-- CHEGADA -->
 				<p>
-					<a href="#" style="display:none;"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+					<a href="#" class="corrigir escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
 					<b><span class="glyphicon glyphicon-time" aria-hidden="true"></span> Chegada:</b> #Chegada
 				</p>
 			</div>
