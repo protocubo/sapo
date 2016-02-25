@@ -1,5 +1,6 @@
 package sapo;
 
+import common.crypto.Password;
 import common.db.MoreTypes;
 import common.spod.InitDB;
 import haxe.PosInfos;
@@ -46,6 +47,10 @@ class Index {
 			ticket2.insert();
 			new TicketMessage(ticket2, ford, arthur, "Time is an illusion, lunchtime doubly so. ").insert();
 			new TicketMessage(ticket2, arthur, ford, "Very deep. You should send that in to the Reader's Digest. They've got a page for people like you.").insert();
+			
+			var u = new User(new AccessName("super"), superGroup, "Test", new EmailAddress("teste@teste.com.br"));
+			u.password = new Password("123vanilla");
+			u.insert();
 		} catch (e:Dynamic) {
 			Manager.cnx.request("ROLLBACK");
 			neko.Lib.rethrow(e);

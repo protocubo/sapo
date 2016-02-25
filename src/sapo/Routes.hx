@@ -1,5 +1,8 @@
 package sapo;
 
+import common.crypto.Random;
+import common.db.MoreTypes.EmailAddress;
+import common.spod.Session;
 import haxe.web.Dispatch;
 import neko.Web;
 import sapo.Spod;
@@ -63,6 +66,40 @@ class Routes
 	public function doTink(d:Dispatch)
 		d.dispatch(new TinkRoutes());
 
-	public function new() {}
+	public function new() { }
+
+	public function doLogin()
+	{
+		if (Web.getMethod() == "POST")
+		{
+			trace("WTF");
+			var p = Web.getParams();
+			var email = p.get("email");
+			var pass = p.get("password");
+			
+			var u = User.manager.search($email == new EmailAddress(email), null, false).first();
+			if (u == null)
+			{
+				Web.redirect("default?error=" + StringTools.urlEncode("Usuário inválido!"));
+				return;
+			}
+			//TODO: Validade password!
+			if (u.password != pass)
+			{
+				Web.redirect("default?error=" + StringTools.urlEncode("Senha inválida!"));
+				return;
+			}
+			
+			var s = new Session();
+			//TODO: Gerar id
+			s.id = Random.global.readSimpleBytes(16).toHex();
+			s.user = u;
+			s.logtime = Date.now().getTime();
+			s.insert();
+			
+			Web.setCookie("session_id", s.id);
+			Web.redirect("tink");
+		}
+	}
 }
 
