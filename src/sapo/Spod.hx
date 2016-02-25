@@ -45,7 +45,7 @@ class User extends sys.db.Object {
 }
 
 @:key(id)
-class AuthSession extends Object {
+class Session extends Object {
 	public static inline var COOKIE_KEY = "session_id";
 	public static inline var DEFAULT_SESSION_DURATION = 3.6*1e6;  // ms
 

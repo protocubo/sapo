@@ -3,7 +3,6 @@ package sapo;
 import common.Web;
 import common.crypto.Random;
 import common.db.MoreTypes.EmailAddress;
-import common.spod.Session;
 import haxe.web.Dispatch;
 import sapo.Spod;
 
@@ -96,11 +95,11 @@ class Routes
 				return;
 			}
 
-			var s = new AuthSession(u);
+			var s = new Session(u);
 			s.insert();
 			trace(s.expired());
 
-			Web.setCookie(AuthSession.COOKIE_KEY, s.id, s.expires_at);
+			Web.setCookie(Session.COOKIE_KEY, s.id, s.expires_at);
 			Web.redirect("/");
 		} else {
 			Sys.println(sapo.view.Login.render());
