@@ -39,7 +39,7 @@ class InitDB
 				TableCreate.create(Modo.manager);
 				TableCreate.create(Morador.manager);
 				TableCreate.create(Ponto.manager);
-				TableCreate.create(Session.manager);
+				TableCreate.create(Survey.manager);
 
 				/******/
 				TableCreate.create(Referencias.manager);

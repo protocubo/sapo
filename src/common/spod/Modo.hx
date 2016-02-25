@@ -18,13 +18,14 @@ class Modo extends Object
 {
 	public var id : SId;
 
-	@:relation(session_id) public var session : Session;
+	@:relation(survey_id) public var survey : Survey;
+	
 	@:relation(morador_id) public var morador : Morador;
 	
 	@:relation(firstpoint_id) public var firstpoint : Ponto;
-	
+	public var firstpoint_id : SInt;
 	@:relation(secondpoint_id) public var secondpoint : Ponto;
-	
+	public var secondpoint_id : SInt;
 	public var date : SDateTime;
 	
 	public var isEdited : SInt;
@@ -50,7 +51,7 @@ class Modo extends Object
 	public var naoRespondeu : SNull<SBool>;
 	
 	public var syncTimestamp : SFloat;
-	public var old_session_id : SInt;
+	public var old_survey_id : SInt;
 	public var old_morador_id : SInt;
 	public var old_id : SInt;
 }

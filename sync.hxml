@@ -4,5 +4,5 @@
 --each
 
 -neko bin/Sync.n
--main sync.MainTemp
+-main sync.MainSync
 

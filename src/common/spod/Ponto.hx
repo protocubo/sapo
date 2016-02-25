@@ -18,9 +18,9 @@ import sys.db.Types.SString;
 class Ponto extends Object
 {
 	public var id : SId;
-	public var session_id : SInt;
-	@:relation(session_id) public var session : Session;
-	public var morador_id : SInt;
+	
+	@:relation(survey_id) public var survey : Survey;
+	
 	@:relation(morador_id) public var morador : Morador;
 	
 	public var date : SDateTime;
@@ -53,5 +53,5 @@ class Ponto extends Object
 	
 	public var old_id : SInt;
 	public var syncTimestamp : SFloat;
-	public var old_session_id : SInt;
+	public var old_survey_id : SInt;
 }
