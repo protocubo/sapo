@@ -4,7 +4,7 @@ import common.db.MoreTypes;
 import common.spod.InitDB;
 import haxe.PosInfos;
 import haxe.web.Dispatch;
-import neko.Web;
+import common.Web;
 import sapo.Spod;
 import sys.db.*;
 import sapo.Context;
@@ -75,9 +75,18 @@ class Index {
 			dbInit();
 			var uri = Web.getURI();
 			if (uri == "/favicon.ico") return;
+			var params = Web.getParams();
+
+			// log if we're loosing any params
+			var aparams = Web.getAllParams();
+			for (p in aparams.keys())
+				if (aparams[p].length > 1)
+					trace('WARNING multiple (${aparams[p].length}) values for param $p');
+
+			// TODO actually use this for something
+			trace(Web.getAllCookies());
 
 			// treat visibly empty params as missing
-			var params = Web.getParams();
 			var cparams = [ for (k in params.keys()) if (StringTools.trim(params.get(k)).length > 0) k => params.get(k) ];
 			var d = new Dispatch(uri, cparams);
 			d.dispatch(new Routes());

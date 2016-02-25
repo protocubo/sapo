@@ -1,7 +1,7 @@
 package sapo;
 
 import haxe.web.Dispatch;
-import neko.Web;
+import common.Web;
 import sapo.Spod;
 
 class TinkRoutes 

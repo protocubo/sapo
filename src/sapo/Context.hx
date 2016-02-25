@@ -1,6 +1,6 @@
 package sapo;
 import common.db.MoreTypes.Privilege;
-import neko.Web;
+import common.Web;
 import sapo.Spod.AccessLevel;
 import sapo.Spod.Group;
 import sapo.Spod.Session;
