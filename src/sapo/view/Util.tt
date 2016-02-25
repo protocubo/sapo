@@ -1,5 +1,6 @@
-(: import sapo.Spod:)
-(: static function head(title:String) :)
+(: import sapo.Spod :)
+
+(: static function head(title:String, ?use:{ formCache:Bool }) :)
 <!-- TITLE -->
 <meta charset="utf-8">
 <title>(: title :)</title>
@@ -16,8 +17,8 @@
 
 <!-- SAPO -->
 <link href="/css/sapo.css" rel="stylesheet" type="text/css" />
+(: if use != null && use.formCache :)<script src="/js/formcache.js"></script>(: end :)
 (: end :)
-
 
 (: static function navbar() :)
 <!-- NAVBAR -->
@@ -35,27 +36,24 @@
                 <ul class="nav navbar-nav">
 				    <!-- adicionar ~class="active"~ no <li> ativo; sem logar: só SAPO; logado (pesquisador): só pagamentos; logado (resto) todos menos pagamentos -->
                     <li><a href="#">SAPO</a></li>
-                    <li><a href="tickets">TICKETS</a></li> 
-                    <li><a href="surveys">PESQUISAS</a></li> 
-                    <li><a href="#">SUMÁRIO</a></li> 
+                    <li><a href="/tink/tickets">TICKETS</a></li> 
+                    <li><a href="/tink/surveys">PESQUISAS</a></li> 
 					<li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">SUMÁRIO <span class="caret"></span></a>
                         <ul class="dropdown-menu">
 						    <!-- todos os sumários -->
-                            <li><a href="#">GERAL:STATUS</a></li>
-                            <li><a href="#">GERAL:STATUS</a></li>
-                            <li><a href="#">GERAL:STATUS</a></li>
+                            <li><a href="/tink/summary">GERAL:STATUS</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">ADMINISTRAÇÃO <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="registration">CADASTRO</a></li>
-                            <li><a href="#">PAGAMENTOS</a></li>
+                            <li><a href="/tink/registration">CADASTRO</a></li>
+                            <li><a href="/tink/payments">PAGAMENTOS</a></li>
                         </ul>
                     </li>
 					<!-- só o pesquisador verá essa aba, e somente esta -->
-                    <li><a href="payment">PAGAMENTOS</a></li> 
+                    <li><a href="/tink/payment">PAGAMENTOS</a></li> 
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <!-- sem logar: vazio; logado: nome do usuário + @ + grupo - (class: super, telefonista, supervisor e pesquisador) -->
@@ -68,18 +66,15 @@
     </div>
 (: end :)
 
-
-
 (: static function footer() :)
 <!-- FOOTER -->
     <footer class="footer">
         <div class="container">
             <h3 class="text-muted" style="display:inline-block;"> SAPO OD DF 2016</h3>
-            <img src="sapo_logo.png" style="height:60px; float:right;">
+            <img src="/resources/sapo_logo.png" style="height:60px; float:right;">
         </div>
     </footer>
 (: end :)
-
 
 (: static function ticket(ticket:Spod.Ticket) :)
 <!-- TICKET -->
@@ -102,21 +97,17 @@
 					(:ticket.survey.id:) - (:ticket.survey.closed_at:) - <b class="pesquisador">(:ticket.survey.surveyor.name:)</b>
 				</a>
 			</div>
-			<div class="col-md-2 panel-title">
-				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyTicket(: ticket.id :)" aria-expanded="true" aria-controls="BodyTicket(: ticket.id :)">
-					<!-- se:foi ligado -->
-					<span class="glyphicon glyphicon-earphone" aria-hidden="true"></span>
-					<!-- class: supervisor, telefonista, super. status: minus -> ok ou remove -->
-					<span class="glyphicon glyphicon-minus supervisor" aria-hidden="true"></span>
-					<span class="glyphicon glyphicon-ok telefonista" aria-hidden="true"></span>
-					<span class="glyphicon glyphicon-remove super" aria-hidden="true"></span>
-
-					(:*
-					<!-- STATUS (class: aberta, completa, verificada, CT, aceita, recusada, sobjudice) -->
-					<b class="(:ticket.survey.status.name:)">(:ticket.survey.status.name:)</b>
-					*:)
-
-				</a>
+			<div class="col-md-2 panel-title text-right">
+				<!-- se:foi ligado -->
+				<span class="glyphicon glyphicon-earphone" aria-hidden="true"></span>
+				<!-- class: supervisor, telefonista, super. status: minus -> ok ou remove -->
+				<span class="glyphicon glyphicon-minus supervisor" aria-hidden="true"></span>
+				<span class="glyphicon glyphicon-ok telefonista" aria-hidden="true"></span>
+				<span class="glyphicon glyphicon-remove super" aria-hidden="true"></span>
+				(:*
+				<!-- STATUS (class: aberta, completa, verificada, CT, aceita, recusada, sobjudice) -->
+				<b class="(:ticket.survey.status.name:)">(:ticket.survey.status.name:)</b>
+				*:)
 			</div>
 		</div>
 	</div>
@@ -124,16 +115,18 @@
 	<div id="BodyTicket(: ticket.id :)" class="panel-collapse collapse" role="tabpanel" aria-labelledby="HeadTicket(: ticket.id :)">
 		<div class="panel-body">
 			<div class="row">
-				(: for message in Spod.TicketMessage.manager.search($ticket == ticket) :)
 				<div class="col-md-7 barraderolagem">
-					<strong>
-						<!-- DATETIME + DE + PARA (class: super, telefonista, supervisor e pesquisador) -->
-						(: message.posted_at :) - <span class="(: message.author.group.group_name:)">(: message.author.name :)@(: message.author.group.group_name:)</span> - <span class="(: message.recipient.group.group_name:)">(: message.recipient.name :)@(: message.recipient.group.group_name:)</span> :
-					</strong>
+				(: for message in Spod.TicketMessage.manager.search($ticket == ticket) :)
+					<p>
+						<strong>
+							<!-- DATETIME + DE + PARA (class: super, telefonista, supervisor e pesquisador) -->
+							(: message.posted_at :) - <span class="(: message.author.group.group_name:)">(: message.author.name :)@(: message.author.group.group_name:)</span> - <span class="(: message.recipient.group.group_name:)">(: message.recipient.name :)@(: message.recipient.group.group_name:)</span> :
+						</strong>
 					<!-- MENSAGEM -->
-					(: message.text :)
+						(: message.text :)
+					</p>
+				(: end :)
 				</div>
-				(: end :)							
 				<div class="col-md-5 barraderolagem">
 					<!-- DADOS DA PESQUISA -->
 					<p><b>Endereço:</b> (:ticket.survey.address :) </p>
@@ -145,11 +138,11 @@
 			</div>
 			<!-- AÇÕES -->
 			<div class="row" style="margin-top: 30px;">
-				<div class="col-md-2"><button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#ticket_fechar">FECHAR</button></div>
-				<div class="col-md-2"><button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#ticket_responder">RESPONDER</button></div>
-				<div class="col-md-2"><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#ticket_incluir">INCLUIR</button></div>
+				<div class="col-md-2"><button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_fechar">FECHAR</button></div>
+				<div class="col-md-2"><button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_responder">RESPONDER</button></div>
+				<div class="col-md-2"><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_incluir">INCLUIR</button></div>
 				<div class="col-md-2 col-md-offset-1"><a href="survey/(: ticket.survey.id :)" type="button" class="btn btn-primary btn-sm">VER PESQUISA</a></div>
-				<div class="col-md-2"><button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#ticket_status">MUDAR STATUS</button></div>
+				<div class="col-md-2"><button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_status">MUDAR STATUS</button></div>
 			</div>
 		</div>
 	</div>
@@ -157,8 +150,7 @@
 <!-- FIM TICKET -->
 (: end :)
 
-
-(: static function survey(survey:Spod.Survey) :)
+(: static function survey(survey:Spod.NewSurvey) :)
 <!-- PESQUISA -->
 <div class="panel panel-default">
 	<!-- HEAD PESQUISA -->
@@ -167,7 +159,7 @@
 			<div class="col-md-4 panel-title">
 				<!-- Nº da Pesquisa, Data da Pesquisa -->
 				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyPesquisa(: survey.id :)" aria-expanded="true" aria-controls="BodyPesquisa(: survey.id :)">
-					Pesquisa #12345 - 01/01/2016 - <b class="pesquisador">Nome</b> - <b class="supervisor">Fulano</b>
+					(: survey.id :) - 01/01/2016 - <b class="pesquisador">Nome</b> - <b class="supervisor">Fulano</b>
 				</a>
 			</div>
 			<div class="col-md-6 panel-title">
@@ -176,15 +168,13 @@
 					R. Itamirindiba, 3 - São Paulo/SP 
 				</a>
 			</div>
-			<div class="col-md-2 panel-title">
-				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyPesquisa(: survey.id :)" aria-expanded="true" aria-controls="BodyPesquisa(: survey.id :)">
-					<!-- se:foi ligado -->
-					<span class="glyphicon glyphicon-earphone" aria-hidden="true"></span>
-					<!-- class: supervisor, telefonista, super. status: minus -> ok ou remove -->
-					<span class="glyphicon glyphicon-minus supervisor" aria-hidden="true"></span>
-					<span class="glyphicon glyphicon-ok telefonista" aria-hidden="true"></span>
-					<span class="glyphicon glyphicon-remove super" aria-hidden="true"></span>
-				</a>
+			<div class="col-md-2 panel-title text-right">
+				<!-- se:foi ligado -->
+				<span class="glyphicon glyphicon-earphone" aria-hidden="true"></span>
+				<!-- class: supervisor, telefonista, super. status: minus -> ok ou remove -->
+				<span class="glyphicon glyphicon-minus supervisor" aria-hidden="true"></span>
+				<span class="glyphicon glyphicon-ok telefonista" aria-hidden="true"></span>
+				<span class="glyphicon glyphicon-remove super" aria-hidden="true"></span>
 			</div>
 		</div>
 	</div>
@@ -205,9 +195,46 @@
 				</div>
 			</div>
 			<div class="row" style="margin-top: 30px;">
-				<div class="col-md-2 col-md-offset-10"><button type="button" class="btn btn-default btn-sm">VER PESQUISAS</button></div>
+				<div class="col-md-2 col-md-offset-10"><a href="survey/(: survey.id :)" class="btn btn-primary btn-sm">VER PESQUISAS</a></div>
 			</div>
 		</div>
 	</div>
 	<!-- FIM PESQUISA -->
+</div>
+(: end :)
+
+(: static function payments(payments:Spod.NewSurvey) :)
+<!-- LINHA: checkbox, nome do pesquisador, número da pesquisa, data da pesquisa, refpagto, datapagto, pagar -->
+<tr>
+	<td>
+		<input type="checkbox" />
+	</td>
+	<td>Filipe Horácio</td>
+	<td>(: payments.id :)</td>
+	<td>21/03/2016</td>
+	<td></td>
+	<td></td>
+	<td align="right">
+		<button type="button" class="btn btn-success btn-xs" aria-label="Desativar" style="width:auto;" data-toggle="modal" data-target="#pagar(: payments.id :)_um">
+			<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+		</button>
+	</td>
+</tr>
+<!-- FIM LINHA -->
+(: end :)
+
+(: static function payment(payment:Spod.NewSurvey) :)
+<!-- LINHA: número da pesquisa, data da pesquisa, endereço, refpagto, datapagto, status -->
+<tr>
+	<td>(: payment.id:)</td>
+	<td>(: payment.closed_at :)</td>
+	<td>(: payment.address :)</td>
+	<td>813518</td>
+	<td>02/02/2016</td>
+	<td class="text-right">
+		<!-- class: completa, pendente, recusada, aceita -->
+		<b class="aceita">Aceita</b>
+	</td>
+</tr>
+<!-- FIM LINHA -->
 (: end :)

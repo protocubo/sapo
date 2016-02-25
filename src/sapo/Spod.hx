@@ -5,6 +5,8 @@ package sapo;
 
 import common.crypto.Password;
 import common.db.MoreTypes;
+import sapo.Spod.User;
+import sys.db.Object;
 import sys.db.Types;
 
 // necessary only because we need mentions to groups
@@ -20,6 +22,13 @@ class Group extends sys.db.Object {
 		this.privilege = privilege;
 		super();
 	}
+}
+
+@:key(id) class Session extends Object
+{
+	public var id : String;
+	@:relation(user_id) public var user : User;
+	public var logtime : SFloat;
 }
 
 @:index(user_name, unique)
@@ -42,7 +51,7 @@ class User extends sys.db.Object {
 	}
 }
 
-class Survey extends sys.db.Object {
+class NewSurvey extends sys.db.Object {
 	public var id:SId;
 	@:relation(surveyor_id) public var surveyor:User;
 	public var closed_at:HaxeTimestamp;
@@ -65,7 +74,7 @@ class Survey extends sys.db.Object {
 
 class Ticket extends sys.db.Object {
 	public var id:SId;
-	@:relation(survey_id) public var survey:Survey;
+	@:relation(survey_id) public var survey:NewSurvey;
 	@:relation(author_id) public var author:User;
 	
 	public var opened_at:HaxeTimestamp;
@@ -86,7 +95,8 @@ class Ticket extends sys.db.Object {
 	}
 }
 
-class TicketMessage extends sys.db.Object {
+class TicketMessage extends sys.db.Object 
+{
 	public var id:SId;
 	@:relation(ticket_id) public var ticket:Ticket;
 	@:relation(author_id) public var author:User;

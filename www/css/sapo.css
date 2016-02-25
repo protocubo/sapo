@@ -43,17 +43,52 @@ body {
 /*CORES GRUPOS*/
 
 .super {
-    color: #337AB7;
+    color: #4C57B7;
 }
 
 .telefonista {
-    color: #666A18;
+    color: #316A3F;
 }
 
 .supervisor {
-    color: #B78433;
+    color: #B79E47;
 }
 
 .pesquisador {
-    color: #C34F4A;
+    color: #C35150;
+}
+
+/*CORES STATUS*/
+
+.completa {
+    color: #0010B7;
+}
+.pendente {
+    color: #B78F00;
+}
+.recusada {
+    color: #C30200;
+}
+.aceita {
+    color: #006A1F;
+}
+
+/*ESPAÇAMENTO PARA MOBILE*/
+
+@media (max-width: 991px) {
+
+    .col-md-1,
+    .col-md-2,
+    .col-md-3,
+    .col-md-4,
+    .col-md-5,
+    .col-md-6,
+    .col-md-7,
+    .col-md-8,
+    .col-md-9,
+    .col-md-10,
+    .col-md-11,
+    .col-md-12 {
+        margin-top: 14px;
+    }
 }

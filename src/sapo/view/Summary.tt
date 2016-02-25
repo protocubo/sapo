@@ -4,45 +4,204 @@
 <!DOCTYPE html>
 <html>
 <head>
-(: Util.head("SAPO [tink_template] – Summary") :)
+(: Util.head("SAPO – Sumário") :)
+
+<!-- GOOGLE CHARTS -->
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+
+	// Load the Visualization API and the piechart package.
+	google.load('visualization', '1.0', { 'packages': ['corechart'] });
+
+	// Set a callback to run when the Google Visualization API is loaded.
+	google.setOnLoadCallback(drawChart);
+
+	// Callback that creates and populates a data table, instantiates the pie chart, passes in the data and draws it.
+	function drawChart() {
+
+		// Create the data table.
+		var data = new google.visualization.DataTable();
+		data.addColumn('string', 'Status');
+		data.addColumn('number', 'Pesquisas');
+		data.addRows([
+		  ['Completas', 29 ],
+		  ['Pendentes', 203]
+		]);
+		// Create the data table.
+
+		var data2 = new google.visualization.DataTable();
+		data2.addColumn('string', 'Data');
+		data2.addColumn('number', 'Pesquisas');
+		data2.addRows([
+		  ['07/03/2004', 0],
+		  ['08/03/2004', 131],
+		  ['09/03/2004', 270],
+		  ['10/03/2004', 405],
+		  ['11/03/2004', 530],
+		  ['12/03/2004', 530],
+		  ['13/03/2004', 530],
+		  ['14/03/2004', 679],
+		  ['15/03/2004', 853],
+		  ['16/03/2004', 1012],
+		  ['17/03/2004', 1175],
+		  ['18/03/2004', 1325],
+		  ['19/03/2004', 1502],
+		  ['20/03/2004', 1502],
+		  ['21/03/2004', 1502],
+		  ['22/03/2004', 1653],
+		  ['23/03/2004', 1805],
+		  ['24/03/2004', 1944],
+		  ['25/03/2004', 2099],
+		  ['26/03/2004', 2229],
+		  ['27/03/2004', 2229],
+		  ['28/03/2004', 2229],
+		  ['29/03/2004', 2395],
+		  ['30/03/2004', 2561],
+		  ['31/03/2004', 2707],
+		  ['01/04/2004', 2862],
+		  ['02/04/2004', 2862],
+		  ['03/04/2004', 2862]
+		]);
+
+		var data3 = new google.visualization.DataTable();
+		data3.addColumn('string', 'Data');
+		data3.addColumn('number', 'Pesquisas');
+		data3.addRows([
+		  ['07/03/2004', 0],
+		  ['08/03/2004', 13],
+		  ['09/03/2004', 27],
+		  ['10/03/2004', 40],
+		  ['11/03/2004', 53],
+		  ['12/03/2004', 53],
+		  ['13/03/2004', 53],
+		  ['14/03/2004', 67],
+		  ['15/03/2004', 85],
+		  ['16/03/2004', 101],
+		  ['17/03/2004', 117],
+		  ['18/03/2004', 132],
+		  ['19/03/2004', 150],
+		  ['20/03/2004', 150],
+		  ['21/03/2004', 150],
+		  ['22/03/2004', 165],
+		  ['23/03/2004', 180],
+		  ['24/03/2004', 194],
+		  ['25/03/2004', 209],
+		  ['26/03/2004', 222],
+		  ['27/03/2004', 222],
+		  ['28/03/2004', 222],
+		  ['29/03/2004', 239],
+		  ['30/03/2004', 256],
+		  ['31/03/2004', 270],
+		  ['01/04/2004', 286],
+		  ['02/04/2004', 286],
+		  ['03/04/2004', 286]
+		]);
+
+		// Set chart options
+		var options = {
+			'width': 555,
+			'height': 333
+		};
+		// Set chart options
+		var options2 = {
+			'hAxis': { textPosition: 'none' },
+			'theme': 'maximized',
+			'width': 555,
+			'height': 333
+		};
+		// Set chart options
+		var options3 = {
+			'hAxis': { textPosition: 'none' },
+			'theme': 'maximized',
+			'width': 555,
+			'height': 333
+		};
+			// Instantiate and draw our chart, passing in some options.
+		var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+		chart.draw(data, options);
+		var chart2 = new google.visualization.LineChart(document.getElementById('chart_div2'));
+		chart2.draw(data2, options2);
+		var chart3 = new google.visualization.LineChart(document.getElementById('chart_div3'));
+		chart3.draw(data3, options3);
+		}
+</script>
+
 </head>
 <body>
-	(: Util.navbar() :)
-	
-	<!-- TICKETS -->
-    <div class="container">
 
-        <!-- HEAD -->
-        <h2>TICKETS</h2>
-        <hr />
-	</div>
+(: Util.navbar() :)
 	
-	
-	<!-- FILTROS -->
-	
-	<!-- BUSCA -->
-	
-	<!-- TICKETS -->
-    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" style="margin-top: 60px;">
-		(: for t in Ticket.manager.all() :)
-			(: Util.ticket(t) :)
-		(: end :)
-	</div>
-	
+<!-- SUMÁRIO -->
+<div class="container">
 
-	<table>
-		<tr><td>#</td><td>Opened</td><td>Closed</td></tr>
-		(: for t in Ticket.manager.all() :)
-		<tr><td><a href="tink/tickets/(: t.id :)">#(: t.id :)</a></td><td>(: t.opened_at :)</td><td>(: if t.closed_at != null :)(: t.closed_at :)(: end :)</td></tr>
-		(: end :)
-	</table>
-	<h2>Users</h2>
-	<table>
-		<tr><td>Name</td><td>Email</td></tr>
-		(: for u in User.manager.all() :)
-		<tr><td>(: u.name :)</td><td>(: u.email :)</td></tr>
-		(: end :)
-	</table>
+	<!-- HEAD -->
+	<h2>SUMÁRIO GERAL:STATUS</h2>
+	<hr />
+	<div class="row">
+		<div class="col-md-6">
+			<h4>
+				TOTAIS |
+				<a href="#"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span></a>
+			</h4>
+			<hr />
+			<table class="table">
+				<thead>
+					<tr>
+						<th>STATUS</th>
+						<th>Nº de Pesquisas</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td><b>Completas:</b></td>
+						<td> 29</td>
+					</tr>
+					<tr>
+						<td><b>Pendentes:</b></td>
+						<td> 203</td>
+					</tr>
+					<tr>
+						<td><b>Aceitas:</b></td>
+						<td> 2862</td>
+					</tr>
+					<tr>
+						<td><b>Recusadas:</b></td>
+						<td> 286</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="col-md-6">
+			<h4>
+				ACEITAS |
+				<a href="#"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span></a>
+			</h4>
+			<hr />
+			<div id="chart_div2"></div>
+		</div>
+	</div>
+	<hr />
+	<div class="row">
+		<div class="col-md-6">
+			<h4>
+				STATUS |
+				<a href="#"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span></a>
+			</h4>
+			<hr />
+			<div id="chart_div"></div>
+		</div>
+		<div class="col-md-6">
+			<h4>
+				RECUSADAS |
+				<a href="#"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span></a>
+			</h4>
+			<hr />
+			<div id="chart_div3"></div>
+		</div>
+	</div>
+</div>
+<hr />
+
 (: Util.footer() :)
 </body>
 </html>

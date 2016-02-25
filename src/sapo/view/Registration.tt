@@ -37,7 +37,7 @@
 		</div>
 		<div class="col-md-2 col-md-offset-4">
 			<!-- ADIÇÃO -->
-			<button type="button" class="btn btn-success">
+			<button type="button" class="btn btn-success" data-toggle="modal" data-target="#cadastro_adicionar">
 				<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
 				ADICIONAR
 			</button>
@@ -69,12 +69,12 @@
 				<td>(:user.email:)</td>
 				<td><b class="supervisor">ToDo</b></td>
 				<td>
-					<button type="button" class="btn btn-warning btn-xs" aria-label="Editar" style="width:auto;">
+					<button type="button" class="btn btn-warning btn-xs" aria-label="Editar" style="width:auto;" data-toggle="modal" data-target="#cadastro(:user.id:)_editar">
 						<span class="glyphicon glyphicon glyphicon-pencil" aria-hidden="true"></span>
 					</button>
 				</td>
 				<td>
-					<button type="button" class="btn btn-danger btn-xs" aria-label="Desativar" style="width:auto;">
+					<button type="button" class="btn btn-danger btn-xs" aria-label="Desativar" style="width:auto;" data-toggle="modal" data-target="#cadastro(:user.id:)_desativar">
 						<span class="glyphicon glyphicon glyphicon-remove" aria-hidden="true"></span>
 					</button>
 				</td>
@@ -102,6 +102,60 @@
 </div>
 
 (: Util.footer() :)
+
+<!-- MODAL ADICIONAR -->
+<div class="modal fade" id="cadastro_adicionar" tabindex="-1" role="dialog" aria-labelledby="cadastro_adicionar_label">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="cadastro_adicionar_label">ADICIONAR USUÁRIO</h4>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-md-2"><h4>Nome:</h4></div>
+					<div class="col-md-10"><input type="text" class="form-control" /></div>
+				</div>
+				<div class="row">
+					<div class="col-md-2"><h4>E-mail:</h4></div>
+					<div class="col-md-10"><input type="text" class="form-control" /></div>
+				</div>
+				<div class="row">
+					<div class="col-md-2"><h4>Grupo:</h4></div>
+					<div class="col-md-10">
+						<select class="form-control">
+							<option disabled selected>Selecione</option>
+							<option>Pesquisador</option>
+							<option>Supervisor</option>
+							<option>Telefonista</option>
+						</select>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-2"><h4>Supervisor:</h4></div>
+					<div class="col-md-10">
+						<select class="form-control">
+							<option disabled selected>Selecione</option>
+							<option>Assunção Alex</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<div class="row">
+					<div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
+					<div class="col-md-6"><button type="button" class="btn btn-success">ADICIONAR</button></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+	(: for user in Spod.User.manager.all() :)
+	(: Modal.modalcadastroeditar(user) :)
+	(: Modal.modalcadastrodesativar(user) :)
+	(: end :)
+
 </body>
 </html>
 (: end :)

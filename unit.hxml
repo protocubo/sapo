@@ -1,9 +1,11 @@
 -cp src
 -lib utest
+-lib hxBitcoin
 
 --each
 
 -neko bin/unit-tests.n
 -main unit.Main
 -cmd neko bin/unit-tests.n
+-dce full
 

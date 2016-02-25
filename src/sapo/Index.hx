@@ -4,9 +4,10 @@ import common.db.MoreTypes;
 import common.spod.InitDB;
 import haxe.PosInfos;
 import haxe.web.Dispatch;
-import neko.Web;
+import common.Web;
 import sapo.Spod;
 import sys.db.*;
+import sapo.Context;
 
 class Index {
 	static var DBPATH = Sys.getEnv("SAPO_DB");
@@ -31,8 +32,8 @@ class Index {
 			arthur.insert();
 			ford.insert();
 
-			var survey1 = new Survey(ford, "Arthur's house", 945634);
-			var survey2 = new Survey(arthur, "Betelgeuse, or somewhere near that planet", 6352344);
+			var survey1 = new NewSurvey(ford, "Arthur's house", 945634);
+			var survey2 = new NewSurvey(arthur, "Betelgeuse, or somewhere near that planet", 6352344);
 			survey1.insert();
 			survey2.insert();
 
@@ -55,7 +56,7 @@ class Index {
 
 	static function dbInit()
 	{
-		var managers:Array<Manager<Dynamic>> = [User.manager, Survey.manager, Ticket.manager, TicketMessage.manager, Group.manager];
+		var managers:Array<Manager<Dynamic>> = [User.manager, NewSurvey.manager, Ticket.manager, TicketMessage.manager, Group.manager];
 		for (m in managers)
 			if (!TableCreate.exists(m))
 				TableCreate.create(m);
@@ -74,9 +75,18 @@ class Index {
 			dbInit();
 			var uri = Web.getURI();
 			if (uri == "/favicon.ico") return;
+			var params = Web.getParams();
+
+			// log if we're loosing any params
+			var aparams = Web.getAllParams();
+			for (p in aparams.keys())
+				if (aparams[p].length > 1)
+					trace('WARNING multiple (${aparams[p].length}) values for param $p');
+
+			// TODO actually use this for something
+			trace(Web.getAllCookies());
 
 			// treat visibly empty params as missing
-			var params = Web.getParams();
 			var cparams = [ for (k in params.keys()) if (StringTools.trim(params.get(k)).length > 0) k => params.get(k) ];
 			var d = new Dispatch(uri, cparams);
 			d.dispatch(new Routes());

@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-(: Util.head("SAPO - Login") :)
+(: Util.head("SAPO - Pesquisas") :)
 </head>
 <body>
 (: Util.navbar() :)
@@ -17,15 +17,83 @@
 	<hr />
 
 	<!-- FILTROS -->
-	
+	<h3>Filtros:</h3>
+		<div class="row">
+			<div class="col-md-2"><h4>GRUPO:</h4></div>
+			<div class="col-md-2">
+				<select class="form-control">
+					<option>Selecione</option>
+					<option>Pesquisador</option>
+					<option>Supervisor</option>
+				</select>
+			</div>
+			<div class="col-md-2"><h4>USUÁRIO</h4></div>
+			<div class="col-md-2">
+				<select class="form-control">
+					<option>Selecione</option>
+					<!-- pegar grupo: listar usuários da lista anterior -->
+				</select>
+			</div>
+			<div class="col-md-2"><h4>VÁLIDA</h4></div>
+			<div class="col-md-2">
+				<select class="form-control">
+					<option>Sim</option>
+					<option>Não</option>
+					<option>Todas</option>
+				</select>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-2"><h4>PAGA</h4></div>
+			<div class="col-md-2">
+				<select class="form-control">
+					<option>Todas</option>
+					<option>Não</option>
+					<option>Sim</option>
+				</select>
+			</div>
+			<div class="col-md-2"><h4>STATUS</h4></div>
+			<div class="col-md-2">
+				<select class="form-control">
+					<option>Todas</option>
+					<option>Completas</option>
+					<option>Recusadas</option>
+					<option>Aceitas</option>
+				</select>
+			</div>
+			<div class="col-md-2"><h4>ORDEM</h4></div>
+			<div class="col-md-2">
+				<select class="form-control">
+					<option>Data Crescente</option>
+					<option>Data Decrescente</option>
+				</select>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-2 col-md-offset-10">
+				<button type="button" class="btn btn-primary">APLICAR</button>
+			</div>
+		</div>
+		<hr />
 
 	<!-- BUSCA -->
-	
+	<h3>Busca:</h3>
+	<div class="row">
+		<div class="col-md-2"><h4>Nº DA PESQUISA</h4></div>
+		<div class="col-md-2">
+			<input type="text" class="form-control" placeholder="Número da Pesquisa">
+		</div>
+		<div class="col-md-2 col-md-offset-6">
+			<button type="button" class="btn btn-primary">BUSCAR</button>
+		</div>
+	</div>
+	<hr />
+
 	<!-- PESQUISAS -->
 	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" style="margin-top: 60px;">
-		(: for s in Spod.Survey.manager.all() :)
+		(: for s in Spod.NewSurvey.manager.all() :)
 			(: Util.survey(s) :)
-		(: end :)	
+		(: end :)
 	</div>
 </div>
 
