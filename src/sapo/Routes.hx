@@ -1,54 +1,21 @@
 package sapo;
 
+import common.Web;
 import common.crypto.Random;
 import common.db.MoreTypes.EmailAddress;
 import common.spod.Session;
 import haxe.web.Dispatch;
-import common.Web;
 import sapo.Spod;
 
-class TinkRoutes 
-{
-	public function doTickets(d:Dispatch)
-		d.dispatch(new TicketRoutes());
-		
-	public function doLogin()
-		Sys.println(sapo.view.Login.render());
-
-	public function doDefault()
-		Sys.println(sapo.view.Summary.render());
-		
-	public function doRegistration()
-		Sys.println(sapo.view.Registration.render());
-		
-	public function doPayment()
-		Sys.println(sapo.view.Payment.render());
-	
-	public function doPayments()
-		Sys.println(sapo.view.Payments.render());
-
-	public function doSummary()
-		Sys.println(sapo.view.Summary.render());
-	
-	public function doSurveys()
-		Sys.println(sapo.view.Surveys.render());
-	
-	public function doSurvey(s:sapo.NewSurvey)
-		Sys.println(sapo.view.Survey.render(s));
-
-	public function new() {}
-}
-
-class TicketRoutes
-{
+class TicketRoutes {
 	public function doDefault(?args:{ ?ofUser:User, ?inbox:String, ?recipient:String, ?state:String })
 	{
 		if (args == null) args = { };
 		var tickets : List<Spod.Ticket> = new List();
-		
+
 		Sys.println(sapo.view.Tickets.render(tickets));
 	}
-	
+
 	public function doSearch(?args:{ ?ofUser:User, ?ticket:Ticket, ?survey:NewSurvey })
 	{
 		if (args == null) args = { };
@@ -59,60 +26,73 @@ class TicketRoutes
 			tickets = Ticket.manager.search($survey == args.survey);
 		Sys.println(sapo.view.Tickets.render(tickets));
 	}
-	
+
 	public function new() {}
 }
 
-class Routes 
-{
+class Routes {
 	public function doDefault()
 	{
-		Web.redirect("/tink/login");
+		if (Context.loop.session == null) Web.redirect("/login");
+		Web.redirect("/tickets");
 	}
 
-	public function doReset()
-	{
-		Index.dbReset();
-		Web.redirect("/");
-	}
+	public function doTickets(d:Dispatch)
+		d.dispatch(new TicketRoutes());
 
-	public function doTink(d:Dispatch)
-		d.dispatch(new TinkRoutes());
+	public function doRegistration()
+		Sys.println(sapo.view.Registration.render());
 
-	public function new() { }
+	public function doPayment()
+		Sys.println(sapo.view.Payment.render());
+
+	public function doPayments()
+		Sys.println(sapo.view.Payments.render());
+
+	public function doSummary()
+		Sys.println(sapo.view.Summary.render());
+
+	public function doSurveys()
+		Sys.println(sapo.view.Surveys.render());
+
+	public function doSurvey(s:sapo.NewSurvey)
+		Sys.println(sapo.view.Survey.render(s));
 
 	public function doLogin()
 	{
-		if (Web.getMethod() == "POST")
-		{
-			trace("WTF");
+		if (Web.getMethod() == "POST") {
 			var p = Web.getParams();
 			var email = p.get("email");
 			var pass = p.get("password");
-			
+
 			var u = User.manager.search($email == new EmailAddress(email), null, false).first();
-			if (u == null)
-			{
+			if (u == null) {
 				Web.redirect("default?error=" + StringTools.urlEncode("Usuário inválido!"));
 				return;
 			}
 			//TODO: Validade password!
-			if (u.password != pass)
-			{
+			if (!u.password.matches(pass)) {
 				Web.redirect("default?error=" + StringTools.urlEncode("Senha inválida!"));
 				return;
 			}
-			
-			var s = new Session();
-			//TODO: Gerar id
-			s.id = Random.global.readSimpleBytes(16).toHex();
-			s.user = u;
-			s.logtime = Date.now().getTime();
+
+			var s = new AuthSession(u);
 			s.insert();
-			
-			Web.setCookie("session_id", s.id);
-			Web.redirect("tink");
+			trace(s.expired());
+
+			Web.setCookie(AuthSession.COOKIE_KEY, s.id, s.expires_at);
+			Web.redirect("/");
+		} else {
+			Sys.println(sapo.view.Login.render());
 		}
 	}
+
+	public function doBye()
+	{
+		Context.loop.session.expire();
+		Web.redirect("/login");
+	}
+
+	public function new() { }
 }
 

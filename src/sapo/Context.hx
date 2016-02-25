@@ -1,31 +1,116 @@
 package sapo;
-import common.db.MoreTypes.Privilege;
-import common.Web;
-import sapo.Spod.AccessLevel;
-import sapo.Spod.Group;
-import sapo.Spod.Session;
-import sapo.Spod.User;
 
-/**
- * ...
- * @author Caio
- */
-class Context
-{
-	public var user(default, null) : User;
-	public var group(default, null) : Group;
-	public var privilege(default, null) : Privilege;
-	
-	public function new() 
+import common.Web;
+import common.crypto.Password;
+import common.db.MoreTypes;
+import common.spod.InitDB;
+import sapo.Spod;
+import sys.db.*;
+
+class Context {
+	static var DBPATH = Sys.getEnv("SAPO_DB");
+
+	public static var loop:Context;
+
+	public var now(default,null):HaxeTimestamp;
+	public var session(default,null):AuthSession;
+	public var user(default,null):User;
+	public var group(default,null):Group;
+	public var privilege(default,null):Privilege;
+
+	function new(now, session)
 	{
-		var sid = Web.getCookies().get("session_id");
-		var u = Session.manager.get(sid);
-		if (u != null)
+		this.now = now;
+		if (session != null)
 		{
-			this.user = u.user;
-			this.group = u.user.group;
-			this.privilege = u.user.group.privilege;
+			this.session = session;
+			this.user = session.user;
+			this.group = session.user.group;
+			this.privilege = session.user.group.privilege;
 		}
 	}
-	
+
+	static function dbInit()
+	{
+		var managers:Array<Manager<Dynamic>> = [
+			Group.manager,
+			NewSurvey.manager,
+			AuthSession.manager,
+			Ticket.manager,
+			TicketMessage.manager,
+			User.manager
+		];
+		for (m in managers)
+			if (!TableCreate.exists(m))
+				TableCreate.create(m);
+	}
+
+	public static function resetMainDb()
+	{
+		Manager.cleanup();
+		Manager.cnx.close();
+		Manager.cnx = null;
+		sys.FileSystem.deleteFile(DBPATH);
+		InitDB.run();
+		dbInit();
+
+		Manager.cnx.request("BEGIN");
+		try {
+			var superGroup = new Group(new AccessName("super"), PSuper);
+			superGroup.insert();
+
+			var arthur = new User(new AccessName("arthur"), superGroup, "Arthur Dent", new EmailAddress("arthur@sapo"));
+			arthur.password = Password.make("secret");
+			var ford = new User(new AccessName("ford"), superGroup, "Ford Prefect", new EmailAddress("ford@sapo"));
+			ford.password = Password.make("secret");
+
+			arthur.insert();
+			ford.insert();
+
+			var survey1 = new NewSurvey(ford, "Arthur's house", 945634);
+			var survey2 = new NewSurvey(arthur, "Betelgeuse, or somewhere near that planet", 6352344);
+			survey1.insert();
+			survey2.insert();
+
+			var ticket1 = new Ticket(survey1, arthur, "Overpass???");
+			ticket1.insert();
+			new TicketMessage(ticket1, arthur, ford, "Hey, I was distrought over they wanting to build an overpass over my house").insert();
+			new TicketMessage(ticket1, ford, arthur, "Don't panic... don't panic...").insert();
+
+			var ticket2 = new Ticket(survey2, ford, "About Time...");
+			ticket2.insert();
+			new TicketMessage(ticket2, ford, arthur, "Time is an illusion, lunchtime doubly so. ").insert();
+			new TicketMessage(ticket2, arthur, ford, "Very deep. You should send that in to the Reader's Digest. They've got a page for people like you.").insert();
+		} catch (e:Dynamic) {
+			Manager.cnx.request("ROLLBACK");
+			neko.Lib.rethrow(e);
+		}
+		Manager.cnx.request("COMMIT");
+	}
+
+	public static function init()
+	{
+		InitDB.run();
+		dbInit();
+	}
+
+	public static function shutdown()
+	{
+		if (Manager.cnx == null) return;
+		Manager.cnx.close();
+		Manager.cnx = null;
+	}
+
+	public static function iterate()
+	{
+		var key = AuthSession.COOKIE_KEY;
+		var cookies = Web.getAllCookies();
+		if (cookies.exists(key) && cookies[key].length > 1)
+			trace('WARNING multiple (${cookies[key].length}) values for cookie ${key}');
+
+		var sid = Web.getCookies()[key];  // FIXME
+		var session = AuthSession.manager.get(sid);
+		loop = new Context(Date.now(), session);
+	}
 }
+
