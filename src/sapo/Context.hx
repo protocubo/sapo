@@ -18,7 +18,6 @@ class Context
 	
 	public function new() 
 	{
-		super();
 		var sid = Web.getCookies().get("session_id");
 		var u = Session.manager.get(sid);
 		if (u != null)
