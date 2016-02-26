@@ -1,9 +1,9 @@
 package sapo;
 
+import common.Dispatch;
 import common.Web;
 import common.crypto.Random;
 import common.db.MoreTypes.EmailAddress;
-import haxe.web.Dispatch;
 import sapo.Spod;
 
 class TicketRoutes {
@@ -78,32 +78,31 @@ class Routes
 		Sys.println(sapo.view.Survey.render(s));
 
 	public function doLogin()
+		Sys.println(sapo.view.Login.render());
+
+	public function postLogin()
 	{
-		if (Web.getMethod() == "POST") {
-			var p = Web.getParams();
-			var email = p.get("email");
-			var pass = p.get("password");
+		var p = Web.getParams();
+		var email = p.get("email");
+		var pass = p.get("password");
 
-			var u = User.manager.search($email == new EmailAddress(email), null, false).first();
-			if (u == null) {
-				Web.redirect("default?error=" + StringTools.urlEncode("Usuário inválido!"));
-				return;
-			}
-			//TODO: Validade password!
-			if (!u.password.matches(pass)) {
-				Web.redirect("default?error=" + StringTools.urlEncode("Senha inválida!"));
-				return;
-			}
-
-			var s = new Session(u);
-			s.insert();
-			trace(s.expired());
-
-			Web.setCookie(Session.COOKIE_KEY, s.id, s.expires_at);
-			Web.redirect("/");
-		} else {
-			Sys.println(sapo.view.Login.render());
+		var u = User.manager.search($email == new EmailAddress(email), null, false).first();
+		if (u == null) {
+			Web.redirect("default?error=" + StringTools.urlEncode("Usuário inválido!"));
+			return;
 		}
+		//TODO: Validade password!
+		if (!u.password.matches(pass)) {
+			Web.redirect("default?error=" + StringTools.urlEncode("Senha inválida!"));
+			return;
+		}
+
+		var s = new Session(u);
+		s.insert();
+		trace(s.expired());
+
+		Web.setCookie(Session.COOKIE_KEY, s.id, s.expires_at);
+		Web.redirect("/");
 	}
 
 	public function doBye()
