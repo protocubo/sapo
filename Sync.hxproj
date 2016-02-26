@@ -22,7 +22,7 @@
     <option directives="" />
     <option flashStrict="False" />
     <option noInlineOnDebug="False" />
-    <option mainClass="sync.MainTemp" />
+    <option mainClass="sync.MainSync" />
     <option enabledebug="False" />
     <option additional="" />
   </build>

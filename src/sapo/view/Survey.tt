@@ -40,21 +40,11 @@ function imprimir() {
 
 	<!-- HEAD -->
 	<div class="row">
-		<div class="col-md-3">
-			<h2>
+		<div class="col-md-12">
+			<h2 style=" float:left;">
 				PESQUISA #(:survey.id:)
 			</h2>
-		</div>
-		<div class="col-md-3 apagar">
-			<h2>TICKET (A:1 / F:3)</h2>
-		</div>
-		<div class="col-md-3 text-right apagar">
-			<h2>
-				<a href="#" onclick="imprimir()"><span class="glyphicon glyphicon-print" aria-hidden="true"></span></a>
-			</h2>
-		</div>
-		<div class="col-md-3 text-right apagar">
-			<h2>
+			<h2 style=" float:right;">
 				<span class="glyphicon glyphicon-earphone" aria-hidden="true"></span>
 				<span class="glyphicon glyphicon-minus supervisor" aria-hidden="true"></span>
 				<span class="glyphicon glyphicon-ok telefonista" aria-hidden="true"></span>
@@ -69,14 +59,17 @@ function imprimir() {
 
 	<!-- ACTIONS -->
 	<div class="row">
-		<div class="col-md-2 col-md-offset-2">
+		<div class="col-md-2 col-md-offset-1">
+			<button type="button" class="btn btn-default" onclick="imprimir()">IMPRIMIR</button>
+		</div>
+		<div class="col-md-2">
 			<button type="button" class="btn btn-danger" id="corrigir">CORRIGIR</button>
 		</div>
 		<div class="col-md-2">
 			<button type="button" class="btn btn-warning" data-toggle="modal" data-target="#pesquisa_ticket">ABRIR TICKET</button>
 		</div>
 		<div class="col-md-2">
-			<button type="button" class="btn btn-warning">VER TICKETS</button>
+			<button type="button" class="btn btn-warning">TICKETS <span class="badge">4/2</span></button>
 		</div>
 		<div class="col-md-2">
 			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#pesquisa_status">MUDAR STATUS</button>
@@ -197,6 +190,7 @@ function imprimir() {
 							<option disabled selected>Selecione</option>
 							<option>Supervisor</option>
 							<option>Telefonista</option>
+							<option>Super</option>
 						</select>
 					</div>
 				</div>
@@ -225,33 +219,51 @@ function imprimir() {
 			</div>
 			<div class="modal-body">
 				<div class="row">
-					<div class="col-md-2"><h4>SV:</h4></div>
-					<div class="col-md-10">
-						<select class="form-control">
-							<option>COMPLETA</option>
-							<option>RECUSADA</option>
-							<option>ACEITA</option>
-						</select>
+					<div class="col-md-1 col-md-offset-4"><h4>SV:</h4></div>
+					<div class="col-md-3">
+						<div class="btn-group" data-toggle="buttons">
+							<label class="btn btn-default active" style="width:auto;">
+								<input type="radio" name="options" id="option1" autocomplete="off" checked> <span class="glyphicon glyphicon-minus supervisor" aria-hidden="true"></span>
+							</label>
+							<label class="btn btn-default" style="width:auto;">
+								<input type="radio" name="options" id="option2" autocomplete="off"> <span class="glyphicon glyphicon-ok supervisor" aria-hidden="true"></span>
+							</label>
+							<label class="btn btn-default" style="width:auto;">
+								<input type="radio" name="options" id="option3" autocomplete="off"> <span class="glyphicon glyphicon-remove supervisor" aria-hidden="true"></span>
+							</label>
+						</div>
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-md-2"><h4>CT:</h4></div>
-					<div class="col-md-10">
-						<select class="form-control">
-							<option>COMPLETA</option>
-							<option>RECUSADA</option>
-							<option>ACEITA</option>
-						</select>
+					<div class="col-md-1 col-md-offset-4"><h4>CT:</h4></div>
+					<div class="col-md-3">
+						<div class="btn-group" data-toggle="buttons">
+							<label class="btn btn-default active" style="width:auto;">
+								<input type="radio" name="options" id="option1" autocomplete="off" checked> <span class="glyphicon glyphicon-minus telefonista" aria-hidden="true"></span>
+							</label>
+							<label class="btn btn-default" style="width:auto;">
+								<input type="radio" name="options" id="option2" autocomplete="off"> <span class="glyphicon glyphicon-ok telefonista" aria-hidden="true"></span>
+							</label>
+							<label class="btn btn-default" style="width:auto;">
+								<input type="radio" name="options" id="option3" autocomplete="off"> <span class="glyphicon glyphicon-remove telefonista" aria-hidden="true"></span>
+							</label>
+						</div>
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-md-2"><h4>CQ:</h4></div>
-					<div class="col-md-10">
-						<select class="form-control">
-							<option>COMPLETA</option>
-							<option>RECUSADA</option>
-							<option>ACEITA</option>
-						</select>
+					<div class="col-md-1 col-md-offset-4"><h4>CQ:</h4></div>
+					<div class="col-md-3">
+						<div class="btn-group" data-toggle="buttons">
+							<label class="btn btn-default active" style="width:auto;">
+								<input type="radio" name="options" id="option1" autocomplete="off" checked> <span class="glyphicon glyphicon-minus super" aria-hidden="true"></span>
+							</label>
+							<label class="btn btn-default" style="width:auto;">
+								<input type="radio" name="options" id="option2" autocomplete="off"> <span class="glyphicon glyphicon-ok super" aria-hidden="true"></span>
+							</label>
+							<label class="btn btn-default" style="width:auto;">
+								<input type="radio" name="options" id="option3" autocomplete="off"> <span class="glyphicon glyphicon-remove super" aria-hidden="true"></span>
+							</label>
+						</div>
 					</div>
 				</div>
 			</div>

@@ -1,5 +1,7 @@
 package common.spod;
 import common.spod.EnumSPOD;
+import common.spod.statics.Referencias;
+import common.spod.statics.UF;
 import sys.db.Object;
 import sys.db.Types.SBool;
 import sys.db.Types.SDateTime;
@@ -18,9 +20,8 @@ import sys.db.Types.SString;
 class Ponto extends Object
 {
 	public var id : SId;
-	public var session_id : SInt;
-	@:relation(session_id) public var session : Session;
-	public var morador_id : SInt;
+	
+	@:relation(survey_id) public var survey : Survey;
 	@:relation(morador_id) public var morador : Morador;
 	
 	public var date : SDateTime;
@@ -33,14 +34,14 @@ class Ponto extends Object
 	
 	public var ordem : SNull<SInt>;
 	*/
-	public var uf_id : SInt;
+	@:relation(uf_id) public var uf : UF;
 	public var city_id : SInt;
 	public var regadm_id : SNull<SInt>;
 	public var street_id : SNull<SInt>;
 	public var complement_id : SNull<SInt>;
 	public var complement_two_id : SNull<SInt>;
 	public var complement2_str : SNull<SString<255>>;
-	public var ref_id : SNull<SInt>;
+	@:relation(ref_id) public var ref : SNull<Referencias>;
 	public var ref_str : SNull<SString<255>>;
 	
 	public var motivo : SNull<SEnum<Motivo>>;
@@ -48,10 +49,10 @@ class Ponto extends Object
 	public var tempo_saida : SNull<SString<255>>;
 	public var tempo_chegada : SNull<SString<255>>;
 	
-	public var copiedFrom_id : SNull<SInt>;
 	@:relation(copiedFrom_id) public var copiedFrom : SNull<Ponto>;
-	
+	public var isPontoProx : SNull<SBool>;
+	@:relation(pontoProx_id) public var pontoProx : SNull<Ponto>;
 	public var old_id : SInt;
 	public var syncTimestamp : SFloat;
-	public var old_session_id : SInt;
+	public var old_survey_id : SInt;
 }

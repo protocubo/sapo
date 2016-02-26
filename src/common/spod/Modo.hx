@@ -1,5 +1,7 @@
 package common.spod;
 import common.spod.EnumSPOD;
+import common.spod.statics.EstacaoMetro;
+import common.spod.statics.LinhaOnibus;
 import sys.db.Object;
 import sys.db.Types.SBool;
 import sys.db.Types.SDateTime;
@@ -18,11 +20,11 @@ class Modo extends Object
 {
 	public var id : SId;
 
-	@:relation(session_id) public var session : Session;
+	@:relation(survey_id) public var survey : Survey;
+	
 	@:relation(morador_id) public var morador : Morador;
 	
 	@:relation(firstpoint_id) public var firstpoint : Ponto;
-	
 	@:relation(secondpoint_id) public var secondpoint : Ponto;
 	
 	public var date : SDateTime;
@@ -32,13 +34,12 @@ class Modo extends Object
 	
 	public var meiotransporte : SEnum<MeioTransporte>;
 	
-	public var linhaOnibus_id : SNull<SInt>;
 	@:relation(linhaOnibus_id) public var linhaOnibus : SNull<LinhaOnibus>;
 	
-	public var estacaoEmbarque_id : SNull<SInt>;
-	//@:relation(estacaoEmbarque_id) public var estacaoEmbarque : SNull<EstacaoMetro>;
-	public var estacaoDesembarque_id : SNull<SInt>;
-	//@:relation(estacaoDesembarque_id) public var estacaoDesembarque : SNull<EstacaoMetro>;
+	
+	@:relation(estacaoEmbarque_id) public var estacaoEmbarque : SNull<EstacaoMetro>;
+	
+	@:relation(estacaoDesembarque_id) public var estacaoDesembarque : SNull<EstacaoMetro>;
 	
 	public var formaPagamento : SNull<SEnum<FormaPagamento>>;
 	public var tipoEstacionamento : SNull<SEnum<TipoEstacionamento>>;
@@ -50,7 +51,7 @@ class Modo extends Object
 	public var naoRespondeu : SNull<SBool>;
 	
 	public var syncTimestamp : SFloat;
-	public var old_session_id : SInt;
+	public var old_survey_id : SInt;
 	public var old_morador_id : SInt;
 	public var old_id : SInt;
 }

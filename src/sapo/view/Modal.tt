@@ -6,12 +6,12 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title" id="ticket(: ticket.id :)_fechar_label">FECHAR TICKET</h4>
+					<h4 class="modal-title" id="ticket(: ticket.id :)_fechar_label">FECHAR TICKET #(: ticket.id :)</h4>
 				</div>
 				<div class="modal-body">
 					<div class="row">
 						<div class="col-md-12">
-							<p>Deseja realmente fechar este Ticket?</p>
+							<p>Deseja realmente fechar o <b>Ticket #(: ticket.id :)</b>?</p>
 						</div>
 					</div>
 				</div>
@@ -32,7 +32,7 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title" id="ticket(: ticket.id :)_responder_label">RESPONDER TICKET</h4>
+					<h4 class="modal-title" id="ticket(: ticket.id :)_responder_label">RESPONDER TICKET #(: ticket.id :)</h4>
 				</div>
 				<div class="modal-body">
 					<div class="row">
@@ -56,7 +56,7 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title" id="ticket(: ticket.id :)_incluir_label">INCLUIR USUÁRIO OU GRUPO</h4>
+					<h4 class="modal-title" id="ticket(: ticket.id :)_incluir_label">INCLUIR USUÁRIO OU GRUPO NO TICKET #(: ticket.id :)</h4>
 				</div>
 				<div class="modal-body">
 					<div class="row">
@@ -97,37 +97,55 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title" id="ticket(: ticket.id :)_status_label">MUDAR STATUS</h4>
+					<h4 class="modal-title" id="ticket(: ticket.id :)_status_label">MUDAR STATUS DA PESQUISA (: ticket.survey.id :)</h4>
 				</div>
 				<div class="modal-body">
 					<div class="row">
-						<div class="col-md-2"><h4>SV:</h4></div>
-						<div class="col-md-10">
-							<select class="form-control">
-								<option>COMPLETA</option>
-								<option>RECUSADA</option>
-								<option>ACEITA</option>
-							</select>
+						<div class="col-md-1 col-md-offset-4"><h4>SV:</h4></div>
+						<div class="col-md-3">
+							<div class="btn-group" data-toggle="buttons">
+								<label class="btn btn-default active" style="width:auto;">
+									<input type="radio" name="options" id="option1" autocomplete="off" checked> <span class="glyphicon glyphicon-minus supervisor" aria-hidden="true"></span>
+								</label>
+								<label class="btn btn-default" style="width:auto;">
+									<input type="radio" name="options" id="option2" autocomplete="off"> <span class="glyphicon glyphicon-ok supervisor" aria-hidden="true"></span>
+								</label>
+								<label class="btn btn-default" style="width:auto;">
+									<input type="radio" name="options" id="option3" autocomplete="off"> <span class="glyphicon glyphicon-remove supervisor" aria-hidden="true"></span>
+								</label>
+							</div>
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-md-2"><h4>CT:</h4></div>
-						<div class="col-md-10">
-							<select class="form-control">
-								<option>COMPLETA</option>
-								<option>RECUSADA</option>
-								<option>ACEITA</option>
-							</select>
+						<div class="col-md-1 col-md-offset-4"><h4>CT:</h4></div>
+						<div class="col-md-3">
+							<div class="btn-group" data-toggle="buttons">
+								<label class="btn btn-default active" style="width:auto;">
+									<input type="radio" name="options" id="option1" autocomplete="off" checked> <span class="glyphicon glyphicon-minus telefonista" aria-hidden="true"></span>
+								</label>
+								<label class="btn btn-default" style="width:auto;">
+									<input type="radio" name="options" id="option2" autocomplete="off"> <span class="glyphicon glyphicon-ok telefonista" aria-hidden="true"></span>
+								</label>
+								<label class="btn btn-default" style="width:auto;">
+									<input type="radio" name="options" id="option3" autocomplete="off"> <span class="glyphicon glyphicon-remove telefonista" aria-hidden="true"></span>
+								</label>
+							</div>
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-md-2"><h4>CQ:</h4></div>
-						<div class="col-md-10">
-							<select class="form-control">
-								<option>COMPLETA</option>
-								<option>RECUSADA</option>
-								<option>ACEITA</option>
-							</select>
+						<div class="col-md-1 col-md-offset-4"><h4>CQ:</h4></div>
+						<div class="col-md-3">
+							<div class="btn-group" data-toggle="buttons">
+								<label class="btn btn-default active" style="width:auto;">
+									<input type="radio" name="options" id="option1" autocomplete="off" checked> <span class="glyphicon glyphicon-minus super" aria-hidden="true"></span>
+								</label>
+								<label class="btn btn-default" style="width:auto;">
+									<input type="radio" name="options" id="option2" autocomplete="off"> <span class="glyphicon glyphicon-ok super" aria-hidden="true"></span>
+								</label>
+								<label class="btn btn-default" style="width:auto;">
+									<input type="radio" name="options" id="option3" autocomplete="off"> <span class="glyphicon glyphicon-remove super" aria-hidden="true"></span>
+								</label>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -153,11 +171,11 @@
 				<div class="modal-body">
 					<div class="row">
 						<div class="col-md-2"><h4>Nome:</h4></div>
-						<div class="col-md-10"><input type="text" class="form-control" value="Filipe Horácio"></div>
+						<div class="col-md-10"><input type="text" class="form-control" value="(:cadastro.name:)"></div>
 					</div>
 					<div class="row">
 						<div class="col-md-2"><h4>E-mail:</h4></div>
-						<div class="col-md-10"><input type="text" class="form-control" value="filipehoracio@e-mail.com"></div>
+						<div class="col-md-10"><input type="text" class="form-control" value="(:cadastro.email:)"></div>
 					</div>
 					<div class="row">
 						<div class="col-md-2"><h4>Grupo:</h4></div>
@@ -202,7 +220,7 @@
 				<div class="modal-body">
 					<div class="row">
 						<div class="col-md-12">
-							<p>Deseja realmente desativar o usuário <b class="pesquisador">Filipe Horácio</b>?</p>
+							<p>Deseja realmente desativar o usuário <b class="pesquisador">(:cadastro.name:)</b>?</p>
 						</div>
 					</div>
 				</div>

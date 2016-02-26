@@ -13,7 +13,7 @@ class Context {
 	public static var loop:Context;
 
 	public var now(default,null):HaxeTimestamp;
-	public var session(default,null):AuthSession;
+	public var session(default,null):Session;
 	public var user(default,null):User;
 	public var group(default,null):Group;
 	public var privilege(default,null):Privilege;
@@ -35,7 +35,7 @@ class Context {
 		var managers:Array<Manager<Dynamic>> = [
 			Group.manager,
 			NewSurvey.manager,
-			AuthSession.manager,
+			Session.manager,
 			Ticket.manager,
 			TicketMessage.manager,
 			User.manager
@@ -111,13 +111,13 @@ class Context {
 
 	public static function iterate()
 	{
-		var key = AuthSession.COOKIE_KEY;
+		var key = Session.COOKIE_KEY;
 		var cookies = Web.getAllCookies();
 		if (cookies.exists(key) && cookies[key].length > 1)
 			trace('WARNING multiple (${cookies[key].length}) values for cookie ${key}');
 
 		var sid = Web.getCookies()[key];  // FIXME
-		var session = AuthSession.manager.get(sid);
+		var session = Session.manager.get(sid);
 		loop = new Context(Date.now(), session);
 	}
 }

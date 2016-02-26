@@ -18,21 +18,19 @@ import sys.db.Types.SString;
 class Familia extends Object
 {
 	public var id : SId;
-	public var session_id : SInt;
-	@:relation(session_id) public var session : Session;
+	@:relation(survey_id) public var survey : Survey;
 	
 	public var date : SDateTime;
+	public var tentativa_id : SInt;
 	public var isDeleted : SBool;
 	public var isEdited : SInt;
+	
 	
 	public var numeroResidentes : SNull<SInt>;
 	public var ocupacaoDomicilio : SNull<SEnum<OcupacaoDomicilio>>;
 	
 	public var condicaoMoradia : SNull<SEnum<CondicaoMoradia>>;
 	public var tipoImovel : SNull<SEnum<TipoImovel>>;
-	
-	
-	public var tentativa_id : SInt;
 	
 	public var banheiros : SNull<SInt>;
 	public var quartos : SNull<SInt>;
@@ -45,22 +43,17 @@ class Familia extends Object
 	public var vagaPropriaEstacionamento_id : SNull<SBool>;
 	public var anoVeiculoMaisRecente : SNull<SEnum<AnoVeiculoMaisRecente>>;
 	public var empregadosDomesticos : SNull<SEnum<EmpregadosDomesticos>>;
-	public var tvCabo : SNull<SBool>;
+	public var tvCabo_id : SNull<SBool>;
 	
-	public var editedNumeroResidentes : SNull<SInt>;
-	//?
-	public var editsNumeroResidentes : SNull<SString<255>>;
 	
 	public var nomeContato : SNull<SString<255>>;
 	public var telefoneContato : SNull<SString<255>>;
 	public var rendaDomiciliar : SNull<SEnum<RendaDomiciliar>>;
 	public var recebeBolsaFamilia : SNull<SBool>;
-	
-	public var codigoReagendamento : SNull<SString<255>>;
-	
+		
 	public var syncTimestamp : SFloat;
 	public var old_id : SInt;
-	public var old_session_id : SInt;
+	public var old_survey_id : SInt;
 	
 	
 }

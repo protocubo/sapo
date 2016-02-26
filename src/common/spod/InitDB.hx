@@ -1,6 +1,9 @@
 package common.spod;
 import common.spod.Familia;
 import common.spod.Modo;
+import common.spod.statics.EstacaoMetro;
+import common.spod.statics.LinhaOnibus;
+import haxe.io.Eof;
 import haxe.Json;
 import haxe.rtti.Meta;
 import common.spod.statics.Referencias;
@@ -39,12 +42,15 @@ class InitDB
 				TableCreate.create(Modo.manager);
 				TableCreate.create(Morador.manager);
 				TableCreate.create(Ponto.manager);
-				TableCreate.create(Session.manager);
+				TableCreate.create(Survey.manager);
+				TableCreate.create(Ocorrencias.manager);
 
 				/******/
 				TableCreate.create(Referencias.manager);
 				TableCreate.create(UF.manager);
-
+				TableCreate.create(LinhaOnibus.manager);
+				TableCreate.create(EstacaoMetro.manager);
+				populateStatics();
 				//Porrada de Enums
 				var classes = CompileTime.getAllClasses("common.spod", true, EnumTable);
 				for (c in classes)
@@ -60,7 +66,7 @@ class InitDB
 		}
 	}
 
-	public static function populateEnumTable()
+	static function populateEnumTable()
 	{
 		var classes = CompileTime.getAllClasses("common.spod", true, EnumTable);
 		trace(classes.length);
@@ -93,5 +99,49 @@ class InitDB
 		}
 
 
+	}
+	
+	static function populateStatics()
+	{
+		var path = "./private/csvs/";
+		if (!FileSystem.exists(path))
+		{
+			trace("No CSVs detected @./private/csvs/");
+			return;
+		}
+		
+		//Manager.cnx.startTransaction();
+		var files = FileSystem.readDirectory(path);
+		for (f in files)
+		{
+			if (StringTools.endsWith(f,".csv"))
+			{
+				var file = File.read(path + f, false);
+				try
+				{
+					var fields = file.readLine().split(";");
+					while (true)
+					{
+						var params = file.readLine().split(";");
+						var cl = Type.resolveClass("common.spod.statics." + f.split(".")[0]);
+						var instance = Type.createEmptyInstance(cl);
+						var i = 0;
+						while (i < fields.length)
+						{
+							Reflect.setField(instance, fields[i], params[i]);
+							i++;
+						}
+						instance.insert();
+					}
+				}
+				catch (e : Eof)
+				{
+					trace("File " + f +" added!");
+					Manager.cnx.commit();
+				}
+			}
+		}
+		
+		
 	}
 }

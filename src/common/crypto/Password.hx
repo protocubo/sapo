@@ -31,6 +31,9 @@ enum PasswordStore {
 }
 
 abstract Password(String) to String {
+	function new(pwd)
+		this = pwd;
+
 	static function concatBytes(a:Bytes, b:Bytes)
 	{
 		var res = Bytes.alloc(a.length + b.length);
@@ -109,9 +112,6 @@ abstract Password(String) to String {
 			false;
 		}
 	}
-
-	public function new(pwd)
-		this = pwd;
 
 	public static function make(plain:String, ?store:PasswordStore)
 	{
