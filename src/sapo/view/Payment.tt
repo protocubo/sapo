@@ -36,7 +36,7 @@
 			</thead>
 			<tbody>
 				
-				(: for p in Spod.Survey.manager.all() :)
+				(: for p in Spod.NewSurvey.manager.all() :)
 					(: Util.payment(p) :)
 				(: end :)
 

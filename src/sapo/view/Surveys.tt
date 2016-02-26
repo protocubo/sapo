@@ -1,5 +1,5 @@
 (: import sapo.Spod :)
-(: static function render() :)
+(: static function render(?surveys:List<Spod.NewSurvey>) :)
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,21 +15,34 @@
 	<!-- HEAD -->
 	<h2>PESQUISAS</h2>
 	<hr />
+	
+	<script>
+		//Disable 'User field' if 'group field' is not selected			
+		function disableUserField(v) {
+			if(v==""){
+				document.getElementById("userField").disabled = true;
+				document.getElementById('userField').selectedIndex = 0;
+			}else
+				document.getElementById("userField").disabled = false;
+		}
+	</script>
 
 	<!-- FILTROS -->
 	<h3>Filtros:</h3>
+	<form method="get">
 		<div class="row">
 			<div class="col-md-2"><h4>GRUPO:</h4></div>
 			<div class="col-md-2">
-				<select class="form-control">
-					<option>Selecione</option>
-					<option>Pesquisador</option>
-					<option>Supervisor</option>
+				<select class="form-control" name="group" onchange="disableUserField(this.value)">
+					<option value="" >Selecione</option>
+					(: for g in Spod.Group.manager.all() :)
+					<option value="(:g.id:)">(:g.group_name:)</option>
+					(: end :)
 				</select>
 			</div>
 			<div class="col-md-2"><h4>USUÁRIO</h4></div>
 			<div class="col-md-2">
-				<select class="form-control">
+				<select class="form-control" name="user" id="userField" disabled>
 					<option>Selecione</option>
 					<!-- pegar grupo: listar usuários da lista anterior -->
 				</select>
@@ -74,24 +87,29 @@
 				<button type="button" class="btn btn-primary">APLICAR</button>
 			</div>
 		</div>
-		<hr />
+	</form>
+	<hr />
+	
+	
 
 	<!-- BUSCA -->
 	<h3>Busca:</h3>
-	<div class="row">
-		<div class="col-md-2"><h4>Nº DA PESQUISA</h4></div>
-		<div class="col-md-2">
-			<input type="text" class="form-control" placeholder="Número da Pesquisa">
+	<form action="surveys/search" method="get">
+		<div class="row">
+			<div class="col-md-2"><h4>Nº DA PESQUISA</h4></div>
+			<div class="col-md-2">
+				<input type="text" name="survey" class="form-control" placeholder="Número da Pesquisa">
+			</div>
+			<div class="col-md-2 col-md-offset-6">
+				<button type="submit" value="submit" class="btn btn-primary">BUSCAR</button>
+			</div>
 		</div>
-		<div class="col-md-2 col-md-offset-6">
-			<button type="button" class="btn btn-primary">BUSCAR</button>
-		</div>
-	</div>
+	</form>
 	<hr />
 
 	<!-- PESQUISAS -->
 	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" style="margin-top: 60px;">
-		(: for s in Spod.Survey.manager.all() :)
+		(: for s in surveys :)
 			(: Util.survey(s) :)
 		(: end :)
 	</div>

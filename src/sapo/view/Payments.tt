@@ -39,7 +39,7 @@
 		</thead>
 		<tbody>
 
-			(: for p in Spod.Survey.manager.all() :)
+			(: for p in Spod.NewSurvey.manager.all() :)
 				(: Util.payments(p) :)
 			(: end :)
 
@@ -58,7 +58,7 @@
 
 (: Util.footer() :)
 
-	(: for m in Spod.Survey.manager.all() :)
+	(: for m in Spod.NewSurvey.manager.all() :)
 	(: Modal.modalpagamentospagar(m) :)
 	(: end :)
 

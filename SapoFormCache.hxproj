@@ -4,7 +4,7 @@
   <output>
     <movie outputType="Application" />
     <movie input="" />
-    <movie path="www\SapoodJS.js" />
+    <movie path="www\js\formcache.js" />
     <movie fps="0" />
     <movie width="0" />
     <movie height="0" />
@@ -22,7 +22,7 @@
     <option directives="" />
     <option flashStrict="False" />
     <option noInlineOnDebug="False" />
-    <option mainClass="js.MainJS" />
+    <option mainClass="sapo.js.FormCache" />
     <option enabledebug="False" />
     <option additional="" />
   </build>

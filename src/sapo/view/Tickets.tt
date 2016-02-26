@@ -1,10 +1,10 @@
 (: import sapo.Spod :)
 
-(: static function render(?ofUser:User) :)
+(: static function render(?tickets:List<Spod.Ticket> ) :)
 <!DOCTYPE html>
 <html>
 <head>
-(: Util.head("SAPO - Tickets") :)
+(: Util.head("SAPO - Tickets", {formCache:true}) :)
 </head>
 <body>
 	(: Util.navbar() :)
@@ -16,64 +16,97 @@
         <h2>TICKETS</h2>
         <hr />
 		
-		<!-- FILTROS -->
+		<!-- FILTROS -->		
 		<h3>Filtros:</h3>
-		<div class="row">
-			<div class="col-md-1"><h4>CAIXA:</h4></div>
-			<div class="col-md-2">
-				<select class="form-control">
-					<option>Entrada</option>
-					<option>Enviados</option>
-				</select>
+		<form method="get" name="filter">
+			<div class="row">
+				<div class="col-md-1"><h4>CAIXA:</h4></div>
+				<div class="col-md-2">
+					<select class="form-control" name="inbox" onchange="disableRecipients(this.value)">
+					<option value="all">Todos</option>
+						<option value="in">Entrada</option>
+						<option value="out">Enviados</option>
+					</select>
+				</div>
+				<div class="col-md-1"><h4>DESTINO</h4></div>
+				<div class="col-md-2">
+					<select class="form-control" id="recipientID" name="recipient">
+						<option value="all">Todos</option>
+						<option value="group">Grupo</option>
+						<option value="individual">Individual</option>
+					</select>
+				</div>
+				<div class="col-md-1"><h4>ESTADO</h4></div>
+				<div class="col-md-2">
+					<select class="form-control" name="state">
+						<option value="open">Não Fechadas</option>
+						<option value="closed">Fechadas</option>
+					</select>
+				</div>
+				<div class="col-md-2 col-md-offset-1">
+					<button type="submit" value="submit" class="btn btn-primary">APLICAR</button>
+				</div>
 			</div>
-			<div class="col-md-1"><h4>DESTINO</h4></div>
-			<div class="col-md-2">
-				<select class="form-control">
-					<option>Todos</option>
-					<option>Grupo</option>
-					<option>Individual</option>
-				</select>
-			</div>
-			<div class="col-md-1"><h4>ESTADO</h4></div>
-			<div class="col-md-2">
-				<select class="form-control">
-					<option>Não Fechadas</option>
-					<option>Fechadas</option>
-				</select>
-			</div>
-			<div class="col-md-2 col-md-offset-1">
-				<button type="button" class="btn btn-primary">APLICAR</button>
-			</div>
-		</div>
+		</form>
 		<hr />
+		
+		<script>
+			//Disable 'group' and 'all' options when inbox 'out' is selected
+			
+			function disableRecipients(s) {
+				var shouldDisable = true;
+				if(s == "out")
+					document.getElementById('recipientID').selectedIndex = 2;
+				else
+					shouldDisable = false; 
+				for (i = 0; i < 2; i++)
+					document.getElementById("recipientID").options[i].disabled = shouldDisable;
+			}
+		</script>
 
 		<!-- BUSCA -->
 		<h3>Busca:</h3>
-		<div class="row">
-			<div class="col-md-2"><h4>Nº DO TICKET</h4></div>
-			<div class="col-md-2">
-				<input type="text" class="form-control" placeholder="Número do Ticket">
+		<form action="/tickets/search" method="get">
+			<div class="row">
+				<div class="col-md-2"><h4>Nº DO TICKET</h4></div>
+				<div class="col-md-2">
+					<input type="text" name="ticket" id="ticketSearch" class="form-control" oninput="disableSearch(this.name, this.value)" placeholder="Número do Ticket">
+				</div>
+				<div class="col-md-2"><h4>Nº DA PESQUISA</h4></div>
+				<div class="col-md-2">
+					<input type="text" name="survey" id="surveySearch" class="form-control" oninput="disableSearch(this.name, this.value)" placeholder="Número da Pesquisa">
+				</div>
+				<div class="col-md-2 col-md-offset-2">
+					<button type="submit" value="submit" class="btn btn-primary">BUSCAR</button>
+				</div>
 			</div>
-			<div class="col-md-2"><h4>Nº DA PESQUISA</h4></div>
-			<div class="col-md-2">
-				<input type="text" class="form-control" placeholder="Número da Pesquisa">
-			</div>
-			<div class="col-md-2 col-md-offset-2">
-				<button type="button" class="btn btn-primary">BUSCAR</button>
-			</div>
-		</div>
+		</form>
 		<hr />
+		
+		<script>
+			//if ticket field is used survey field is disable and vice versa
+			function disableSearch(field, value) {
+				document.getElementById("surveySearch").disabled = false;
+				document.getElementById("ticketSearch").disabled = false;
+				if(field == "ticket" && value.length>0)
+					document.getElementById("surveySearch").disabled = true;
+				else if(field == "survey" && value.length>0)
+					document.getElementById("ticketSearch").disabled = true;
+			}
+		</script>		
+		
 
 		<!-- TICKETS -->
 		<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" style="margin-top: 60px;">
 			(:* gostaria disso: var users = Spod.Ticket.manager.search( (ofUser == null|| $author == ofUser) ) *:)
-			(: var users:List<Spod.Ticket> = Spod.Ticket.manager.search((ofUser!=null ? $author==ofUser : 1==1)) :)
-			(: for t in users :)
+			(:* var users:List<Spod.Ticket> = Spod.Ticket.manager.search((ofUser!=null ? $author==ofUser : 1==1)) *:)
+			
+			(: for t in tickets :)
 				(: Util.ticket(t) :)
 			(: end :)
 		</div>
 	</div>
-	(: for t in users :)
+	(: for t in tickets :)
 	(: Modal.modalticketfechar(t) :)
 	(: Modal.modalticketresponder(t) :)
 	(: Modal.modalticketincluir(t) :)

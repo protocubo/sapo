@@ -235,7 +235,7 @@
 	</div>
 (: end :)
 
-(: static function modalpagamentospagar(pagamentos:Spod.Survey) :)
+(: static function modalpagamentospagar(pagamentos:Spod.NewSurvey) :)
     <div class="modal fade" id="pagar(: pagamentos.id :)_um" tabindex="-1" role="dialog" aria-labelledby="pagar(: pagamentos.id :)_um_label">
         <div class="modal-dialog" role="document">
             <div class="modal-content">

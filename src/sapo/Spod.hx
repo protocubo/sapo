@@ -5,6 +5,8 @@ package sapo;
 
 import common.crypto.Password;
 import common.db.MoreTypes;
+import sapo.Spod.User;
+import sys.db.Object;
 import sys.db.Types;
 
 // necessary only because we need mentions to groups
@@ -42,7 +44,39 @@ class User extends sys.db.Object {
 	}
 }
 
-class Survey extends sys.db.Object {
+@:key(id)
+class Session extends Object {
+	public static inline var COOKIE_KEY = "session_id";
+	public static inline var DEFAULT_SESSION_DURATION = 3.6*1e6;  // ms
+
+	public var id:String;
+	@:relation(user_id) public var user:User;
+	public var created_at:HaxeTimestamp;
+	public var expires_at:HaxeTimestamp;
+	public var expired_at:Null<HaxeTimestamp>;
+
+	public function expired()
+		return expired_at != null || (expires_at < Context.loop.now);
+
+	public function expire(?autoUpdate=true)
+	{
+		if (expired_at != null) return;
+		expired_at = expires_at < Context.loop.now ? expires_at : Context.loop.now;
+		if (autoUpdate)
+			update();
+	}
+
+	public function new(user, ?duration=DEFAULT_SESSION_DURATION)
+	{
+		this.user = user;
+		id = common.crypto.Random.global.readSimpleBytes(16).toHex();
+		created_at = Context.loop.now;
+		expires_at = Context.loop.now + duration;
+		super();
+	}
+}
+
+class NewSurvey extends sys.db.Object {
 	public var id:SId;
 	@:relation(surveyor_id) public var surveyor:User;
 	public var closed_at:HaxeTimestamp;
@@ -65,7 +99,7 @@ class Survey extends sys.db.Object {
 
 class Ticket extends sys.db.Object {
 	public var id:SId;
-	@:relation(survey_id) public var survey:Survey;
+	@:relation(survey_id) public var survey:NewSurvey;
 	@:relation(author_id) public var author:User;
 	
 	public var opened_at:HaxeTimestamp;
@@ -86,7 +120,8 @@ class Ticket extends sys.db.Object {
 	}
 }
 
-class TicketMessage extends sys.db.Object {
+class TicketMessage extends sys.db.Object 
+{
 	public var id:SId;
 	@:relation(ticket_id) public var ticket:Ticket;
 	@:relation(author_id) public var author:User;

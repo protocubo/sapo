@@ -1,5 +1,6 @@
 (: import sapo.Spod :)
-(: static function head(title:String) :)
+
+(: static function head(title:String, ?use:{ formCache:Bool }) :)
 <!-- TITLE -->
 <meta charset="utf-8">
 <title>(: title :)</title>
@@ -16,8 +17,8 @@
 
 <!-- SAPO -->
 <link href="/css/sapo.css" rel="stylesheet" type="text/css" />
+(: if use != null && use.formCache :)<script src="/js/formcache.js"></script>(: end :)
 (: end :)
-
 
 (: static function navbar() :)
 <!-- NAVBAR -->
@@ -35,30 +36,30 @@
                 <ul class="nav navbar-nav">
 				    <!-- adicionar ~class="active"~ no <li> ativo; sem logar: só SAPO; logado (pesquisador): só pagamentos; logado (resto) todos menos pagamentos -->
                     <li><a href="#">SAPO</a></li>
-                    <li><a href="/tink/tickets">TICKETS</a></li> 
-                    <li><a href="/tink/surveys">PESQUISAS</a></li> 
+                    <li><a href="/tickets">TICKETS</a></li> 
+                    <li><a href="/surveys">PESQUISAS</a></li> 
 					<li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">SUMÁRIO <span class="caret"></span></a>
                         <ul class="dropdown-menu">
 						    <!-- todos os sumários -->
-                            <li><a href="/tink/summary">GERAL:STATUS</a></li>
+                            <li><a href="/summary">GERAL:STATUS</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">ADMINISTRAÇÃO <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="/tink/registration">CADASTRO</a></li>
-                            <li><a href="/tink/payments">PAGAMENTOS</a></li>
+                            <li><a href="/registration">CADASTRO</a></li>
+                            <li><a href="/payments">PAGAMENTOS</a></li>
                         </ul>
                     </li>
 					<!-- só o pesquisador verá essa aba, e somente esta -->
-                    <li><a href="/tink/payment">PAGAMENTOS</a></li> 
+                    <li><a href="/payment">PAGAMENTOS</a></li> 
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <!-- sem logar: vazio; logado: nome do usuário + @ + grupo - (class: super, telefonista, supervisor e pesquisador) -->
                     <li><a><b class="super">Nome@Grupo</b></a></li> <!-- pós login -->
 					<!-- sem logar: Entrar; logado: Sair -->
-                    <li><a href="#">Sair</a></li>
+                    <li><a href="/bye">Sair</a></li>
                 </ul>
             </div>
         </div>
@@ -149,7 +150,7 @@
 <!-- FIM TICKET -->
 (: end :)
 
-(: static function survey(survey:Spod.Survey) :)
+(: static function survey(survey:Spod.NewSurvey) :)
 <!-- PESQUISA -->
 <div class="panel panel-default">
 	<!-- HEAD PESQUISA -->
@@ -202,7 +203,7 @@
 </div>
 (: end :)
 
-(: static function payments(payments:Spod.Survey) :)
+(: static function payments(payments:Spod.NewSurvey) :)
 <!-- LINHA: checkbox, nome do pesquisador, número da pesquisa, data da pesquisa, refpagto, datapagto, pagar -->
 <tr>
 	<td>
@@ -222,7 +223,7 @@
 <!-- FIM LINHA -->
 (: end :)
 
-(: static function payment(payment:Spod.Survey) :)
+(: static function payment(payment:Spod.NewSurvey) :)
 <!-- LINHA: número da pesquisa, data da pesquisa, endereço, refpagto, datapagto, status -->
 <tr>
 	<td>(: payment.id:)</td>
