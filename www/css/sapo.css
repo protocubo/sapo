@@ -2,31 +2,29 @@
     position: relative;
     min-height: 100%;
 }
-
 body {
     margin-top: 90px;
-    margin-bottom: 60px;
+    margin-bottom: 50px;
     font-family: 'Roboto Condensed', sans-serif;
+}
+a:focus, a:hover {
+    text-decoration: none;
 }
 
 .footer {
     position: absolute;
     bottom: 0;
     width: 100%;
-    height: 60px;
+    height: 50px;
     background-color: #EEE;
 }
-a:focus, a:hover {
-    text-decoration: none;
-}
+
 .btn {
     width: 100%;
 }
-
 .navbar-nav > li > a {
     font-size: 15px;
 }
-
 .barraderolagem {
     overflow: auto;
     max-height: 300px;
@@ -38,41 +36,55 @@ a:focus, a:hover {
 }
 .viagem {
     display: block;
-    margin-left: 194px;
+    margin-left: 98px;
     margin-top: 10px;
+}
+.rodape {
+    color: #777;
+    display:inline-block;
+    font-size: 14px;
+    line-height: 14px;
+}
+.rodape a {
+    color: #777;
+}
+.rodape_logo {
+    height:50px;
+    float:right;
+    opacity: 0.5;
 }
 
 /*CORES GRUPOS*/
 
 .super {
-    color: #4C57B7;
+    color: #59B7A8;
 }
 
 .telefonista {
-    color: #316A3F;
+    color: #AD54C3;
 }
 
 .supervisor {
-    color: #B79E47;
+    color: #B76A40;
 }
 
 .pesquisador {
-    color: #C35150;
+    color: #646A31;
 }
 
 /*CORES STATUS*/
 
 .completa {
-    color: #0010B7;
+    color: #4C57B7;
 }
 .pendente {
-    color: #B78F00;
+    color: #B79E47;
 }
 .recusada {
-    color: #C30200;
+    color: #C35150;
 }
 .aceita {
-    color: #006A1F;
+    color: #316A3F;
 }
 
 /*ESPAÇAMENTO PARA MOBILE*/

@@ -1,5 +1,4 @@
 (: import sapo.Spod :)
-
 (: static function render(?tickets:List<Spod.Ticket> ) :)
 <!DOCTYPE html>
 <html>
