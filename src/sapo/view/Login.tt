@@ -5,13 +5,22 @@
 <html>
 <head>
 (: Util.head("SAPO") :)
+<script>
+$("document").ready(function()
+{
+	$(".btn").click(function()
+	{
+		$("form").submit();
+	});
+});
+</script>
 </head>
 <body>
 (: Util.navbar() :)
 
 	<!-- INDEX -->
 	<div class="container">
-
+	<form method="POST" action="/login">
 		<!-- HEAD -->
 		<h2>SAPO</h2>
 		<hr />
@@ -23,14 +32,15 @@
 			</div>
 			<div class="col-md-4">
 				<h3>E-mail:</h3>
-				<input type="email" class="form-control" />
+				<input type="email" name="email" class="form-control" required />
 				<h3>Senha:</h3>
-				<input type="password" class="form-control" />
+				<input type="password" name="password" class="form-control" required />
 				<hr />
 				<button type="button" class="btn btn-success">ENTRAR</button>
 			</div>
 		</div>
 		<hr />
+	</form>
 	 </div>
 
 (: Util.footer() :)

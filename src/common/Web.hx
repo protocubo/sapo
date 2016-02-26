@@ -3,6 +3,10 @@ package common;
 @:forwardStatics
 @:access(neko.Web)
 abstract Web(neko.Web) from neko.Web {
+#if neko
+	static var date_get_tz = neko.Lib.load("std","date_get_tz", 0);
+	static function getTimezoneDelta():Float return 1e3*date_get_tz();
+#end
 	/**
 		Returns all GET and POST parameters.
 	**/
@@ -37,4 +41,23 @@ abstract Web(neko.Web) from neko.Web {
 		}
 		return h;
 	}
+
+	/**
+		Set a Cookie value in the HTTP headers. Same remark as setHeader.
+
+		Fixed in regards to hosts running on timezones differents than GMT.
+	**/
+	public static function setCookie( key : String, value : String, ?expire: Date, ?domain: String, ?path: String, ?secure: Bool, ?httpOnly: Bool ) {
+		var buf = new StringBuf();
+		buf.add(value);
+		expire = DateTools.delta(expire, -getTimezoneDelta());
+		if( expire != null ) neko.Web.addPair(buf, "expires=", DateTools.format(expire, "%a, %d-%b-%Y %H:%M:%S GMT"));
+		neko.Web.addPair(buf, "domain=", domain);
+		neko.Web.addPair(buf, "path=", path);
+		if( secure ) neko.Web.addPair(buf, "secure", "");
+		if( httpOnly ) neko.Web.addPair(buf, "HttpOnly", "");
+		var v = buf.toString();
+		neko.Web._set_cookie(untyped key.__s, untyped v.__s);
+	}
 }
+

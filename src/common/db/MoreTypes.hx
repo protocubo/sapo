@@ -13,6 +13,11 @@ abstract HaxeTimestamp(Float) from Float to Float {
 	@:to public function toString():String
 		return toDate().toString();
 
+	@:op(A > B) public function gt(rhs:HaxeTimestamp):Bool;
+	@:op(A >= B) public function gte(rhs:HaxeTimestamp):Bool;
+	@:op(A < B) public function lt(rhs:HaxeTimestamp):Bool;
+	@:op(A <= B) public function lte(rhs:HaxeTimestamp):Bool;
+
 #if tink_template
 	@:to public function toHtml():tink.template.Html
 		return toDate().toString();
