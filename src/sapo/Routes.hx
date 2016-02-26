@@ -1,18 +1,54 @@
 package sapo;
 import common.db.MoreTypes.Privilege;
+import common.Dispatch;
 import common.Web;
 import common.crypto.Random;
 import common.db.MoreTypes.EmailAddress;
-import haxe.web.Dispatch;
 import sapo.Spod;
 
 @:build(sapo.MetaMacros.ReplaceMeta())
 class TicketRoutes {
-	@noauth
-	public function doDefault(?args:{ ?ofUser:User, ?inbox:String, ?recipient:String, ?state:String })
+	public function doDefault(?args:{ ?inbox:String, ?recipient:String, ?state:String })
 	{
 		if (args == null) args = { };
 		var tickets : List<Spod.Ticket> = new List();
+		var u = Context.loop.user;
+		var tickets : List<Ticket> = new List();
+		
+		tickets = Ticket.manager.search(
+		(args.inbox == "out"? $author == u : 1 == 1) &&
+		(args.state == "open"? $closed_at == null:$closed_at != null)
+		
+		);
+		
+		if (args.inbox == "out")
+		{
+			
+		}
+		else if (args.inbox == "in")
+		{
+			//Todo: Spod Recipients
+			//if(args.recipient == "all")
+			//	tickets = Ticket.manager.search( (args.state == "open"? $closed_at == null:$closed_at != null));
+			//else
+			//	tickets = Ticket.manager.search( (args.state == "open"? $closed_at == null:$closed_at != null));
+		}
+		else
+		{
+			
+		}
+		
+		/*tickets = Ticket.manager.search(
+		switch args.inbox {
+			case "in": 1 == 1; //$recipient == u;
+			case "out": $author == u;
+			default: 1==1;
+		}
+		
+		$author == u
+		
+		
+		);*/
 
 		Sys.println(sapo.view.Tickets.render(tickets));
 	}
@@ -94,32 +130,31 @@ class Routes
 
 	@noauth	
 	public function doLogin()
+		Sys.println(sapo.view.Login.render());
+
+	public function postLogin()
 	{
-		if (Web.getMethod() == "POST") {
-			var p = Web.getParams();
-			var email = p.get("email");
-			var pass = p.get("password");
+		var p = Web.getParams();
+		var email = p.get("email");
+		var pass = p.get("password");
 
-			var u = User.manager.search($email == new EmailAddress(email), null, false).first();
-			if (u == null) {
-				Web.redirect("default?error=" + StringTools.urlEncode("Usuário inválido!"));
-				return;
-			}
-			//TODO: Validade password!
-			if (!u.password.matches(pass)) {
-				Web.redirect("default?error=" + StringTools.urlEncode("Senha inválida!"));
-				return;
-			}
-
-			var s = new Session(u);
-			s.insert();
-			trace(s.expired());
-
-			Web.setCookie(Session.COOKIE_KEY, s.id, s.expires_at);
-			Web.redirect("/");
-		} else {
-			Sys.println(sapo.view.Login.render());
+		var u = User.manager.search($email == new EmailAddress(email), null, false).first();
+		if (u == null) {
+			Web.redirect("default?error=" + StringTools.urlEncode("Usuário inválido!"));
+			return;
 		}
+		//TODO: Validade password!
+		if (!u.password.matches(pass)) {
+			Web.redirect("default?error=" + StringTools.urlEncode("Senha inválida!"));
+			return;
+		}
+
+		var s = new Session(u);
+		s.insert();
+		trace(s.expired());
+
+		Web.setCookie(Session.COOKIE_KEY, s.id, s.expires_at);
+		Web.redirect("/");
 	}
 
 	@noauth

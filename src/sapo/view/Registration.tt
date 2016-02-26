@@ -64,8 +64,8 @@
 			(: for user in Spod.User.manager.all() :)
 			<tr>
 				(:* <td><b class="pesquisador">(:user.name:)@</b></td> *:)
-				<td><b class="(:user.group:)">(:user.name:)</b></td>
-				<td><b class="(:user.group:)">(:user.group:)</b></td>
+				<td><b class="(:user.group.group_name:)">(:user.name:)</b></td>
+				<td><b class="(:user.group.group_name:)">(:user.group.group_name:)</b></td>
 				<td>(:user.email:)</td>
 				<td><b class="supervisor">ToDo</b></td>
 				<td>

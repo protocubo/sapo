@@ -1,7 +1,7 @@
 package sapo;
 
 import haxe.PosInfos;
-import haxe.web.Dispatch;
+import common.Dispatch;
 import common.Web;
 import sapo.Spod;
 import sys.db.*;
@@ -19,6 +19,7 @@ class Index {
 			Context.init();  // for future optimized operation on tora
 			Context.iterate();
 
+                        var method = Web.getMethod();
 			var uri = Web.getURI();
 			if (uri == "/favicon.ico") return;
 
@@ -48,7 +49,10 @@ class Index {
 
 			// treat visibly empty params as missing
 			var cparams = [ for (k in params.keys()) if (StringTools.trim(params.get(k)).length > 0) k => params.get(k) ];
-			var d = new Dispatch(uri, cparams);
+			var d = new Dispatch(uri, cparams, method);
+                        trace(haxe.Unserializer.run(haxe.rtti.Meta.getType(Routes).dispatchConfig[0]));
+                        trace(haxe.Unserializer.run(haxe.rtti.Meta.getType(Routes.TicketRoutes).dispatchConfig[0]));
+                        trace(haxe.Unserializer.run(haxe.rtti.Meta.getType(Routes.SurveysRoutes).dispatchConfig[0]));
 			d.dispatch(new Routes());
 
 			Context.shutdown();
