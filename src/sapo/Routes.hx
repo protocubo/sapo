@@ -5,6 +5,7 @@ import common.crypto.Random;
 import common.db.MoreTypes.EmailAddress;
 import haxe.web.Dispatch;
 import sapo.Spod;
+import common.spod.Survey;
 
 class TicketRoutes {
 	public function doDefault(?args:{ ?ofUser:User, ?inbox:String, ?recipient:String, ?state:String })
@@ -33,13 +34,13 @@ class SurveysRoutes
 {
 	public function doDefault()
 	{
-		var surveys = NewSurvey.manager.all();
+		var surveys = Survey.manager.all();
 		Sys.println(sapo.view.Surveys.render(surveys));
 	}
-	public function doSearch(?args:{ ?survey:NewSurvey })
+	public function doSearch(?args:{ ?survey:Survey })
 	{
 		if (args == null) args = { };
-		var surveys : List<NewSurvey> = new List();
+		var surveys : List<Survey> = new List();
 		if (args.survey != null)
 			surveys.add(args.survey);
 		Sys.println(sapo.view.Surveys.render( surveys ));

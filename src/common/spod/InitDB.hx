@@ -51,7 +51,7 @@ class InitDB
 				TableCreate.create(LinhaOnibus.manager);
 				TableCreate.create(EstacaoMetro.manager);
 				populateStatics();
-				//Porrada de Enums
+				//Enums (many of them)
 				var classes = CompileTime.getAllClasses("common.spod", true, EnumTable);
 				for (c in classes)
 					TableCreate.create(Reflect.field(c, "manager"));

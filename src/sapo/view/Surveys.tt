@@ -1,5 +1,5 @@
-(: import sapo.Spod :)
-(: static function render(?surveys:List<Spod.NewSurvey>) :)
+(: import common.spod.Survey :)
+(: static function render(?surveys:List<Survey>) :)
 <!DOCTYPE html>
 <html>
 <head>
