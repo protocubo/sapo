@@ -72,6 +72,7 @@ class Redirect {
 }
 
 class Dispatch {
+	static var prefixes = ["post", "get", "do"];
 
 	public var method : String;
 	public var parts : Array<String>;
@@ -120,7 +121,7 @@ class Dispatch {
 			name = "default";
 		name = resolveName(name);
 		this.cfg = cfg;
-		var r : DispatchRule = Reflect.field(cfg.rules, name);
+		var r = Reflect.field(cfg.rules, name);
 		if( r == null ) {
 			r = Reflect.field(cfg.rules, "default");
 			if( r == null )
@@ -128,10 +129,20 @@ class Dispatch {
 			parts.unshift(name);
 			name = "default";
 		}
-		name = "do" + name.charAt(0).toUpperCase() + name.substr(1);
+		var rv : DispatchRule = null;
+		for (p in prefixes) {
+			if (!Reflect.hasField(r, p)) continue;
+			if (p == "do" || p == method) {
+				rv = Reflect.field(r, p);
+				name = p + name.charAt(0).toUpperCase() + name.substr(1);
+				break;
+			}
+		}
+		if (rv == null)
+			throw DENotFound(name);
 		var args = [];
 		subDispatch = false;
-		loop(args, r);
+		loop(args, rv);
 		if( parts.length > 0 && !subDispatch ) {
 			if( parts.length == 1 && parts[parts.length - 1] == "" ) parts.pop() else throw DETooManyValues;
 		}
@@ -373,8 +384,6 @@ class Dispatch {
 		return null;
 	}
 
-	static var prefixes = [/*"post", "get",*/"do"];
-
 	static function getPrefix(name:String)
 	{
 		for (p in prefixes)
@@ -397,18 +406,27 @@ class Dispatch {
 		var t = Context.typeof(obj);
 		switch( Context.follow(t) ) {
 		case TAnonymous(fl):
-			var fields = [];
+			var fields = new Map();
 			for( f in fl.get().fields ) {
-				if (getPrefix(f.name) == null)
+				var prefix = getPrefix(f.name);
+				if (prefix == null)
 					continue;
 				if (!f.meta.has(':keep'))
 					f.meta.add(':keep', [], f.pos);
 				var r = makeRule(f);
-				fields.push( { field : deprefix(f.name), expr : Context.makeExpr(r,p) } );
+				var name = deprefix(f.name);
+				var rf = fields.get(name);
+				if (rf == null) fields.set(name, rf = []);
+				rf.push({ field : prefix, expr : Context.makeExpr(r,p) });
 			}
-			if( fields.length == 0 )
+			var decl = [];
+			for (name in fields.keys()) {
+				var fexpr = { expr : EObjectDecl(fields.get(name)), pos : p };
+				decl.push({ field : name, expr : fexpr });
+			}
+			if( decl.length == 0 )
 				Context.error("No dispatch method found", p);
-			var rules = { expr : EObjectDecl(fields), pos : p };
+			var rules = { expr : EObjectDecl(decl), pos : p };
 			return { expr : EObjectDecl([ { field : "obj", expr : obj }, { field : "rules", expr : rules } ]), pos : p };
 		case TInst(i, _):
 			var i = i.get();
@@ -418,7 +436,8 @@ class Dispatch {
 				var tmp = i;
 				while( true ) {
 					for( f in tmp.fields.get() ) {
-						if (getPrefix(f.name) == null)
+						var prefix = getPrefix(f.name);
+						if (prefix == null)
 							continue;
 						if (!f.meta.has(':keep'))
 							f.meta.add(':keep', [], f.pos);
@@ -429,7 +448,10 @@ class Dispatch {
 								r = DRMeta(r);
 								break;
 							}
-						Reflect.setField(fields, deprefix(f.name), r);
+						var name = deprefix(f.name);
+						var rf = Reflect.field(fields, name);
+						if (rf == null) Reflect.setField(fields, name, rf = {});
+						Reflect.setField(rf, prefix, r);
 					}
 					if( tmp.superClass == null )
 						break;
