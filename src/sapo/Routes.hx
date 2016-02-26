@@ -147,6 +147,7 @@ class Routes
 	public function doLogin()
 		Sys.println(sapo.view.Login.render());
 
+	@noauth	
 	public function postLogin()
 	{
 		var p = Web.getParams();
