@@ -5,6 +5,10 @@ import common.spod.Modo;
 import common.spod.Morador;
 import common.spod.Ocorrencias;
 import common.spod.Ponto;
+import common.spod.statics.EstacaoMetro;
+import common.spod.statics.LinhaOnibus;
+import common.spod.statics.Referencias;
+import common.spod.statics.UF;
 import common.spod.Survey;
 import haxe.Http;
 import haxe.Json;
@@ -282,8 +286,13 @@ class MainSync
 						new_point.pontoProx = pointhash.get(p.pontoProxRef_id);
 					case "isDeleted", "isPontoProx":
 						new_point.isDeleted = (p.isDeleted == 1);
+					//Static refs
+					case "uf_id":
+						new_point.uf = UF.manager.get(p.uf_id);
+					case "ref_id":
+						new_point.ref = Referencias.manager.get(p.ref_id);
 					//ctrl+c ctrl+v
-					case "date", "isEdited", "uf_id", "city_id", "regadm_id", "street_id", "complement_id", "complement_two_id", "complement2_str", "ref_id", "ref_str", "tempo_saida", "tempo_chegada":
+					case "date", "isEdited", "uf_id", "city_id", "regadm_id", "street_id", "complement_id", "complement_two_id", "complement2_str", "ref_str", "tempo_saida", "tempo_chegada":
 						Reflect.setField(new_point, field, Reflect.field(p, field));
 					//Enums
 					case "motivoID", "motivoOutraPessoaID":
@@ -329,11 +338,15 @@ class MainSync
 					case "meiotransporte_id":
 						if (Macros.checkEnumValue(MeioTransporte, m.meiotransporte_id))
 							new_modo.meiotransporte = Macros.getStaticEnum(MeioTransporte, m.meiotransporte_id);
+					case "estacaoEmbarque_id", "estacaoDesembarque_id":
+						Reflect.setProperty(new_modo, f.split("_")[0], EstacaoMetro.manager.get(Reflect.field(m, f)));
+					case "linhaOnibus_id":
+						new_modo.linhaOnibus = LinhaOnibus.manager.get(m.linhaOnibus_id);
 					case "formaPagamento_id", "tipoEstacionamento_id":
 						Macros.setEnumField(f, new_modo, m);
 					case "isDeleted":
 						new_modo.isDeleted = (m.isDeleted == 1);
-					case "date", "isEdited", "linhaOnibus_id":
+					case "date", "isEdited":
 						Reflect.setField(new_modo, f, Reflect.field(m, f));
 					//Conversoes de um mte de field pra um 
 					case "valorPagoTaxi", "valorViagem", "custoEstacionamento":

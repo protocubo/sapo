@@ -1,5 +1,7 @@
 package common.spod;
 import common.spod.EnumSPOD;
+import common.spod.statics.Referencias;
+import common.spod.statics.UF;
 import sys.db.Object;
 import sys.db.Types.SBool;
 import sys.db.Types.SDateTime;
@@ -32,14 +34,14 @@ class Ponto extends Object
 	
 	public var ordem : SNull<SInt>;
 	*/
-	public var uf_id : SInt;
+	@:relation(uf_id) public var uf : UF;
 	public var city_id : SInt;
 	public var regadm_id : SNull<SInt>;
 	public var street_id : SNull<SInt>;
 	public var complement_id : SNull<SInt>;
 	public var complement_two_id : SNull<SInt>;
 	public var complement2_str : SNull<SString<255>>;
-	public var ref_id : SNull<SInt>;
+	@:relation(ref_id) public var ref : SNull<Referencias>;
 	public var ref_str : SNull<SString<255>>;
 	
 	public var motivo : SNull<SEnum<Motivo>>;
