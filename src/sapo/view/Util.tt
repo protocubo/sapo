@@ -152,7 +152,7 @@
 <!-- FIM TICKET -->
 (: end :)
 
-(: static function survey(survey:Spod.NewSurvey) :)
+(: static function survey(survey:common.spod.Survey) :)
 <!-- PESQUISA -->
 <div class="panel panel-default">
 	<!-- HEAD PESQUISA -->
@@ -161,14 +161,14 @@
 			<div class="col-md-4 panel-title">
 				<!-- Nº da Pesquisa, Data da Pesquisa -->
 				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyPesquisa(: survey.id :)" aria-expanded="true" aria-controls="BodyPesquisa(: survey.id :)">
-					(: survey.id :) - 01/01/2016 - <b class="pesquisador">Nome</b> - <b class="supervisor">Fulano</b>
+					(: survey.id :) - (: survey.date_completed :) - <b class="pesquisador"> (:* survey.surveyor *:) Dilbert</b> - <b class="supervisor">(:* survey.supervisor *:) Magali</b>
 				</a>
 			</div>
 			<div class="col-md-6 panel-title">
 				<!-- Endereço -->
 				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyPesquisa(: survey.id :)" aria-expanded="true" aria-controls="BodyPesquisa(: survey.id :)">
-					R. Itamirindiba, 3 - São Paulo/SP 
-				</a>
+			    (: survey.logradouro:) , (:survey.numero:)
+                </a>
 			</div>
 			<div class="col-md-2 panel-title text-right">
 				<!-- se:foi ligado -->
@@ -186,18 +186,25 @@
 			<div class="row">
 				<div class="col-md-12 barraderolagem">
 					<!-- DADOS DA PESQUISA -->
-					<p><b>Endereço:</b> Setor SCN QD. 02 Torre A Shopping Liberty Mall, SL 212 Asa Norte - Brasília </p>
-					<p><b>Contato:</b> Marcelo - (61) 98765432</p>
-					<p><b>Senha:</b> 9841321687</p>
+					<p><b>Endereço:</b>  (: survey.logradouro :) , (: survey.numero :)  (: survey.complemento :), (: survey.bairro :) </p>
+					
+					(: for d in common.spod.Familia.manager.search($survey_id == survey.id, { orderBy:-syncTimestamp, limit : 1 }) :) (:* FIXME syncTimestamp  *:)
+                    <p><b>Contato:</b> (: d.nomeContato :) - (: d.telefoneContato :) </p>
+                    (: end :)
+					<p><b>Senha:</b> (: survey.pin :) </p>
 					<p><b>Moradores:</b></p>
-					<p>Marcelo (25): Residência - Trabalho - Residência</p>
-					<p>Maria (23): Residência - Trabalho - Residência</p>
-					<p>Cristiano (57): Residência - Lazer - Residência</p>
-					<p>Tereza (78): Residência - Lazer - Residência</p>
+					(: for m in common.spod.Morador.manager.search($survey_id == survey.id)  :) 
+                        (: var dash = false :)
+                            <p> (: m.nomeMorador :) ( (: m.idade :) ) : 
+                            (: for p in common.spod.Ponto.manager.search($morador_id == m.id)  :)
+                                (: if dash :) - (: end :)(: p.motivo :) (: do dash = true :)  
+                            (: end :)
+                            </p>
+                    (: end :)
 				</div>
 			</div>
 			<div class="row" style="margin-top: 30px;">
-				<div class="col-md-2 col-md-offset-10"><a href="survey/(: survey.id :)" class="btn btn-primary btn-sm">VER PESQUISAS</a></div>
+				<div class="col-md-2 col-md-offset-10"><a href="survey/(: survey.id :)" class="btn btn-primary btn-sm">VER PESQUISA</a></div>
 			</div>
 		</div>
 	</div>
