@@ -1,5 +1,4 @@
 (: import sapo.Spod :)
-
 (: static function render() :)
 <!DOCTYPE html>
 <html>
@@ -122,7 +121,7 @@
 
 		// Set chart options
 		var options = {
-			'colors': ['#B79E47', '#316A3F', '#4C57B7', '#0010B7', '#B78F00'],
+			'colors': ['#B76A40', '#AD54C3', '#59B7A8', '#4C57B7', '#B79E47'],
 			'legend': { position: 'none' },
 			'hAxis': { textPosition: 'none' },
 			'vAxis': { textPosition: 'none' },
@@ -134,7 +133,7 @@
 		};
 		// Set chart options
 		var options2 = {
-			'colors': ['#006A1F'],
+			'colors': ['#316A3F'],
 			'legend': { position: 'none' },
 			'hAxis': { textPosition: 'none' },
 			'vAxis': { textPosition: 'none' },
@@ -144,7 +143,7 @@
 		};
 		// Set chart options
 		var options3 = {
-			'colors': ['#C30200'],
+			'colors': ['#C35150'],
 			'legend': { position: 'none' },
 			'hAxis': { textPosition: 'none' },
 			'vAxis': { textPosition: 'none' },
@@ -176,12 +175,11 @@
 	<div class="row">
 		<div class="col-md-12">
 			<h4>
-				TOTAIS :
-				<span class="supervisor">SUPERVISOR</span> | 
-				<span class="telefonista">TELEFONISTA</span> | 
-				<span class="super">QUALIDADE</span> 
-				(<span class="completa">COMPLETA</span> / 
-				<span class="pendente">PENDENTE</span>)
+				<span class="supervisor"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> SUPERVISOR</span> | 
+				<span class="telefonista"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> TELEFONISTA</span> | 
+				<span class="super"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> QUALIDADE</span>  | 
+				<span class="completa"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> COMPLETA</span> | 
+				<span class="pendente"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> PENDENTE</span>
 			</h4>
 			<hr />
 			<div id="chart_div"></div>
@@ -288,15 +286,11 @@
 			</table>
 		</div>
 		<div class="col-md-6">
-			<h4 class="aceita">
-				ACEITAS
-			</h4>
+			<h4 class="aceita"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> ACEITAS</h4>
 			<hr />
 			<div id="chart_div2"></div>
 			<hr />
-			<h4 class="recusada">
-				RECUSADAS	
-			</h4>
+			<h4 class="recusada"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> RECUSADAS</h4>
 			<hr />
 			<div id="chart_div3"></div>
 		</div>

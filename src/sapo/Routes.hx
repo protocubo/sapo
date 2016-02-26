@@ -65,6 +65,15 @@ class Routes
 	public function doPayment()
 		Sys.println(sapo.view.Payment.render());
 
+	public function doAbout()
+		Sys.println(sapo.view.About.render());
+
+	public function doHelp()
+		Sys.println(sapo.view.Help.render());
+
+		public function doLicenses()
+		Sys.println(sapo.view.Licenses.render());
+
 	public function doPayments()
 		Sys.println(sapo.view.Payments.render());
 

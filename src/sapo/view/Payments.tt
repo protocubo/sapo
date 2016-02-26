@@ -1,5 +1,4 @@
 (: import sapo.Spod :)
-
 (: static function render() :)
 <!DOCTYPE html>
 <html>
@@ -48,7 +47,7 @@
 			<tr>
 				<td colspan="7" align="right">
 					<button type="button" class="btn btn-success btn-xs" aria-label="Desativar" style="width:auto;" data-toggle="modal" data-target="#pagar_selecionadas">
-						REGISTRAR PAGAMENTO NAS SELECIONADAS <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+						REGISTRAR PAGAMENTO NAS SELECIONADAS
 					</button>
 				</td>
 			</tr>

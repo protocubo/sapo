@@ -1,5 +1,4 @@
 (: import sapo.Spod :)
-
 (: static function head(title:String, ?use:{ formCache:Bool }) :)
 <!-- TITLE -->
 <meta charset="utf-8">
@@ -35,7 +34,6 @@
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
 				    <!-- adicionar ~class="active"~ no <li> ativo; sem logar: só SAPO; logado (pesquisador): só pagamentos; logado (resto) todos menos pagamentos -->
-                    <li><a href="#">SAPO</a></li>
                     <li><a href="/tickets">TICKETS</a></li> 
                     <li><a href="/surveys">PESQUISAS</a></li> 
 					<li class="dropdown">
@@ -54,11 +52,12 @@
                     </li>
 					<!-- só o pesquisador verá essa aba, e somente esta -->
                     <li><a href="/payment">PAGAMENTOS</a></li> 
+                    <li><a href="/help">AJUDA</a></li> 
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <!-- sem logar: vazio; logado: nome do usuário + @ + grupo - (class: super, telefonista, supervisor e pesquisador) -->
-                    <li><a><b class="super">Nome@Grupo</b></a></li> <!-- pós login -->
-					<!-- sem logar: Entrar; logado: Sair -->
+                    <li><a><span class="super">Nome@Grupo</span></a></li> <!-- pós login -->
+					<!-- sem logar: Entrar; logado: SAIR -->
                     <li><a href="/bye">Sair</a></li>
                 </ul>
             </div>
@@ -70,8 +69,12 @@
 <!-- FOOTER -->
     <footer class="footer">
         <div class="container">
-            <h3 class="text-muted" style="display:inline-block;"> SAPO OD DF 2016</h3>
-            <img src="/resources/sapo_logo.png" style="height:60px; float:right;">
+            <h3 class="rodape">
+				<b>SAPO</b> OD DF 2016 | 
+				<a href="/about">SOBRE</a> | 
+				<a href="/licenses">LICENÇAS</a>
+			</h3>
+            <img src="/resources/sapo_logo.png" class="rodape_logo">
         </div>
     </footer>
 (: end :)
@@ -141,7 +144,7 @@
 				<div class="col-md-2"><button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_fechar">FECHAR</button></div>
 				<div class="col-md-2"><button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_responder">RESPONDER</button></div>
 				<div class="col-md-2"><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_incluir">INCLUIR</button></div>
-				<div class="col-md-2 col-md-offset-1"><a href="survey/(: ticket.survey.id :)" type="button" class="btn btn-primary btn-sm">VER PESQUISA</a></div>
+				<div class="col-md-2 col-md-offset-1"><a href="/survey/(: ticket.survey.id :)" type="button" class="btn btn-primary btn-sm">VER PESQUISA</a></div>
 				<div class="col-md-2"><button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_status">MUDAR STATUS</button></div>
 			</div>
 		</div>
@@ -195,7 +198,7 @@
 				</div>
 			</div>
 			<div class="row" style="margin-top: 30px;">
-				<div class="col-md-2 col-md-offset-10"><a href="survey/(: survey.id :)" class="btn btn-primary btn-sm">VER PESQUISAS</a></div>
+				<div class="col-md-2 col-md-offset-10"><a href="/survey/(: survey.id :)" class="btn btn-primary btn-sm">VER PESQUISAS</a></div>
 			</div>
 		</div>
 	</div>
@@ -209,9 +212,9 @@
 	<td>
 		<input type="checkbox" />
 	</td>
-	<td>Filipe Horácio</td>
+	<td>(: payments.surveyor.name :)</td>
 	<td>(: payments.id :)</td>
-	<td>21/03/2016</td>
+	<td>(: payments.closed_at :)</td>
 	<td></td>
 	<td></td>
 	<td align="right">

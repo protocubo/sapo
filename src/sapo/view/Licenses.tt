@@ -1,0 +1,39 @@
+(: import sapo.Spod :)
+(: static function render() :)
+<!DOCTYPE html>
+<html>
+<head>
+(: Util.head("SAPO – Licenças") :)
+</head>
+<body>
+(: Util.navbar() :)
+	
+<!-- LICENSES -->
+<div class="container">
+
+	<!-- HEAD -->
+	<h2>LICENÇAS</h2>
+	<hr />
+	<div class="row">
+		<div class="col-md-12">
+			<!-- MODEL -->
+			<h3>Título</h3>
+			<h4>Lorem ipsum dolor sit amet, consectetur adipiscing elit. </h4>
+			<p>Nullam mi nisi, accumsan ac dapibus at, suscipit in dolor. Integer laoreet ex ex, at maximus quam maximus sed. Aenean dignissim, magna vitae pellentesque mattis, ante lacus malesuada arcu, quis sollicitudin massa enim sed mauris. Nunc commodo augue finibus urna laoreet, vitae luctus quam sagittis. Nulla facilisi. Donec viverra quis ex ac cursus. Vestibulum feugiat finibus felis eu dignissim.</p>
+			<hr>
+
+			<!-- Bootstrap -->
+			<h3><a href="https://github.com/twbs/bootstrap">Bootstrap</a></h3>
+			<h4><p>Code licensed <a rel="license" href="https://github.com/twbs/bootstrap/blob/master/LICENSE" target="_blank">MIT</a>, docs <a rel="license" href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC BY 3.0</a>.</p></h4>
+			<p>Code and documentation copyright 2011-2016 Twitter, Inc. Code released under <a href="https://github.com/twbs/bootstrap/blob/master/LICENSE">the MIT license</a>. Docs released under <a href="https://github.com/twbs/bootstrap/blob/master/docs/LICENSE">Creative Commons</a>.</p>
+			<hr>
+
+		</div>
+	</div>
+</div>
+<hr />
+
+(: Util.footer() :)
+</body>
+</html>
+(: end :)

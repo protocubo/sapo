@@ -37,10 +37,7 @@
 		</div>
 		<div class="col-md-2 col-md-offset-4">
 			<!-- ADIÇÃO -->
-			<button type="button" class="btn btn-success" data-toggle="modal" data-target="#cadastro_adicionar">
-				<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-				ADICIONAR
-			</button>
+			<button type="button" class="btn btn-success" data-toggle="modal" data-target="#cadastro_adicionar">ADICIONAR</button>
 		</div>
 
 	</div>
