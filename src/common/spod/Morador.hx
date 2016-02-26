@@ -36,8 +36,8 @@ class Morador extends Object
 	public var possuiHabilitacao_id : SNull<SBool>;
 	public var portadorNecessidadesEspeciais : SNull<SEnum<PortadorNecessidadesEspeciais>>;
 	//TODO
-	public var setorAtividadeEmpresaPrivada : SNull<SEnum<SetorAtividadeEmpresaPrivada>;
-	public var setorAtividadeEmpresaPublica : SNull<SEnum<SetorAtividadeEmpresaPublica>;
+	public var setorAtividadeEmpresaPrivada : SNull<SEnum<SetorAtividadeEmpresaPrivada>>;
+	public var setorAtividadeEmpresaPublica : SNull<SEnum<SetorAtividadeEmpresaPublica>>;
 	
 	public var motivoSemViagem : SNull<SEnum<MotivoSemViagem>>;
 	
