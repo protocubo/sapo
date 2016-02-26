@@ -20,110 +20,146 @@
 	function drawChart() {
 
 		// Create the data table.
-		var data = new google.visualization.DataTable();
-		data.addColumn('string', 'Status');
-		data.addColumn('number', 'Pesquisas');
-		data.addRows([
-		  ['Completas', 29 ],
-		  ['Pendentes', 203]
+		var data = new google.visualization.arrayToDataTable([
+			[	'Data',			'Supervisor',	'Telefonista',	'Qualidade',	'Completas',	'Pendentes' ],
+			[	'07/03/2016',	32,				48,				79,				105,			2			],
+			[	'08/03/2016',	76,	59,	73,	117,	19	],
+			[	'09/03/2016',	33,	36,	25,	114,	7	],
+			[	'10/03/2016',	96,	65,	30,	117,	14	],
+			[	'11/03/2016',	8,	100,	47,	100,	2	],
+			[	'12/03/2016',	88,	52,	70,	103,	36	],
+			[	'13/03/2016',	35,	19,	65,	104,	23	],
+			[	'14/03/2016',	88,	24,	4,	103,	9	],
+			[	'15/03/2016',	49,	53,	7,	113,	1	],
+			[	'16/03/2016',	4,	65,	33,	104,	22	],
+			[	'17/03/2016',	22,	7,	88,	113,	25	],
+			[	'18/03/2016',	35,	9,	40,	111,	8	],
+			[	'19/03/2016',	27,	96,	65,	109,	37	],
+			[	'20/03/2016',	80,	91,	58,	106,	21	],
+			[	'21/03/2016',	15,	4,	89,	109,	1	],
+			[	'22/03/2016',	60,	63,	96,	114,	21	],
+			[	'23/03/2016',	74,	14,	69,	113,	31	],
+			[	'24/03/2016',	45,	51,	51,	117,	36	],
+			[	'25/03/2016',	41,	98,	58,	104,	21	],
+			[	'26/03/2016',	96,	14,	32,	118,	38	],
+			[	'27/03/2016',	80,	56,	17,	115,	37	],
+			[	'28/03/2016',	23,	29,	75,	110,	8	],
+			[	'29/03/2016',	60,	18,	45,	113,	32	],
+			[	'30/03/2016',	25,	100,	95,	113,	31	],
+			[	'31/03/2016',	71,	3,	31,	115,	27	],
+			[	'01/04/2016',	8,	86,	97,	102,	25	],
+			[	'02/04/2016',	62,	92,	64,	114,	25	],
+			[	'03/04/2016',	25,	82,	49,	119,	6	]
 		]);
-		// Create the data table.
 
 		var data2 = new google.visualization.DataTable();
 		data2.addColumn('string', 'Data');
 		data2.addColumn('number', 'Pesquisas');
 		data2.addRows([
-		  ['07/03/2004', 0],
-		  ['08/03/2004', 131],
-		  ['09/03/2004', 270],
-		  ['10/03/2004', 405],
-		  ['11/03/2004', 530],
-		  ['12/03/2004', 530],
-		  ['13/03/2004', 530],
-		  ['14/03/2004', 679],
-		  ['15/03/2004', 853],
-		  ['16/03/2004', 1012],
-		  ['17/03/2004', 1175],
-		  ['18/03/2004', 1325],
-		  ['19/03/2004', 1502],
-		  ['20/03/2004', 1502],
-		  ['21/03/2004', 1502],
-		  ['22/03/2004', 1653],
-		  ['23/03/2004', 1805],
-		  ['24/03/2004', 1944],
-		  ['25/03/2004', 2099],
-		  ['26/03/2004', 2229],
-		  ['27/03/2004', 2229],
-		  ['28/03/2004', 2229],
-		  ['29/03/2004', 2395],
-		  ['30/03/2004', 2561],
-		  ['31/03/2004', 2707],
-		  ['01/04/2004', 2862],
-		  ['02/04/2004', 2862],
-		  ['03/04/2004', 2862]
+[	'	07/03/2016	'	,	3000	],
+[	'	08/03/2016	'	,	3129	],
+[	'	09/03/2016	'	,	3282	],
+[	'	10/03/2016	'	,	3450	],
+[	'	11/03/2016	'	,	3735	],
+[	'	12/03/2016	'	,	4008	],
+[	'	13/03/2016	'	,	4275	],
+[	'	14/03/2016	'	,	4396	],
+[	'	15/03/2016	'	,	4510	],
+[	'	16/03/2016	'	,	4810	],
+[	'	17/03/2016	'	,	5087	],
+[	'	18/03/2016	'	,	5264	],
+[	'	19/03/2016	'	,	5445	],
+[	'	20/03/2016	'	,	5721	],
+[	'	21/03/2016	'	,	5856	],
+[	'	22/03/2016	'	,	6131	],
+[	'	23/03/2016	'	,	6234	],
+[	'	24/03/2016	'	,	6430	],
+[	'	25/03/2016	'	,	6556	],
+[	'	26/03/2016	'	,	6762	],
+[	'	27/03/2016	'	,	6930	],
+[	'	28/03/2016	'	,	7224	],
+[	'	29/03/2016	'	,	7406	],
+[	'	30/03/2016	'	,	7571	],
+[	'	31/03/2016	'	,	7845	],
+[	'	01/04/2016	'	,	8091	],
+[	'	02/04/2016	'	,	8320	],
+[	'	03/04/2016	'	,	8517	]
 		]);
 
 		var data3 = new google.visualization.DataTable();
 		data3.addColumn('string', 'Data');
 		data3.addColumn('number', 'Pesquisas');
 		data3.addRows([
-		  ['07/03/2004', 0],
-		  ['08/03/2004', 13],
-		  ['09/03/2004', 27],
-		  ['10/03/2004', 40],
-		  ['11/03/2004', 53],
-		  ['12/03/2004', 53],
-		  ['13/03/2004', 53],
-		  ['14/03/2004', 67],
-		  ['15/03/2004', 85],
-		  ['16/03/2004', 101],
-		  ['17/03/2004', 117],
-		  ['18/03/2004', 132],
-		  ['19/03/2004', 150],
-		  ['20/03/2004', 150],
-		  ['21/03/2004', 150],
-		  ['22/03/2004', 165],
-		  ['23/03/2004', 180],
-		  ['24/03/2004', 194],
-		  ['25/03/2004', 209],
-		  ['26/03/2004', 222],
-		  ['27/03/2004', 222],
-		  ['28/03/2004', 222],
-		  ['29/03/2004', 239],
-		  ['30/03/2004', 256],
-		  ['31/03/2004', 270],
-		  ['01/04/2004', 286],
-		  ['02/04/2004', 286],
-		  ['03/04/2004', 286]
+[	'07/03/2016'	,	0	],
+[	'08/03/2016'	,	18	],
+[	'09/03/2016'	,	52	],
+[	'10/03/2016'	,	69	],
+[	'11/03/2016'	,	90	],
+[	'12/03/2016'	,	100	],
+[	'13/03/2016'	,	117	],
+[	'14/03/2016'	,	146	],
+[	'15/03/2016'	,	159	],
+[	'16/03/2016'	,	188	],
+[	'17/03/2016'	,	227	],
+[	'18/03/2016'	,	267	],
+[	'19/03/2016'	,	280	],
+[	'20/03/2016'	,	308	],
+[	'21/03/2016'	,	330	],
+[	'22/03/2016'	,	344	],
+[	'23/03/2016'	,	355	],
+[	'24/03/2016'	,	378	],
+[	'25/03/2016'	,	411	],
+[	'26/03/2016'	,	443	],
+[	'27/03/2016'	,	479	],
+[	'28/03/2016'	,	509	],
+[	'29/03/2016'	,	539	],
+[	'30/03/2016'	,	554	],
+[	'31/03/2016'	,	578	],
+[	'01/04/2016'	,	613	],
+[	'02/04/2016'	,	623	],
+[	'03/04/2016'	,	641	]
 		]);
 
 		// Set chart options
 		var options = {
-			'width': 555,
-			'height': 333
+			'colors': ['#B79E47', '#316A3F', '#4C57B7', '#0010B7', '#B78F00'],
+			'legend': { position: 'none' },
+			'hAxis': { textPosition: 'none' },
+			'vAxis': { textPosition: 'none' },
+			'theme': 'maximized',
+			'width': 1140,
+			'height': 400,
+			'seriesType': 'bars',
+			series: { 3: { 'type': 'line' }, 4: { 'type': 'line' } }
 		};
 		// Set chart options
 		var options2 = {
+			'colors': ['#006A1F'],
+			'legend': { position: 'none' },
 			'hAxis': { textPosition: 'none' },
+			'vAxis': { textPosition: 'none' },
 			'theme': 'maximized',
 			'width': 555,
-			'height': 333
+			'height': 400
 		};
 		// Set chart options
 		var options3 = {
+			'colors': ['#C30200'],
+			'legend': { position: 'none' },
 			'hAxis': { textPosition: 'none' },
+			'vAxis': { textPosition: 'none' },
 			'theme': 'maximized',
 			'width': 555,
-			'height': 333
+			'height': 400
 		};
-			// Instantiate and draw our chart, passing in some options.
-		var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+		// Instantiate and draw our chart, passing in some options.
+		var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
 		chart.draw(data, options);
 		var chart2 = new google.visualization.LineChart(document.getElementById('chart_div2'));
 		chart2.draw(data2, options2);
 		var chart3 = new google.visualization.LineChart(document.getElementById('chart_div3'));
 		chart3.draw(data3, options3);
-		}
+	}
 </script>
 
 </head>
@@ -138,12 +174,27 @@
 	<h2>SUMÁRIO GERAL:STATUS</h2>
 	<hr />
 	<div class="row">
-		<div class="col-md-6">
+		<div class="col-md-12">
 			<h4>
-				TOTAIS |
-				<a href="#"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span></a>
+				TOTAIS :
+				<span class="supervisor">SUPERVISOR</span> | 
+				<span class="telefonista">TELEFONISTA</span> | 
+				<span class="super">QUALIDADE</span> 
+				(<span class="completa">COMPLETA</span> / 
+				<span class="pendente">PENDENTE</span>)
 			</h4>
 			<hr />
+			<div id="chart_div"></div>
+		</div>
+		
+	</div>
+	<hr />
+	<div class="row">
+		<div class="col-md-6">
+			<h4>
+				TABELA
+			</h4>
+			 <hr />
 			<table class="table">
 				<thead>
 					<tr>
@@ -157,43 +208,94 @@
 						<td> 29</td>
 					</tr>
 					<tr>
-						<td><b>Pendentes:</b></td>
-						<td> 203</td>
+						<td><b>Completas:</b></td>
+						<td> 29</td>
 					</tr>
 					<tr>
-						<td><b>Aceitas:</b></td>
-						<td> 2862</td>
+						<td><b>Completas:</b></td>
+						<td> 29</td>
 					</tr>
 					<tr>
-						<td><b>Recusadas:</b></td>
-						<td> 286</td>
+						<td><b>Completas:</b></td>
+						<td> 29</td>
+					</tr>
+					<tr>
+						<td><b>Completas:</b></td>
+						<td> 29</td>
+					</tr>
+					<tr>
+						<td><b>Completas:</b></td>
+						<td> 29</td>
+					</tr>
+					<tr>
+						<td><b>Completas:</b></td>
+						<td> 29</td>
+					</tr>
+					<tr>
+						<td><b>Completas:</b></td>
+						<td> 29</td>
+					</tr>
+					<tr>
+						<td><b>Completas:</b></td>
+						<td> 29</td>
+					</tr>
+					<tr>
+						<td><b>Completas:</b></td>
+						<td> 29</td>
+					</tr>
+					<tr>
+						<td><b>Completas:</b></td>
+						<td> 29</td>
+					</tr>
+					<tr>
+						<td><b>Completas:</b></td>
+						<td> 29</td>
+					</tr>
+					<tr>
+						<td><b>Completas:</b></td>
+						<td> 29</td>
+					</tr>
+					<tr>
+						<td><b>Completas:</b></td>
+						<td> 29</td>
+					</tr>
+					<tr>
+						<td><b>Completas:</b></td>
+						<td> 29</td>
+					</tr>
+					<tr>
+						<td><b>Completas:</b></td>
+						<td> 29</td>
+					</tr>
+					<tr>
+						<td><b>Completas:</b></td>
+						<td> 29</td>
+					</tr>
+					<tr>
+						<td><b>Completas:</b></td>
+						<td> 29</td>
+					</tr>
+					<tr>
+						<td><b>Completas:</b></td>
+						<td> 29</td>
 					</tr>
 				</tbody>
+				<tfoot>
+					<tr>
+						<td colspan="2"></td>
+					</tr>
+				</tfoot>
 			</table>
 		</div>
 		<div class="col-md-6">
-			<h4>
-				ACEITAS |
-				<a href="#"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span></a>
+			<h4 class="aceita">
+				ACEITAS
 			</h4>
 			<hr />
 			<div id="chart_div2"></div>
-		</div>
-	</div>
-	<hr />
-	<div class="row">
-		<div class="col-md-6">
-			<h4>
-				STATUS |
-				<a href="#"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span></a>
-			</h4>
 			<hr />
-			<div id="chart_div"></div>
-		</div>
-		<div class="col-md-6">
-			<h4>
-				RECUSADAS |
-				<a href="#"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span></a>
+			<h4 class="recusada">
+				RECUSADAS	
 			</h4>
 			<hr />
 			<div id="chart_div3"></div>
@@ -206,4 +308,3 @@
 </body>
 </html>
 (: end :)
-

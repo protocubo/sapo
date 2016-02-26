@@ -22,20 +22,25 @@ $("document").ready(function()
 	<div class="container">
 	<form method="POST" action="/login">
 		<!-- HEAD -->
-		<h2>SAPO</h2>
-		<hr />
-		<p>Sistema de Acompanhamento de Pesquisa Operacional.</p>
-		<hr />
 		<div class="row">
-			<div class="col-md-2 col-md-offset-3">
-				<img src="/resources/sapo_logo.png" class="img-responsive">
+			<div class="col-md-12">
+				<h2>SAPO</h2>
+				<hr />
+				<img src="/resources/sapo_foto.jpg" class="img-responsive">
+				<hr />
 			</div>
+		</div>
+		<div class="row">
 			<div class="col-md-4">
 				<h3>E-mail:</h3>
 				<input type="email" name="email" class="form-control" required />
+			</div>
+			<div class="col-md-4">
 				<h3>Senha:</h3>
 				<input type="password" name="password" class="form-control" required />
-				<hr />
+			</div>
+			<div class="col-md-4">
+				<h3>&nbsp;</h3>
 				<button type="button" class="btn btn-success">ENTRAR</button>
 			</div>
 		</div>
