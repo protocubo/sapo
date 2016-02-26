@@ -80,20 +80,25 @@ class Macros {
 						return true;
 					}
 				}
+				
+				$curEntry = old_entry;
+				
 			}
-			try
+			else
 			{
-				$curEntry.insert();
-				var v = ours.get(tblname) != null ? ours.get(tblname) : 0;
-				ours.set(tblname, v+1);
+				try
+				{
+					$curEntry.insert();
+					var v = ours.get(tblname) != null ? ours.get(tblname) : 0;
+					ours.set(tblname, v+1);
+				}
+				catch (e : Dynamic)
+				{
+					Macros.criticalError(tblname, e);
+				}
 			}
-			catch (e : Dynamic)
-			{
-				Macros.criticalError(tblname, e);
-			}
-			
 			var v = syncex.get(tblname) != null ? syncex.get(tblname) : 0;
-			syncex.set(tblname, v+1);
+			syncex.set(tblname, v + 1);
 		}
 	}
 	
