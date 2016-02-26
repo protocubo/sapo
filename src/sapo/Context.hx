@@ -60,9 +60,9 @@ class Context {
 			var superGroup = new Group(new AccessName("super"), PSuper);
 			superGroup.insert();
 			// more
-			new Group(new AccessName("Telefonista"), PPhoneOperator).insert();
-			new Group(new AccessName("Supervisor"), PSupervisor).insert();
-			new Group(new AccessName("Pesquisador"), PSurveyor).insert();
+			new Group(new AccessName("telefonista"), PPhoneOperator).insert();
+			new Group(new AccessName("supervisor"), PSupervisor).insert();
+			new Group(new AccessName("pesquisador"), PSurveyor).insert();
 
 			// some users
 			var arthur = new User(new AccessName("arthur"), superGroup,
