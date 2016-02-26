@@ -1,12 +1,14 @@
 package sapo;
-
+import common.db.MoreTypes.Privilege;
 import common.Web;
 import common.crypto.Random;
 import common.db.MoreTypes.EmailAddress;
 import haxe.web.Dispatch;
 import sapo.Spod;
 
+@:build(sapo.MetaMacros.ReplaceMeta())
 class TicketRoutes {
+	@noauth
 	public function doDefault(?args:{ ?ofUser:User, ?inbox:String, ?recipient:String, ?state:String })
 	{
 		if (args == null) args = { };
@@ -15,6 +17,7 @@ class TicketRoutes {
 		Sys.println(sapo.view.Tickets.render(tickets));
 	}
 
+	@:authbuild("PPhoneOperator", "PSuper", "PSupervisor")
 	public function doSearch(?args:{ ?ofUser:User, ?ticket:Ticket, ?survey:NewSurvey })
 	{
 		if (args == null) args = { };
@@ -29,13 +32,16 @@ class TicketRoutes {
 	public function new() {}
 }
 
+@:build(sapo.MetaMacros.ReplaceMeta())
 class SurveysRoutes
 {
+	@authbuild("PPhoneOperator", "PSuper", "PSupervisor")
 	public function doDefault()
 	{
 		var surveys = NewSurvey.manager.all();
 		Sys.println(sapo.view.Surveys.render(surveys));
 	}
+	@authbuild("PPhoneOperator", "PSuper", "PSupervisor")
 	public function doSearch(?args:{ ?survey:NewSurvey })
 	{
 		if (args == null) args = { };
@@ -48,35 +54,45 @@ class SurveysRoutes
 	public function new() {}
 }
 
+@:build(sapo.MetaMacros.ReplaceMeta())
 class Routes
 {
+	@noAuth()
 	public function doDefault()
 	{
 		if (Context.loop.session == null) Web.redirect("/login");
 		Web.redirect("/tickets");
 	}
-
+	
+	@:authbuild(PPhoneOperator, PSuper, "PSupervisor")
 	public function doTickets(d:Dispatch)
 		d.dispatch(new TicketRoutes());
-
+		
+	@:authbuild("PPhoneOperator", "PSuper", "PSupervisor")
 	public function doRegistration()
 		Sys.println(sapo.view.Registration.render());
-
+		
+	@:authbuild("PPhoneOperator", "PSuper", "PSupervisor")
 	public function doPayment()
 		Sys.println(sapo.view.Payment.render());
-
+		
+	@:authbuild("PSurveyor")
 	public function doPayments()
 		Sys.println(sapo.view.Payments.render());
 
+	@:authbuild("PSurveyor", "PSupervisor", "PPhoneOperator", "PSuper")
 	public function doSummary()
 		Sys.println(sapo.view.Summary.render());
-
+	
+	@:authbuild("PPhoneOperator", "PSuper", "PSupervisor")
 	public function doSurveys(d:Dispatch)
 		d.dispatch(new SurveysRoutes());
-
+	
+	@:authbuild("PPhoneOperator", "PSuper", "PSupervisor")
 	public function doSurvey(s:sapo.NewSurvey)
 		Sys.println(sapo.view.Survey.render(s));
 
+	@noauth	
 	public function doLogin()
 	{
 		if (Web.getMethod() == "POST") {
@@ -106,6 +122,7 @@ class Routes
 		}
 	}
 
+	@noauth
 	public function doBye()
 	{
 		Context.loop.session.expire();
