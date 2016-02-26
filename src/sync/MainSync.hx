@@ -3,6 +3,7 @@ import common.spod.EnumSPOD;
 import common.spod.Familia;
 import common.spod.Modo;
 import common.spod.Morador;
+import common.spod.Ocorrencias;
 import common.spod.Ponto;
 import common.spod.Survey;
 import haxe.Http;
@@ -98,11 +99,7 @@ class MainSync
 		
 		for (u in updateVars)
 		{
-			processSession(u);
-			processFamilia(u);
-			processMorador(u);
-			processPonto(u);
-			processModo(u);			
+			var shouldInsert = processSessionID(u, false);
 		}
 		
 		Manager.cleanup();
@@ -120,7 +117,16 @@ class MainSync
 		trace("Done with only " + warning + " warnings!");
 	}
 	
-	static function processSession(sid : Int)
+	static function processSessionID(u : Int, insertMode : Bool) : Bool
+	{
+		for (p in [processSession, processFamilia, processMorador, processPonto, processModo, processOcorrencias]) {
+			if (p(u, insertMode))
+				return processSessionID(u, true);
+		}
+		return true;
+	}
+	
+	static function processSession(sid : Int, insertMode : Bool) : Bool
 	{
 		var dbSession = targetCnx.request("SELECT * FROM Session WHERE id = " + sid).results().first();
 		
@@ -135,9 +141,17 @@ class MainSync
 				case "isValid", "isRestored":
 					Reflect.setField(new_sess, f, (Reflect.field(dbSession, f) == 1));
 				//Copia simples de campo
-				case "user_id", "tentativa_id", "lastPageVisited", "date_create", "date_finished":
+				case "user_id", "tentativa_id", "lastPageVisited", 
+				"dataInicioPesquisaPapel", "dataFimPesquisaPapel", "codigoFormularioPapel", 
+				"date_create", "date_started", "date_finished", "date_completed",
+				"endereco_id", "pin", "latitude", "longitude",
+				"municipio", "bairro", "logradouro", "numero", "complemento", "cep",
+				"zona","macrozona","lote","estratoSocioEconomico":
 					Reflect.setField(new_sess, f, Reflect.field(dbSession, f));
-				case "client_ip", "location", "ponto", "gps_id":
+				//Enum
+				case "estadoPesquisa_id":
+					Macros.setEnumField(f, new_sess, dbSession);
+				case "ponto","gps_id","client_ip", "closedFromIndex":
 					continue;
 				default:
 					Macros.warnTable("Survey", f, null);
@@ -148,9 +162,10 @@ class MainSync
 		
 		Macros.validateEntry(Survey, ["syncTimestamp", "id"], [ { key : "old_survey_id", value : new_sess.old_survey_id } ], new_sess);
 		sessHash.set(new_sess.old_survey_id, new_sess);
+		return false;
 	}
 	
-	static function processFamilia(old_sid : Int)
+	static function processFamilia(old_sid : Int, insertMode : Bool) : Bool
 	{
 		var dbFam = targetCnx.request("SELECT * FROM Familia WHERE session_id = " + old_sid + " ORDER BY id").results();
 		var new_familia = new Familia();
@@ -167,12 +182,12 @@ class MainSync
 						new_familia.survey = sessHash.get(f.session_id);
 						new_familia.old_survey_id = f.session_id;
 					case "ocupacaoDomicilio_id", "condicaoMoradia_id", "tipoImovel_id",
-					"aguaEncanada_id", "anoVeiculoMaisRecente_id", "empregadosDomesticos_id", "rendaDomiciliar_id":
+					"aguaEncanada_id", "anoVeiculoMaisRecente_id", "empregadosDomesticos_id", 
+					"rendaDomiciliar_id":
 						Macros.setEnumField(field, new_familia, f);
 					//Fields ctrl+c ctrl+v
 					case "date", "isEdited", "numeroResidentes", "banheiros", "quartos", 
-					"veiculos", "bicicletas", "motos", "editedNumeroResidentes", 
-					"editsNumeroResidentes", "nomeContato", "telefoneContato", "codigoReagendamento","tentativa_id":
+					"veiculos", "bicicletas", "motos",  "nomeContato", "telefoneContato","tentativa_id":
 						Reflect.setField(new_familia, field, Reflect.field(f, field));
 					//Bool simples
 					case "isDeleted","ruaPavimentada_id", "recebeBolsaFamilia_id":
@@ -181,10 +196,13 @@ class MainSync
 					case "tvCabo_id","vagaPropriaEstacionamento_id, ruaPavimentada_id":
 						var v = Reflect.field(f, field);
 						Reflect.setField(new_familia, field, (v != 3) ? (v == 1) : null);
-					case "gps_id":
+					case "gps_id", "editedNumeroResidentes", "editsNumeroResidentes",
+					"editedNomeContato", "editsNomeContato", "editedTelefoneContato",
+					"editsTelefoneContato", "editedRendaDomiciliar", "editsRendaDomiciliar",
+					"codigoReagendamento":
 						continue;
 					default:
-						Macros.warnTable("Familia", field, Reflect.field(f, field));					
+						Macros.warnTable("Familia", field, null);					
 				}
 			}
 			new_familia.syncTimestamp = maxtimestamp;
@@ -193,9 +211,10 @@ class MainSync
 			
 			famHash.set(new_familia.old_id, new_familia);
 		}
+		return false;
 	}
 	
-	static function processMorador(old_session : Int)
+	static function processMorador(old_session : Int, insertMode : Bool) : Bool
 	{
 		var dbMorador = targetCnx.request("SELECT * FROM Morador WHERE session_id = " + old_session + " ORDER BY familia_id").results();
 		for (m in dbMorador)
@@ -215,19 +234,19 @@ class MainSync
 					case "quemResponde_id":
 						new_morador.quemResponde = morHash.get(m.quemResponde_id);
 					//Enums
-					case "idade_id", "grauInstrucao_id", "situacaoFamiliar_id", "atividadeMorador_id", "portadorNecessidadesEspeciais_id", "motivoSemViagem_id":
+					case "idade_id", "grauInstrucao_id", "situacaoFamiliar_id", "atividadeMorador_id", "portadorNecessidadesEspeciais_id", "motivoSemViagem_id","setorAtividadeEmpresaPrivada_id","setorAtividadeEmpresaPublica_id":
 						Macros.setEnumField(field, new_morador, m);
 					//Bools
 					case "isDeleted", "possuiHabilitacao_id","proprioMorador_id":
 						var f = (Reflect.field(m, field) == null) ? null : (Reflect.field(m, field) == 1);
 						Reflect.setField(new_morador, field, f);
 					//ctrl+c ctrl+v
-					case "date", "isEdited", "nomeMorador", "genero_id", "codigoReagendamento":
+					case "date", "isEdited", "nomeMorador", "genero_id":
 						Reflect.setField(new_morador, field, Reflect.field(m, field));
-					case "gps_id":
+					case "gps_id","codigoReagendamento":
 						continue;
 					default:
-						Macros.warnTable("Morador", field, Reflect.field(m, field));	
+						Macros.warnTable("Morador", field, null);	
 				}
 			}
 			
@@ -237,11 +256,12 @@ class MainSync
 			
 			morHash.set(new_morador.old_id , new_morador);
 		}
+		return false;
 	}
 	
-	static function processPonto(session_id : Int)
+	static function processPonto(session_id : Int, insertMode : Bool) : Bool
 	{
-		var dbPoints = targetCnx.request("SELECT * FROM Ponto WHERE session_id = " + session_id + " ORDER BY morador_id, anterior_id").results();
+		var dbPoints = targetCnx.request("SELECT * FROM Ponto WHERE session_id = " + session_id + " ORDER BY morador_id, ordem").results();
 		for (p in dbPoints)
 		{
 			var new_point = new Ponto();
@@ -258,18 +278,20 @@ class MainSync
 						new_point.morador = morHash.get(p.morador_id);
 					case "copiedFrom_id":
 						new_point.copiedFrom = pointhash.get(p.id);
-					case "isDeleted":
+					case "pontoProximoRef_id":
+						new_point.pontoProx = pointhash.get(p.pontoProxRef_id);
+					case "isDeleted", "isPontoProx":
 						new_point.isDeleted = (p.isDeleted == 1);
 					//ctrl+c ctrl+v
-					case "date", "isEdited", "uf_id", "city_id", "regadm_id", "street_id", "complement_id", "complement_two_id", "complement2_str", "ref_id", "tempo_saida", "tempo_chegada", "ref_str":
+					case "date", "isEdited", "uf_id", "city_id", "regadm_id", "street_id", "complement_id", "complement_two_id", "complement2_str", "ref_id", "ref_str", "tempo_saida", "tempo_chegada":
 						Reflect.setField(new_point, field, Reflect.field(p, field));
 					//Enums
 					case "motivoID", "motivoOutraPessoaID":
 						Macros.setEnumField("motivo", new_point, p);
-					case "gps_id", "anterior_id", "posterior_id", "ordem", "city_str", "regadm_str", "street_str", "complement_str", "complement_two_str":
+					case "gps_id", "anterior_id", "posterior_id", "ordem", "city_str", "regadm_str", "street_str", "complement_str", "complement_two_str", "isIntermediario":
 						continue;
 					default:
-						Macros.warnTable("Ponto", field, Reflect.field(p, field));						
+						Macros.warnTable("Ponto", field, null);						
 				}
 			}
 			
@@ -278,9 +300,11 @@ class MainSync
 			Macros.validateEntry(Ponto, [ "id", "syncTimestamp"], [ { key : "old_id", value : new_point.old_id } ], new_point);
 			pointhash.set(new_point.old_id, new_point);
 		}
+		
+		return false;
 	}
 	
-	static function processModo(session_id : Int)
+	static function processModo(session_id : Int, insertMode : Bool)
 	{
 		var dbModos = targetCnx.request("SELECT * FROM Modo WHERE session_id = " + session_id + " ORDER BY morador_id, firstpoint_id, anterior_id").results();
 		
@@ -319,16 +343,49 @@ class MainSync
 					case "naoRespondeuLinhaOnibus", "naoRespondeuEstacaoEmbarque", "naoRespondeuEstacaoDesembarque", "naoRespondeuValorViagem", "naoRespondeuValorPagoTaxi","naoRespondeuCustoEstacionamento":
 						new_modo.naoRespondeu = (new_modo.naoRespondeu) ? true : (Reflect.field(m, f) != 0);
 					//fim conversao
-					case "anterior_id", "posterior_id", "gps_id", "linhaOnibus_str","estacaoEmbarque_str", "estacaoDesembarque_str":
+					case "anterior_id", "posterior_id","ordem", "gps_id", "linhaOnibus_str","estacaoEmbarque_str", "estacaoDesembarque_str":
 						continue;
 					default:
-						Macros.warnTable("Modo", f, Reflect.field(m, f));
+						Macros.warnTable("Modo", f, null);
 				}	
 			}
 			
 			new_modo.syncTimestamp = maxtimestamp;
 			Macros.validateEntry(Modo, ["id", "syncTimestamp"], [ { key : "old_id" , value : new_modo.old_id } ], new_modo);
 		}
+		return false;
+	}
+	
+	static function processOcorrencias(sid : Int, insertMode : Bool)
+	{
+		var res = targetCnx.request("SELECT * FROM Ocorrencias WHERE session_id = " + sid).results();
+		for (r in res)
+		{
+			var c = new Ocorrencias();
+			for (f in Reflect.fields(r))
+			{
+				switch(f)
+				{
+					case "id":
+						c.old_id = r.id;
+					case "session_id":
+						c.survey = sessHash.get(r.session_id);
+						c.old_survey_id = r.session_id;
+					case "desc", "datetime":
+						Reflect.setField(c, f, Reflect.field(r, f));
+					case "sessionTime_id", "gps_id":
+						continue;
+					default:
+						Macros.warnTable("Ocorrencias", f, null);
+				}
+			}
+			
+			c.syncTimestamp = maxtimestamp;
+			Macros.validateEntry(Ocorrencias, ["id", "syncTimestamp"], [ { key : "old_id", value : c.old_id } ], c);
+		}
+		
+		return false;
+		
 	}
 	
 	static function populateHash() : Map<String,Map<Int,Int>>

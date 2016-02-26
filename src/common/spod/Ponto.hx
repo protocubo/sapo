@@ -20,7 +20,6 @@ class Ponto extends Object
 	public var id : SId;
 	
 	@:relation(survey_id) public var survey : Survey;
-	
 	@:relation(morador_id) public var morador : Morador;
 	
 	public var date : SDateTime;
@@ -48,9 +47,9 @@ class Ponto extends Object
 	public var tempo_saida : SNull<SString<255>>;
 	public var tempo_chegada : SNull<SString<255>>;
 	
-	public var copiedFrom_id : SNull<SInt>;
 	@:relation(copiedFrom_id) public var copiedFrom : SNull<Ponto>;
-	
+	public var isPontoProx : SNull<SBool>;
+	@:relation(pontoProx_id) public var pontoProx : SNull<Ponto>;
 	public var old_id : SInt;
 	public var syncTimestamp : SFloat;
 	public var old_survey_id : SInt;

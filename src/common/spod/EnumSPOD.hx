@@ -90,17 +90,11 @@ import sys.db.Types.SString;
 	 
  }
    
- class EstacaoMetro extends Object
- {
-	 public var id : SId;
-	 public var desc : SString<255>;
- }
- 
+
  @dbNullVal(0) enum EstadoPesquisa {
 	@dbVal(1) Concluida;
-	@dbVal(2) ConcluidaParcial;
-	@dbVal(3) Incompleta;
-	@dbVal(99) Outros;
+	@dbVal(2) IncompletaMorador;
+	@dbVal(3) IncompletaViagem;
  }
   class EstadoPesquisa_Tbl extends EnumTable {
 	 
@@ -177,10 +171,7 @@ import sys.db.Types.SString;
 	 
  }
 
- class LinhaOnibus extends Object {
-	 public var id : SId;
-	 public var desc : SString<255>;
- }
+
  
   @dbNullVal(0) enum MeioTransporte{
 	 @dbVal(1) Ape;
@@ -266,6 +257,32 @@ import sys.db.Types.SString;
 	 
  }
  
+ @dbNullVal(101) enum SetorAtividadeEmpresaPrivada
+ {
+	 @dbVal(1) Agropecuaria;
+	 @dbVal(2) ConstrucaoCivil;
+	 @dbVal(3) Industria;
+	 @dbVal(4) Comercio;
+	 @dbVal(5) Financeiro;
+	 @dbVal(6) Servicos;
+	 @dbVal(99) Outro;
+	 @dbVal(101) NR;
+ }
+ 
+ class SetorAtividadeEmpresaPrivada_Tbl extends EnumTable {
+	 
+ }
+ 
+ @dbNullVal(101) enum SetorAtividadeEmpresaPublica {
+	@dbVal(1) AdministracaoFederal;
+	@dbVal(2) AdministracaoGDF;
+	@dbVal(3) AdministracaoMunicipal;
+	@dbVal(101) NR;
+ }
+ 
+ class SetorAtividadeEmpresaPublica_Tbl extends EnumTable {
+	 
+ }
  
  @dbNullVal(13) enum RendaDomiciliar
  {

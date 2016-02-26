@@ -69,26 +69,23 @@ class Macros {
 			var old_entry = $tableClass.manager.unsafeObject("SELECT * FROM " + tblname + str+" ORDER BY syncTimestamp DESC LIMIT 1", false);
 			
 			var shouldInsert = false;
-			
-			for (info in $tableClass.manager.dbInfos().fields)
+			if (!insertMode)
 			{
-				var field = info.name;
-				
-				if ($ignoreParams.indexOf(field) == -1 && Std.string(Reflect.getProperty($curEntry, field)) != Std.string(Reflect.getProperty(old_entry, field)))
+				for (info in $tableClass.manager.dbInfos().fields)
 				{
-					shouldInsert = true;
+					var field = info.name;
+					
+					if ($ignoreParams.indexOf(field) == -1 && Std.string(Reflect.getProperty($curEntry, field)) != Std.string(Reflect.getProperty(old_entry, field)))
+					{
+						return true;
+					}
 				}
 			}
-			try{
-			if (shouldInsert)
+			try
 			{
-				
 				$curEntry.insert();
 				var v = ours.get(tblname) != null ? ours.get(tblname) : 0;
 				ours.set(tblname, v+1);
-			}
-			else
-				$curEntry = old_entry;
 			}
 			catch (e : Dynamic)
 			{
