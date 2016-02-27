@@ -3,7 +3,6 @@ package sapo;
 import common.Dispatch;
 import common.Web;
 import haxe.PosInfos;
-import sapo.Spod;
 import sys.db.*;
 
 class Index {

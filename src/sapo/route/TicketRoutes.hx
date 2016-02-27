@@ -1,13 +1,15 @@
 package sapo.route;
 
-import sapo.Spod;
+import sapo.spod.Other;
+import sapo.spod.Ticket;
+import sapo.spod.User;
 
 class TicketRoutes implements AccessControl {
 	@authorizeAll
 	public function doDefault(?args:{ ?inbox:String, ?recipient:String, ?state:String })
 	{
 		if (args == null) args = { };
-		var tickets : List<Spod.Ticket> = new List();
+		var tickets : List<Ticket> = new List();
 		var u = Context.loop.user;
 		var tickets : List<Ticket> = new List();
 

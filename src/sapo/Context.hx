@@ -4,7 +4,9 @@ import common.Web;
 import common.crypto.Password;
 import common.db.MoreTypes;
 import common.spod.InitDB;
-import sapo.Spod;
+import sapo.spod.Other;
+import sapo.spod.Ticket;
+import sapo.spod.User;
 import sys.db.*;
 
 class Context {

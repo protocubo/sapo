@@ -3,7 +3,9 @@ package sapo.route;
 import common.Dispatch;
 import common.Web;
 import common.db.MoreTypes;
-import sapo.Spod;
+import sapo.spod.Other;
+import sapo.spod.Ticket;
+import sapo.spod.User;
 
 class RootRoutes implements AccessControl {
 	@authorizeAll
@@ -50,7 +52,7 @@ class RootRoutes implements AccessControl {
 		d.dispatch(new SurveyRoutes());
 
 	@authorize("PPhoneOperator", "PSuper", "PSupervisor")
-	public function doSurvey(s:sapo.NewSurvey)
+	public function doSurvey(s:NewSurvey)
 		Sys.println(sapo.view.Survey.render(s));
 
 	@authorizeAll

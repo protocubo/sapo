@@ -1,7 +1,7 @@
 package sapo.route;
 
 import common.spod.*;
-import sapo.Spod;
+import sapo.spod.Other;
 
 class SurveyRoutes implements AccessControl {
 	@authorize("PPhoneOperator", "PSuper", "PSupervisor")
