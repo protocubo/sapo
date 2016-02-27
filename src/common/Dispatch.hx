@@ -2,7 +2,7 @@
  * A method-aware Dispatch.
  *
  * Retro compatible with haxe.web.Dispatch.
- * 
+ *
  * Based on and licensed as the original haxe.web.Dispatch.
  * Copyright (C)2005-2016 Haxe Foundation
  *
