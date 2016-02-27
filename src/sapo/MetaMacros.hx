@@ -1,63 +1,60 @@
 package sapo;
-import haxe.macro.Expr;
-import haxe.rtti.Meta;
-import haxe.macro.Context;
-import haxe.macro.ExprTools;
-/**
- * ...
- * @author Caio
- */
-class MetaMacros
-{
-	static var privilegePath = "common.db.Privilege";
-	
-	public static function ReplaceMeta() : Array<Field>
-	{
-		var fields = Context.getBuildFields();
-		for (f in fields)
-		{
-			var new_meta = new Metadata();
-			var metas = f.meta;
-			for (m in metas)
-			{
-				if (m.name == ":authbuild" || m.name=="authbuild")
-				{
-					var new_metaentry : MetadataEntry = { name : "auth", params : [], pos : m.pos };
-					for (p in m.params)
-					{
-						var en = switch Context.getType(privilegePath)
-						{
-							case TEnum(_.get() => t, _): t;
-							case other: throw other;
-						}
-						
-						var vals = en.constructs;
 
-						var index = switch p.expr {
+import haxe.macro.Context;
+import haxe.macro.Expr;
+using haxe.macro.ExprTools;
+
+class MetaMacros {
+	static inline var META = "authorize";
+	static inline var META_ALL = "authorizeAll";
+	static inline var PRIVILEGE = "common.db.Privilege";
+
+	public static function resolveMetas(required=true, verbs=true)
+	{
+		var vals = switch Context.getType(PRIVILEGE) {
+			case TEnum(_.get() => t, _): t.constructs;
+			case other: Context.error('Internal: error while searching for Enum type $PRIVILEGE', Context.currentPos());
+		}
+		var valNames = [ for (n in vals.keys()) n ];
+
+		var prefixes = ["do"];
+		if (verbs) prefixes = prefixes.concat(["get", "post"]);
+
+		var fields = Context.getBuildFields();
+		for (f in fields) {
+			for (m in f.meta) {
+				switch m.name.split(":") {
+				case [META]:
+					var params = m.params;
+					m.params = [];
+					if (params.length == 0)
+						Context.warning('Route not authorized to anyone: ${f.name}', f.pos);
+					for (p in params) {
+						switch p.expr {
 						case EConst(CIdent(cname)), EConst(CString(cname)):
-							if (!vals.exists(cname)) Context.error('__Internal__   Just kidding: no privilege $cname', m.pos);
-							vals.get(cname).index;
-						case other:
-							Context.error('Unsupported @:authbuild value: $other', m.pos);
+							if (!vals.exists(cname))
+								Context.fatalError('No privilege $cname (try ${valNames.join(" or ")})', m.pos);
+							m.params.push(Context.makeExpr(vals.get(cname).index, m.pos));
+						case _:
+							Context.fatalError('Unsupported @$META value: ${p.toString()}\n' + 
+									'Use a $PRIVILEGE constructor: ${valNames.join(", ")}', m.pos);
 						}
-						//var index = vals.get(ExprTools.getValue(p)).index;
-						
-						if(index != null)
-							new_metaentry.params.push(Context.makeExpr(index, m.pos));
-						else
-							throw "Invalid AUTH meta name: " + p;
 					}
-					
-					new_meta.push(new_metaentry);
+				case [META_ALL] if (m.params.length > 0):
+					Context.fatalError('Meta @$META_ALL expects no parameters', m.pos);
+				case [_, META] | [_, META_ALL]:
+					Context.fatalError('Access control cannot be a compiler metadata\n' +
+							'Instead of @${m.name} use @$META or @$META_ALL', m.pos);
+				case _:  // NOOP
 				}
-				else
-					new_meta.push(m);
 			}
-			
-			f.meta = new_meta;
-			
-			
+			if (required &&
+					Lambda.exists(prefixes, function (i) return StringTools.startsWith(f.name, i)) &&
+					!Lambda.exists(f.meta, function (i) return i.name == META || i.name == META_ALL))
+				Context.fatalError('Missing access control meta (@$META or @$META_ALL) on route ${f.name}', f.pos);
+
 		}
 		return fields;
 	}
 }
+

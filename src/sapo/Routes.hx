@@ -8,24 +8,25 @@ import common.db.MoreTypes.Privilege;
 import common.spod.Survey;
 import sapo.Spod;
 
-@:build(sapo.MetaMacros.ReplaceMeta())
+@:build(sapo.MetaMacros.resolveMetas())
 class TicketRoutes {
+	@authorizeAll
 	public function doDefault(?args:{ ?inbox:String, ?recipient:String, ?state:String })
 	{
 		if (args == null) args = { };
 		var tickets : List<Spod.Ticket> = new List();
 		var u = Context.loop.user;
 		var tickets : List<Ticket> = new List();
-		
+
 		tickets = Ticket.manager.search(
 		(args.inbox == "out"? $author == u : 1 == 1) &&
 		(args.state == "open"? $closed_at == null:$closed_at != null)
-		
+
 		);
-		
+
 		if (args.inbox == "out")
 		{
-			
+
 		}
 		else if (args.inbox == "in")
 		{
@@ -37,25 +38,25 @@ class TicketRoutes {
 		}
 		else
 		{
-			
+
 		}
-		
+
 		/*tickets = Ticket.manager.search(
 		switch args.inbox {
 			case "in": 1 == 1; //$recipient == u;
 			case "out": $author == u;
 			default: 1==1;
 		}
-		
+
 		$author == u
-		
-		
+
+
 		);*/
 
 		Sys.println(sapo.view.Tickets.render(tickets));
 	}
 
-	@:authbuild("PPhoneOperator", "PSuper", "PSupervisor")
+	@authorize("PPhoneOperator", "PSuper", "PSupervisor")
 	public function doSearch(?args:{ ?ofUser:User, ?ticket:Ticket, ?survey:NewSurvey })
 	{
 		if (args == null) args = { };
@@ -70,17 +71,17 @@ class TicketRoutes {
 	public function new() {}
 }
 
-@:build(sapo.MetaMacros.ReplaceMeta())
+@:build(sapo.MetaMacros.resolveMetas())
 class SurveysRoutes
 {
-	@authbuild("PPhoneOperator", "PSuper", "PSupervisor")
+	@authorize("PPhoneOperator", "PSuper", "PSupervisor")
 	public function doDefault()
 	{
 		var surveys = Survey.manager.all();
 		Sys.println(sapo.view.Surveys.render(surveys));
 	}
 
-	@authbuild("PPhoneOperator", "PSuper", "PSupervisor")
+	@authorize("PPhoneOperator", "PSuper", "PSupervisor")
 	public function doSearch(?args:{ ?survey:Survey })
 	{
 		if (args == null) args = { };
@@ -93,61 +94,61 @@ class SurveysRoutes
 	public function new() {}
 }
 
-@:build(sapo.MetaMacros.ReplaceMeta())
+@:build(sapo.MetaMacros.resolveMetas())
 class Routes
 {
-	@noAuth()
+	@authorizeAll
 	public function doDefault()
 	{
 		if (Context.loop.session == null) Web.redirect("/login");
 		Web.redirect("/tickets");
 	}
-	
-	@:authbuild(PPhoneOperator, PSuper, "PSupervisor")
+
+	@authorize(PPhoneOperator, PSuper, "PSupervisor")
 	public function doTickets(d:Dispatch)
 		d.dispatch(new TicketRoutes());
-		
-	@:authbuild("PPhoneOperator", "PSuper", "PSupervisor")
+
+	@authorize("PPhoneOperator", "PSuper", "PSupervisor")
 	public function doRegistration()
 		Sys.println(sapo.view.Registration.render());
-		
-	@:authbuild("PPhoneOperator", "PSuper", "PSupervisor")
+
+	@authorize("PPhoneOperator", "PSuper", "PSupervisor")
 	public function doPayment()
 		Sys.println(sapo.view.Payment.render());
 
-	@:noauth
+	@authorizeAll
 	public function doAbout()
 		Sys.println(sapo.view.About.render());
 
-	@:noauth
+	@authorizeAll
 	public function doHelp()
 		Sys.println(sapo.view.Help.render());
 
-	@:noauth
+	@authorizeAll
 	public function doLicenses()
 	Sys.println(sapo.view.Licenses.render());
 
-	@:authbuild("PSurveyor")
+	@authorize("PSurveyor")
 	public function doPayments()
 		Sys.println(sapo.view.Payments.render());
 
-	@:authbuild("PSurveyor", "PSupervisor", "PPhoneOperator", "PSuper")
+	@authorize("PSurveyor", "PSupervisor", "PPhoneOperator", "PSuper")
 	public function doSummary()
 		Sys.println(sapo.view.Summary.render());
-	
-	@:authbuild("PPhoneOperator", "PSuper", "PSupervisor")
+
+	@authorize("PPhoneOperator", "PSuper", "PSupervisor")
 	public function doSurveys(d:Dispatch)
 		d.dispatch(new SurveysRoutes());
-	
-	@:authbuild("PPhoneOperator", "PSuper", "PSupervisor")
+
+	@authorize("PPhoneOperator", "PSuper", "PSupervisor")
 	public function doSurvey(s:sapo.NewSurvey)
 		Sys.println(sapo.view.Survey.render(s));
 
-	@noauth	
+	@authorizeAll
 	public function doLogin()
 		Sys.println(sapo.view.Login.render());
 
-	@noauth	
+	@authorizeAll
 	public function postLogin()
 	{
 		var p = Web.getParams();
@@ -173,7 +174,7 @@ class Routes
 		Web.redirect("/");
 	}
 
-	@noauth
+	@authorizeAll
 	public function doBye()
 	{
 		Context.loop.session.expire();
