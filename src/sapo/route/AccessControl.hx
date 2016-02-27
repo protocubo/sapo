@@ -1,13 +1,13 @@
-package sapo;
+package sapo.route;
 
 import haxe.macro.Context;
 import haxe.macro.Expr;
 using haxe.macro.ExprTools;
 
-class MetaMacros {
+class AccessControlBuild {
 	static inline var META = "authorize";
 	static inline var META_ALL = "authorizeAll";
-	static inline var PRIVILEGE = "common.db.Privilege";
+	static inline var PRIVILEGE = "common.db.MoreTypes.Privilege";
 
 	public static function resolveMetas(required=true, verbs=true)
 	{
@@ -36,7 +36,7 @@ class MetaMacros {
 								Context.fatalError('No privilege $cname (try ${valNames.join(" or ")})', m.pos);
 							m.params.push(Context.makeExpr(vals.get(cname).index, m.pos));
 						case _:
-							Context.fatalError('Unsupported @$META value: ${p.toString()}\n' + 
+							Context.fatalError('Unsupported @$META value: ${p.toString()}\n' +
 									'Use a $PRIVILEGE constructor: ${valNames.join(", ")}', m.pos);
 						}
 					}
@@ -57,4 +57,9 @@ class MetaMacros {
 		return fields;
 	}
 }
+
+#if !macro
+@:autoBuild(sapo.route.AccessControlBuild.resolveMetas())
+interface AccessControl {}
+#end
 

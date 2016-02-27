@@ -1,8 +1,8 @@
 package sapo;
 
-import haxe.PosInfos;
 import common.Dispatch;
 import common.Web;
+import haxe.PosInfos;
 import sapo.Spod;
 import sys.db.*;
 
@@ -50,7 +50,7 @@ class Index {
 			// treat visibly empty params as missing
 			var cparams = [ for (k in params.keys()) if (StringTools.trim(params.get(k)).length > 0) k => params.get(k) ];
 			var d = new Dispatch(uri, cparams, method);
-			d.dispatch(new Routes());
+			d.dispatch(new sapo.route.RootRoutes());
 
 			Context.shutdown();
 		} catch (e:Dynamic) {
