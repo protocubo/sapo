@@ -19,7 +19,8 @@ enum AccessControlError {
 @:autoBuild(sapo.route.AccessControl.resolveMetas())
 class AccessControl {
 	public static inline var META = "authorize";
-	public static inline var META_ALL = "authorizeAll";
+	public static inline var VAL_ALL = "all";
+	public static inline var VAL_GUEST = "guest";
 	public static inline var PRIVILEGE = "common.db.MoreTypes.Privilege";
 
 #if macro
@@ -45,6 +46,8 @@ class AccessControl {
 						Context.warning('Route not authorized to anyone: ${f.name}', f.pos);
 					for (p in params) {
 						switch p.expr {
+						case EConst(CIdent(magic)), EConst(CString(magic)) if (magic == VAL_ALL || magic == VAL_GUEST):
+							m.params.push(Context.makeExpr(magic, m.pos));
 						case EConst(CIdent(cname)), EConst(CString(cname)):
 							if (!vals.exists(cname))
 								Context.fatalError('No privilege $cname (try ${valNames.join(" or ")})', m.pos);
@@ -54,18 +57,16 @@ class AccessControl {
 									'Use a $PRIVILEGE constructor: ${valNames.join(", ")}', m.pos);
 						}
 					}
-				case [META_ALL] if (m.params.length > 0):
-					Context.fatalError('Meta @$META_ALL expects no parameters', m.pos);
-				case [_, META] | [_, META_ALL]:
+				case [_, META]:
 					Context.fatalError('Access control cannot be a compiler metadata\n' +
-							'Instead of @${m.name} use @$META or @$META_ALL', m.pos);
+							'Instead of @${m.name} use @$META', m.pos);
 				case _:  // NOOP
 				}
 			}
 			if (required &&
 					Lambda.exists(prefixes, function (i) return StringTools.startsWith(f.name, i)) &&
-					!Lambda.exists(f.meta, function (i) return i.name == META || i.name == META_ALL))
-				Context.fatalError('Missing access control meta (@$META or @$META_ALL) on route ${f.name}', f.pos);
+					!Lambda.exists(f.meta, function (i) return i.name == META))
+				Context.fatalError('Missing access control meta @$META on route ${f.name}', f.pos);
 
 		}
 		return fields;
@@ -74,7 +75,10 @@ class AccessControl {
 	public static function onDispatchMeta(v:String, params:Null<Array<Dynamic>>)
 	{
 		switch v {
-		case "authorize":
+		case META:
+			if (Lambda.exists(params, function (i) return i == VAL_GUEST))
+				return;  // NOOP
+
 			// no need to check for params.length == 0, since that has been enforced in macro mode
 			var ctx = Context.loop;
 			if (ctx.session == null) throw EACNotAuthorized();
@@ -82,7 +86,7 @@ class AccessControl {
 				ctx.session.expire();
 				throw EACSessionExpired(ctx.session);
 			}
-			if (!Lambda.exists(params, function (i) return i == ctx.privilege.getIndex()))
+			if (!Lambda.exists(params, function (i:Dynamic) return i == VAL_ALL || i == ctx.privilege.getIndex()))
 				throw EACNotAuthorized(ctx.user);
 		case _:  // NOOP
 		}

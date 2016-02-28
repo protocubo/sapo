@@ -8,12 +8,9 @@ import sapo.spod.Ticket;
 import sapo.spod.User;
 
 class RootRoutes extends AccessControl {
-	@authorize(PSuper, PPhoneOperator, PSuper)
+	@authorize(all)
 	public function doDefault()
-	{
-		if (Context.loop.session == null) Web.redirect("/login");
-		Web.redirect("/tickets");
-	}
+		Web.redirect("/tickets");  // FIXME
 
 	@authorize(PPhoneOperator, PSuper, "PSupervisor")
 	public function doTickets(d:Dispatch)
@@ -27,15 +24,15 @@ class RootRoutes extends AccessControl {
 	public function doPayment()
 		Sys.println(sapo.view.Payment.render());
 
-	@authorizeAll
+	@authorize(all, guest)
 	public function doAbout()
 		Sys.println(sapo.view.About.render());
 
-	@authorizeAll
+	@authorize(all, guest)
 	public function doHelp()
 		Sys.println(sapo.view.Help.render());
 
-	@authorizeAll
+	@authorize(all, guest)
 	public function doLicenses()
 	Sys.println(sapo.view.Licenses.render());
 
@@ -55,11 +52,11 @@ class RootRoutes extends AccessControl {
 	public function doSurvey(s:NewSurvey)
 		Sys.println(sapo.view.Survey.render(s));
 
-	@authorizeAll
+	@authorize(all, guest)
 	public function doLogin()
 		Sys.println(sapo.view.Login.render());
 
-	@authorizeAll
+	@authorize(all, guest)
 	public function postLogin()
 	{
 		var p = Web.getParams();
@@ -85,7 +82,7 @@ class RootRoutes extends AccessControl {
 		Web.redirect("/");
 	}
 
-	@authorizeAll
+	@authorize(all)
 	public function doBye()
 	{
 		Context.loop.session.expire();
