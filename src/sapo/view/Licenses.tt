@@ -16,18 +16,25 @@
 	<hr />
 	<div class="row">
 		<div class="col-md-12">
-			<!-- MODEL -->
-			<h3>Título</h3>
-			<h4>Lorem ipsum dolor sit amet, consectetur adipiscing elit. </h4>
-			<p>Nullam mi nisi, accumsan ac dapibus at, suscipit in dolor. Integer laoreet ex ex, at maximus quam maximus sed. Aenean dignissim, magna vitae pellentesque mattis, ante lacus malesuada arcu, quis sollicitudin massa enim sed mauris. Nunc commodo augue finibus urna laoreet, vitae luctus quam sagittis. Nulla facilisi. Donec viverra quis ex ac cursus. Vestibulum feugiat finibus felis eu dignissim.</p>
+			<!-- SAPO -->
+			<h3><a href="https://github.com/jonasmalacofilho/sapood" target="_blank">SAPO</a></h3>
+			<h4>Licensed under the <a ref="license" href="https://github.com/jonasmalacofilho/sapood/blob/development/LICENSE" target="_blank">GNU GPL v3</a></h4>
+			<p>Copyright 2016 Arthur Szász, Caio Honma, Jonas Malaco, Rafael Craice, Renato Vogelaar</p>
+			<p>This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, version 3.</p>
+			<p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>
 			<hr>
 
 			<!-- Bootstrap -->
-			<h3><a href="https://github.com/twbs/bootstrap">Bootstrap</a></h3>
-			<h4><p>Code licensed <a rel="license" href="https://github.com/twbs/bootstrap/blob/master/LICENSE" target="_blank">MIT</a>, docs <a rel="license" href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC BY 3.0</a>.</p></h4>
-			<p>Code and documentation copyright 2011-2016 Twitter, Inc. Code released under <a href="https://github.com/twbs/bootstrap/blob/master/LICENSE">the MIT license</a>. Docs released under <a href="https://github.com/twbs/bootstrap/blob/master/docs/LICENSE">Creative Commons</a>.</p>
+			<h3><a href="https://github.com/twbs/bootstrap" target="_blank">Bootstrap</a></h3>
+			<h4>Licensed under the <a rel="license" href="https://github.com/twbs/bootstrap/blob/master/LICENSE" target="_blank">MIT license</a></h4>
+			<p>Copyright 2011–2016 Twitter, Inc.</p>
 			<hr>
 
+			<!-- Haxe -->
+			<h3><a href="https://github.com/HaxeFoundation/haxe" target="_blank">Haxe</a></h3>
+			<h4>Licensed under the <a rel="license" href="https://github.com/HaxeFoundation/haxe/blob/development/extra/LICENSE.txt" target="_blank">MIT and GNU GPL v2 licenses</a></h4>
+			<p>Copyright 2005–2016 Haxe Foundation</p>
+			<hr>
 		</div>
 	</div>
 </div>
