@@ -28,28 +28,18 @@ class RootRoutes extends AccessControl {
 		Sys.println(sapo.view.Login.render());
 
 	@authorize(all, guest)
-	public function postLogin()
+	public function postLogin(args:{ email:String, password:String })
 	{
-		var p = Web.getParams();
-		var email = p.get("email");
-		var pass = p.get("password");
-
-		var u = User.manager.search($email == new EmailAddress(email), null, false).first();
-		if (u == null) {
-			Web.redirect("default?error=" + StringTools.urlEncode("Usuário inválido!"));
-			return;
-		}
-		//TODO: Validade password!
-		if (!u.password.matches(pass)) {
-			Web.redirect("default?error=" + StringTools.urlEncode("Senha inválida!"));
+		var user = User.manager.select($email == new EmailAddress(args.email));
+		if (user == null || !user.password.matches(args.password)) {
+			trace('User "${args.email}" ' + (user == null ? "unknown" : "known, but password did not match"));
+			Web.redirect('default?error=${StringTools.urlEncode("Usuário ou senha inválidos")}');
 			return;
 		}
 
-		var s = new Session(u);
-		s.insert();
-		trace(s.expired());
-
-		Web.setCookie(Session.COOKIE_KEY, s.id, s.expires_at);
+		var session = new Session(user);
+		session.insert();
+		Web.setCookie(Session.COOKIE_KEY, session.id, session.expires_at);
 		Web.redirect(initialLocation());
 	}
 
