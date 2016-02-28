@@ -8,7 +8,7 @@ class SurveyRoutes extends AccessControl {
 	public function doDefault()
 	{
 		var surveys = Survey.manager.all();
-		Sys.println(sapo.view.Surveys.render(surveys));
+		Sys.println(sapo.view.Surveys.page(surveys));
 	}
 
 	@authorize("PPhoneOperator", "PSuper", "PSupervisor")
@@ -18,7 +18,7 @@ class SurveyRoutes extends AccessControl {
 		var surveys : List<Survey> = new List();
 		if (args.survey != null)
 			surveys.add(args.survey);
-		Sys.println(sapo.view.Surveys.render( surveys ));
+		Sys.println(sapo.view.Surveys.page(surveys));
 	}
 
 	public function new() {}
