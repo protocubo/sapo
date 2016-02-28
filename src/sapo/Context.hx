@@ -116,7 +116,7 @@ class Context {
 		var key = Session.COOKIE_KEY;
 		var cookies = Web.getAllCookies();
 		if (cookies.exists(key) && cookies[key].length > 1)
-			trace('WARNING multiple (${cookies[key].length}) values for cookie ${key}');
+			trace('WARNING multiple (${cookies[key].length}) values for cookie ${key}; we can\'t handle that yet');
 
 		var sid = Web.getCookies()[key];  // FIXME
 		var session = Session.manager.get(sid);

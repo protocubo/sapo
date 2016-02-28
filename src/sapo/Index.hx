@@ -40,7 +40,7 @@ class Index {
 			var aparams = Web.getAllParams();
 			for (p in aparams.keys())
 				if (aparams[p].length > 1)
-					trace('WARNING multiple (${aparams[p].length}) values for param $p');
+					trace('WARNING multiple (${aparams[p].length}) values for param $p; we can\'t handle that yet');
 
 			// treat visibly empty params as missing
 			var cparams = [ for (k in params.keys()) if (StringTools.trim(params.get(k)).length > 0) k => params.get(k) ];
