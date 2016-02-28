@@ -31,6 +31,8 @@ class AccessControl {
 			case other: Context.error('Internal: error while searching for Enum type $PRIVILEGE', Context.currentPos());
 		}
 		var valNames = [ for (n in vals.keys()) n ];
+		valNames.push(VAL_ALL);
+		valNames.push(VAL_GUEST);
 
 		var prefixes = ["do"];
 		if (verbs) prefixes = prefixes.concat(["get", "post"]);
@@ -50,11 +52,11 @@ class AccessControl {
 							m.params.push(Context.makeExpr(magic, m.pos));
 						case EConst(CIdent(cname)), EConst(CString(cname)):
 							if (!vals.exists(cname))
-								Context.fatalError('No privilege $cname (try ${valNames.join(" or ")})', m.pos);
+								Context.fatalError('No privilege $cname\nTry one of the following: ${valNames.join(", ")}', m.pos);
 							m.params.push(Context.makeExpr(vals.get(cname).index, m.pos));
 						case _:
 							Context.fatalError('Unsupported @$META value: ${p.toString()}\n' +
-									'Use a $PRIVILEGE constructor: ${valNames.join(", ")}', m.pos);
+									'Use $PRIVILEGE constructors or other special values: ${valNames.join(", ")}', m.pos);
 						}
 					}
 				case [_, META]:
