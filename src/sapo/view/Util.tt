@@ -206,11 +206,7 @@
 				</div>
 			</div>
 			<div class="row" style="margin-top: 30px;">
-<<<<<<< HEAD
-				<div class="col-md-2 col-md-offset-10"><a href="survey/(: survey.id :)" class="btn btn-primary btn-sm">VER PESQUISA</a></div>
-=======
-				<div class="col-md-2 col-md-offset-10"><a href="/survey/(: survey.id :)" class="btn btn-primary btn-sm">VER PESQUISAS</a></div>
->>>>>>> layout
+				<div class="col-md-2 col-md-offset-10"><a href="/survey/(: survey.id :)" class="btn btn-primary btn-sm">VER PESQUISA</a></div>
 			</div>
 		</div>
 	</div>
