@@ -84,11 +84,11 @@
 	(: Util.navbar() :)
 
 	<!-- TICKETS -->
-    <div class="container">
+	<div class="container">
 
-        <!-- HEAD -->
-        <h2>TICKETS</h2>
-        <hr />
+		<!-- HEAD -->
+		<h2>TICKETS</h2>
+		<hr />
 
 		<!-- FILTROS -->
 		<h3>Filtros:</h3>

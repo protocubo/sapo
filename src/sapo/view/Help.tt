@@ -8,14 +8,14 @@
 </head>
 <body>
 (: Util.navbar() :)
-	
+
 <!-- HELP -->
 <div class="container">
 
 	<!-- HEAD -->
 	<h2>USUÁRIOS</h2>
 	<hr />
-	
+
 	<div class="row">
 		<div class="col-md-3">
 			<h3 class="pesquisador"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> PESQUISADOR</h3>
@@ -35,10 +35,10 @@
 			<hr>
 		</div>
 	</div>
-	
+
 	<h2>ESTADOS DA PESQUISA</h2>
 	<hr />
-	
+
 	<div class="row">
 		<div class="col-md-3">
 			<h3 class="completa"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> COMPLETA</h3>

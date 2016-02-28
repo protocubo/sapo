@@ -15,9 +15,9 @@
 	<!-- HEAD -->
 	<h2>PESQUISAS</h2>
 	<hr />
-	
+
 	<script>
-		//Disable 'User field' if 'group field' is not selected			
+		//Disable 'User field' if 'group field' is not selected
 		function disableUserField(v) {
 			if(v==""){
 				document.getElementById("userField").disabled = true;
@@ -75,7 +75,7 @@
 					<option value="SCT" >CT</option>
 					<option value="SAccepted" >Aceitas</option>
 					<option value="SRejected" >Rejeitadas</option>
-					<option value="SSubJudice" >Sob Judice</option>					
+					<option value="SSubJudice" >Sob Judice</option>
 				</select>
 			</div>
 			<div class="col-md-2"><h4>ORDEM</h4></div>
@@ -93,8 +93,8 @@
 		</div>
 	</form>
 	<hr />
-	
-	
+
+
 
 	<!-- BUSCA -->
 	<h3>Busca:</h3>
