@@ -5,9 +5,9 @@ import haxe.macro.Expr;
 using haxe.macro.ExprTools;
 
 class AccessControlBuild {
-	static inline var META = "authorize";
-	static inline var META_ALL = "authorizeAll";
 	static inline var PRIVILEGE = "common.db.MoreTypes.Privilege";
+	public static inline var META = "authorize";
+	public static inline var META_ALL = "authorizeAll";
 
 	public static function resolveMetas(required=true, verbs=true)
 	{
