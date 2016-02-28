@@ -11,7 +11,7 @@ enum SurveyStatus {
 	SCT;
 	SAccepted;
 	SRejected;
-	SSubJudice;	
+	SSubJudice;
 }
 
 enum TicketStatus {

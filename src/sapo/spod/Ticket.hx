@@ -9,7 +9,7 @@ class Ticket extends sys.db.Object {
 	public var id:SId;
 	@:relation(survey_id) public var survey:NewSurvey;
 	@:relation(author_id) public var author:User;
-	
+
 	public var opened_at:HaxeTimestamp;
 	public var closed_at:Null<HaxeTimestamp>;
 	public var subject:String;
