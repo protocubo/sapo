@@ -52,7 +52,7 @@
                         </ul>
                     </li>
 					<!-- só o pesquisador verá essa aba, e somente esta -->
-                    <li><a href="/payment">PAGAMENTOS</a></li> 
+                    <li><a href="/payments">PAGAMENTOS</a></li> 
                     <li><a href="/help">AJUDA</a></li> 
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
@@ -141,38 +141,3 @@
 </div>
 (: end :)
 
-(: static function payments(payments:Spod.NewSurvey) :)
-<!-- LINHA: checkbox, nome do pesquisador, número da pesquisa, data da pesquisa, refpagto, datapagto, pagar -->
-<tr>
-	<td>
-		<input type="checkbox" />
-	</td>
-	<td>(: payments.surveyor.name :)</td>
-	<td>(: payments.id :)</td>
-	<td>(: payments.closed_at :)</td>
-	<td></td>
-	<td></td>
-	<td align="right">
-		<button type="button" class="btn btn-success btn-xs" aria-label="Desativar" style="width:auto;" data-toggle="modal" data-target="#pagar(: payments.id :)_um">
-			<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-		</button>
-	</td>
-</tr>
-<!-- FIM LINHA -->
-(: end :)
-
-(: static function payment(payment:Spod.NewSurvey) :)
-<!-- LINHA: número da pesquisa, data da pesquisa, endereço, refpagto, datapagto, status -->
-<tr>
-	<td>(: payment.id:)</td>
-	<td>(: payment.closed_at :)</td>
-	<td>(: payment.address :)</td>
-	<td>813518</td>
-	<td>02/02/2016</td>
-	<td class="text-right">
-		<!-- class: completa, pendente, recusada, aceita -->
-		<b class="aceita">Aceita</b>
-	</td>
-</tr>
-<!-- FIM LINHA -->
-(: end :)

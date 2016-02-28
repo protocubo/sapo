@@ -1,5 +1,97 @@
 (: import sapo.Spod :)
-(: static function render() :)
+
+(: static function surveySuperStatus(payments:Spod.NewSurvey) :)
+<!-- LINHA: checkbox, nome do pesquisador, número da pesquisa, data da pesquisa, refpagto, datapagto, pagar -->
+<tr>
+	<td>
+		<input type="checkbox" />
+	</td>
+	<td>(: payments.surveyor.name :)</td>
+	<td>(: payments.id :)</td>
+	<td>(: payments.closed_at :)</td>
+	<td></td>
+	<td></td>
+	<td align="right">
+		<button type="button" class="btn btn-success btn-xs" aria-label="Desativar" style="width:auto;" data-toggle="modal" data-target="#pagar(: payments.id :)_um">
+			<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+		</button>
+	</td>
+</tr>
+<!-- FIM LINHA -->
+(: end :)
+
+(: static function surveySimpleStatus(payment:Spod.NewSurvey) :)
+<!-- LINHA: número da pesquisa, data da pesquisa, endereço, refpagto, datapagto, status -->
+<tr>
+	<td>(: payment.id:)</td>
+	<td>(: payment.closed_at :)</td>
+	<td>(: payment.address :)</td>
+	<td>813518</td>
+	<td>02/02/2016</td>
+	<td class="text-right">
+		<!-- class: completa, pendente, recusada, aceita -->
+		<b class="aceita">Aceita</b>
+	</td>
+</tr>
+<!-- FIM LINHA -->
+(: end :)
+
+(: static function surveyorPage() :)
+<!DOCTYPE html>
+<html>
+<head>
+(: Util.head("SAPO - Pagamento") :)
+</head>
+<body>
+	(: Util.navbar() :)
+
+	<!-- PAGAMENTOS / PESQUISADOR -->
+	<div class="container">
+
+		<!-- HEAD -->
+		<h2>PAGAMENTOS</h2>
+		<hr />
+
+		<!-- PESQUISAS -->
+		<h3>Pesquisas:</h3>
+		<hr />
+
+		<!-- TABELA DE USUÁRIOS -->
+
+		<table class="table">
+			<thead>
+				<tr>
+					<!-- HEAD -->
+					<th>Nº da Pesquisa</th>
+					<th>Data</th>
+					<th>Endereço</th>
+					<th>RefPagto</th>
+					<th>Data Pgto</th>
+					<th class="text-right">Status</th>
+				</tr>
+			</thead>
+			<tbody>
+
+				(: for p in Spod.NewSurvey.manager.all() :)
+					(: surveySimpleStatus(p) :)
+				(: end :)
+
+			</tbody>
+			<tfoot>
+				<tr>
+					<td colspan="6"></td>
+				</tr>
+			</tfoot>
+		</table>
+
+	</div>
+
+(: Util.footer() :)
+</body>
+</html>
+(: end :)
+
+(: static function superPage() :)
 <!DOCTYPE html>
 <html>
 <head>
@@ -39,7 +131,7 @@
 		<tbody>
 
 			(: for p in Spod.NewSurvey.manager.all() :)
-				(: Util.payments(p) :)
+				(: surveySuperStatus(p) :)
 			(: end :)
 
 		</tbody>
