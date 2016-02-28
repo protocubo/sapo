@@ -1,14 +1,28 @@
 package sapo.route;
 
+#if macro
 import haxe.macro.Context;
 import haxe.macro.Expr;
 using haxe.macro.ExprTools;
+#else  // !macro
+import common.Dispatch;
+import sapo.spod.User;
+#end
 
-class AccessControlBuild {
-	static inline var PRIVILEGE = "common.db.MoreTypes.Privilege";
+#if !macro
+enum AccessControlError {
+	EACNotAuthorized(?user:User);
+	EACSessionExpired(session:Session);
+}
+#end
+
+@:autoBuild(sapo.route.AccessControl.resolveMetas())
+class AccessControl {
 	public static inline var META = "authorize";
 	public static inline var META_ALL = "authorizeAll";
+	public static inline var PRIVILEGE = "common.db.MoreTypes.Privilege";
 
+#if macro
 	public static function resolveMetas(required=true, verbs=true)
 	{
 		var vals = switch Context.getType(PRIVILEGE) {
@@ -56,10 +70,23 @@ class AccessControlBuild {
 		}
 		return fields;
 	}
-}
-
-#if !macro
-@:autoBuild(sapo.route.AccessControlBuild.resolveMetas())
-interface AccessControl {}
+#else  // !macro
+	public static function onDispatchMeta(v:String, params:Null<Array<Dynamic>>)
+	{
+		switch v {
+		case "authorize":
+			// no need to check for params.length == 0, since that has been enforced in macro mode
+			var ctx = Context.loop;
+			if (ctx.session == null) throw EACNotAuthorized();
+			if (ctx.session.expired()) {
+				ctx.session.expire();
+				throw EACSessionExpired(ctx.session);
+			}
+			if (!Lambda.exists(params, function (i) return i == ctx.privilege.getIndex()))
+				throw EACNotAuthorized(ctx.user);
+		case _:  // NOOP
+		}
+	}
 #end
+}
 

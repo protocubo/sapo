@@ -3,7 +3,7 @@ package sapo.route;
 import common.spod.*;
 import sapo.spod.Other;
 
-class SurveyRoutes implements AccessControl {
+class SurveyRoutes extends AccessControl {
 	@authorize("PPhoneOperator", "PSuper", "PSupervisor")
 	public function doDefault()
 	{

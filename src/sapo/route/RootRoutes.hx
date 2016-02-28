@@ -7,8 +7,8 @@ import sapo.spod.Other;
 import sapo.spod.Ticket;
 import sapo.spod.User;
 
-class RootRoutes implements AccessControl {
-	@authorizeAll
+class RootRoutes extends AccessControl {
+	@authorize(PSuper, PPhoneOperator, PSuper)
 	public function doDefault()
 	{
 		if (Context.loop.session == null) Web.redirect("/login");

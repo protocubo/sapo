@@ -4,7 +4,7 @@ import sapo.spod.Other;
 import sapo.spod.Ticket;
 import sapo.spod.User;
 
-class TicketRoutes implements AccessControl {
+class TicketRoutes extends AccessControl {
 	@authorizeAll
 	public function doDefault(?args:{ ?inbox:String, ?recipient:String, ?state:String })
 	{
