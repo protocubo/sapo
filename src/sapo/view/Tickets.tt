@@ -76,7 +76,7 @@
 
 
 
-(: static function render(?tickets:List<Spod.Ticket> ) :)
+(: static function page(?tickets:List<Spod.Ticket> ) :)
 <!DOCTYPE html>
 <html>
 <head>

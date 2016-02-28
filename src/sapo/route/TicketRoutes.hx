@@ -47,7 +47,7 @@ class TicketRoutes extends AccessControl {
 
 		);*/
 
-		Sys.println(sapo.view.Tickets.render(tickets));
+		Sys.println(sapo.view.Tickets.page(tickets));
 	}
 
 	@authorize("PPhoneOperator", "PSuper", "PSupervisor")
@@ -59,7 +59,7 @@ class TicketRoutes extends AccessControl {
 			tickets.push(args.ticket);
 		else if (args.survey != null)
 			tickets = Ticket.manager.search($survey == args.survey);
-		Sys.println(sapo.view.Tickets.render(tickets));
+		Sys.println(sapo.view.Tickets.page(tickets));
 	}
 
 	public function new() {}
