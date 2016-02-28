@@ -39,7 +39,7 @@ class RootRoutes extends AccessControl {
 
 		var session = new Session(user);
 		session.insert();
-		Web.setCookie(Session.COOKIE_KEY, session.id, session.expires_at);
+		Web.setCookie(Session.COOKIE_KEY, session.id, session.expires_at, null, "/", Web.isTora, true);
 		Web.redirect(initialLocation());
 	}
 
