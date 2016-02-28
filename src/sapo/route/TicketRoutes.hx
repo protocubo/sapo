@@ -5,7 +5,7 @@ import sapo.spod.Ticket;
 import sapo.spod.User;
 
 class TicketRoutes extends AccessControl {
-	@authorize(all)
+	@authorize(PSupervisor, PPhoneOperator, PSuper)
 	public function doDefault(?args:{ ?inbox:String, ?recipient:String, ?state:String })
 	{
 		if (args == null) args = { };
@@ -50,7 +50,7 @@ class TicketRoutes extends AccessControl {
 		Sys.println(sapo.view.Tickets.page(tickets));
 	}
 
-	@authorize("PPhoneOperator", "PSuper", "PSupervisor")
+	@authorize(PSupervisor, PPhoneOperator, PSuper)
 	public function doSearch(?args:{ ?ofUser:User, ?ticket:Ticket, ?survey:NewSurvey })
 	{
 		if (args == null) args = { };
