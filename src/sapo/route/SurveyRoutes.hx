@@ -4,14 +4,14 @@ import common.spod.*;
 import sapo.spod.Other;
 
 class SurveyRoutes extends AccessControl {
-	@authorize(PSupervisor, PPhoneOperator, PSuper)
+	@authorize(PSupervisor, PPhoneOperator, PSuperUser)
 	public function doDefault()
 	{
 		var surveys = Survey.manager.all();
 		Sys.println(sapo.view.Surveys.page(surveys));
 	}
 
-	@authorize(PSupervisor, PPhoneOperator, PSuper)
+	@authorize(PSupervisor, PPhoneOperator, PSuperUser)
 	public function doSearch(?args:{ ?survey:Survey })
 	{
 		if (args == null) args = { };

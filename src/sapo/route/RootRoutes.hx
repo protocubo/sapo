@@ -50,33 +50,33 @@ class RootRoutes extends AccessControl {
 		Web.redirect("/login");
 	}
 
-	@authorize(PSupervisor, PPhoneOperator, PSuper)
+	@authorize(PSupervisor, PPhoneOperator, PSuperUser)
 	public function doTickets(d:Dispatch)
 		d.dispatch(new TicketRoutes());
 
-	@authorize(PSupervisor, PPhoneOperator, PSuper)
+	@authorize(PSupervisor, PPhoneOperator, PSuperUser)
 	public function doSurveys(d:Dispatch)
 		d.dispatch(new SurveyRoutes());
 
-	@authorize(PSupervisor, PPhoneOperator, PSuper)
+	@authorize(PSupervisor, PPhoneOperator, PSuperUser)
 	public function doSurvey(s:NewSurvey)
 		Sys.println(sapo.view.Survey.render(s));
 
-	@authorize(PSupervisor, PSuper)
+	@authorize(PSupervisor, PSuperUser)
 	public function doSummary()
 		Sys.println(sapo.view.Summary.render());
 
-	@authorize(PSurveyor, PSuper)
+	@authorize(PSurveyor, PSuperUser)
 	public function doPayments()
 	{
 		switch Context.loop.privilege {
 		case PSurveyor: Sys.println(sapo.view.Payments.surveyorPage());
-		case PSuper: Sys.println(sapo.view.Payments.superPage());
+		case PSuperUser: Sys.println(sapo.view.Payments.superPage());
 		case other: throw 'access control model failure: got $other';
 		}
 	}
 
-	@authorize(PSuper)
+	@authorize(PSuperUser)
 	public function doRegistration()
 		Sys.println(sapo.view.Registration.render());
 

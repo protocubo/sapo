@@ -59,7 +59,7 @@ class Context {
 		Manager.cnx.request("BEGIN");
 		try {
 			// some groups
-			var superGroup = new Group(new AccessName("super"), PSuper);
+			var superGroup = new Group(new AccessName("super"), PSuperUser);
 			superGroup.insert();
 			// more
 			new Group(new AccessName("telefonista"), PPhoneOperator).insert();
