@@ -42,7 +42,7 @@ class User extends sys.db.Object {
 @:key(id)
 class Session extends sys.db.Object {
 	public static inline var COOKIE_KEY = "session_id";
-	public static inline var DEFAULT_SESSION_DURATION = 3.6*1e6;  // ms
+	public static inline var DEFAULT_SESSION_DURATION = 24*3.6*1e6;  // unit: ms
 
 	public var id:String;
 	@:relation(user_id) public var user:User;
