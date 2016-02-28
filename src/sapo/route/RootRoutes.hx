@@ -8,22 +8,6 @@ import sapo.spod.Ticket;
 import sapo.spod.User;
 
 class RootRoutes extends AccessControl {
-	@authorize(all)
-	public function doDefault()
-		Web.redirect("/tickets");  // FIXME
-
-	@authorize(PPhoneOperator, PSuper, "PSupervisor")
-	public function doTickets(d:Dispatch)
-		d.dispatch(new TicketRoutes());
-
-	@authorize("PPhoneOperator", "PSuper", "PSupervisor")
-	public function doRegistration()
-		Sys.println(sapo.view.Registration.render());
-
-	@authorize("PPhoneOperator", "PSuper", "PSupervisor")
-	public function doPayment()
-		Sys.println(sapo.view.Payment.render());
-
 	@authorize(all, guest)
 	public function doAbout()
 		Sys.println(sapo.view.About.render());
@@ -34,23 +18,7 @@ class RootRoutes extends AccessControl {
 
 	@authorize(all, guest)
 	public function doLicenses()
-	Sys.println(sapo.view.Licenses.render());
-
-	@authorize("PSurveyor")
-	public function doPayments()
-		Sys.println(sapo.view.Payments.render());
-
-	@authorize("PSurveyor", "PSupervisor", "PPhoneOperator", "PSuper")
-	public function doSummary()
-		Sys.println(sapo.view.Summary.render());
-
-	@authorize("PPhoneOperator", "PSuper", "PSupervisor")
-	public function doSurveys(d:Dispatch)
-		d.dispatch(new SurveyRoutes());
-
-	@authorize("PPhoneOperator", "PSuper", "PSupervisor")
-	public function doSurvey(s:NewSurvey)
-		Sys.println(sapo.view.Survey.render(s));
+		Sys.println(sapo.view.Licenses.render());
 
 	@authorize(all, guest)
 	public function doLogin()
@@ -88,6 +56,38 @@ class RootRoutes extends AccessControl {
 		Context.loop.session.expire();
 		Web.redirect("/login");
 	}
+
+	@authorize(PPhoneOperator, PSuper, "PSupervisor")
+	public function doTickets(d:Dispatch)
+		d.dispatch(new TicketRoutes());
+
+	@authorize("PPhoneOperator", "PSuper", "PSupervisor")
+	public function doSurveys(d:Dispatch)
+		d.dispatch(new SurveyRoutes());
+
+	@authorize("PPhoneOperator", "PSuper", "PSupervisor")
+	public function doSurvey(s:NewSurvey)
+		Sys.println(sapo.view.Survey.render(s));
+
+	@authorize("PSurveyor", "PSupervisor", "PPhoneOperator", "PSuper")
+	public function doSummary()
+		Sys.println(sapo.view.Summary.render());
+
+	@authorize("PPhoneOperator", "PSuper", "PSupervisor")
+	public function doPayment()
+		Sys.println(sapo.view.Payment.render());
+
+	@authorize("PSurveyor")
+	public function doPayments()
+		Sys.println(sapo.view.Payments.render());
+
+	@authorize("PPhoneOperator", "PSuper", "PSupervisor")
+	public function doRegistration()
+		Sys.println(sapo.view.Registration.render());
+
+	@authorize(all)
+	public function doDefault()
+		Web.redirect("/tickets");  // FIXME
 
 	public function new() { }
 }
