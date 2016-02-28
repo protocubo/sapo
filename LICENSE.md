@@ -1,6 +1,6 @@
 # Open-source licenses
 
-## SAPO – all original code
+## SAPO
 
 Copyright 2016 Arthur Szász, Caio Honma, Jonas Malaco, Rafael Craice, Renato
 Vogelaar
@@ -16,8 +16,10 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 For a copy of the GNU General Public License, see
 [gplv3.txt](docs/licenses/gplv3.txt).
 
-## Code based or that modifies the Haxe Standard Library
+## The Haxe Standard Library
+
+_— fixes and extensions_
 
 Copyright 2005–2016 Haxe Foundation.  Licensed under the
-[MIT](docs/licenses/mit.txt) license.
+[MIT](https://github.com/HaxeFoundation/haxe/blob/development/extra/LICENSE.txt) license.
 
