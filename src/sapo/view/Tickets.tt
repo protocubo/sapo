@@ -74,8 +74,6 @@
 <!-- FIM TICKET -->
 (: end :)
 
-
-
 (: static function page(?tickets:List<Spod.Ticket> ) :)
 <!DOCTYPE html>
 <html>
@@ -84,15 +82,15 @@
 </head>
 <body>
 	(: Util.navbar() :)
-	
+
 	<!-- TICKETS -->
     <div class="container">
 
         <!-- HEAD -->
         <h2>TICKETS</h2>
         <hr />
-		
-		<!-- FILTROS -->		
+
+		<!-- FILTROS -->
 		<h3>Filtros:</h3>
 		<form method="get" name="filter">
 			<div class="row">
@@ -125,16 +123,16 @@
 			</div>
 		</form>
 		<hr />
-		
+
 		<script>
 			//Disable 'group' and 'all' options when inbox 'out' is selected
-			
+
 			function disableRecipients(s) {
 				var shouldDisable = true;
 				if(s == "out")
 					document.getElementById('recipientID').selectedIndex = 2;
 				else
-					shouldDisable = false; 
+					shouldDisable = false;
 				for (i = 0; i < 2; i++)
 					document.getElementById("recipientID").options[i].disabled = shouldDisable;
 			}
@@ -158,7 +156,7 @@
 			</div>
 		</form>
 		<hr />
-		
+
 		<script>
 			//if ticket field is used survey field is disable and vice versa
 			function disableSearch(field, value) {
@@ -169,14 +167,14 @@
 				else if(field == "survey" && value.length>0)
 					document.getElementById("ticketSearch").disabled = true;
 			}
-		</script>		
-		
+		</script>
+
 
 		<!-- TICKETS -->
 		<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" style="margin-top: 60px;">
 			(:* gostaria disso: var users = Spod.Ticket.manager.search( (ofUser == null|| $author == ofUser) ) *:)
 			(:* var users:List<Spod.Ticket> = Spod.Ticket.manager.search((ofUser!=null ? $author==ofUser : 1==1)) *:)
-			
+
 			(: for t in tickets :)
 				(: ticketSummary(t) :)
 			(: end :)
