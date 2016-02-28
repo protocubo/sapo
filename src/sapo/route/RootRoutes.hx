@@ -8,6 +8,9 @@ import sapo.spod.Ticket;
 import sapo.spod.User;
 
 class RootRoutes extends AccessControl {
+	function initialLocation()
+		return Context.loop.privilege.match(PSurveyor) ? "/payments" : "/tickets";
+
 	@authorize(all, guest)
 	public function doAbout()
 		Sys.println(sapo.view.About.render());
@@ -47,7 +50,7 @@ class RootRoutes extends AccessControl {
 		trace(s.expired());
 
 		Web.setCookie(Session.COOKIE_KEY, s.id, s.expires_at);
-		Web.redirect("/");
+		Web.redirect(initialLocation());
 	}
 
 	@authorize(all)
@@ -57,37 +60,37 @@ class RootRoutes extends AccessControl {
 		Web.redirect("/login");
 	}
 
-	@authorize(PPhoneOperator, PSuper, "PSupervisor")
+	@authorize(PSupervisor, PPhoneOperator, PSuper)
 	public function doTickets(d:Dispatch)
 		d.dispatch(new TicketRoutes());
 
-	@authorize("PPhoneOperator", "PSuper", "PSupervisor")
+	@authorize(PSupervisor, PPhoneOperator, PSuper)
 	public function doSurveys(d:Dispatch)
 		d.dispatch(new SurveyRoutes());
 
-	@authorize("PPhoneOperator", "PSuper", "PSupervisor")
+	@authorize(PSupervisor, PPhoneOperator, PSuper)
 	public function doSurvey(s:NewSurvey)
 		Sys.println(sapo.view.Survey.render(s));
 
-	@authorize("PSurveyor", "PSupervisor", "PPhoneOperator", "PSuper")
+	@authorize(PSupervisor, PSuper)
 	public function doSummary()
 		Sys.println(sapo.view.Summary.render());
 
-	@authorize("PPhoneOperator", "PSuper", "PSupervisor")
+	@authorize(PSurveyor, PSuper)
 	public function doPayment()
 		Sys.println(sapo.view.Payment.render());
 
-	@authorize("PSurveyor")
+	@authorize(PSurveyor, PSuper)
 	public function doPayments()
 		Sys.println(sapo.view.Payments.render());
 
-	@authorize("PPhoneOperator", "PSuper", "PSupervisor")
+	@authorize(PSuper)
 	public function doRegistration()
 		Sys.println(sapo.view.Registration.render());
 
 	@authorize(all)
 	public function doDefault()
-		Web.redirect("/tickets");  // FIXME
+		Web.redirect(initialLocation());
 
 	public function new() { }
 }
