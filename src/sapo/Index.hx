@@ -51,7 +51,13 @@ class Index {
 			Context.shutdown();
 		} catch (e:AccessControlError) {
 			trace(e);
-			Web.redirect("/login");
+			var url = Web.getURI();
+			if (Web.getMethod().toLowerCase() == "get")
+				url += "?" + [
+					for (k in Web.getParams().keys())
+						'${StringTools.urlEncode(k)}=${StringTools.urlEncode(Web.getParams().get(k))}'
+				].join("&");
+			Web.redirect('/login?redirect=${StringTools.urlEncode(url)}');
 		} catch (e:Dynamic) {
 			Context.shutdown();
 			neko.Lib.rethrow(e);

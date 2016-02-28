@@ -24,11 +24,11 @@ class RootRoutes extends AccessControl {
 		Sys.println(sapo.view.Licenses.render());
 
 	@authorize(all, guest)
-	public function doLogin()
-		Sys.println(sapo.view.Login.render());
+	public function doLogin(args:{ ?redirect:String })
+		Sys.println(sapo.view.Login.render(args.redirect));
 
 	@authorize(all, guest)
-	public function postLogin(args:{ email:String, password:String })
+	public function postLogin(args:{ email:String, password:String, ?redirect:String })
 	{
 		var user = User.manager.select($email == new EmailAddress(args.email));
 		if (user == null || !user.password.matches(args.password)) {
@@ -40,7 +40,7 @@ class RootRoutes extends AccessControl {
 		var session = new Session(user);
 		session.insert();
 		Web.setCookie(Session.COOKIE_KEY, session.id, session.expires_at, null, "/", Web.isTora, true);
-		Web.redirect(initialLocation());
+		Web.redirect(args.redirect != null ? args.redirect : initialLocation());
 	}
 
 	@authorize(all)
