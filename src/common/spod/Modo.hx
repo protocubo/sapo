@@ -1,5 +1,5 @@
 package common.spod;
 
-@:deprecated("Moved into sapo.spod.Survey")
+@:deprecated("common.spod.Modo moved into sapo.spod.Survey")
 typedef Modo = sapo.spod.Survey.Modo;
 
