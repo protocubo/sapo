@@ -16,19 +16,17 @@ class Index {
 		}
 
 		try {
-			Context.init();  // for future optimized operation on tora
-			Context.iterate();
-
                         var method = Web.getMethod();
 			var uri = Web.getURI();
-			if (uri == "/favicon.ico") return;
-
 			if (uri == "/reset") {
 				trace("WARNING route handled manually; /reset");
 				Context.resetMainDb();
 				Web.redirect("/login");
 				return;
 			}
+
+			Context.init();  // for future optimized operation on tora
+			Context.iterate();
 
 			trace(Context.loop.session);
 			if (Context.loop.session != null) trace(Context.loop.session.expires_at.toDate());
