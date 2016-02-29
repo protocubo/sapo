@@ -49,12 +49,12 @@ class Context {
 
 	public static function resetMainDb()
 	{
-		Manager.cleanup();
-		Manager.cnx.close();
-		Manager.cnx = null;
+		if (Manager.cnx != null) {
+			Manager.cnx.close();
+			Manager.cnx = null;
+		}
 		sys.FileSystem.deleteFile(DBPATH);
-		InitDB.run();
-		dbInit();
+		init();
 
 		Manager.cnx.request("BEGIN");
 		try {
