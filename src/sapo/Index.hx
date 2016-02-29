@@ -50,7 +50,8 @@ class Index {
 
 			Context.shutdown();
 		} catch (e:AccessControlError) {
-			trace(e);
+			Context.shutdown();
+			trace('Access control error: $e');
 			var url = Web.getURI();
 			if (Web.getMethod().toLowerCase() == "get")
 				url += "?" + [
