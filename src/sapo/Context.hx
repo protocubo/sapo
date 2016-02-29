@@ -64,15 +64,20 @@ class Context {
 			// more
 			new Group(new AccessName("telefonista"), PPhoneOperator).insert();
 			new Group(new AccessName("supervisor"), PSupervisor).insert();
-			new Group(new AccessName("pesquisador"), PSurveyor).insert();
+			var surveyorGroup = new Group(new AccessName("pesquisador"), PSurveyor);
+			surveyorGroup.insert();
 
 			// some users
+			var mane = new User(new AccessName("mane"), surveyorGroup,
+					"Mane Mane", new EmailAddress("mane@sapo"));
+			mane.password = Password.make("secret");
 			var arthur = new User(new AccessName("arthur"), superGroup,
 					"Arthur Dent", new EmailAddress("arthur@sapo"));
 			arthur.password = Password.make("secret");
 			var ford = new User(new AccessName("ford"), superGroup,
 					"Ford Prefect", new EmailAddress("ford@sapo"));
 			ford.password = Password.make("secret");
+			mane.insert();
 			arthur.insert();
 			ford.insert();
 
@@ -83,14 +88,14 @@ class Context {
 			survey2.insert();
 
 			// some tickets
-			var ticket1 = new Ticket(survey1, arthur, "Overpass???");
+			var ticket1 = new Ticket(survey1, arthur, ford, "Overpass???");
 			ticket1.insert();
-			new TicketMessage(ticket1, arthur, ford, "Hey, I was distrought over they wanting to build an overpass over my house").insert();
-			new TicketMessage(ticket1, ford, arthur, "Don't panic... don't panic...").insert();
-			var ticket2 = new Ticket(survey2, ford, "About Time...");
+			new TicketMessage(ticket1, arthur, "Hey, I was distrought over they wanting to build an overpass over my house").insert();
+			new TicketMessage(ticket1, ford, "Don't panic... don't panic...").insert();
+			var ticket2 = new Ticket(survey2, ford, arthur, "About Time...");
 			ticket2.insert();
-			new TicketMessage(ticket2, ford, arthur, "Time is an illusion, lunchtime doubly so. ").insert();
-			new TicketMessage(ticket2, arthur, ford, "Very deep. You should send that in to the Reader's Digest. They've got a page for people like you.").insert();
+			new TicketMessage(ticket2, ford, "Time is an illusion, lunchtime doubly so. ").insert();
+			new TicketMessage(ticket2, arthur, "Very deep. You should send that in to the Reader's Digest. They've got a page for people like you.").insert();
 		} catch (e:Dynamic) {
 			Manager.cnx.request("ROLLBACK");
 			neko.Lib.rethrow(e);
