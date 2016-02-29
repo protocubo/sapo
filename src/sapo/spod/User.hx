@@ -2,6 +2,7 @@ package sapo.spod;
 
 import common.crypto.Password;
 import common.db.MoreTypes;
+import sys.db.Object;
 import sys.db.Types;
 
 // necessary only because we need mentions to groups
@@ -28,7 +29,9 @@ class User extends sys.db.Object {
 	public var name:String;
 	public var email:EmailAddress;
 	public var password:Null<Password>;
-
+	
+	@:relation(supervisor_id) public var supervisor : SNull<User>;
+	
 	public function new(user_name, group, name, email)
 	{
 		this.user_name = user_name;
@@ -38,6 +41,7 @@ class User extends sys.db.Object {
 		super();
 	}
 }
+
 
 @:key(id)
 class Session extends sys.db.Object {

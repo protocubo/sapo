@@ -5,6 +5,7 @@ import common.spod.statics.EstacaoMetro;
 import common.spod.statics.LinhaOnibus;
 import common.spod.statics.Referencias;
 import common.spod.statics.UF;
+import sapo.Spod.SurveyStatus;
 import sys.db.Object;
 import sys.db.Types;
 
@@ -42,7 +43,14 @@ class Survey extends Object {
 	public var macrozona : SNull<SString<255>>;
 	public var lote : SNull<SString<255>>;
 	public var estratoSocioEconomico : SNull<SString<255>>;
-
+	
+	/** CHECKS -> Verificado? **/
+	public var checkSupervisor : SNull<SBool>;
+	public var checkCT : SNull<SBool>;
+	public var checkSuper : SNull<SBool>;
+	public var group : Null<Int>;
+	/*********************************/
+	
 	public var old_survey_id : SInt;
 	public var syncTimestamp : SFloat;
 }
