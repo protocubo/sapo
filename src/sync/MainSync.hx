@@ -109,7 +109,7 @@ class MainSync
 				submap = userGroup.get(r.user_id);
 			
 			var v = submap.get(r.group) != null ? submap.get(r.group) : 0;
-			submap.set(r.group, v +1);
+			submap.set(r.group, v + 1);
 			
 			userGroup.set(r.user_id, submap);			
 		}
@@ -197,43 +197,41 @@ class MainSync
 		}
 		
 		new_sess.syncTimestamp = maxtimestamp;
-		var groups = userGroup.get(new_sess.user_id);
-		var largest = 0;
-		if (groups != null)
+		if (insertMode)
 		{
+			var groups = userGroup.get(new_sess.user_id);
+			var biggest = 1;
+			if (groups == null)
+				groups = new Map();
+				
 			for(k in groups.keys())
 			{
-				if (k > largest)
-					largest = k;
+				if (k > biggest)
+					biggest = k;
 			}
-		}
-		
-		//trace(groups != null);
-		if (groups.get(largest) < 10)
-		{			
-			groups.set(largest, groups.get(largest) + 1);
-			userGroup.set(new_sess.user_id, groups);
+			trace("cur? " + biggest);
 			
-			new_sess.group = groups.get(largest);
-		}
-		else
-		{
-			var v = 0;
-			if (groups == null)
+			//trace(groups != null);
+			if (groups.get(biggest) == null || groups.get(biggest) < 10)
 			{
-				groups = new Map();
-				v = 1;
+				var curval = groups.get(biggest) != null ? groups.get(biggest) : 0;
+				groups.set(biggest, curval + 1);
+				userGroup.set(new_sess.user_id, groups);
+				
+				new_sess.group = biggest;
 			}
 			else
-				v = largest + 1;
-			
-			groups.set(v, 1);
-			userGroup.set(new_sess.user_id, groups);
-			
-			new_sess.group = 1;
+			{
+				trace("null? ");
+				
+				var v = biggest + 1;
+				groups.set(v, 1);
+				userGroup.set(new_sess.user_id, groups);
+				
+				new_sess.group = v;
+			}
+		
 		}
-		
-		
 		
 		Macros.validateEntry(Survey, ["syncTimestamp", "id"], [ { key : "old_survey_id", value : new_sess.old_survey_id } ], new_sess);
 		
