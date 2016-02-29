@@ -3,6 +3,7 @@ package sapo.route;
 import sapo.spod.Other;
 import sapo.spod.Ticket;
 import sapo.spod.User;
+import sapo.view.Tickets.*;
 
 class TicketRoutes extends AccessControl {
 	@authorize(PSupervisor, PPhoneOperator, PSuperUser)
@@ -12,10 +13,10 @@ class TicketRoutes extends AccessControl {
 		var u = Context.loop.user;
 
 		var tickets = Ticket.manager.search(
-			(args.inbox == "out" ? $author == u : 1 == 1) &&
-			(args.state == "closed" ? $closed_at != null : $closed_at == null));
+			(args.inbox == PARAM_OUTBOX ? $author == u : $author != u) &&
+			(args.state == PARAM_CLOSED ? $closed_at != null : $closed_at == null));
 
-		Sys.println(sapo.view.Tickets.page(tickets));
+		Sys.println(page(tickets));
 	}
 
 	@authorize(PSupervisor, PPhoneOperator, PSuperUser)
@@ -27,7 +28,7 @@ class TicketRoutes extends AccessControl {
 			tickets.push(args.ticket);
 		else if (args.survey != null)
 			tickets = Ticket.manager.search($survey == args.survey);
-		Sys.println(sapo.view.Tickets.page(tickets));
+		Sys.println(page(tickets));
 	}
 
 	public function new() {}
