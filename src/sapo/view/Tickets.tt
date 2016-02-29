@@ -8,8 +8,8 @@
 		<div class="row">
 			<div class="col-md-7 panel-title">
 				<!-- DE/PARA (class: super, telefonista, supervisor e pesquisador) -->
-				<span class="glyphicon glyphicon glyphicon-stop super" aria-hidden="true"></span>
-				<span class="glyphicon glyphicon glyphicon-stop supervisor" aria-hidden="true"></span>
+				<span class="glyphicon glyphicon glyphicon-stop (: ticket.author.group.group_name :)" aria-hidden="true"></span>
+				<span class="glyphicon glyphicon glyphicon-stop (: ticket.recipient.group.group_name :)" aria-hidden="true"></span>
 				<!-- Nº do Ticket, Data da criação do Ticket, Hora da criação do Ticket -->
 				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyTicket(: ticket.id :)" aria-expanded="true" aria-controls="BodyTicket(: ticket.id :)">
 					#(: ticket.id :) - (: ticket.opened_at :) - (: ticket.subject :)
@@ -44,7 +44,7 @@
 					<p>
 						<strong>
 							<!-- DATETIME + DE + PARA (class: super, telefonista, supervisor e pesquisador) -->
-							(: message.posted_at :) - <span class="(: message.author.group.group_name:)">(: message.author.name :)@(: message.author.group.group_name:)</span> - <span class="(: message.recipient.group.group_name:)">(: message.recipient.name :)@(: message.recipient.group.group_name:)</span> :
+							(: message.posted_at :) - <span class="(: message.author.group.group_name:)">(: message.author.name :)@(: message.author.group.group_name:)</span> :
 						</strong>
 					<!-- MENSAGEM -->
 						(: message.text :)
