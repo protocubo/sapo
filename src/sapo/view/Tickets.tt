@@ -6,19 +6,20 @@
 	<!-- HEAD TICKET -->
 	<div class="panel-heading" role="tab" id="HeadTicket(: ticket.id :)">
 		<div class="row">
-			<div class="col-md-7 panel-title">
+			<div class="col-md-6 panel-title">
 				<!-- DE/PARA (class: super, telefonista, supervisor e pesquisador) -->
-				<span class="glyphicon glyphicon glyphicon-stop (: ticket.author.group.group_name :)" aria-hidden="true"></span>
-				<span class="glyphicon glyphicon glyphicon-stop (: ticket.recipient.group.group_name :)" aria-hidden="true"></span>
+				<span class="glyphicon glyphicon glyphicon-user (: ticket.author.group.group_name :)" aria-hidden="true"></span>
+				<span class="glyphicon glyphicon-arrow-right text-muted" aria-hidden="true"></span>
+				<span class="glyphicon glyphicon glyphicon-user (: ticket.recipient.group.group_name :)" aria-hidden="true"></span>
 				<!-- Nº do Ticket, Data da criação do Ticket, Hora da criação do Ticket -->
 				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyTicket(: ticket.id :)" aria-expanded="true" aria-controls="BodyTicket(: ticket.id :)">
-					#(: ticket.id :) - (: ticket.opened_at :) - (: ticket.subject :)
+					Ticket #(: ticket.id :) - (: ticket.opened_at :) - (: ticket.subject :)
 				</a>
 			</div>
-			<div class="col-md-3 panel-title">
+			<div class="col-md-4 panel-title">
 				<!-- Número da pesquisa, data da pesquisa, Nome do pesquisador (class: super, telefonista, supervisor e pesquisador) -->
 				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyTicket(: ticket.id :)" aria-expanded="true" aria-controls="BodyTicket(: ticket.id :)">
-					(:ticket.survey.id:) - (:ticket.survey.closed_at:) - <b class="pesquisador">(:ticket.survey.surveyor.name:)</b>
+					Pesquisa #(:ticket.survey.id:) - (:ticket.survey.closed_at:) - <b class="pesquisador">(:ticket.survey.surveyor.name:)</b>
 				</a>
 			</div>
 			<div class="col-md-2 panel-title text-right">
@@ -39,7 +40,7 @@
 	<div id="BodyTicket(: ticket.id :)" class="panel-collapse collapse" role="tabpanel" aria-labelledby="HeadTicket(: ticket.id :)">
 		<div class="panel-body">
 			<div class="row">
-				<div class="col-md-7 barraderolagem">
+				<div class="col-md-6 barraderolagem">
 				(: for message in Spod.TicketMessage.manager.search($ticket == ticket) :)
 					<p>
 						<strong>
@@ -51,13 +52,16 @@
 					</p>
 				(: end :)
 				</div>
-				<div class="col-md-5 barraderolagem">
+				<div class="col-md-6 barraderolagem">
 					<!-- DADOS DA PESQUISA -->
-					<p><b>Endereço:</b> (:ticket.survey.address :) </p>
-					<p><b>Contato:</b> Marcelo - (11) 888888888 <b>Senha:</b> (:ticket.survey.code :)</p>
+					<div class="bloco"><b>Endereço:</b> (:ticket.survey.address :) </div>
+					<div class="bloco"><b>Contato:</b> Marcelo - (11) 888888888</div>
+					<div class="bloco"><b>Senha:</b> (:ticket.survey.code :)</div>
+					<hr>
 					<p><b>Moradores:</b></p>
 					<p>Maria (25): Residência - Trabalho - Residência</p>
-					<p><b>Conferência:</b> 3 carros</p>
+					<hr>
+					<div class="bloco"><b>Conferência:</b> 3 carros</div>
 				</div>
 			</div>
 			<!-- AÇÕES -->
@@ -65,7 +69,7 @@
 				<div class="col-md-2"><button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_fechar">FECHAR</button></div>
 				<div class="col-md-2"><button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_responder">RESPONDER</button></div>
 				<div class="col-md-2"><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_incluir">INCLUIR</button></div>
-				<div class="col-md-2 col-md-offset-1"><a href="/survey/(: ticket.survey.id :)" type="button" class="btn btn-primary btn-sm">VER PESQUISA</a></div>
+				<div class="col-md-2"><a href="/survey/(: ticket.survey.id :)" type="button" class="btn btn-primary btn-sm">VER PESQUISA</a></div>
 				<div class="col-md-2"><button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_status">MUDAR STATUS</button></div>
 			</div>
 		</div>
@@ -142,11 +146,11 @@
 		<h3>Busca:</h3>
 		<form action="/tickets/search" method="get">
 			<div class="row">
-				<div class="col-md-2"><h4>Nº DO TICKET</h4></div>
+				<div class="col-md-2"><h4>TICKET</h4></div>
 				<div class="col-md-2">
 					<input type="text" name="ticket" id="ticketSearch" class="form-control" oninput="disableSearch(this.name, this.value)" placeholder="Nº do Ticket">
 				</div>
-				<div class="col-md-2"><h4>Nº DA PESQUISA</h4></div>
+				<div class="col-md-2"><h4>PESQUISA</h4></div>
 				<div class="col-md-2">
 					<input type="text" name="survey" id="surveySearch" class="form-control" oninput="disableSearch(this.name, this.value)" placeholder="Nº da Pesquisa">
 				</div>
