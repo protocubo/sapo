@@ -84,9 +84,14 @@ class MainSync
 		var serverTimestamp = serverTimestamp();
 		#end
 		
-		//SQLite
-		Manager.cnx.request("CREATE VIEW IF NOT EXISTS UpdatedSession AS SELECT MAX(id) as session_id, old_survey_id, MAX(syncTimestamp) as syncTimestamp FROM Survey GROUP BY old_survey_id");
-		
+		//SQLite - yay versao antiga
+		try{
+		Manager.cnx.request("CREATE VIEW UpdatedSession AS SELECT MAX(id) as session_id, old_survey_id, MAX(syncTimestamp) as syncTimestamp FROM Survey GROUP BY old_survey_id");
+		}
+		catch (e : Dynamic)
+		{
+			
+		}
 		//MySQL
 		//Manager.cnx.request("CREATE OR REPLACE VIEW UpdatedSession AS SELECT MAX(id) as session_id, old_survey_id, MAX(syncTimestamp) as syncTimestamp FROM Survey GROUP BY old_survey_id");
 		
@@ -96,12 +101,15 @@ class MainSync
 		{
 			var submap : Map<Int, Int>;
 			if (userGroup.get(r.user_id) == null)
+			{
+				trace("woot");
 				submap = new Map();
+			}
 			else
 				submap = userGroup.get(r.user_id);
 			
 			var v = submap.get(r.group) != null ? submap.get(r.group) : 0;
-			submap.set(r.group, v + 1);
+			submap.set(r.group, v +1);
 			
 			userGroup.set(r.user_id, submap);			
 		}
@@ -113,8 +121,8 @@ class MainSync
 		
 		// Query -> ../../extras/main.sql
 		//Session_id only 
-		var updateVars = targetCnx.request("SELECT DISTINCT session_id FROM ((SELECT ep.session_id as session_id FROM SyncMap sm join EnderecoProp ep ON sm.tbl = 'EnderecoProp' AND sm.new_id = ep.id /*AND sm.timestamp > x*/) UNION ALL (SELECT  s.id as session_id FROM SyncMap sm JOIN Session s ON sm.tbl = 'Session' AND sm.new_id = s.id /*AND sm.timestamp > x*/) UNION ALL ( select f.session_id as session_id FROM SyncMap sm JOIN Familia f ON f.id = sm.new_id AND sm.tbl = 'Familia'  /*AND sm.timestamp > x*/) UNION ALL (select  m.session_id as session_id FROM SyncMap sm JOIN Morador m ON m.id = sm.new_id AND sm.tbl = 'Morador'  /*AND sm.timestamp > x*/) UNION ( select  p.session_id as session_id FROM SyncMap sm JOIN Ponto p ON  sm.tbl = 'Ponto' AND p.id = sm.new_id  /*AND sm.timestamp > x*/) UNION ALL (select m.session_id as session_id FROM SyncMap sm JOIN Modo m ON m.id = sm.new_id AND sm.tbl = 'Modo'  /*AND sm.timestamp > x*/)	) ack WHERE session_id IS NOT NULL ORDER BY session_id ASC").results().map(function(v) { return v.session_id; } ).array();
-		//var updateVars = targetCnx.request("SELECT id as session_id FROM Session WHERE id < 11").results().map(function(v) { return v.session_id; } ).array();
+		//var updateVars = targetCnx.request("SELECT DISTINCT session_id FROM ((SELECT ep.session_id as session_id FROM SyncMap sm join EnderecoProp ep ON sm.tbl = 'EnderecoProp' AND sm.new_id = ep.id /*AND sm.timestamp > x*/) UNION ALL (SELECT  s.id as session_id FROM SyncMap sm JOIN Session s ON sm.tbl = 'Session' AND sm.new_id = s.id /*AND sm.timestamp > x*/) UNION ALL ( select f.session_id as session_id FROM SyncMap sm JOIN Familia f ON f.id = sm.new_id AND sm.tbl = 'Familia'  /*AND sm.timestamp > x*/) UNION ALL (select  m.session_id as session_id FROM SyncMap sm JOIN Morador m ON m.id = sm.new_id AND sm.tbl = 'Morador'  /*AND sm.timestamp > x*/) UNION ( select  p.session_id as session_id FROM SyncMap sm JOIN Ponto p ON  sm.tbl = 'Ponto' AND p.id = sm.new_id  /*AND sm.timestamp > x*/) UNION ALL (select m.session_id as session_id FROM SyncMap sm JOIN Modo m ON m.id = sm.new_id AND sm.tbl = 'Modo'  /*AND sm.timestamp > x*/)	) ack WHERE session_id IS NOT NULL ORDER BY session_id ASC").results().map(function(v) { return v.session_id; } ).array();
+		var updateVars = targetCnx.request("SELECT id as session_id FROM Session WHERE id < 100").results().map(function(v) { return v.session_id; } ).array();
 		#if debug
 		maxtimestamp = Date.now().getTime();
 		#else
@@ -191,23 +199,40 @@ class MainSync
 		new_sess.syncTimestamp = maxtimestamp;
 		var groups = userGroup.get(new_sess.user_id);
 		var largest = 0;
-		for(k in groups.keys())
+		if (groups != null)
 		{
-			if (k > largest)
-				largest = k;
+			for(k in groups.keys())
+			{
+				if (k > largest)
+					largest = k;
+			}
 		}
+		
+		//trace(groups != null);
 		if (groups.get(largest) < 10)
-		{
-			new_sess.group = groups.get(largest);
+		{			
 			groups.set(largest, groups.get(largest) + 1);
-			userGroup.set(groups);
+			userGroup.set(new_sess.user_id, groups);
+			
+			new_sess.group = groups.get(largest);
 		}
 		else
 		{
-			new_sess.group = groups.get(largest) + 1;
-			groups.set(largest, 1);
+			var v = 0;
+			if (groups == null)
+			{
+				groups = new Map();
+				v = 1;
+			}
+			else
+				v = largest + 1;
+			
+			groups.set(v, 1);
 			userGroup.set(new_sess.user_id, groups);
+			
+			new_sess.group = 1;
 		}
+		
 		
 		
 		Macros.validateEntry(Survey, ["syncTimestamp", "id"], [ { key : "old_survey_id", value : new_sess.old_survey_id } ], new_sess);
