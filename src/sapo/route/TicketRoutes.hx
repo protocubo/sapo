@@ -19,34 +19,6 @@ class TicketRoutes extends AccessControl {
 
 		);
 
-		if (args.inbox == "out")
-		{
-
-		}
-		else if (args.inbox == "in")
-		{
-			//Todo: Spod Recipients
-			//if(args.recipient == "all")
-			//	tickets = Ticket.manager.search( (args.state == "open"? $closed_at == null:$closed_at != null));
-			//else
-			//	tickets = Ticket.manager.search( (args.state == "open"? $closed_at == null:$closed_at != null));
-		}
-		else
-		{
-
-		}
-
-		/*tickets = Ticket.manager.search(
-		switch args.inbox {
-			case "in": 1 == 1; //$recipient == u;
-			case "out": $author == u;
-			default: 1==1;
-		}
-
-		$author == u
-
-		);*/
-
 		Sys.println(sapo.view.Tickets.page(tickets));
 	}
 
