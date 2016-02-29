@@ -10,45 +10,13 @@ class TicketRoutes {
 	public function doDefault(?args:{ ?inbox:String, ?recipient:String, ?state:String })
 	{
 		if (args == null) args = { };
-		var tickets : List<Spod.Ticket> = new List();
-		var u = Context.loop.user;
-		var tickets : List<Ticket> = new List();
-		
-		tickets = Ticket.manager.search(
-		(args.inbox == "out"? $author == u : 1 == 1) &&
-		(args.state == "open"? $closed_at == null:$closed_at != null)
-		
+		var u = Context.loop.user;		
+		var tickets = Ticket.manager.search(
+		(args.inbox == "out"? $author == u : 1 == 1) && // out-> individual
+		(args.inbox == "in" && args.recipient == "individual"? /*to do: recipient == user*/ 1 == 1: 1 == 1) &&
+		(args.inbox == "in" && args.recipient == "group"? /*to do: recipient == user.group*/ 1 == 1: 1 == 1) &&
+		(args.state == "closed"? $closed_at != null:$closed_at == null)
 		);
-		
-		if (args.inbox == "out")
-		{
-			
-		}
-		else if (args.inbox == "in")
-		{
-			//Todo: Spod Recipients
-			//if(args.recipient == "all")
-			//	tickets = Ticket.manager.search( (args.state == "open"? $closed_at == null:$closed_at != null));
-			//else
-			//	tickets = Ticket.manager.search( (args.state == "open"? $closed_at == null:$closed_at != null));
-		}
-		else
-		{
-			
-		}
-		
-		/*tickets = Ticket.manager.search(
-		switch args.inbox {
-			case "in": 1 == 1; //$recipient == u;
-			case "out": $author == u;
-			default: 1==1;
-		}
-		
-		$author == u
-		
-		
-		);*/
-
 		Sys.println(sapo.view.Tickets.render(tickets));
 	}
 
@@ -68,8 +36,10 @@ class TicketRoutes {
 
 class SurveysRoutes
 {
-	public function doDefault()
+	public function doDefault(?args:{ ?group:String, ?user:String, ?valid:String, ?payment:String, ?status:String, ?order:String } )
 	{
+		if (args == null) args = { };
+		
 		var surveys = NewSurvey.manager.all();
 		Sys.println(sapo.view.Surveys.render(surveys));
 	}
