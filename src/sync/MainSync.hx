@@ -1,21 +1,16 @@
 package sync;
 import common.spod.EnumSPOD;
-import common.spod.Familia;
-import common.spod.Modo;
-import common.spod.Morador;
-import common.spod.Ocorrencias;
-import common.spod.Ponto;
 import common.spod.statics.EstacaoMetro;
 import common.spod.statics.LinhaOnibus;
 import common.spod.statics.Referencias;
 import common.spod.statics.UF;
-import common.spod.Survey;
 import haxe.Http;
 import haxe.Json;
 import haxe.Log;
 import haxe.PosInfos;
 import common.spod.InitDB;
 import sapo.Context;
+import sapo.spod.Survey;
 
 import sys.db.Connection;
 import sys.db.Manager;
@@ -44,6 +39,8 @@ class MainSync
 	
 	static var refValue : Map<String,Map<Int,Int>>;
 	
+	//User_id , Group, Count
+	static var userGroup : Map<Int, Map<Int,Int>>;
 	
 	static var syncex : Map<String,Int>;
 	
@@ -86,6 +83,29 @@ class MainSync
 		#else
 		var serverTimestamp = serverTimestamp();
 		#end
+		
+		//SQLite
+		Manager.cnx.request("CREATE VIEW IF NOT EXISTS UpdatedSession AS SELECT MAX(id) as session_id, old_survey_id, MAX(syncTimestamp) as syncTimestamp FROM Survey GROUP BY old_survey_id");
+		
+		//MySQL
+		//Manager.cnx.request("CREATE OR REPLACE VIEW UpdatedSession AS SELECT MAX(id) as session_id, old_survey_id, MAX(syncTimestamp) as syncTimestamp FROM Survey GROUP BY old_survey_id");
+		
+		var resUsers = Manager.cnx.request("SELECT id, user_id, `group` FROM Survey s JOIN UpdatedSession us ON s.id = us.session_id ORDER BY user_id, `group`");
+		userGroup = new Map();
+		for (r in resUsers)
+		{
+			var submap : Map<Int, Int>;
+			if (userGroup.get(r.user_id) == null)
+				submap = new Map();
+			else
+				submap = userGroup.get(r.user_id);
+			
+			var v = submap.get(r.group) != null ? submap.get(r.group) : 0;
+			submap.set(r.group, v + 1);
+			
+			userGroup.set(r.user_id, submap);			
+		}
+		
 		
 		//Todos os valores de enums -> usa as keys "EnumName" e "Old_val" => "New_val" para conversão das entradas originais para as novas
 		//A estrutura é Map<String,Map<Int,Int>>
@@ -169,6 +189,26 @@ class MainSync
 		}
 		
 		new_sess.syncTimestamp = maxtimestamp;
+		var groups = userGroup.get(new_sess.user_id);
+		var largest = 0;
+		for(k in groups.keys())
+		{
+			if (k > largest)
+				largest = k;
+		}
+		if (groups.get(largest) < 10)
+		{
+			new_sess.group = groups.get(largest);
+			groups.set(largest, groups.get(largest) + 1);
+			userGroup.set(groups);
+		}
+		else
+		{
+			new_sess.group = groups.get(largest) + 1;
+			groups.set(largest, 1);
+			userGroup.set(new_sess.user_id, groups);
+		}
+		
 		
 		Macros.validateEntry(Survey, ["syncTimestamp", "id"], [ { key : "old_survey_id", value : new_sess.old_survey_id } ], new_sess);
 		
