@@ -33,7 +33,6 @@ class Macros {
 		return macro {
 			var name = Type.getEnumName($target);
 			
-			trace("refValue " + refValue.get(name));
 			if (refValue.get(name) == null)
 			{
 				Macros.warnTable(name, null, null);
