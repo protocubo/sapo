@@ -5,7 +5,7 @@
 (: static var PARAM_OPEN = "open" :)
 (: static var PARAM_CLOSED = "closed" :)
 
-(: static function ticketSummary(ticket:Spod.Ticket) :)
+(: static function ticketSummary(ticket:Spod.Ticket, ?open=false) :)
 <!-- TICKET -->
 <div class="panel panel-default">
 	<!-- HEAD TICKET -->
@@ -41,7 +41,7 @@
 		</div>
 	</div>
 	<!-- BODY TICKET -->
-	<div id="BodyTicket(: ticket.id :)" class="panel-collapse collapse" role="tabpanel" aria-labelledby="HeadTicket(: ticket.id :)">
+	<div id="BodyTicket(: ticket.id :)" class="panel-collapse collapse (: if open :)in(: end :)" role="tabpanel" aria-labelledby="HeadTicket(: ticket.id :)">
 		<div class="panel-body">
 			<div class="row">
 				<div class="col-md-7 barraderolagem">
@@ -178,19 +178,20 @@
 
 		<!-- TICKETS -->
 		<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" style="margin-top: 60px;">
-			(:* gostaria disso: var users = Spod.Ticket.manager.search( (ofUser == null|| $author == ofUser) ) *:)
-			(:* var users:List<Spod.Ticket> = Spod.Ticket.manager.search((ofUser!=null ? $author==ofUser : 1==1)) *:)
-
-			(: for t in tickets :)
-				(: ticketSummary(t) :)
+			(: if tickets.length == 1 :)
+				(: ticketSummary(tickets.first(), true) :)
+			(: else :)
+				(: for t in tickets :)
+					(: ticketSummary(t) :)
+				(: end :)
 			(: end :)
 		</div>
 	</div>
 	(: for t in tickets :)
-	(: Modal.modalticketfechar(t) :)
-	(: Modal.modalticketresponder(t) :)
-	(: Modal.modalticketincluir(t) :)
-	(: Modal.modalticketstatus(t) :)
+		(: Modal.modalticketfechar(t) :)
+		(: Modal.modalticketresponder(t) :)
+		(: Modal.modalticketincluir(t) :)
+		(: Modal.modalticketstatus(t) :)
 	(: end :)
 
 (: Util.footer() :)
