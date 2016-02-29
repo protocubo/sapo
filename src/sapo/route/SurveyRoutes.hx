@@ -1,7 +1,6 @@
 package sapo.route;
 
-import common.spod.*;
-import sapo.spod.Other;
+import sapo.spod.Survey;
 
 class SurveyRoutes extends AccessControl {
 	@authorize(PSupervisor, PPhoneOperator, PSuperUser)
@@ -9,18 +8,18 @@ class SurveyRoutes extends AccessControl {
 	{
 		if (args == null) args = { };
 		
-		var surveys = NewSurvey.manager.all();
-		Sys.println(sapo.view.Surveys.render(surveys));
+		var surveys = Survey.manager.all();
+		Sys.println(sapo.view.Surveys.page(surveys));
 	}
 
 	@authorize(PSupervisor, PPhoneOperator, PSuperUser)
 	public function doSearch(?args:{ ?survey:Survey })
 	{
 		if (args == null) args = { };
-		var surveys : List<NewSurvey> = new List();
+		var surveys : List<Survey> = new List();
 		if (args.survey != null)
 			surveys.add(args.survey);
-		Sys.println(sapo.view.Surveys.render( surveys ));
+		Sys.println(sapo.view.Surveys.page( surveys ));
 	}
 
 	public function new() {}
