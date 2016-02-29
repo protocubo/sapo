@@ -45,15 +45,17 @@
 		<div class="panel-body">
 			<div class="row">
 				<div class="col-md-7 barraderolagem">
+				(: var first = true :)
 				(: for message in Spod.TicketMessage.manager.search($ticket == ticket) :)
 					<p>
 						<strong>
 							<!-- DATETIME + DE + PARA (class: super, telefonista, supervisor e pesquisador) -->
-							(: message.posted_at :) - <span class="(: message.author.group.group_name:)">(: message.author.name :)@(: message.author.group.group_name:)</span> :
+							(: message.posted_at :) - <span class="(: message.author.group.group_name:)">(: message.author.name :)@(: message.author.group.group_name:)</span>(: if first :) - <span class="(: ticket.recipient.group.group_name:)">(: ticket.recipient.name :)@(: ticket.recipient.group.group_name:)</span>(: end :) :
 						</strong>
 					<!-- MENSAGEM -->
 						(: message.text :)
 					</p>
+					(: do first = false :)
 				(: end :)
 				</div>
 				<div class="col-md-5 barraderolagem">
