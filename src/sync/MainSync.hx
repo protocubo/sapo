@@ -155,7 +155,7 @@ class MainSync
 				"dataInicioPesquisaPapel", "dataFimPesquisaPapel", "codigoFormularioPapel", 
 				"date_create", "date_started", "date_finished", "date_completed",
 				"endereco_id", "pin", "latitude", "longitude",
-				"municipio", "bairro", "logradouro", "numero", "complemento", "cep",
+				"municipio", "bairro", "logradouro", "numero", "complemento","cep",
 				"zona","macrozona","lote","estratoSocioEconomico":
 					Reflect.setField(new_sess, f, Reflect.field(dbSession, f));
 				//Enum
