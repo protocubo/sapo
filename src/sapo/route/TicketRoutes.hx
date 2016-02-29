@@ -8,16 +8,12 @@ class TicketRoutes extends AccessControl {
 	@authorize(PSupervisor, PPhoneOperator, PSuperUser)
 	public function doDefault(?args:{ ?inbox:String, ?recipient:String, ?state:String })
 	{
-		if (args == null) args = { };
-		var tickets : List<Ticket> = new List();
+		if (args == null) args = {};
 		var u = Context.loop.user;
-		var tickets : List<Ticket> = new List();
 
-		tickets = Ticket.manager.search(
-		(args.inbox == "out"? $author == u : 1 == 1) &&
-		(args.state == "open"? $closed_at == null:$closed_at != null)
-
-		);
+		var tickets = Ticket.manager.search(
+			(args.inbox == "out" ? $author == u : 1 == 1) &&
+			(args.state == "closed" ? $closed_at != null : $closed_at == null));
 
 		Sys.println(sapo.view.Tickets.page(tickets));
 	}
