@@ -78,13 +78,20 @@
 	<hr />
 
 	<script>
-		//Disable 'User field' if 'group field' is not selected
-		function disableUserField(v) {
+		//Disable 'User field' if 'group field' is not selected	else get all users in the group		
+		function disableUserField(v) 
+		{
+			for(i=0;i<(:Spod.Group.manager.all().length + 1:);i++)
+			{
+				document.getElementById("userID"+i).style.visibility = 'hidden';
+			}
+			document.getElementById("userID"+v).style.visibility = 'visible';
 			if(v==""){
-				document.getElementById("userField").disabled = true;
-				document.getElementById('userField').selectedIndex = 0;
-			}else
-				document.getElementById("userField").disabled = false;
+				//document.getElementById("userID").disabled = true;
+				//document.getElementById('userField').selectedIndex = 0;
+			}else{
+				//document.getElementById("userField").disabled = false;
+			}
 		}
 	</script>
 
@@ -95,18 +102,27 @@
 			<div class="col-md-2"><h4>GRUPO:</h4></div>
 			<div class="col-md-2">
 				<select class="form-control" name="group" onchange="disableUserField(this.value)">
-					<option value="" >Selecione</option>
+					<option value="0" >Selecione</option>
 					(: for g in Spod.Group.manager.all() :)
-					<option value="(:g.id:)">(:g.group_name:)</option>
+					<option value=(:g.id:)>(:g.group_name:)</option>
 					(: end :)
 				</select>
 			</div>
 			<div class="col-md-2"><h4>USUÁRIO</h4></div>
 			<div class="col-md-2">
-				<select class="form-control" name="user" id="userField" disabled>
-					<option value="">Selecione</option>
-					<!-- pegar grupo: listar usuários da lista anterior -->
+				<select class="form-control" id="userID0" disabled>
+					<option value="">---------</option>
 				</select>
+				
+				(: for g in Spod.Group.manager.all() :)				
+					<select class="form-control" id="userID(:g.id:)">
+						<option value=0>todos</option>
+						(: for u in Spod.User.manager.search($group_id == g.id ) :)
+							<option value=(:u.id:)>(:u.name:)</option>
+						(: end :)
+					</select>			
+				(: end :)
+				
 			</div>
 			<div class="col-md-2"><h4>VÁLIDA</h4></div>
 			<div class="col-md-2">

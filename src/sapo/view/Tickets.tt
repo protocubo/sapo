@@ -97,7 +97,6 @@
 				<div class="col-md-1"><h4>CAIXA:</h4></div>
 				<div class="col-md-2">
 					<select class="form-control" name="inbox" onchange="disableRecipients(this.value)">
-					<option value="all">Todos</option>
 						<option value="in">Entrada</option>
 						<option value="out">Enviados</option>
 					</select>
