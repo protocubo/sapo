@@ -8,8 +8,11 @@ import sapo.spod.Ticket;
 import sapo.spod.User;
 
 class RootRoutes extends AccessControl {
-	function initialLocation()
-		return Context.loop.privilege.match(PSurveyor) ? "/payments" : "/tickets";
+	function initialLocation(?user:User)
+	{
+		var priv = user == null ? Context.loop.privilege : user.group.privilege;
+		return priv.match(PSurveyor) ? "/payments" : "/tickets";
+	}
 
 	@authorize(all, guest)
 	public function doAbout()
@@ -43,7 +46,7 @@ class RootRoutes extends AccessControl {
 		var session = new Session(user);
 		session.insert();
 		Web.setCookie(Session.COOKIE_KEY, session.id, session.expires_at, null, "/", Web.isTora, true);
-		Web.redirect(args.redirect != null ? args.redirect : initialLocation());
+		Web.redirect(args.redirect != null ? args.redirect : initialLocation(user));
 	}
 
 	@authorize(all)
