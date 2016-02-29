@@ -1,5 +1,7 @@
 package sapo.route;
 
+import common.Dispatch;
+import common.Web;
 import sapo.spod.Other;
 import sapo.spod.Ticket;
 import sapo.spod.User;
@@ -29,6 +31,20 @@ class TicketRoutes extends AccessControl {
 		else if (args.survey != null)
 			tickets = Ticket.manager.search($survey == args.survey);
 		Sys.println(page(tickets));
+	}
+
+	@authorize(PSupervisor, PPhoneOperator, PSuperUser)
+	public function doClose(t:Lock<Ticket>)
+	{
+		switch Context.loop.privilege {
+		case PSupervisor: if (Context.loop.user != t.author) throw 'Can\'t close ticket authored by someone else';
+		case PSuperUser:  // ok;
+		case _: throw "Assertion failed";
+		}
+
+		t.closed_at = Context.loop.now;
+		t.update();
+		Web.redirect('/tickets/search?ticket=${t.id}');
 	}
 
 	public function new() {}
