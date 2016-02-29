@@ -1,0 +1,32 @@
+(: import sapo.Spod :)
+
+(: static function render() :)
+<!DOCTYPE html>
+<html>
+<head>
+(: Util.head("SAPO – Sobre") :)
+</head>
+<body>
+(: Util.navbar() :)
+
+<!-- ABOUT -->
+<div class="container">
+
+	<!-- HEAD -->
+	<h2>SOBRE</h2>
+	<hr />
+	<div class="row">
+		<div class="col-md-12">
+
+			<hr />
+			<div id="chart_div"></div>
+		</div>
+	</div>
+</div>
+<hr />
+
+(: Util.footer() :)
+</body>
+</html>
+(: end :)
+

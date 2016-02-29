@@ -159,7 +159,7 @@
 		</div>
 	</div>
 (: end :)
-	
+
 (: static function modalcadastroeditar(cadastro:Spod.User) :)
 	<div class="modal fade" id="cadastro(: cadastro.id :)_editar" tabindex="-1" role="dialog" aria-labelledby="cadastro(: cadastro.id :)_editar_label">
 		<div class="modal-dialog" role="document">
@@ -236,26 +236,26 @@
 (: end :)
 
 (: static function modalpagamentospagar(pagamentos:Spod.NewSurvey) :)
-    <div class="modal fade" id="pagar(: pagamentos.id :)_um" tabindex="-1" role="dialog" aria-labelledby="pagar(: pagamentos.id :)_um_label">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="pagar(: pagamentos.id :)_um_label">PAGAR PESQUISA</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-4"><h4>Ref. Pagamento:</h4></div>
-                        <div class="col-md-8"><input type="text" class="form-control" /></div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <div class="row">
-                        <div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
-                        <div class="col-md-6"><button type="button" class="btn btn-success">PAGAR</button></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="modal fade" id="pagar(: pagamentos.id :)_um" tabindex="-1" role="dialog" aria-labelledby="pagar(: pagamentos.id :)_um_label">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="pagar(: pagamentos.id :)_um_label">PAGAR PESQUISA</h4>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-4"><h4>Ref. Pagamento:</h4></div>
+						<div class="col-md-8"><input type="text" class="form-control" /></div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div class="row">
+						<div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
+						<div class="col-md-6"><button type="button" class="btn btn-success">PAGAR</button></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 (: end :)

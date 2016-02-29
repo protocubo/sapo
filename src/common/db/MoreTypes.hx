@@ -28,7 +28,7 @@ enum Privilege {
 	PSurveyor;
 	PSupervisor;
 	PPhoneOperator;
-	PSuper;
+	PSuperUser;
 }
 
 abstract AccessName(String) to String {

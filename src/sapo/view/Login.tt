@@ -1,6 +1,6 @@
 (: import sapo.Spod :)
 
-(: static function render() :)
+(: static function render(?redirect:String) :)
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,33 +20,35 @@ $("document").ready(function()
 
 	<!-- INDEX -->
 	<div class="container">
-	<form method="POST" action="/login">
-		<!-- HEAD -->
-		<div class="row">
-			<div class="col-md-12">
-				<h2>SAPO</h2>
-				<hr />
-				<img src="/resources/sapo_foto.jpg" class="img-responsive">
-				<hr />
+		(: var url = "/login" :)
+		(: do if (redirect != null) url += "?redirect=" + StringTools.urlEncode(redirect) :)
+		<form method="POST" action="(: url :)">
+			<!-- HEAD -->
+			<div class="row">
+				<div class="col-md-12">
+					<h2>SAPO</h2>
+					<hr />
+					<img src="/resources/sapo_foto.jpg" class="img-responsive">
+					<hr />
+				</div>
 			</div>
-		</div>
-		<div class="row">
-			<div class="col-md-4">
-				<h3>E-mail:</h3>
-				<input type="email" name="email" class="form-control" required />
+			<div class="row">
+				<div class="col-md-4">
+					<h3>E-mail:</h3>
+					<input type="email" name="email" class="form-control" required />
+				</div>
+				<div class="col-md-4">
+					<h3>Senha:</h3>
+					<input type="password" name="password" class="form-control" required />
+				</div>
+				<div class="col-md-4">
+					<h3>&nbsp;</h3>
+					<button type="button" class="btn btn-success">ENTRAR</button>
+				</div>
 			</div>
-			<div class="col-md-4">
-				<h3>Senha:</h3>
-				<input type="password" name="password" class="form-control" required />
-			</div>
-			<div class="col-md-4">
-				<h3>&nbsp;</h3>
-				<button type="button" class="btn btn-success">ENTRAR</button>
-			</div>
-		</div>
-		<hr />
-	</form>
-	 </div>
+			<hr />
+		</form>
+	</div>
 
 (: Util.footer() :)
 </body>

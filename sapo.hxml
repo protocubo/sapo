@@ -6,6 +6,7 @@
 -main sapo.Index
 -lib tink_template
 -lib compiletime
+-D dump=pretty
 
 --next
 

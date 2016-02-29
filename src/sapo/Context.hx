@@ -4,7 +4,9 @@ import common.Web;
 import common.crypto.Password;
 import common.db.MoreTypes;
 import common.spod.InitDB;
-import sapo.Spod;
+import sapo.spod.Other;
+import sapo.spod.Ticket;
+import sapo.spod.User;
 import sys.db.*;
 
 class Context {
@@ -47,17 +49,17 @@ class Context {
 
 	public static function resetMainDb()
 	{
-		Manager.cleanup();
-		Manager.cnx.close();
-		Manager.cnx = null;
+		if (Manager.cnx != null) {
+			Manager.cnx.close();
+			Manager.cnx = null;
+		}
 		sys.FileSystem.deleteFile(DBPATH);
-		InitDB.run();
-		dbInit();
+		init();
 
 		Manager.cnx.request("BEGIN");
 		try {
 			// some groups
-			var superGroup = new Group(new AccessName("super"), PSuper);
+			var superGroup = new Group(new AccessName("super"), PSuperUser);
 			superGroup.insert();
 			// more
 			new Group(new AccessName("telefonista"), PPhoneOperator).insert();
@@ -114,7 +116,7 @@ class Context {
 		var key = Session.COOKIE_KEY;
 		var cookies = Web.getAllCookies();
 		if (cookies.exists(key) && cookies[key].length > 1)
-			trace('WARNING multiple (${cookies[key].length}) values for cookie ${key}');
+			trace('WARNING multiple (${cookies[key].length}) values for cookie ${key}; we can\'t handle that yet');
 
 		var sid = Web.getCookies()[key];  // FIXME
 		var session = Session.manager.get(sid);

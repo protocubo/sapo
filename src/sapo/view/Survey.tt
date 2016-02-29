@@ -5,7 +5,7 @@
 <head>
 (: Util.head("SAPO - Pesquisa #"+survey.id) :)
 
-<!-- CORRIGIR TOGGLE -->
+<!-- TOGGLE CORRIGIR -->
 <style type="text/css">
 .escondido {
  display: none;
@@ -60,19 +60,19 @@ function imprimir() {
 	<!-- ACTIONS -->
 	<div class="row">
 		<div class="col-md-2 col-md-offset-1">
-			<button type="button" class="btn btn-default" onclick="imprimir()">IMPRIMIR</button>
+			<a class="btn btn-default" onclick="imprimir()">IMPRIMIR</a>
 		</div>
 		<div class="col-md-2">
-			<button type="button" class="btn btn-danger" id="corrigir">CORRIGIR</button>
+			<a class="btn btn-default" data-toggle="modal" data-target="#pesquisa_ticket">ABRIR TICKET</a>
 		</div>
 		<div class="col-md-2">
-			<button type="button" class="btn btn-warning" data-toggle="modal" data-target="#pesquisa_ticket">ABRIR TICKET</button>
+			<a href="/tickets/search?survey=(:survey.id:)" class="btn btn-default">TICKETS <span class="badge">4/2</span></a>
 		</div>
 		<div class="col-md-2">
-			<button type="button" class="btn btn-warning">TICKETS <span class="badge">4/2</span></button>
+			<a type="button" class="btn btn-danger" id="corrigir">CORRIGIR</a>
 		</div>
 		<div class="col-md-2">
-			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#pesquisa_status">MUDAR STATUS</button>
+			<a type="button" class="btn btn-primary" data-toggle="modal" data-target="#pesquisa_status">MUDAR STATUS</a>
 		</div>
 	</div>
 	<hr />
@@ -97,7 +97,7 @@ function imprimir() {
 			</div>
 			<div class="bloco">
 				<a href="#" class="corrigir escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
-				<b class="pesquisador">Pesquisador:</b> Filipe Horácio
+				<b class="pesquisador">Pesquisador:</b> (: survey.surveyor :)
 			</div>
 			<div class="bloco">
 				<a href="#" class="corrigir escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
@@ -219,7 +219,7 @@ function imprimir() {
 			</div>
 			<div class="modal-body">
 				<div class="row">
-					<div class="col-md-1 col-md-offset-4"><h4>SV:</h4></div>
+					<div class="col-md-3 col-md-offset-3 supervisor"><h4>Supervisor:</h4></div>
 					<div class="col-md-3">
 						<div class="btn-group" data-toggle="buttons">
 							<label class="btn btn-default active" style="width:auto;">
@@ -235,7 +235,7 @@ function imprimir() {
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-md-1 col-md-offset-4"><h4>CT:</h4></div>
+					<div class="col-md-3 col-md-offset-3 telefonista"><h4>Telefonista:</h4></div>
 					<div class="col-md-3">
 						<div class="btn-group" data-toggle="buttons">
 							<label class="btn btn-default active" style="width:auto;">
@@ -251,7 +251,7 @@ function imprimir() {
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-md-1 col-md-offset-4"><h4>CQ:</h4></div>
+					<div class="col-md-3 col-md-offset-3 super"><h4>Superusuário:</h4></div>
 					<div class="col-md-3">
 						<div class="btn-group" data-toggle="buttons">
 							<label class="btn btn-default active" style="width:auto;">
