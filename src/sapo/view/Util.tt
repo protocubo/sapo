@@ -52,7 +52,6 @@
 						</ul>
 					</li>
 					<!-- só o pesquisador verá essa aba, e somente esta -->
-					<li><a href="/payments">PAGAMENTOS</a></li>
 					<li><a href="/help">AJUDA</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">

@@ -129,7 +129,7 @@
 			'width': 1140,
 			'height': 400,
 			'seriesType': 'bars',
-			series: { 3: { 'type': 'line' }, 4: { 'type': 'line' } }
+			series: { 3: { 'type': 'line' }, 4: { 'type': 'line', 'lineWidth': 4 } }
 		};
 		// Set chart options
 		var options2 = {

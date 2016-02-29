@@ -64,15 +64,20 @@ class Context {
 			// more
 			new Group(new AccessName("telefonista"), PPhoneOperator).insert();
 			new Group(new AccessName("supervisor"), PSupervisor).insert();
-			new Group(new AccessName("pesquisador"), PSurveyor).insert();
+			var surveyorGroup = new Group(new AccessName("pesquisador"), PSurveyor);
+			surveyorGroup.insert();
 
 			// some users
+			var mane = new User(new AccessName("mane"), surveyorGroup,
+					"Mane Mane", new EmailAddress("mane@sapo"));
+			mane.password = Password.make("secret");
 			var arthur = new User(new AccessName("arthur"), superGroup,
 					"Arthur Dent", new EmailAddress("arthur@sapo"));
 			arthur.password = Password.make("secret");
 			var ford = new User(new AccessName("ford"), superGroup,
 					"Ford Prefect", new EmailAddress("ford@sapo"));
 			ford.password = Password.make("secret");
+			mane.insert();
 			arthur.insert();
 			ford.insert();
 
