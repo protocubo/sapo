@@ -101,8 +101,8 @@
 				</div>
 				<div class="modal-body">
 					<div class="row">
-						<div class="col-md-1 col-md-offset-4"><h4>SV:</h4></div>
-						<div class="col-md-3">
+						<div class="col-md-4 col-md-offset-2"><h4>Supervisor:</h4></div>
+						<div class="col-md-4">
 							<div class="btn-group" data-toggle="buttons">
 								<label class="btn btn-default active" style="width:auto;">
 									<input type="radio" name="options" id="option1" autocomplete="off" checked> <span class="glyphicon glyphicon-minus supervisor" aria-hidden="true"></span>
@@ -117,8 +117,8 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-md-1 col-md-offset-4"><h4>CT:</h4></div>
-						<div class="col-md-3">
+						<div class="col-md-4 col-md-offset-2"><h4>Telefonista:</h4></div>
+						<div class="col-md-4">
 							<div class="btn-group" data-toggle="buttons">
 								<label class="btn btn-default active" style="width:auto;">
 									<input type="radio" name="options" id="option1" autocomplete="off" checked> <span class="glyphicon glyphicon-minus telefonista" aria-hidden="true"></span>
@@ -133,8 +133,8 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-md-1 col-md-offset-4"><h4>CQ:</h4></div>
-						<div class="col-md-3">
+						<div class="col-md-4 col-md-offset-2"><h4>Superusuário:</h4></div>
+						<div class="col-md-4">
 							<div class="btn-group" data-toggle="buttons">
 								<label class="btn btn-default active" style="width:auto;">
 									<input type="radio" name="options" id="option1" autocomplete="off" checked> <span class="glyphicon glyphicon-minus super" aria-hidden="true"></span>
