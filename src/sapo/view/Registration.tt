@@ -12,30 +12,27 @@
 <div class="container">
 
 	<!-- HEAD -->
-	<h2>ADMINISTRAÇÃO/CADASTRO</h2>
+	<h2>CADASTRO</h2>
 	<hr />
-
+	
 	<div class="row">
-		<div class="col-md-6">
-			<h3>Filtros:</h3>
-		</div>
-		<div class="col-md-2 col-md-offset-4">
-			<h3>Usuários:</h3>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-md-1"><h4>SITUAÇÃO:</h4></div>
 		<div class="col-md-2">
+			<h3 class="filtro">Filtros:</h3>
+		</div>
+		<div class="col-md-2"><h4>SITUAÇÃO:</h4>
 			<!-- FILTRO -->
 			<select class="form-control">
 				<option>Ativos</option>
 				<option>Desativados</option>
 			</select>
 		</div>
-		<div class="col-md-2 col-md-offset-1">
+		<div class="col-md-2"><h4>&nbsp;</h4>
 			<button type="button" class="btn btn-primary">APLICAR</button>
 		</div>
-		<div class="col-md-2 col-md-offset-4">
+		<div class="col-md-2 col-md-offset-2">
+			<h3 class="filtro">Usuários:</h3>
+		</div>
+		<div class="col-md-2"><h4>&nbsp;</h4>
 			<!-- ADIÇÃO -->
 			<button type="button" class="btn btn-success" data-toggle="modal" data-target="#cadastro_adicionar">ADICIONAR</button>
 		</div>
