@@ -49,11 +49,7 @@
 	<div class="container">
 
 		<!-- HEAD -->
-		<h2>PAGAMENTOS</h2>
-		<hr />
-
-		<!-- PESQUISAS -->
-		<h3>Pesquisas:</h3>
+		<h2>PESQUISAS</h2>
 		<hr />
 
 		<!-- TABELA DE USUÁRIOS -->
@@ -107,8 +103,48 @@
 	<h2>PAGAMENTOS</h2>
 	<hr />
 
-	<!-- PESQUISAS -->
-	<h3>Pesquisas:</h3>
+	<!-- FILTROS -->
+	<div class="row">
+		<div class="col-md-2"><h3 class="filtro">Filtros:</h3></div>
+		<div class="col-md-2 col-md-offset-2"><h4>PESQUISADOR:</h4>
+			<select class="form-control">
+				<option>Selecione</option>
+				<!-- lista de pesquisadores por ordem alfabética -->
+			</select>
+		</div>
+		<div class="col-md-2"><h4>PAGA</h4>
+			<select class="form-control">
+				<option>Não</option>
+				<option>Sim</option>
+			</select>
+		</div>
+		<div class="col-md-2"><h4>STATUS</h4>
+			<select class="form-control">
+				<option>Abertas</option>
+				<option>Completas</option>
+				<option>Verificadas</option>
+				<option>Aceitas</option>
+			</select>
+		</div>
+		<div class="col-md-2"><h4>&nbsp;</h4>
+			<button type="button" class="btn btn-primary">APLICAR</button>
+		</div>
+	</div>
+	<hr />
+	
+	<!-- BUSCA -->
+	<div class="row">
+		<div class="col-md-2"><h3 class="filtro">Busca:</h3></div>
+		<div class="col-md-2 col-md-offset-4"><h4>REFERÊNCIA PAGTO</h4>
+			<input type="text" class="form-control" placeholder="Referência Pagto">
+		</div>
+		<div class="col-md-2"><h4>PESQUISA</h4>
+			<input type="text" class="form-control" placeholder="Nº da Pesquisa">
+		</div>
+		<div class="col-md-2"><h4>&nbsp;</h4>
+			<button type="button" class="btn btn-primary">BUSCAR</button>
+		</div>
+	</div>
 	<hr />
 
 	<!-- TABELA DE USUÁRIOS -->
@@ -123,8 +159,8 @@
 				<th>Pesquisador</th>
 				<th>Nº da Pesquisa</th>
 				<th>Data</th>
-				<th>RefPagto</th>
-				<th>Data Pgto</th>
+				<th>Ref. Pagto</th>
+				<th>Data Pagto</th>
 				<th width="40px"></th>
 			</tr>
 		</thead>
