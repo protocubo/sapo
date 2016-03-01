@@ -1,5 +1,5 @@
 (: import sapo.Spod :)
-(: static function render() :)
+(: static function page() :)
 <!DOCTYPE html>
 <html>
 <head>
