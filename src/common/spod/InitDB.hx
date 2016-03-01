@@ -1,8 +1,7 @@
 package common.spod;
-import common.spod.Familia;
-import common.spod.Modo;
 import common.spod.statics.EstacaoMetro;
 import common.spod.statics.LinhaOnibus;
+import sapo.spod.Survey;
 import haxe.io.Eof;
 import haxe.Json;
 import haxe.rtti.Meta;

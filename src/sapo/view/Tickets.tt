@@ -1,6 +1,17 @@
 (: import sapo.Spod :)
 
-(: static function ticketSummary(ticket:Spod.Ticket) :)
+(: static var PARAM_INBOX = "inbox" :)
+(: static var PARAM_OUTBOX = "outbox" :)
+(: static var PARAM_OPEN = "open" :)
+(: static var PARAM_CLOSED = "closed" :)
+
+(: private static function hideClose(ticket:Spod.Ticket) :)
+(: if ticket.closed_at != null || (Context.loop.user != ticket.author && !Context.loop.privilege.match(PSuperUser)) :)
+unavailable
+(: end :)
+(: end :)
+
+(: static function ticketSummary(ticket:Spod.Ticket, ?open=false) :)
 <!-- TICKET -->
 <div class="panel panel-default">
 	<!-- HEAD TICKET -->
@@ -37,19 +48,21 @@
 		</div>
 	</div>
 	<!-- BODY TICKET -->
-	<div id="BodyTicket(: ticket.id :)" class="panel-collapse collapse" role="tabpanel" aria-labelledby="HeadTicket(: ticket.id :)">
+	<div id="BodyTicket(: ticket.id :)" class="panel-collapse collapse (: if open :)in(: end :)" role="tabpanel" aria-labelledby="HeadTicket(: ticket.id :)">
 		<div class="panel-body">
 			<div class="row">
 				<div class="col-md-6 barraderolagem">
+				(: var first = true :)
 				(: for message in Spod.TicketMessage.manager.search($ticket == ticket) :)
 					<p>
 						<strong>
 							<!-- DATETIME + DE + PARA (class: super, telefonista, supervisor e pesquisador) -->
-							(: message.posted_at :) - <span class="(: message.author.group.group_name:)">(: message.author.name :)@(: message.author.group.group_name:)</span> :
+							(: message.posted_at :) - <span class="(: message.author.group.group_name:)">(: message.author.name :)@(: message.author.group.group_name:)</span>(: if first :) - <span class="(: ticket.recipient.group.group_name:)">(: ticket.recipient.name :)@(: ticket.recipient.group.group_name:)</span>(: end :) :
 						</strong>
 					<!-- MENSAGEM -->
 						(: message.text :)
 					</p>
+					(: do first = false :)
 				(: end :)
 				</div>
 				<div class="col-md-6 barraderolagem">
@@ -66,10 +79,10 @@
 			</div>
 			<!-- AÇÕES -->
 			<div class="row" style="margin-top: 30px;">
-				<div class="col-md-2"><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_incluir">INCLUIR</button></div>
+				<div class="col-md-2"><button type="button" class="btn btn-success btn-sm (: hideClose(ticket) :)" data-toggle="modal" data-target="#ticket(: ticket.id :)_fechar">FECHAR</button></div>
 				<div class="col-md-2"><button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_responder">RESPONDER</button></div>
-				<div class="col-md-2"><button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_fechar">FECHAR</button></div>
-				<div class="col-md-2 col-md-offset-2"><a href="/survey/(: ticket.survey.id :)" type="button" class="btn btn-primary btn-sm">VER PESQUISA</a></div>
+				<div class="col-md-2"><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_incluir">INCLUIR</button></div>
+				<div class="col-md-2"><a href="/survey/(: ticket.survey.id :)" type="button" class="btn btn-primary btn-sm">VER PESQUISA</a></div>
 				<div class="col-md-2"><button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_status">MUDAR STATUS</button></div>
 			</div>
 		</div>
@@ -95,32 +108,32 @@
 		<hr />
 
 		<!-- FILTROS -->
+		<h3>Filtros:</h3>
 		<form method="get" name="filter">
 			<div class="row">
+				<div class="col-md-1"><h4>CAIXA</h4></div>
 				<div class="col-md-2">
-					<h3 class="filtro">Filtros:</h3>
-				</div>
-				<div class="col-md-2 col-md-offset-2"><h4>CAIXA</h4>
 					<select class="form-control" name="inbox" onchange="disableRecipients(this.value)">
-					<option value="all">Todos</option>
-						<option value="in">Entrada</option>
-						<option value="out">Enviados</option>
+						<option value="(: PARAM_INBOX :)">Entrada</option>
+						<option value="(: PARAM_OUTBOX :)">Enviados</option>
 					</select>
 				</div>
-				<div class="col-md-2"><h4>DESTINO</h4>
+				<div class="col-md-1"><h4>DESTINO</h4></div>
+				<div class="col-md-2">
 					<select class="form-control" id="recipientID" name="recipient">
 						<option value="all">Todos</option>
 						<option value="group">Grupo</option>
 						<option value="individual">Individual</option>
 					</select>
 				</div>
-				<div class="col-md-2"><h4>ESTADO</h4>
+				<div class="col-md-1"><h4>ESTADO</h4></div>
+				<div class="col-md-2">
 					<select class="form-control" name="state">
-						<option value="open">Não Fechadas</option>
-						<option value="closed">Fechadas</option>
+						<option value="(: PARAM_OPEN :)">Não Fechadas</option>
+						<option value="(: PARAM_CLOSED :)">Fechadas</option>
 					</select>
 				</div>
-				<div class="col-md-2"><h4>&nbsp;</h4>
+				<div class="col-md-2 col-md-offset-1">
 					<button type="submit" value="submit" class="btn btn-primary">APLICAR</button>
 				</div>
 			</div>
@@ -142,18 +155,18 @@
 		</script>
 
 		<!-- BUSCA -->
+		<h3>Busca:</h3>
 		<form action="/tickets/search" method="get">
 			<div class="row">
+				<div class="col-md-2"><h4>TICKET</h4></div>
 				<div class="col-md-2">
-					<h3 class="filtro">Busca:</h3>
-				</div>
-				<div class="col-md-2 col-md-offset-4"><h4>TICKET</h4>
 					<input type="text" name="ticket" id="ticketSearch" class="form-control" oninput="disableSearch(this.name, this.value)" placeholder="Nº do Ticket">
 				</div>
-				<div class="col-md-2"><h4>PESQUISA</h4>
+				<div class="col-md-2"><h4>PESQUISA</h4></div>
+				<div class="col-md-2">
 					<input type="text" name="survey" id="surveySearch" class="form-control" oninput="disableSearch(this.name, this.value)" placeholder="Nº da Pesquisa">
 				</div>
-				<div class="col-md-2"><h4>&nbsp;</h4>
+				<div class="col-md-2 col-md-offset-2">
 					<button type="submit" value="submit" class="btn btn-primary">BUSCAR</button>
 				</div>
 			</div>
@@ -175,19 +188,20 @@
 
 		<!-- TICKETS -->
 		<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" style="margin-top: 60px;">
-			(:* gostaria disso: var users = Spod.Ticket.manager.search( (ofUser == null|| $author == ofUser) ) *:)
-			(:* var users:List<Spod.Ticket> = Spod.Ticket.manager.search((ofUser!=null ? $author==ofUser : 1==1)) *:)
-
-			(: for t in tickets :)
-				(: ticketSummary(t) :)
+			(: if tickets.length == 1 :)
+				(: ticketSummary(tickets.first(), true) :)
+			(: else :)
+				(: for t in tickets :)
+					(: ticketSummary(t) :)
+				(: end :)
 			(: end :)
 		</div>
 	</div>
 	(: for t in tickets :)
-	(: Modal.modalticketfechar(t) :)
-	(: Modal.modalticketresponder(t) :)
-	(: Modal.modalticketincluir(t) :)
-	(: Modal.modalticketstatus(t) :)
+		(: Modal.modalticketfechar(t) :)
+		(: Modal.modalticketresponder(t) :)
+		(: Modal.modalticketincluir(t) :)
+		(: Modal.modalticketstatus(t) :)
 	(: end :)
 
 (: Util.footer() :)

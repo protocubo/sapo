@@ -10,7 +10,9 @@ class Macros {
 			//trace(StringTools.capitalize(norm_field));
 			var e = Type.resolveEnum("common.spod." + StringTools.capitalize(norm_field));
 			if (Macros.checkEnumValue(e, Reflect.field($old_entry, $field)))
-				Reflect.setField($new_entry, norm_field, Macros.getStaticEnum(e, Reflect.field($old_entry, $field)));
+			{
+				Reflect.setProperty($new_entry, norm_field, Macros.getStaticEnum(e, Reflect.field($old_entry, $field)));
+			}
 		}
 	}
 	
@@ -31,7 +33,6 @@ class Macros {
 		return macro {
 			var name = Type.getEnumName($target);
 			
-			//trace("refValue " + refValue.get(name));
 			if (refValue.get(name) == null)
 			{
 				Macros.warnTable(name, null, null);

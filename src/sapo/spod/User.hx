@@ -2,44 +2,48 @@ package sapo.spod;
 
 import common.crypto.Password;
 import common.db.MoreTypes;
+import sys.db.Object;
 import sys.db.Types;
 
-// necessary only because we need mentions to groups
 @:index(group_name, unique)
 class Group extends sys.db.Object {
 	public var id:SId;
-	public var group_name:AccessName;
 	public var privilege:SEnum<Privilege>;
-
-	public function new(group_name, privilege)
-	{
-		this.group_name = group_name;
-		this.privilege = privilege;
-		super();
-	}
-}
-
-@:index(user_name, unique)
-@:index(email, unique)
-class User extends sys.db.Object {
-	public var id:SId;
-	public var user_name:AccessName;
-	@:relation(group_id) public var group:Group;
+	public var group_name:AccessName;
 	public var name:String;
-	public var email:EmailAddress;
-	public var password:Null<Password>;
 
-	public function new(user_name, group, name, email)
+	public function new(privilege, group_name, name)
 	{
-		this.user_name = user_name;
-		this.group = group;
-		this.email = email;
+		this.privilege = privilege;
+		this.group_name = group_name;
 		this.name = name;
 		super();
 	}
 }
 
-@:key(id)
+@:index(email, unique)
+class User extends sys.db.Object {
+	public var id:SId;
+	@:relation(group_id) public var group:Group;
+	public var email:EmailAddress;
+	public var name:String;
+	@:relation(supervisor_id) public var supervisor:Null<User>;
+
+	public var password:Null<Password>;
+
+	public function new(group, email, name, ?supervisor)
+	{
+		this.group = group;
+		this.email = email;
+		this.name = name;
+		this.supervisor = supervisor;
+		if (group.privilege.match(PSurveyor) && supervisor == null)
+			throw 'Can\'t create surveyor $email: lacking supervisor';
+		super();
+	}
+}
+
+@:id(id)
 class Session extends sys.db.Object {
 	public static inline var COOKIE_KEY = "session_id";
 	public static inline var DEFAULT_SESSION_DURATION = 24*3.6*1e6;  // unit: ms
@@ -50,8 +54,11 @@ class Session extends sys.db.Object {
 	public var expires_at:HaxeTimestamp;
 	public var expired_at:Null<HaxeTimestamp>;
 
-	public function expired()
-		return expired_at != null || (expires_at < Context.loop.now);
+	public function expired(?at:HaxeTimestamp)
+	{
+		if (at == null) at = Context.loop.now;
+		return expired_at != null || (expires_at < at);
+	}
 
 	public function expire(?autoUpdate=true)
 	{
