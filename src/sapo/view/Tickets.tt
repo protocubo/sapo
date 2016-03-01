@@ -5,11 +5,13 @@
 (: static var PARAM_OPEN = "open" :)
 (: static var PARAM_CLOSED = "closed" :)
 
-(: static function ticketSummary(ticket:Spod.Ticket, ?open=false) :)
-(: var cl = { showClose : "" } :)
-(: if ticket.closed_at == null && (Context.loop.user == ticket.author || Context.loop.privilege.match(PSuperUser)) :)
-	(: do cl.showClose = "unavailable" :)
+(: private static function hideClose(ticket:Spod.Ticket) :)
+(: if ticket.closed_at != null || (Context.loop.user != ticket.author && !Context.loop.privilege.match(PSuperUser)) :)
+unavailable
 (: end :)
+(: end :)
+
+(: static function ticketSummary(ticket:Spod.Ticket, ?open=false) :)
 <!-- TICKET -->
 <div class="panel panel-default">
 	<!-- HEAD TICKET -->
@@ -77,7 +79,7 @@
 			</div>
 			<!-- AÇÕES -->
 			<div class="row" style="margin-top: 30px;">
-				<div class="col-md-2"><button type="button" class="btn btn-success btn-sm (: cl.showClose :)" data-toggle="modal" data-target="#ticket(: ticket.id :)_fechar">FECHAR</button></div>
+				<div class="col-md-2"><button type="button" class="btn btn-success btn-sm (: hideClose(ticket) :)" data-toggle="modal" data-target="#ticket(: ticket.id :)_fechar">FECHAR</button></div>
 				<div class="col-md-2"><button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_responder">RESPONDER</button></div>
 				<div class="col-md-2"><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_incluir">INCLUIR</button></div>
 				<div class="col-md-2"><a href="/survey/(: ticket.survey.id :)" type="button" class="btn btn-primary btn-sm">VER PESQUISA</a></div>
