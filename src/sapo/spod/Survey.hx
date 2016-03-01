@@ -17,7 +17,7 @@ class Survey extends Object {
 	public var lastPageVisited : SNull<SString<255>>;
 	public var isValid : SBool;
 	
-	public var paid : SBool;
+	public var paid : SNull<SBool> = false;
 
 	public var isRestored : SBool;
 
