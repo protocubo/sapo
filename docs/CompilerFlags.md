@@ -5,8 +5,9 @@ certain subsystems.
 
 To use an hypothetical flag `foo`, add `-D foo` to the command line options or
 `.hxml` file – or use the corresponding UI in your IDE – and check for it with
-`#if foo #else #end`.  Note that hyphens in flag names automatically become
-underscores in Haxe code.
+`#if foo #else #end`.
+
+Note that hyphens in flag names automatically become underscores in Haxe code.
 
 ## Essentials
 
