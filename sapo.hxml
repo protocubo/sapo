@@ -7,7 +7,6 @@
 -lib tink_template
 -lib compiletime
 -D dump=pretty
--D no-deprecation-warnings
 
 --next
 
