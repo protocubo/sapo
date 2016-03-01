@@ -30,6 +30,7 @@ class User extends sys.db.Object {
 	@:relation(supervisor_id) public var supervisor:Null<User>;
 
 	public var password:Null<Password>;
+	public var deactivated_at:Null<HaxeTimestamp>;
 
 	public function new(group, email, name, ?supervisor)
 	{
