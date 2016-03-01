@@ -5,43 +5,40 @@ import common.db.MoreTypes;
 import sys.db.Object;
 import sys.db.Types;
 
-// necessary only because we need mentions to groups
 @:index(group_name, unique)
 class Group extends sys.db.Object {
 	public var id:SId;
-	public var group_name:AccessName;
 	public var privilege:SEnum<Privilege>;
+	public var group_name:AccessName;
+	public var name:String;
 
-	public function new(group_name, privilege)
+	public function new(privilege, group_name, name)
 	{
-		this.group_name = group_name;
 		this.privilege = privilege;
+		this.group_name = group_name;
+		this.name = name;
 		super();
 	}
-}
-
-// necessary only because we need mentions to groups
-@:id(user_id, group_id)
-class UserGroups extends sys.db.Object {
-	@:relation(user_id) public var user:User;
-	@:relation(group_id) public var group:Group;
 }
 
 @:index(email, unique)
 class User extends sys.db.Object {
 	public var id:SId;
 	@:relation(group_id) public var group:Group;
-	public var name:String;
 	public var email:EmailAddress;
+	public var name:String;
+	@:relation(supervisor_id) public var supervisor:Null<User>;
+
 	public var password:Null<Password>;
 
-	@:relation(supervisor_id) public var supervisor : SNull<User>;
-
-	public function new(group, name, email)
+	public function new(group, email, name, ?supervisor)
 	{
 		this.group = group;
 		this.email = email;
 		this.name = name;
+		this.supervisor = supervisor;
+		if (group.privilege.match(PSurveyor) && supervisor == null)
+			throw 'Can\'t create surveyor $email: lacking supervisor';
 		super();
 	}
 }

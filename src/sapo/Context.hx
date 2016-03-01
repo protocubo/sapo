@@ -27,8 +27,8 @@ class Context {
 		{
 			this.session = session;
 			this.user = session.user;
-			this.group = session.user.group;
-			this.privilege = session.user.group.privilege;
+			this.group = user.group;
+			this.privilege = group.privilege;
 		}
 	}
 
@@ -40,8 +40,7 @@ class Context {
 			Session.manager,
 			Ticket.manager,
 			TicketMessage.manager,
-			User.manager,
-			UserGroups.manager
+			User.manager
 		];
 		for (m in managers)
 			if (!TableCreate.exists(m))
@@ -59,29 +58,32 @@ class Context {
 
 		Manager.cnx.request("BEGIN");
 		try {
-			// some groups
-			var surveyorGroup = new Group(new AccessName("pesquisador"), PSurveyor);
-			surveyorGroup.insert();
-			var superGroup = new Group(new AccessName("super"), PSuperUser);
-			superGroup.insert();
-			// more
-			new Group(new AccessName("telefonista"), PPhoneOperator).insert();
-			new Group(new AccessName("supervisor"), PSupervisor).insert();
+			// system groups
+			var surveyors = new Group(PSurveyor, new AccessName("pesquisador"), "Pesquisador");
+			var supervisors = new Group(PSupervisor, new AccessName("supervisor"), "Supervisor");
+			var phoneOperators = new Group(PPhoneOperator, new AccessName("telefonista"), "Telefonista");
+			var superUsers = new Group(PSuperUser, new AccessName("super"), "Super usuário");
+			for (g in [surveyors, supervisors, phoneOperators, superUsers])
+				g.insert();
 
-			// some users
-			var mane = new User(surveyorGroup, "Mane Mane", new EmailAddress("mane@sapo"));
-			mane.password = Password.make("secret");
-			var arthur = new User(superGroup, "Arthur Dent", new EmailAddress("arthur@sapo"));
-			arthur.password = Password.make("secret");
-			var ford = new User(superGroup, "Ford Prefect", new EmailAddress("ford@sapo"));
-			ford.password = Password.make("secret");
-			mane.insert();
-			arthur.insert();
-			ford.insert();
+			// users
+			var arthur = new User(superUsers, new EmailAddress("arthur@sapo"), "Arthur Dent");
+			var ford = new User(superUsers, new EmailAddress("ford@sapo"), "Ford Prefect");
+			var judite = new User(phoneOperators, new EmailAddress("judite@sapo"), "Judite da NET");
+			var magentoCol = [ for (i in 0...4) new User(supervisors, new EmailAddress('magento.$i@sapo'), 'Magento Maria #$i') ];
+			for (u in [arthur, ford, judite].concat(magentoCol)) {
+				u.password = Password.make("secret");
+				u.insert();
+			}
+			var maneCol = [ for (i in 0...20) new User(surveyors, new EmailAddress('mane.$i@sapo'), 'Mané Manê #$i', magentoCol[i%magentoCol.length]) ];
+			for (u in maneCol) {
+				u.password = Password.make("secret");
+				u.insert();
+			}
 
 			// some surveys
-			var survey1 = new NewSurvey(ford, "Arthur's house", 945634);
-			var survey2 = new NewSurvey(arthur, "Betelgeuse, or somewhere near that planet", 6352344);
+			var survey1 = new NewSurvey(maneCol[0], "Arthur's house", 945634);
+			var survey2 = new NewSurvey(maneCol[1], "Betelgeuse, or somewhere near that planet", 6352344);
 			survey1.insert();
 			survey2.insert();
 
