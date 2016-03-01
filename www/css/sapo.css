@@ -53,6 +53,9 @@ a:focus, a:hover {
     float:right;
     opacity: 0.5;
 }
+.unavailable {
+    display: none;
+}
 
 /*CORES GRUPOS*/
 

@@ -68,7 +68,7 @@
 
 (: static function footer() :)
 <!-- FOOTER -->
-	<footer class="footer">
+	<footer class="footer apagar">
 		<div class="container">
 			<h3 class="rodape">
 				<b>SAPO</b> OD DF 2016 |
