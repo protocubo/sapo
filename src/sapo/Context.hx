@@ -24,13 +24,9 @@ class Context {
 	public var method(default,null):String;
 
 	public var session(default,null):Null<Session>;
-
-	public var user(get,null):Null<User>;
-		inline function get_user() return session.user;
-	public var group(get,null):Null<Group>;
-		inline function get_group() return user.group;
-	public var privilege(get,null):Null<Privilege>;
-		inline function get_privilege() return group.privilege;
+	public var user(default,null):Null<User>;
+	public var group(default,null):Null<Group>;
+	public var privilege(default,null):Null<Privilege>;
 
 	function new(now, uri:String, params:Map<String, String>, method:String, session:Null<Session>)
 	{
