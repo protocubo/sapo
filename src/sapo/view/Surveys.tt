@@ -89,45 +89,40 @@
 	</script>
 
 	<!-- FILTROS -->
-	<h3>Filtros:</h3>
 	<form method="get">
 		<div class="row">
-			<div class="col-md-2"><h4>GRUPO</h4></div>
 			<div class="col-md-2">
+				<h3>Filtros:</h3>
+			</div>
+			<!--div class="col-md-2"><h4>GRUPO</h4>
 				<select class="form-control" name="group" onchange="disableUserField(this.value)">
 					<option value="" >Selecione</option>
 					(: for g in Spod.Group.manager.all() :)
 					<option value="(:g.id:)">(:g.group_name:)</option>
 					(: end :)
 				</select>
-			</div>
-			<div class="col-md-2"><h4>USUÁRIO</h4></div>
-			<div class="col-md-2">
+			</div-->
+			<div class="col-md-2 col-md-offset-2"><h4>USUÁRIO</h4>
 				<select class="form-control" name="user" id="userField" disabled>
 					<option value="">Selecione</option>
 					<!-- pegar grupo: listar usuários da lista anterior -->
 				</select>
 			</div>
-			<div class="col-md-2"><h4>VÁLIDA</h4></div>
-			<div class="col-md-2">
+			<!--div class="col-md-2"><h4>VÁLIDA</h4>
 				<select class="form-control" name="valid">
 					<option value="yes">Sim</option>
 					<option value="no">Não</option>
 					<option>Todas</option>
 				</select>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-md-2"><h4>PAGA</h4></div>
-			<div class="col-md-2">
+			</div-->
+			<!--div class="col-md-2 col-md-offset-4"><h4>PAGA</h4>
 				<select class="form-control" name="payment">
 					<option value="all">Todas</option>
 					<option value="no">Não</option>
 					<option value="yes">Sim</option>
 				</select>
-			</div>
-			<div class="col-md-2"><h4>STATUS</h4></div>
-			<div class="col-md-2">
+			</div-->
+			<div class="col-md-2"><h4>STATUS</h4>
 				<select class="form-control" name="status">
 					<option value="" >Todas</option>
 					<option value="SOpen" >Abertas</option>
@@ -139,16 +134,13 @@
 					<option value="SSubJudice" >Sob Judice</option>
 				</select>
 			</div>
-			<div class="col-md-2"><h4>ORDEM</h4></div>
-			<div class="col-md-2">
+			<div class="col-md-2"><h4>ORDEM</h4>
 				<select class="form-control" name="order">
 					<option value="0" >Data Crescente</option>
 					<option value="1" >Data Decrescente</option>
 				</select>
 			</div>
-		</div>
-		<div class="row">
-			<div class="col-md-2 col-md-offset-10">
+			<div class="col-md-2"><h4>&nbsp;</h4>
 				<button type="submit" value="submit" class="btn btn-primary">APLICAR</button>
 			</div>
 		</div>
@@ -156,14 +148,13 @@
 	<hr />
 
 	<!-- BUSCA -->
-	<h3>Busca:</h3>
 	<form action="/surveys/search" method="get">
 		<div class="row">
-			<div class="col-md-2"><h4>PESQUISA</h4></div>
-			<div class="col-md-2">
+			<div class="col-md-2"><h3>Busca:</h3></div>
+			<div class="col-md-2 col-md-offset-6"><h4>PESQUISA</h4>
 				<input type="text" name="survey" class="form-control" placeholder="Nº da Pesquisa">
 			</div>
-			<div class="col-md-2 col-md-offset-6">
+			<div class="col-md-2"><h4>&nbsp;</h4>
 				<button type="submit" value="submit" class="btn btn-primary">BUSCAR</button>
 			</div>
 		</div>
