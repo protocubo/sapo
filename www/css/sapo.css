@@ -53,6 +53,11 @@ a:focus, a:hover {
     float:right;
     opacity: 0.5;
 }
+.filtro {
+    margin-top: 40px;
+    margin-bottom: 0px;
+    color: #999;
+}
 .unavailable {
     display: none;
 }

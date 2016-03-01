@@ -49,11 +49,7 @@
 	<div class="container">
 
 		<!-- HEAD -->
-		<h2>PAGAMENTOS</h2>
-		<hr />
-
-		<!-- PESQUISAS -->
-		<h3>Pesquisas:</h3>
+		<h2>PESQUISAS</h2>
 		<hr />
 
 		<!-- TABELA DE USUÁRIOS -->
@@ -109,7 +105,7 @@
 
 	<!-- FILTROS -->
 	<div class="row">
-		<div class="col-md-2"><h3>Filtros:</h3></div>
+		<div class="col-md-2"><h3 class="filtro">Filtros:</h3></div>
 		<div class="col-md-2 col-md-offset-2"><h4>PESQUISADOR:</h4>
 			<select class="form-control">
 				<option>Selecione</option>
@@ -138,7 +134,7 @@
 	
 	<!-- BUSCA -->
 	<div class="row">
-		<div class="col-md-2"><h3>Busca:</h3></div>
+		<div class="col-md-2"><h3 class="filtro">Busca:</h3></div>
 		<div class="col-md-2 col-md-offset-4"><h4>REFERÊNCIA PAGTO</h4>
 			<input type="text" class="form-control" placeholder="Referência Pagto">
 		</div>

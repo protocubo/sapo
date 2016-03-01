@@ -92,7 +92,7 @@
 	<form method="get">
 		<div class="row">
 			<div class="col-md-2">
-				<h3>Filtros:</h3>
+				<h3 class="filtro">Filtros:</h3>
 			</div>
 			<!--div class="col-md-2"><h4>GRUPO</h4>
 				<select class="form-control" name="group" onchange="disableUserField(this.value)">
@@ -150,7 +150,7 @@
 	<!-- BUSCA -->
 	<form action="/surveys/search" method="get">
 		<div class="row">
-			<div class="col-md-2"><h3>Busca:</h3></div>
+			<div class="col-md-2"><h3 class="filtro">Busca:</h3></div>
 			<div class="col-md-2 col-md-offset-6"><h4>PESQUISA</h4>
 				<input type="text" name="survey" class="form-control" placeholder="Nº da Pesquisa">
 			</div>
