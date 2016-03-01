@@ -34,7 +34,7 @@ class TicketRoutes extends AccessControl {
 	}
 
 	@authorize(PSupervisor, PPhoneOperator, PSuperUser)
-	public function doClose(t:Lock<Ticket>)
+	public function postClose(t:Lock<Ticket>)
 	{
 		switch Context.loop.privilege {
 		case PSupervisor: if (Context.loop.user != t.author) throw 'Can\'t close ticket authored by someone else';
