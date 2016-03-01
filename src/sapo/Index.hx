@@ -12,6 +12,16 @@ class Index {
 			Web.logMessage(msg);
 		}
 
+#if trace_sqlite
+		{
+			var underlying = untyped sys.db._Sqlite.SqliteConnection._request;
+			untyped sys.db._Sqlite.SqliteConnection._request = function (c:Dynamic, sql:Dynamic) {
+				trace('SQLite: ${new String(sql)}');
+				return underlying(c, sql);
+			}
+		}
+#end
+
 		try {
 			if (Web.getURI() == "/reset") {
 				trace("WARNING route handled manually; /reset");
