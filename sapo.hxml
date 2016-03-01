@@ -7,7 +7,7 @@
 -lib tink_template
 -lib compiletime
 -D dump=pretty
--D trace-sqlite
+# -D trace-sqlite
 
 --next
 
