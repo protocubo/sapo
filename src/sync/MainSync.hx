@@ -59,14 +59,15 @@ class MainSync
 		}
 		//TODO:Apagar
 		{
+			Context.resetMainDb();
 			//Context.init();
-			//Context.resetMainDb();
 		}
 		//END
 		syncex = new Map();
 		ours = new Map();
 		
-		InitDB.run();
+		//InitDB.run();
+		
 		
 		if (!FileSystem.exists("./private/cnxstring"))
 		{

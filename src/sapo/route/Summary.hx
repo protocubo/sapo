@@ -17,58 +17,79 @@ class Summary extends AccessControl
 	public static function doDefault()
 	{
 		var queryResults = new List<Dynamic>();
+		var wherestr = "";
+		var espGroupBy = "";
 		switch(Context.loop.group.privilege)
 		{
 			case Privilege.PSurveyor:
-				// queries/User_summary.sql
-				//TODO: Mudar a syncTimestamp para T-6 dias ou no modo B para todas agrupado por semana e mudar o user_id (nao há relação ainda)
-				queryResults = Manager.cnx.request("SELECT STRFTIME('%Y-%m-%d', s.date_finished) as date_end,s.`group` as grupo, COUNT(*) as pesqGrupo, SUM(CASE /* Qdo algum é nulo, a pesquisa está 'Completa'*/ WHEN checkSupervisor IS NULL OR checkCT IS NULL OR checkSuper IS NULL THEN 1 ELSE 0 END) as hasNull, SUM(CASE /* Tudo false = RECUSADO */ WHEN checkSupervisor = 0 AND checkCT = 0 AND checkSuper = 0 THEN 1 ELSE 0 END) as allFalse, SUM(CASE /*Quando algum é falso -> Pendente */ WHEN checkSupervisor = 0 OR checkCT = 0 OR checkSuper = 0 THEN 1 ELSE 0 END) as hasFalse, SUM(CASE/* Quando todos são ok -> YAY */ WHEN checkSupervisor = 1 AND checkCT = 1 AND checkSuper = 1 THEN 1 /*WTH?*/ ELSE 0 END) as hasTrue FROM Survey s JOIN UpdatedSession us ON s.old_survey_id = us.old_survey_id AND s.syncTimestamp = us.syncTimestamp WHERE s.syncTimestamp > 1000 AND user_id = 99999 GROUP BY s.`group`, date_end").results().array();
+				wherestr = " AND user_id = " + Context.loop.user;
 			case Privilege.PSupervisor:
-				var users = User.manager.search($supervisor == Context.loop.user; Null; false);
-				var str = "";
-				for (var i = 0; i < users.length; i++)
-				{
-					if (i = 0)
-						str = " WHERE ";
-					else
-						str = str + " AND ";
-					str = str + " user_id = " + users[i].id;
-				}
-				queryResults = Survey.manager.unsafeObjects("SELECT s.* FROM Survey s JOIN UpdatedSurvey us ON s.old_survey_id = us.old_survey_id AND s.syncTimestamp = us.syncTimestamp " + str + " ORDER BY s.old_survey_id").array();
+				var users = User.manager.search($supervisor == Context.loop.user, null, false);
+				for (u in users)
+					wherestr = wherestr + " AND user_id = " + u.id + " ";
 			case Privilege.PSuperUser:
-				queryResults = Survey.manager.unsafeObjects("SELECT s.* FROM Survey s JOIN UpdatedSurvey us ON s.old_survey_id = us.old_survey_id AND s.syncTimestamp = us.syncTimestamp ORDER BY s.old_survey_id").array();
+				return;
 			default:
 				Web.redirect("index");
 				return;
 		}
+		if(wherestr.length > 0)
+			queryResults = Manager.cnx.request("SELECT STRFTIME('%Y-%m-%d', s.date_finished) as date_end, s.`group` as grupo, COUNT(*) as pesqGrupo, SUM(CASE /* Qdo algum é nulo, a pesquisa está 'Completa'*/ WHEN checkSupervisor IS NULL OR checkCT IS NULL OR checkSuper IS NULL THEN 1 ELSE 0 END) as hasNull, SUM(CASE /* Tudo false = RECUSADO */ WHEN checkSupervisor = 0 AND checkCT = 0 AND checkSuper = 0 THEN 1 ELSE 0 END) as allFalse, SUM(CASE /*Quando algum é falso -> Pendente */ WHEN checkSupervisor = 0 OR checkCT = 0 OR checkSuper = 0 THEN 1 ELSE 0 END) as hasFalse, SUM(CASE/* Quando todos são ok -> YAY */ WHEN checkSupervisor = 1 AND checkCT = 1 AND checkSuper = 1 THEN 1 ELSE 0 END) as hasTrue FROM Survey s JOIN UpdatedSession us ON s.old_survey_id = us.old_survey_id AND s.syncTimestamp = us.syncTimestamp  WHERE s.syncTimestamp > 1000 AND "+wherestr+" GROUP BY s.`group`, date_end").results().array();
+		else //TODO
+			queryResults = [];
 		
-		var groupCheck = new Map();
-		//Pensei em algo do tipo (data;
-		var dateVal = new Map();
-		//TODO:Repensar isso
-		for (q in queryResults)
+		//User;group;val
+		var userCheck : Map<Int,Map<Int,Int>> = new Map();
+		
+		//Map do tipo data; categoria; val que vai para a view (para todos fazer Completas, pendentes e recusadas + os params adicionais (grupo ou usuários)
+		var dateVal : Map<Date, Map<String, Int>> = new Map();
+		
+		var i = 0;
+		while (i < queryResults.length)
 		{
-			var retval = 10;
+			var isSameUserGroup = false;
+			//Rever..altas chances de dar pau
+			if (i > 0 && userCheck.exists(queryResults[i - 1].user_id) && userCheck.get(queryResults[i - 1].user_id).exists(queryResults[i - 1].group_id))
+				isSameUserGroup = true;
 			
-			if (q.allFalse != 0)
-				retval = -2;
-			else if (q.hasFalse != 0)
+			var retval = 5;
+			var cur = queryResults[i];
+			//Reprovado
+			if (cur.allFalse != 0)
+				reval = -2;
+			//Pendente
+			else if (cur.hasFalse != 0)
 				retval = -1;
-			else if (q.hasTrue >= 1)
+			//Aprovado
+			else if (cur.hasTrue >= 1)
 				retval = 1;
-			else 
+			//Completo
+			else
 				retval = 0;
 			
-			//TODO:Reescrever
-			if (groupCheck.exists(q.grupo))
-			{
-				var cur = groupCheck.get(q.grupo);
-				//TODO:Pensar melhor nisso
-				if ((cur > retval && retval != 0) || (cur == 0 && retval == 1))
-					groupCheck.set(q.grupo, retval);
-			}
+			var groupHash = userCheck.get(cur.user_id);
+			if (groupHash == null)
+				groupHash = new Map();
+			
+			var curGroup = groupHash.get(q.grupo);
+			//N existe valor ou valor existe e é menor que o atual qdo o valor atual é diferente de zero (p.e. atual é 1 e o novo é -1,
+			//mostrando que é uma pesquisa pendente 
+			//Ou o grupo atual é 0 e o novo é 1 (Pesquisas aprovadas)
+			if (curGroup == null || ((curGroup != null && curGroup > retval && retval != 0) || (curGroup == 0 && retval == 1))
+				groupHash.set(q.grupo, retval);
+			
+			var curDate = Date.fromString(queryResults[i].date_end);
+			var curCat : Map<String,Int>;
+			
+			if(!dateVal.exists(curDate))
+				curCat = new Map();
 			else
-				groupCheck.set(q.grupo, retval);
+				curCat = dateVal.get(curDate);
+			
+			curCat.
+			
+			
+			i++;
 		}
 	}
 	
