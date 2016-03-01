@@ -1,9 +1,11 @@
 package sapo;
 
+import common.Dispatch;
 import common.Web;
 import common.crypto.Password;
 import common.db.MoreTypes;
 import common.spod.InitDB;
+import sapo.route.AccessControl;
 import sapo.spod.Other;
 import sapo.spod.Ticket;
 import sapo.spod.User;
@@ -14,15 +16,23 @@ class Context {
 
 	public static var loop:Context;
 
-	public var now(default,null):HaxeTimestamp;
-	public var session(default,null):Session;
-	public var user(default,null):User;
-	public var group(default,null):Group;
-	public var privilege(default,null):Privilege;
+	var dispatch:Dispatch;
 
-	function new(now, session:Session)
+	public var now(default,null):HaxeTimestamp;
+	public var uri(default,null):String;
+	public var params(default,null):Map<String,String>;
+	public var method(default,null):String;
+
+	public var session(default,null):Null<Session>;
+	public var user(default,null):Null<User>;
+	public var group(default,null):Null<Group>;
+	public var privilege(default,null):Null<Privilege>;
+
+	function new(now, uri:String, params:Map<String, String>, method:String, session:Null<Session>)
 	{
 		this.now = now;
+		this.uri = uri;
+		this.params = params;
 		if (session == null)
 			return;
 		if (session.expired(now)) {
@@ -34,6 +44,8 @@ class Context {
 		this.user = session.user;
 		this.group = user.group;
 		this.privilege = group.privilege;
+
+		dispatch = new Dispatch(uri, params, method);
 	}
 
 	static function dbInit()
@@ -122,14 +134,47 @@ class Context {
 
 	public static function iterate()
 	{
+		var uri = Web.getURI();
+		var params = Web.getParams();
+		var method = Web.getMethod();
+
+		// treat visibly empty params as missing
+		var cparams = [ for (k in params.keys()) if (StringTools.trim(params.get(k)).length > 0) k => params.get(k) ];
+
 		var key = Session.COOKIE_KEY;
 		var cookies = Web.getAllCookies();
 		if (cookies.exists(key) && cookies[key].length > 1)
 			trace('WARNING multiple (${cookies[key].length}) values for cookie ${key}; we can\'t handle that yet');
-
 		var sid = Web.getCookies()[key];  // FIXME
 		var session = Session.manager.get(sid);
-		loop = new Context(Date.now(), session);
+
+		loop = new Context(Date.now(), uri, cparams, method, session);
+
+		trace(loop.session);
+		if (loop.session != null) trace(loop.session.expires_at.toDate());
+		if (loop.session != null) trace(loop.session.expired());
+		if (loop.session != null && loop.session.expired_at != null) trace(loop.session.expired_at.toDate());
+
+		// log if we're loosing any params
+		var aparams = Web.getAllParams();
+		for (p in aparams.keys())
+			if (aparams[p].length > 1)
+				trace('WARNING multiple (${aparams[p].length}) values for param $p; we can\'t handle that yet');
+
+		loop.dispatch.onMeta = AccessControl.onDispatchMeta;
+		try {
+			loop.dispatch.dispatch(new sapo.route.RootRoutes());
+		} catch (e:AccessControlError) {
+			Context.shutdown();
+			trace('Access control error: $e');
+			var url = Web.getURI();
+			if (Web.getMethod().toLowerCase() == "get")
+				url += "?" + [
+					for (k in Web.getParams().keys())
+						'${StringTools.urlEncode(k)}=${StringTools.urlEncode(Web.getParams().get(k))}'
+				].join("&");
+			Web.redirect('/login?redirect=${StringTools.urlEncode(url)}');
+		}
 	}
 }
 
