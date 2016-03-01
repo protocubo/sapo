@@ -33,6 +33,8 @@ class Context {
 		this.now = now;
 		this.uri = uri;
 		this.params = params;
+		dispatch = new Dispatch(uri, params, method);
+		
 		if (session == null)
 			return;
 		if (session.expired(now)) {
@@ -44,8 +46,6 @@ class Context {
 		this.user = session.user;
 		this.group = user.group;
 		this.privilege = group.privilege;
-
-		dispatch = new Dispatch(uri, params, method);
 	}
 
 	static function dbInit()
@@ -69,7 +69,8 @@ class Context {
 			Manager.cnx.close();
 			Manager.cnx = null;
 		}
-		sys.FileSystem.deleteFile(DBPATH);
+		if(sys.FileSystem.exists(DBPATH))
+			sys.FileSystem.deleteFile(DBPATH);
 		init();
 
 		Manager.cnx.request("BEGIN");
@@ -132,6 +133,7 @@ class Context {
 		Manager.cnx = null;
 	}
 
+#if !sapo_sync
 	public static function iterate()
 	{
 		var uri = Web.getURI();
@@ -176,5 +178,6 @@ class Context {
 			Web.redirect('/login?redirect=${StringTools.urlEncode(url)}');
 		}
 	}
+#end
 }
 

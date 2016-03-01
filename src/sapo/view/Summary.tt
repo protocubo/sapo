@@ -1,5 +1,5 @@
 (: import sapo.Spod :)
-(: static function render() :)
+(: static function render(plotData : Map<Date,Map<String,Int>>, header : Array<String>) :)
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,103 +20,44 @@
 
 		// Create the data table.
 		var data = new google.visualization.arrayToDataTable([
-			['Data',	'Supervisor',	'Telefonista',	'Qualidade',	'Completas',	'Pendentes' ],
-			['07/03/2016',	32,	48,	79,	105,	2	],
-			['08/03/2016',	76,	59,	73,	117,	19	],
-			['09/03/2016',	33,	36,	25,	114,	7	],
-			['10/03/2016',	96,	65,	30,	117,	14	],
-			['11/03/2016',	8,	100,	47,	100,	2	],
-			['12/03/2016',	88,	52,	70,	103,	36	],
-			['13/03/2016',	35,	19,	65,	104,	23	],
-			['14/03/2016',	88,	24,	4,	103,	9	],
-			['15/03/2016',	49,	53,	7,	113,	1	],
-			['16/03/2016',	4,	65,	33,	104,	22	],
-			['17/03/2016',	22,	7,	88,	113,	25	],
-			['18/03/2016',	35,	9,	40,	111,	8	],
-			['19/03/2016',	27,	96,	65,	109,	37	],
-			['20/03/2016',	80,	91,	58,	106,	21	],
-			['21/03/2016',	15,	4,	89,	109,	1	],
-			['22/03/2016',	60,	63,	96,	114,	21	],
-			['23/03/2016',	74,	14,	69,	113,	31	],
-			['24/03/2016',	45,	51,	51,	117,	36	],
-			['25/03/2016',	41,	98,	58,	104,	21	],
-			['26/03/2016',	96,	14,	32,	118,	38	],
-			['27/03/2016',	80,	56,	17,	115,	37	],
-			['28/03/2016',	23,	29,	75,	110,	8	],
-			['29/03/2016',	60,	18,	45,	113,	32	],
-			['30/03/2016',	25,	100,	95,	113,	31	],
-			['31/03/2016',	71,	3,	31,	115,	27	],
-			['01/04/2016',	8,	86,	97,	102,	25	],
-			['02/04/2016',	62,	92,	64,	114,	25	],
-			['03/04/2016',	25,	82,	49,	119,	6	]
+			(: header :),
+			(: for data in plotData.keys() :)
+				
+				(: do var line = [DateTools.format(data,"%d/%m/%Y")] :)
+				
+				(: for categories in 1...header.length :)
+					(: do var v = plotData.get(data).get(header[categories]) == null ? 0 : plotData.get(data).get(header[categories]) :)
+					(: do line.push(v +'') :)
+				(: end :)
+				
+			(: line :),
+			
+			(: end :)
+			
 		]);
 
 		var data2 = new google.visualization.DataTable();
 		data2.addColumn('string', 'Data');
 		data2.addColumn('number', 'Pesquisas');
 		data2.addRows([
-			['	07/03/2016	'	,	3000	],
-			['	08/03/2016	'	,	3129	],
-			['	09/03/2016	'	,	3282	],
-			['	10/03/2016	'	,	3450	],
-			['	11/03/2016	'	,	3735	],
-			['	12/03/2016	'	,	4008	],
-			['	13/03/2016	'	,	4275	],
-			['	14/03/2016	'	,	4396	],
-			['	15/03/2016	'	,	4510	],
-			['	16/03/2016	'	,	4810	],
-			['	17/03/2016	'	,	5087	],
-			['	18/03/2016	'	,	5264	],
-			['	19/03/2016	'	,	5445	],
-			['	20/03/2016	'	,	5721	],
-			['	21/03/2016	'	,	5856	],
-			['	22/03/2016	'	,	6131	],
-			['	23/03/2016	'	,	6234	],
-			['	24/03/2016	'	,	6430	],
-			['	25/03/2016	'	,	6556	],
-			['	26/03/2016	'	,	6762	],
-			['	27/03/2016	'	,	6930	],
-			['	28/03/2016	'	,	7224	],
-			['	29/03/2016	'	,	7406	],
-			['	30/03/2016	'	,	7571	],
-			['	31/03/2016	'	,	7845	],
-			['	01/04/2016	'	,	8091	],
-			['	02/04/2016	'	,	8320	],
-			['	03/04/2016	'	,	8517	]
+			(: for data in plotData.keys() :)
+				(: do var line = [DateTools.format(data,"%d/%m/%Y")] :)
+				(: do var v = plotData.get(data).get("Aceitas") == null ? 0 : plotData.get(data).get("Aceitas") :)
+				(: do line.push(v+ '') :)
+				(: line :),
+			(: end :)
 		]);
 
 		var data3 = new google.visualization.DataTable();
 		data3.addColumn('string', 'Data');
 		data3.addColumn('number', 'Pesquisas');
 		data3.addRows([
-			['07/03/2016'	,	0	],
-			['08/03/2016'	,	18	],
-			['09/03/2016'	,	52	],
-			['10/03/2016'	,	69	],
-			['11/03/2016'	,	90	],
-			['12/03/2016'	,	100	],
-			['13/03/2016'	,	117	],
-			['14/03/2016'	,	146	],
-			['15/03/2016'	,	159	],
-			['16/03/2016'	,	188	],
-			['17/03/2016'	,	227	],
-			['18/03/2016'	,	267	],
-			['19/03/2016'	,	280	],
-			['20/03/2016'	,	308	],
-			['21/03/2016'	,	330	],
-			['22/03/2016'	,	344	],
-			['23/03/2016'	,	355	],
-			['24/03/2016'	,	378	],
-			['25/03/2016'	,	411	],
-			['26/03/2016'	,	443	],
-			['27/03/2016'	,	479	],
-			['28/03/2016'	,	509	],
-			['29/03/2016'	,	539	],
-			['30/03/2016'	,	554	],
-			['31/03/2016'	,	578	],
-			['01/04/2016'	,	613	],
-			['02/04/2016'	,	623	],
-			['03/04/2016'	,	641	]
+			(: for data in plotData.keys() :)
+				(: do var line = [DateTools.format(data,"%d/%m/%Y")] :)
+				(: do var v = plotData.get(data).get("Recusadas") == null ? 0 : plotData.get(data).get("Recusadas") :)
+				(: do line.push(v+'') :)
+				(: line :),
+			(: end :)
 		]);
 
 		// Set chart options
@@ -164,35 +105,65 @@
 </head>
 <body>
 
-(: Util.navbar() :)
+	(: Util.navbar() :)
 
-<!-- SUMÁRIO -->
-<div class="container">
+	<!-- SUMÁRIO -->
+	<div class="container">
 
 	<!-- HEAD -->
-	<h2>SUMÁRIO GERAL:STATUS</h2>
+	<h2>SUMÁRIO</h2>
 	<hr />
-	<div class="row">
+
+		<!-- FILTROS -->
+		<form>
+			<div class="row">
+				<div class="col-md-2">
+					<h3 class="filtro">Filtros:</h3>
+				</div>
+				<div class="col-md-2 col-md-offset-4"><h4>TIPO</h4>
+					<select class="form-control">
+						<option>Status</option>
+						<option>Histórico</option>
+					</select>
+				</div>
+				<div class="col-md-2"><h4>USUÁRIO</h4>
+					<select class="form-control">
+						<option>Todos</option>
+						<optgroup label="Supervisores">
+							<!-- SUPERVISORES -->
+							<option>Fulano</option>
+						</optgroup>
+						<optgroup label="Pesquisadores">
+							<!-- PESQUISADORES -->
+							<option>Ciclano</option>
+						</optgroup>
+					</select>
+				</div>
+				<div class="col-md-2"><h4>&nbsp;</h4>
+					<button type="submit" value="submit" class="btn btn-primary">APLICAR</button>
+				</div>
+			</div>
+		</form>
+		<hr />
+	
+	<div class="row" style="margin-top:50px;">
 		<div class="col-md-12">
 			<h4>
 				<span class="supervisor"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> SUPERVISOR</span> |
 				<span class="telefonista"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> TELEFONISTA</span> |
 				<span class="super"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> QUALIDADE</span>	|
-				<span class="completa"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> COMPLETA</span> |
-				<span class="pendente"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> PENDENTE</span>
+				<span class="completa"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> COMPLETA</span> |
+				<span class="pendente"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> PENDENTE</span>
 			</h4>
-			<hr />
 			<div id="chart_div"></div>
 		</div>
 
 	</div>
-	<hr />
-	<div class="row">
+	<div class="row" style="margin-top:50px;">
 		<div class="col-md-6">
 			<h4>
 				TABELA
 			</h4>
-			<hr />
 			<table class="table">
 				<thead>
 					<tr>
@@ -286,12 +257,9 @@
 			</table>
 		</div>
 		<div class="col-md-6">
-			<h4 class="aceita"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> ACEITAS</h4>
-			<hr />
+			<h4 class="aceita"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> ACEITAS</h4>
 			<div id="chart_div2"></div>
-			<hr />
-			<h4 class="recusada"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> RECUSADAS</h4>
-			<hr />
+			<h4 class="recusada"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> RECUSADAS</h4>
 			<div id="chart_div3"></div>
 		</div>
 	</div>

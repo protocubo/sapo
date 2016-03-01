@@ -70,8 +70,9 @@ class RootRoutes extends AccessControl {
 		Sys.println(sapo.view.Survey.render(s));
 
 	@authorize(PSupervisor, PSuperUser)
-	public function doSummary()
-		Sys.println(sapo.view.Summary.render());
+	public function doSummary(d : Dispatch)
+		d.dispatch(new SummaryRoutes());
+		//Sys.println(sapo.view.Summary.render());
 
 	@authorize(PSurveyor, PSuperUser)
 	public function doPayments()

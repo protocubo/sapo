@@ -34,7 +34,7 @@ class RegistrationRoutes extends AccessControl {
 		var u = new User(args.group, new EmailAddress(args.email), args.name, (args.supervisor != null? args.supervisor:null));
 		u.insert();
 		
-		//Web.redirect("/registration");
+		Web.redirect("/registration");
 	}
 	@authorize(PSuperUser)
 	public function doDeactivate(?args:{ ?user:User })

@@ -59,14 +59,15 @@ class MainSync
 		}
 		//TODO:Apagar
 		{
+			Context.resetMainDb();
 			//Context.init();
-			//Context.resetMainDb();
 		}
 		//END
 		syncex = new Map();
 		ours = new Map();
 		
-		InitDB.run();
+		//InitDB.run();
+		
 		
 		if (!FileSystem.exists("./private/cnxstring"))
 		{
@@ -86,16 +87,16 @@ class MainSync
 		
 		//SQLite - yay versao antiga
 		try{
-		Manager.cnx.request("CREATE VIEW UpdatedSession AS SELECT MAX(id) as session_id, old_survey_id, MAX(syncTimestamp) as syncTimestamp FROM Survey GROUP BY old_survey_id");
+		Manager.cnx.request("CREATE VIEW UpdatedSurvey AS SELECT MAX(id) as session_id, old_survey_id, MAX(syncTimestamp) as syncTimestamp FROM Survey GROUP BY old_survey_id");
 		}
 		catch (e : Dynamic)
 		{
 			
 		}
 		//MySQL
-		//Manager.cnx.request("CREATE OR REPLACE VIEW UpdatedSession AS SELECT MAX(id) as session_id, old_survey_id, MAX(syncTimestamp) as syncTimestamp FROM Survey GROUP BY old_survey_id");
+		//Manager.cnx.request("CREATE OR REPLACE VIEW UpdatedSurvey AS SELECT MAX(id) as session_id, old_survey_id, MAX(syncTimestamp) as syncTimestamp FROM Survey GROUP BY old_survey_id");
 		
-		var resUsers = Manager.cnx.request("SELECT id, user_id, `group` FROM Survey s JOIN UpdatedSession us ON s.id = us.session_id ORDER BY user_id, `group`");
+		var resUsers = Manager.cnx.request("SELECT id, user_id, `group` FROM Survey s JOIN UpdatedSurvey us ON s.id = us.session_id ORDER BY user_id, `group`");
 		userGroup = new Map();
 		for (r in resUsers)
 		{
