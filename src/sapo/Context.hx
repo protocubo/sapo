@@ -132,6 +132,7 @@ class Context {
 		Manager.cnx = null;
 	}
 
+#if !sapo_sync
 	public static function iterate()
 	{
 		var uri = Web.getURI();
@@ -176,5 +177,6 @@ class Context {
 			Web.redirect('/login?redirect=${StringTools.urlEncode(url)}');
 		}
 	}
+#end
 }
 
