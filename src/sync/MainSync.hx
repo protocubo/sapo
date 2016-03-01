@@ -1,21 +1,16 @@
 package sync;
 import common.spod.EnumSPOD;
-import common.spod.Familia;
-import common.spod.Modo;
-import common.spod.Morador;
-import common.spod.Ocorrencias;
-import common.spod.Ponto;
 import common.spod.statics.EstacaoMetro;
 import common.spod.statics.LinhaOnibus;
 import common.spod.statics.Referencias;
 import common.spod.statics.UF;
-import common.spod.Survey;
 import haxe.Http;
 import haxe.Json;
 import haxe.Log;
 import haxe.PosInfos;
 import common.spod.InitDB;
 import sapo.Context;
+import sapo.spod.Survey;
 
 import sys.db.Connection;
 import sys.db.Manager;
@@ -44,6 +39,8 @@ class MainSync
 	
 	static var refValue : Map<String,Map<Int,Int>>;
 	
+	//User_id , Group, Count
+	static var userGroup : Map<Int, Map<Int,Int>>;
 	
 	static var syncex : Map<String,Int>;
 	
@@ -62,14 +59,15 @@ class MainSync
 		}
 		//TODO:Apagar
 		{
+			Context.resetMainDb();
 			//Context.init();
-			//Context.resetMainDb();
 		}
 		//END
 		syncex = new Map();
 		ours = new Map();
 		
-		InitDB.run();
+		//InitDB.run();
+		
 		
 		if (!FileSystem.exists("./private/cnxstring"))
 		{
@@ -87,6 +85,37 @@ class MainSync
 		var serverTimestamp = serverTimestamp();
 		#end
 		
+		//SQLite - yay versao antiga
+		try{
+		Manager.cnx.request("CREATE VIEW UpdatedSurvey AS SELECT MAX(id) as session_id, old_survey_id, MAX(syncTimestamp) as syncTimestamp FROM Survey GROUP BY old_survey_id");
+		}
+		catch (e : Dynamic)
+		{
+			
+		}
+		//MySQL
+		//Manager.cnx.request("CREATE OR REPLACE VIEW UpdatedSurvey AS SELECT MAX(id) as session_id, old_survey_id, MAX(syncTimestamp) as syncTimestamp FROM Survey GROUP BY old_survey_id");
+		
+		var resUsers = Manager.cnx.request("SELECT id, user_id, `group` FROM Survey s JOIN UpdatedSurvey us ON s.id = us.session_id ORDER BY user_id, `group`");
+		userGroup = new Map();
+		for (r in resUsers)
+		{
+			var submap : Map<Int, Int>;
+			if (userGroup.get(r.user_id) == null)
+			{
+				trace("woot");
+				submap = new Map();
+			}
+			else
+				submap = userGroup.get(r.user_id);
+			
+			var v = submap.get(r.group) != null ? submap.get(r.group) : 0;
+			submap.set(r.group, v + 1);
+			
+			userGroup.set(r.user_id, submap);			
+		}
+		
+		
 		//Todos os valores de enums -> usa as keys "EnumName" e "Old_val" => "New_val" para conversão das entradas originais para as novas
 		//A estrutura é Map<String,Map<Int,Int>>
 		refValue = populateHash();
@@ -94,7 +123,7 @@ class MainSync
 		// Query -> ../../extras/main.sql
 		//Session_id only 
 		//var updateVars = targetCnx.request("SELECT DISTINCT session_id FROM ((SELECT ep.session_id as session_id FROM SyncMap sm join EnderecoProp ep ON sm.tbl = 'EnderecoProp' AND sm.new_id = ep.id /*AND sm.timestamp > x*/) UNION ALL (SELECT  s.id as session_id FROM SyncMap sm JOIN Session s ON sm.tbl = 'Session' AND sm.new_id = s.id /*AND sm.timestamp > x*/) UNION ALL ( select f.session_id as session_id FROM SyncMap sm JOIN Familia f ON f.id = sm.new_id AND sm.tbl = 'Familia'  /*AND sm.timestamp > x*/) UNION ALL (select  m.session_id as session_id FROM SyncMap sm JOIN Morador m ON m.id = sm.new_id AND sm.tbl = 'Morador'  /*AND sm.timestamp > x*/) UNION ( select  p.session_id as session_id FROM SyncMap sm JOIN Ponto p ON  sm.tbl = 'Ponto' AND p.id = sm.new_id  /*AND sm.timestamp > x*/) UNION ALL (select m.session_id as session_id FROM SyncMap sm JOIN Modo m ON m.id = sm.new_id AND sm.tbl = 'Modo'  /*AND sm.timestamp > x*/)	) ack WHERE session_id IS NOT NULL ORDER BY session_id ASC").results().map(function(v) { return v.session_id; } ).array();
-		var updateVars = targetCnx.request("SELECT id as session_id FROM Session WHERE id < 11").results().map(function(v) { return v.session_id; } ).array();
+		var updateVars = targetCnx.request("SELECT id as session_id FROM Session WHERE id < 100").results().map(function(v) { return v.session_id; } ).array();
 		#if debug
 		maxtimestamp = Date.now().getTime();
 		#else
@@ -155,7 +184,7 @@ class MainSync
 				"dataInicioPesquisaPapel", "dataFimPesquisaPapel", "codigoFormularioPapel", 
 				"date_create", "date_started", "date_finished", "date_completed",
 				"endereco_id", "pin", "latitude", "longitude",
-				"municipio", "bairro", "logradouro", "numero", "complemento", "cep",
+				"municipio", "bairro", "logradouro", "numero", "complemento","cep",
 				"zona","macrozona","lote","estratoSocioEconomico":
 					Reflect.setField(new_sess, f, Reflect.field(dbSession, f));
 				//Enum
@@ -169,6 +198,41 @@ class MainSync
 		}
 		
 		new_sess.syncTimestamp = maxtimestamp;
+		if (insertMode)
+		{
+			var groups = userGroup.get(new_sess.user_id);
+			var biggest = 1;
+			if (groups == null)
+				groups = new Map();
+				
+			for(k in groups.keys())
+			{
+				if (k > biggest)
+					biggest = k;
+			}
+			trace("cur? " + biggest);
+			
+			//trace(groups != null);
+			if (groups.get(biggest) == null || groups.get(biggest) < 10)
+			{
+				var curval = groups.get(biggest) != null ? groups.get(biggest) : 0;
+				groups.set(biggest, curval + 1);
+				userGroup.set(new_sess.user_id, groups);
+				
+				new_sess.group = biggest;
+			}
+			else
+			{
+				trace("null? ");
+				
+				var v = biggest + 1;
+				groups.set(v, 1);
+				userGroup.set(new_sess.user_id, groups);
+				
+				new_sess.group = v;
+			}
+		
+		}
 		
 		Macros.validateEntry(Survey, ["syncTimestamp", "id"], [ { key : "old_survey_id", value : new_sess.old_survey_id } ], new_sess);
 		

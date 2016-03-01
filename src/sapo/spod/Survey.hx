@@ -5,6 +5,7 @@ import common.spod.statics.EstacaoMetro;
 import common.spod.statics.LinhaOnibus;
 import common.spod.statics.Referencias;
 import common.spod.statics.UF;
+import sapo.Spod.SurveyStatus;
 import sys.db.Object;
 import sys.db.Types;
 
@@ -15,6 +16,8 @@ class Survey extends Object {
 
 	public var lastPageVisited : SNull<SString<255>>;
 	public var isValid : SBool;
+	
+	public var paid : SNull<SBool> = false;
 
 	public var isRestored : SBool;
 
@@ -42,9 +45,23 @@ class Survey extends Object {
 	public var macrozona : SNull<SString<255>>;
 	public var lote : SNull<SString<255>>;
 	public var estratoSocioEconomico : SNull<SString<255>>;
-
+	
+	/** CHECKS -> Verificado? - TODO:IGNORAR NO SYNC! **/
+	public var checkSupervisor : SNull<SBool>;
+	public var checkCT : SNull<SBool>;
+	public var checkSuper : SNull<SBool>;
+	public var group : Null<Int>;
+	public var date_edited : SNull<SDateTime>;
+	/*********************************/
+	
 	public var old_survey_id : SInt;
 	public var syncTimestamp : SFloat;
+	
+	override public function insert()
+	{
+		date_edited = Date.now();
+		super.insert();
+	}
 }
 
 class Ocorrencias extends Object {

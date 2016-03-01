@@ -3,6 +3,7 @@ package sapo.route;
 import common.Dispatch;
 import common.Web;
 import common.db.MoreTypes;
+import sapo.route.RegistrationRoutes;
 import sapo.spod.Other;
 import sapo.spod.Ticket;
 import sapo.spod.User;
@@ -69,8 +70,9 @@ class RootRoutes extends AccessControl {
 		Sys.println(sapo.view.Survey.render(s));
 
 	@authorize(PSupervisor, PSuperUser)
-	public function doSummary()
-		Sys.println(sapo.view.Summary.render());
+	public function doSummary(d : Dispatch)
+		d.dispatch(new SummaryRoutes());
+		//Sys.println(sapo.view.Summary.render());
 
 	@authorize(PSurveyor, PSuperUser)
 	public function doPayments()
@@ -83,8 +85,8 @@ class RootRoutes extends AccessControl {
 	}
 
 	@authorize(PSuperUser)
-	public function doRegistration()
-		Sys.println(sapo.view.Registration.render());
+	public function doRegistration(d:Dispatch)
+		d.dispatch(new RegistrationRoutes());
 
 	@authorize(all)
 	public function doDefault()
