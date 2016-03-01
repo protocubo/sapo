@@ -1,5 +1,5 @@
 (: import sapo.Spod :)
-(: static function page() :)
+(: static function page(?users:List<Spod.User>) :)
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,16 +25,18 @@
 	</div>
 	<div class="row">
 		<div class="col-md-1"><h4>SITUAÇÃO:</h4></div>
-		<div class="col-md-2">
-			<!-- FILTRO -->
-			<select class="form-control">
-				<option>Ativos</option>
-				<option>Desativados</option>
-			</select>
-		</div>
-		<div class="col-md-2 col-md-offset-1">
-			<button type="button" class="btn btn-primary">APLICAR</button>
-		</div>
+		<form action="" method="get">
+			<div class="col-md-2">		
+			<!-- FILTRO -->				
+				<select class="form-control" name="activeFilter">
+					<option value="active">Ativos</option>
+					<option value="deactivated">Desativados</option>
+				</select>
+			</div>
+			<div class="col-md-2 col-md-offset-1">
+				<button type="submit" value="submit" class="btn btn-primary">APLICAR</button>
+			</div>
+		</form>
 		<div class="col-md-2 col-md-offset-4">
 			<!-- ADIÇÃO -->
 			<button type="button" class="btn btn-success" data-toggle="modal" data-target="#cadastro_adicionar">ADICIONAR</button>
@@ -58,7 +60,7 @@
 		</thead>
 		<tbody>
 			<!-- LINHA: nome, grupo, e-mail, supervisor, editar, desativar -->
-			(: for user in Spod.User.manager.all() :)
+			(: for user in users :)
 			<tr>
 				(:* <td><b class="pesquisador">(:user.name:)@</b></td> *:)
 				<td><b class="(:user.group.group_name:)">(:user.name:)</b></td>
@@ -108,50 +110,64 @@
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 			<h4 class="modal-title" id="cadastro_adicionar_label">ADICIONAR USUÁRIO</h4>
 			</div>
-			<div class="modal-body">
-				<div class="row">
-					<div class="col-md-2"><h4>Nome:</h4></div>
-					<div class="col-md-10"><input type="text" class="form-control" /></div>
-				</div>
-				<div class="row">
-					<div class="col-md-2"><h4>E-mail:</h4></div>
-					<div class="col-md-10"><input type="text" class="form-control" /></div>
-				</div>
-				<div class="row">
-					<div class="col-md-2"><h4>Grupo:</h4></div>
-					<div class="col-md-10">
-						<select class="form-control">
-							<option disabled selected>Selecione</option>
-							<option>Pesquisador</option>
-							<option>Supervisor</option>
-							<option>Telefonista</option>
-						</select>
+			<form action="/registration/add" method="get">				
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-2"><h4>Nome:</h4></div>
+						<div class="col-md-10"><input type="text" name="name" class="form-control"></div>
+					</div>
+					<div class="row">
+						<div class="col-md-2"><h4>E-mail:</h4></div>
+						<div class="col-md-10"><input type="text" name="email" class="form-control"></div>
+					</div>
+					<div class="row">
+						<div class="col-md-2"><h4>Grupo:</h4></div>
+						<div class="col-md-10">
+							<select class="form-control" id="groupFieldAdd" name="group" onchange="disableSupervisorField('groupFieldAdd','supervisorFieldAdd')">
+								(: for g in Spod.Group.manager.all() :)
+									<option value=(:g.id:)>(:g.group_name:)</option>
+								(:end:)
+							</select>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-2"><h4>Supervisor:</h4></div>
+						<div class="col-md-10">
+							<select class="form-control" id="supervisorFieldAdd" name="supervisor" disabled>
+								(: for s in Spod.User.manager.search($group_id== Spod.Group.manager.select($group_name=="supervisor").id ) :)
+									<option value=(:s.id:)>(:s.user_name:)</option>
+								(:end:)
+							</select>
+						</div>
 					</div>
 				</div>
-				<div class="row">
-					<div class="col-md-2"><h4>Supervisor:</h4></div>
-					<div class="col-md-10">
-						<select class="form-control">
-							<option disabled selected>Selecione</option>
-							<option>Assunção Alex</option>
-						</select>
+				<div class="modal-footer">
+					<div class="row">
+						<div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
+						<div class="col-md-6"><button type="submit" value="submit" class="btn btn-success">ADICIONAR</button></div>
 					</div>
 				</div>
-			</div>
-			<div class="modal-footer">
-				<div class="row">
-					<div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
-					<div class="col-md-6"><button type="button" class="btn btn-success">ADICIONAR</button></div>
-				</div>
-			</div>
+			</form>
 		</div>
 	</div>
 </div>
-
+	
 	(: for user in Spod.User.manager.all() :)
 	(: Modal.modalcadastroeditar(user) :)
 	(: Modal.modalcadastrodesativar(user) :)
 	(: end :)
+	
+	<script>
+		function disableSupervisorField(idg,ids) 
+		{
+			var eGrp = document.getElementById(idg);
+			var eSup = document.getElementById(ids);
+			if(eGrp.options[eGrp.selectedIndex].text=="pesquisador")
+				eSup.disabled = false;
+			else
+				eSup.disabled = true;
+		}
+	</script>
 
 </body>
 </html>

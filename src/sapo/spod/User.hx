@@ -28,6 +28,7 @@ class User extends sys.db.Object {
 	public var name:String;
 	public var email:EmailAddress;
 	public var password:Null<Password>;
+	public var deactivated_at:Null<HaxeTimestamp>;
 
 	public function new(user_name, group, name, email)
 	{

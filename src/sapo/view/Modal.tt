@@ -168,8 +168,7 @@
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 					<h4 class="modal-title" id="cadastro(: cadastro.id :)_editar_label">EDITAR USUÁRIO</h4>
 				</div>
-				<form action="/registration/edit" method="get">
-				
+				<form action="/registration/edit" method="get">				
 					<input type="hidden" name="user" value=(:cadastro.id:)>
 					<div class="modal-body">
 						<div class="row">
@@ -183,7 +182,7 @@
 						<div class="row">
 							<div class="col-md-2"><h4>Grupo:</h4></div>
 							<div class="col-md-10">
-								<select class="form-control" name="group">
+								<select class="form-control" id="groupFieldEdit(:cadastro.id:)" name="group" onchange="disableSupervisorField('groupFieldEdit(:cadastro.id:)','supervisorFieldEdit(:cadastro.id:)')">
 									(: for g in Spod.Group.manager.all() :)
 										<option value=(:g.id:) (: g.id == cadastro.group.id? "selected":"" :)>(:g.group_name:)</option>
 									(:end:)
@@ -193,7 +192,7 @@
 						<div class="row">
 							<div class="col-md-2"><h4>Supervisor:</h4></div>
 							<div class="col-md-10">
-								<select class="form-control" name="supervisor" (:cadastro.group.group_name == "pesquisador"? "":"disabled":)>
+								<select class="form-control" name="supervisor" id="supervisorFieldEdit(:cadastro.id:)" (:cadastro.group.group_name == "pesquisador"? "":"disabled":)>
 									(: for s in Spod.User.manager.search($group_id== Spod.Group.manager.select($group_name=="supervisor").id ) :)
 										<option value=(:s.id:)>(:s.user_name:)</option>
 									(:end:)
@@ -221,19 +220,22 @@
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 					<h4 class="modal-title" id="cadastro(: cadastro.id :)_desativar_label">DESATIVAR USUÁRIO</h4>
 				</div>
-				<div class="modal-body">
-					<div class="row">
-						<div class="col-md-12">
-							<p>Deseja realmente desativar o usuário <b class="pesquisador">(:cadastro.name:)</b>?</p>
+				<form action="/registration/deactivate" method="get">				
+					<input type="hidden" name="user" value=(:cadastro.id:)>
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-md-12">
+								<p>Deseja realmente desativar o usuário <b class="pesquisador">(:cadastro.name:)</b>?</p>
+							</div>
 						</div>
 					</div>
-				</div>
-				<div class="modal-footer">
-					<div class="row">
-						<div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">NÃO</button></div>
-						<div class="col-md-6"><button type="button" class="btn btn-success">SIM</button></div>
+					<div class="modal-footer">
+						<div class="row">
+							<div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">NÃO</button></div>
+							<div class="col-md-6"><button type="submit" value="submit" class="btn btn-success">SIM</button></div>
+						</div>
 					</div>
-				</div>
+				</form>
 			</div>
 		</div>
 	</div>
