@@ -74,12 +74,12 @@ class Context {
 			var arthur = new User(superUsers, new EmailAddress("arthur@sapo"), "Arthur Dent");
 			var ford = new User(superUsers, new EmailAddress("ford@sapo"), "Ford Prefect");
 			var judite = new User(phoneOperators, new EmailAddress("judite@sapo"), "Judite da NET");
-			var magentoCol = [ for (i in 0...4) new User(supervisors, new EmailAddress('magento.$i@sapo'), 'Magento Maria #$i') ];
+			var magentoCol = [ for (i in 0...4) new User(supervisors, new EmailAddress('magento.${i+1}@sapo'), 'Magento Maria #${i+1}') ];
 			for (u in [arthur, ford, judite].concat(magentoCol)) {
 				u.password = Password.make("secret");
 				u.insert();
 			}
-			var maneCol = [ for (i in 0...20) new User(surveyors, new EmailAddress('mane.$i@sapo'), 'Mané Manê #$i', magentoCol[i%magentoCol.length]) ];
+			var maneCol = [ for (i in 0...20) new User(surveyors, new EmailAddress('mane.${i+1}@sapo'), 'Mané Manê #${i+1}', magentoCol[i%magentoCol.length]) ];
 			for (u in maneCol) {
 				u.password = Password.make("secret");
 				u.insert();
