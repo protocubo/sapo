@@ -40,7 +40,8 @@ class Context {
 			Session.manager,
 			Ticket.manager,
 			TicketMessage.manager,
-			User.manager
+			User.manager,
+			UserGroups.manager
 		];
 		for (m in managers)
 			if (!TableCreate.exists(m))

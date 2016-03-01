@@ -20,6 +20,13 @@ class Group extends sys.db.Object {
 	}
 }
 
+// necessary only because we need mentions to groups
+@:id(user_id, group_id)
+class UserGroups extends sys.db.Object {
+	@:relation(user_id) public var user:User;
+	@:relation(group_id) public var group:Group;
+}
+
 @:index(email, unique)
 class User extends sys.db.Object {
 	public var id:SId;
@@ -39,7 +46,7 @@ class User extends sys.db.Object {
 	}
 }
 
-@:key(id)
+@:id(id)
 class Session extends sys.db.Object {
 	public static inline var COOKIE_KEY = "session_id";
 	public static inline var DEFAULT_SESSION_DURATION = 24*3.6*1e6;  // unit: ms
