@@ -1,4 +1,5 @@
 package sapo.route;
+import common.db.MoreTypes.EmailAddress;
 import neko.Web;
 import sapo.spod.User;
 
@@ -27,9 +28,11 @@ class RegistrationRoutes extends AccessControl {
 		Web.redirect("/registration");
 	}
 	@authorize(PSuperUser)
-	public function doAdd(?args:{ ?user:User, ?name:String, ?email:String, ?group:Group, ?supervisor:User })
+	public function doAdd(?args:{ ?name:String, ?email:String, ?group:Group, ?supervisor:User })
 	{
 		if (args == null) args = { };
+		var u = new User(args.group, new EmailAddress(args.email), args.name, (args.supervisor != null? args.supervisor:null));
+		u.insert();
 		
 		//Web.redirect("/registration");
 	}
@@ -37,8 +40,9 @@ class RegistrationRoutes extends AccessControl {
 	public function doDeactivate(?args:{ ?user:User })
 	{
 		if (args == null) args = { };
-		
-		//Web.redirect("/registration");
+		args.user.deactivated_at = Context.loop.now;
+		args.user.update();
+		Web.redirect("/registration");
 	}
 
 	public function new() {}

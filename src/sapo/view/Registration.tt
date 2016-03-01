@@ -135,7 +135,7 @@
 						<div class="col-md-10">
 							<select class="form-control" id="supervisorFieldAdd" name="supervisor" disabled>
 								(: for s in Spod.User.manager.search($group_id== Spod.Group.manager.select($group_name=="supervisor").id ) :)
-									<option value=(:s.id:)>(:s.user_name:)</option>
+									<option value=(:s.id:)>(:s.name:)</option>
 								(:end:)
 							</select>
 						</div>
