@@ -20,28 +20,24 @@ class Group extends sys.db.Object {
 	}
 }
 
-@:index(user_name, unique)
 @:index(email, unique)
 class User extends sys.db.Object {
 	public var id:SId;
-	public var user_name:AccessName;
 	@:relation(group_id) public var group:Group;
 	public var name:String;
 	public var email:EmailAddress;
 	public var password:Null<Password>;
-	
+
 	@:relation(supervisor_id) public var supervisor : SNull<User>;
-	
-	public function new(user_name, group, name, email)
+
+	public function new(group, name, email)
 	{
-		this.user_name = user_name;
 		this.group = group;
 		this.email = email;
 		this.name = name;
 		super();
 	}
 }
-
 
 @:key(id)
 class Session extends sys.db.Object {

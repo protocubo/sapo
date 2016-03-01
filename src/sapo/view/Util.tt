@@ -57,7 +57,7 @@
 				<ul class="nav navbar-nav navbar-right">
 					<!-- sem logar: vazio; logado: nome do usuário + @ + grupo - (class: super, telefonista, supervisor e pesquisador) -->
 					(:if Context.loop.session != null:)
-					<li><a><b class="(:Context.loop.user.group.group_name:)">(:Context.loop.user.user_name:)@(:Context.loop.user.group.group_name:)</b></a></li> <!-- pós login -->
+					<li><a><b class="(:Context.loop.user.group.group_name:)">(:Context.loop.user.name:)@(:Context.loop.user.group.group_name:)</b></a></li> <!-- pós login -->
 					(:end:)
 					<li><a href="/bye">Sair</a></li>
 				</ul>
