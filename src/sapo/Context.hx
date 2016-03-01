@@ -53,7 +53,7 @@ class Context {
 			Manager.cnx.close();
 			Manager.cnx = null;
 		}
-		if(sys.Filesystem.exists(DBPATH))
+		if(sys.FileSystem.exists(DBPATH))
 			sys.FileSystem.deleteFile(DBPATH);
 		init();
 

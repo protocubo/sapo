@@ -86,7 +86,7 @@ class Summary extends AccessControl
 			else
 				curCat = dateVal.get(curDate);
 			
-			curCat.
+			if(
 			
 			
 			i++;
