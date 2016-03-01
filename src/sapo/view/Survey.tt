@@ -44,7 +44,7 @@ function imprimir() {
 			<h2 style=" float:left;">
 				PESQUISA #(:survey.id:)
 			</h2>
-			<h2 style=" float:right;">
+			<h2 class="tags">
 				<!-- se paga -->
 				<span class="glyphicon glyphicon-usd" aria-hidden="true"></span>
 				<!-- se telefonada -->

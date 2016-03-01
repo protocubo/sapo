@@ -79,10 +79,10 @@ unavailable
 			</div>
 			<!-- AÇÕES -->
 			<div class="row" style="margin-top: 30px;">
-				<div class="col-md-2"><button type="button" class="btn btn-success btn-sm (: hideClose(ticket) :)" data-toggle="modal" data-target="#ticket(: ticket.id :)_fechar">FECHAR</button></div>
-				<div class="col-md-2"><button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_responder">RESPONDER</button></div>
 				<div class="col-md-2"><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_incluir">INCLUIR</button></div>
-				<div class="col-md-2"><a href="/survey/(: ticket.survey.id :)" type="button" class="btn btn-primary btn-sm">VER PESQUISA</a></div>
+				<div class="col-md-2"><button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_responder">RESPONDER</button></div>
+				<div class="col-md-2"><button type="button" class="btn btn-success btn-sm (: hideClose(ticket) :)" data-toggle="modal" data-target="#ticket(: ticket.id :)_fechar">FECHAR</button></div>
+				<div class="col-md-2 col-md-offset-2"><a href="/survey/(: ticket.survey.id :)" type="button" class="btn btn-primary btn-sm">VER PESQUISA</a></div>
 				<div class="col-md-2"><button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_status">MUDAR STATUS</button></div>
 			</div>
 		</div>
@@ -108,32 +108,32 @@ unavailable
 		<hr />
 
 		<!-- FILTROS -->
-		<h3>Filtros:</h3>
+		
 		<form method="get" name="filter">
 			<div class="row">
-				<div class="col-md-1"><h4>CAIXA</h4></div>
 				<div class="col-md-2">
+					<h3 class="filtro">Filtros:</h3>
+				</div>
+				<div class="col-md-2 col-md-offset-2"><h4>CAIXA</h4>
 					<select class="form-control" name="inbox" onchange="disableRecipients(this.value)">
 						<option value="(: PARAM_INBOX :)">Entrada</option>
 						<option value="(: PARAM_OUTBOX :)">Enviados</option>
 					</select>
 				</div>
-				<div class="col-md-1"><h4>DESTINO</h4></div>
-				<div class="col-md-2">
+				<div class="col-md-2"><h4>DESTINO</h4>
 					<select class="form-control" id="recipientID" name="recipient">
 						<option value="all">Todos</option>
 						<option value="group">Grupo</option>
 						<option value="individual">Individual</option>
 					</select>
 				</div>
-				<div class="col-md-1"><h4>ESTADO</h4></div>
-				<div class="col-md-2">
+				<div class="col-md-2"><h4>ESTADO</h4>
 					<select class="form-control" name="state">
 						<option value="(: PARAM_OPEN :)">Não Fechadas</option>
 						<option value="(: PARAM_CLOSED :)">Fechadas</option>
 					</select>
 				</div>
-				<div class="col-md-2 col-md-offset-1">
+				<div class="col-md-2"><h4>&nbsp;</h4>
 					<button type="submit" value="submit" class="btn btn-primary">APLICAR</button>
 				</div>
 			</div>
@@ -155,18 +155,19 @@ unavailable
 		</script>
 
 		<!-- BUSCA -->
-		<h3>Busca:</h3>
+		
 		<form action="/tickets/search" method="get">
 			<div class="row">
-				<div class="col-md-2"><h4>TICKET</h4></div>
 				<div class="col-md-2">
+					<h3 class="filtro">Busca:</h3>
+				</div>
+				<div class="col-md-2 col-md-offset-4"><h4>TICKET</h4>
 					<input type="text" name="ticket" id="ticketSearch" class="form-control" oninput="disableSearch(this.name, this.value)" placeholder="Nº do Ticket">
 				</div>
-				<div class="col-md-2"><h4>PESQUISA</h4></div>
-				<div class="col-md-2">
+				<div class="col-md-2"><h4>PESQUISA</h4>
 					<input type="text" name="survey" id="surveySearch" class="form-control" oninput="disableSearch(this.name, this.value)" placeholder="Nº da Pesquisa">
 				</div>
-				<div class="col-md-2 col-md-offset-2">
+				<div class="col-md-2"><h4>&nbsp;</h4>
 					<button type="submit" value="submit" class="btn btn-primary">BUSCAR</button>
 				</div>
 			</div>
