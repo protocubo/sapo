@@ -49,9 +49,10 @@ class TicketRoutes extends AccessControl {
 		Web.redirect('/tickets/search?ticket=${t.id}');
 	}
 
-	@authorize(PSupervisor, PPhoneOperator, PSuperUser)
+	@authorize(PSupervisor, PSuperUser)
 	public function postClose(t:Lock<Ticket>)
 	{
+		// TODO separate route for PPhoneOperators
 		switch Context.loop.privilege {
 		case PSupervisor if (Context.loop.user != t.author):
 			throw 'Can\'t close ticket authored by someone else';
