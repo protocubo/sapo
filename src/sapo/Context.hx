@@ -20,16 +20,20 @@ class Context {
 	public var group(default,null):Group;
 	public var privilege(default,null):Privilege;
 
-	function new(now, session)
+	function new(now, session:Session)
 	{
 		this.now = now;
-		if (session != null)
-		{
-			this.session = session;
-			this.user = session.user;
-			this.group = user.group;
-			this.privilege = group.privilege;
+		if (session == null)
+			return;
+		if (session.expired(now)) {
+			session.expire();
+			session.update();
+			return;
 		}
+		this.session = session;
+		this.user = session.user;
+		this.group = user.group;
+		this.privilege = group.privilege;
 	}
 
 	static function dbInit()

@@ -54,8 +54,11 @@ class Session extends sys.db.Object {
 	public var expires_at:HaxeTimestamp;
 	public var expired_at:Null<HaxeTimestamp>;
 
-	public function expired()
-		return expired_at != null || (expires_at < Context.loop.now);
+	public function expired(?at:HaxeTimestamp)
+	{
+		if (at == null) at = Context.loop.now;
+		return expired_at != null || (expires_at < at);
+	}
 
 	public function expire(?autoUpdate=true)
 	{

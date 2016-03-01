@@ -34,23 +34,35 @@
 			</div>
 			<div class="collapse navbar-collapse">
 				<ul class="nav navbar-nav">
-					<!-- adicionar ~class="active"~ no <li> ativo; sem logar: só SAPO; logado (pesquisador): só pagamentos; logado (resto) todos menos pagamentos -->
-					<li><a href="/tickets">TICKETS</a></li>
-					<li><a href="/surveys">PESQUISAS</a></li>
-					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">SUMÁRIO <span class="caret"></span></a>
-						<ul class="dropdown-menu">
-							<!-- todos os sumários -->
-							<li><a href="/summary">GERAL:STATUS</a></li>
-						</ul>
-					</li>
-					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">ADMINISTRAÇÃO <span class="caret"></span></a>
-						<ul class="dropdown-menu">
-							<li><a href="/registration">CADASTRO</a></li>
-							<li><a href="/payments">PAGAMENTOS</a></li>
-						</ul>
-					</li>
+					(:*adicionar ~class="active"~ no <li> ativo*:)
+					(:if Context.loop.session == null:)
+						(:*nothing*:)
+					(:else if Context.loop.privilege.match(PSurveyor):)
+						<li><a href="/payments">PAGAMENTOS</a></li>
+					(:else:)
+						(:if !Context.loop.privilege.match(PSurveyor):)
+							<li><a href="/tickets">TICKETS</a></li>
+						(:end:)
+						(:if Context.loop.privilege.match(PSupervisor|PSuperUser) :)
+							<li><a href="/surveys">PESQUISAS</a></li>
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown">SUMÁRIO <span class="caret"></span></a>
+								<ul class="dropdown-menu">
+									<!-- todos os sumários -->
+									<li><a href="/summary">GERAL:STATUS</a></li>
+								</ul>
+							</li>
+						(:end:)
+						(:if Context.loop.privilege.match(PSuperUser):)
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown">ADMINISTRAÇÃO <span class="caret"></span></a>
+								<ul class="dropdown-menu">
+									<li><a href="/registration">CADASTRO</a></li>
+									<li><a href="/payments">PAGAMENTOS</a></li>
+								</ul>
+							</li>
+						(:end:)
+					(:end:)
 					<!-- só o pesquisador verá essa aba, e somente esta -->
 					<li><a href="/help">AJUDA</a></li>
 				</ul>
@@ -58,8 +70,8 @@
 					<!-- sem logar: vazio; logado: nome do usuário + @ + grupo - (class: super, telefonista, supervisor e pesquisador) -->
 					(:if Context.loop.session != null:)
 					<li><a><b class="(:Context.loop.user.group.group_name:)">(:Context.loop.user.name:)@(:Context.loop.user.group.group_name:)</b></a></li> <!-- pós login -->
-					(:end:)
 					<li><a href="/bye">Sair</a></li>
+					(:end:)
 				</ul>
 			</div>
 		</div>
