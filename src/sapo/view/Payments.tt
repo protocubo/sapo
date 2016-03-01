@@ -62,7 +62,7 @@
 			<thead>
 				<tr>
 					<!-- HEAD -->
-					<th>Nº da Pesquisa</th>
+					<th>Pesquisa</th>
 					<th>Data</th>
 					<th>Endereço</th>
 					<th>RefPagto</th>

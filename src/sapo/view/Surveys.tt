@@ -9,7 +9,7 @@
 			<div class="col-md-4 panel-title">
 				<!-- Nº da Pesquisa, Data da Pesquisa -->
 				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyPesquisa(: survey.id :)" aria-expanded="true" aria-controls="BodyPesquisa(: survey.id :)">
-					(: survey.id :) - (: survey.date_completed :) - <b class="pesquisador"> (:* survey.surveyor *:) Dilbert</b> - <b class="supervisor">(:* survey.supervisor *:) Magali</b>
+					Pesquisa #(: survey.id :) - (: survey.date_completed :) - <b class="pesquisador"> (:* survey.surveyor *:) Dilbert</b> - <b class="supervisor">(:* survey.supervisor *:) Magali</b>
 				</a>
 			</div>
 			<div class="col-md-6 panel-title">
@@ -34,12 +34,12 @@
 			<div class="row">
 				<div class="col-md-12 barraderolagem">
 					<!-- DADOS DA PESQUISA -->
-					<p><b>Endereço:</b>  (: survey.logradouro :) , (: survey.numero :)	(: survey.complemento :), (: survey.bairro :) </p>
-
+					<div class="bloco"><b>Endereço:</b>  (: survey.logradouro :) , (: survey.numero :)	(: survey.complemento :), (: survey.bairro :) </div>
 					(: for d in common.spod.Familia.manager.search($survey_id == survey.id, { orderBy:-syncTimestamp, limit : 1 }) :) (:* FIXME syncTimestamp  *:)
-					<p><b>Contato:</b> (: d.nomeContato :) - (: d.telefoneContato :) </p>
+					<div class="bloco"><b>Contato:</b> (: d.nomeContato :) - (: d.telefoneContato :) </div>
 					(: end :)
-					<p><b>Senha:</b> (: survey.pin :) </p>
+					<div class="bloco"><b>Senha:</b> (: survey.pin :) </div>
+					<hr>
 					<p><b>Moradores:</b></p>
 					(: for m in common.spod.Morador.manager.search($survey_id == survey.id)  :)
 						(: var dash = false :)
@@ -93,7 +93,7 @@
 	<h3>Filtros:</h3>
 	<form method="get">
 		<div class="row">
-			<div class="col-md-2"><h4>GRUPO:</h4></div>
+			<div class="col-md-2"><h4>GRUPO</h4></div>
 			<div class="col-md-2">
 				<select class="form-control" name="group" onchange="disableUserField(this.value)">
 					<option value="0" >Selecione</option>
@@ -166,15 +166,13 @@
 	</form>
 	<hr />
 
-
-
 	<!-- BUSCA -->
 	<h3>Busca:</h3>
 	<form action="/surveys/search" method="get">
 		<div class="row">
-			<div class="col-md-2"><h4>Nº DA PESQUISA</h4></div>
+			<div class="col-md-2"><h4>PESQUISA</h4></div>
 			<div class="col-md-2">
-				<input type="text" name="survey" class="form-control" placeholder="Número da Pesquisa">
+				<input type="text" name="survey" class="form-control" placeholder="Nº da Pesquisa">
 			</div>
 			<div class="col-md-2 col-md-offset-6">
 				<button type="submit" value="submit" class="btn btn-primary">BUSCAR</button>
