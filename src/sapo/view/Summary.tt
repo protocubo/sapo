@@ -1,5 +1,6 @@
 (: import sapo.Spod :)
-(: static function render(plotData : Map<Date,Map<String,Int>>, header : Array<String>) :)
+(: import common.db.MoreTypes :)
+(: static function render(plotData : Map<String,Map<String,Int>>, header : Array<String>) :)
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,10 +21,10 @@
 
 		// Create the data table.
 		var data = new google.visualization.arrayToDataTable([
-			(: header :),
+			(: header.map(function(v) { return "'" + v + "'";}) :),
 			(: for data in plotData.keys() :)
 				
-				(: do var line = [DateTools.format(data,"%d/%m/%Y")] :)
+				(: do var line = ["'" + DateTools.format(Date.fromString(data),"%d/%m/%Y") + "'"] :)
 				
 				(: for categories in 1...header.length :)
 					(: do var v = plotData.get(data).get(header[categories]) == null ? 0 : plotData.get(data).get(header[categories]) :)
@@ -41,7 +42,7 @@
 		data2.addColumn('number', 'Pesquisas');
 		data2.addRows([
 			(: for data in plotData.keys() :)
-				(: do var line = [DateTools.format(data,"%d/%m/%Y")] :)
+				(: do var line = ["'"+DateTools.format(Date.fromString(data),"%d/%m/%Y")+"'"] :)
 				(: do var v = plotData.get(data).get("Aceitas") == null ? 0 : plotData.get(data).get("Aceitas") :)
 				(: do line.push(v+ '') :)
 				(: line :),
@@ -53,7 +54,7 @@
 		data3.addColumn('number', 'Pesquisas');
 		data3.addRows([
 			(: for data in plotData.keys() :)
-				(: do var line = [DateTools.format(data,"%d/%m/%Y")] :)
+				(: do var line = ["'"+DateTools.format(Date.fromString(data),"%d/%m/%Y")+"'"] :)
 				(: do var v = plotData.get(data).get("Recusadas") == null ? 0 : plotData.get(data).get("Recusadas") :)
 				(: do line.push(v+'') :)
 				(: line :),
@@ -142,82 +143,18 @@
 					</tr>
 				</thead>
 				<tbody>
+				(: for h in 1...header.length :)
+					(: do var val = 0 :)
+					
+					(: for data in plotData.keys() :)
+						(: do val += plotData.get(data).get(header[h]) != null ? plotData.get(data).get(header[h]) : 0 :)
+					(: end :)
+					
 					<tr>
-						<td><b>Completas:</b></td>
-						<td> 29</td>
+						<td>(: header[h] :):</td>
+						<td>(: val :)</td>
 					</tr>
-					<tr>
-						<td><b>Completas:</b></td>
-						<td> 29</td>
-					</tr>
-					<tr>
-						<td><b>Completas:</b></td>
-						<td> 29</td>
-					</tr>
-					<tr>
-						<td><b>Completas:</b></td>
-						<td> 29</td>
-					</tr>
-					<tr>
-						<td><b>Completas:</b></td>
-						<td> 29</td>
-					</tr>
-					<tr>
-						<td><b>Completas:</b></td>
-						<td> 29</td>
-					</tr>
-					<tr>
-						<td><b>Completas:</b></td>
-						<td> 29</td>
-					</tr>
-					<tr>
-						<td><b>Completas:</b></td>
-						<td> 29</td>
-					</tr>
-					<tr>
-						<td><b>Completas:</b></td>
-						<td> 29</td>
-					</tr>
-					<tr>
-						<td><b>Completas:</b></td>
-						<td> 29</td>
-					</tr>
-					<tr>
-						<td><b>Completas:</b></td>
-						<td> 29</td>
-					</tr>
-					<tr>
-						<td><b>Completas:</b></td>
-						<td> 29</td>
-					</tr>
-					<tr>
-						<td><b>Completas:</b></td>
-						<td> 29</td>
-					</tr>
-					<tr>
-						<td><b>Completas:</b></td>
-						<td> 29</td>
-					</tr>
-					<tr>
-						<td><b>Completas:</b></td>
-						<td> 29</td>
-					</tr>
-					<tr>
-						<td><b>Completas:</b></td>
-						<td> 29</td>
-					</tr>
-					<tr>
-						<td><b>Completas:</b></td>
-						<td> 29</td>
-					</tr>
-					<tr>
-						<td><b>Completas:</b></td>
-						<td> 29</td>
-					</tr>
-					<tr>
-						<td><b>Completas:</b></td>
-						<td> 29</td>
-					</tr>
+				(: end :)
 				</tbody>
 				<tfoot>
 					<tr>
