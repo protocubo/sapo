@@ -66,7 +66,7 @@
 				<td><b class="(:user.group.group_name:)">(:user.name:)</b></td>
 				<td><b class="(:user.group.group_name:)">(:user.group.group_name:)</b></td>
 				<td>(:user.email:)</td>
-				<td><b class="supervisor">ToDo</b></td>
+				<td>(:if user.supervisor != null:)<b class="(:user.supervisor.group.group_name:)">(:user.supervisor.name:)</b>(:end:)</td>
 				<td>
 					<button type="button" class="btn btn-warning btn-xs" aria-label="Editar" style="width:auto;" data-toggle="modal" data-target="#cadastro(:user.id:)_editar">
 						<span class="glyphicon glyphicon glyphicon-pencil" aria-hidden="true"></span>

@@ -20,7 +20,7 @@ abstract HaxeTimestamp(Float) from Float to Float {
 
 #if tink_template
 	@:to public function toHtml():tink.template.Html
-		return toDate().toString();
+		return DateTools.format(toDate(), "%d-%m-%Y %H:%M");
 #end
 }
 
@@ -32,12 +32,15 @@ enum Privilege {
 }
 
 abstract AccessName(String) to String {
-	public function new(name)
+	public inline function new(name)
 		this = name;
 }
 
 abstract EmailAddress(String) to String {
-	public function new(email)
+	@:to public inline function toAccessName()
+		return new AccessName(this);
+
+	public inline function new(email)
 		this = email;
 }
 
