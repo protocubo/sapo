@@ -40,13 +40,13 @@ a:focus, a:hover {
     margin-top: 10px;
 }
 .rodape {
-    color: #777;
+    color: #999;
     display:inline-block;
     font-size: 14px;
     line-height: 14px;
 }
 .rodape a {
-    color: #777;
+    color: #999;
 }
 .rodape_logo {
     height:50px;
