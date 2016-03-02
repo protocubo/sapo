@@ -87,7 +87,7 @@
 </html>
 (: end :)
 
-(: static function superPage() :)
+(: static function superPage(?surveys:List<Survey>) :)
 <!DOCTYPE html>
 <html>
 <head>
@@ -104,48 +104,67 @@
 	<hr />
 
 	<!-- FILTROS -->
-	<div class="row">
-		<div class="col-md-2"><h3 class="filtro">Filtros:</h3></div>
-		<div class="col-md-2 col-md-offset-2"><h4>PESQUISADOR:</h4>
-			<select class="form-control">
-				<option>Selecione</option>
-				<!-- lista de pesquisadores por ordem alfabética -->
-			</select>
+	<form method="get">
+		<div class="row">
+			<div class="col-md-2"><h3 class="filtro">Filtros:</h3></div>
+			<div class="col-md-2 col-md-offset-2"><h4>PESQUISADOR:</h4>
+				<select name="surveyor"  class="form-control" >
+					<option value =0 >Todos</option>
+					(:for u in Spod.User.manager.search($group_id== Spod.Group.manager.select($group_name=="pesquisador").id) :)
+						<option value=(:u.id:) >(:u.name:)</option>
+					(: end :)
+				</select>
+			</div>
+			<div class="col-md-2"><h4>PAGA</h4>
+				<select name="paid" class="form-control">
+					<option value=false>Não</option>
+					<option value=true>Sim</option>
+				</select>
+			</div>
+			<div class="col-md-2"><h4>STATUS</h4>
+				<select class="form-control">
+					<option>Abertas</option>
+					<option>Completas</option>
+					<option>Verificadas</option>
+					<option>Aceitas</option>
+				</select>
+			</div>
+			<div class="col-md-2"><h4>&nbsp;</h4>
+				<button type="submit" value="submit" class="btn btn-primary">APLICAR</button>
+			</div>
 		</div>
-		<div class="col-md-2"><h4>PAGA</h4>
-			<select class="form-control">
-				<option>Não</option>
-				<option>Sim</option>
-			</select>
-		</div>
-		<div class="col-md-2"><h4>STATUS</h4>
-			<select class="form-control">
-				<option>Abertas</option>
-				<option>Completas</option>
-				<option>Verificadas</option>
-				<option>Aceitas</option>
-			</select>
-		</div>
-		<div class="col-md-2"><h4>&nbsp;</h4>
-			<button type="button" class="btn btn-primary">APLICAR</button>
-		</div>
-	</div>
+	</form>
 	<hr />
 	
 	<!-- BUSCA -->
-	<div class="row">
-		<div class="col-md-2"><h3 class="filtro">Busca:</h3></div>
-		<div class="col-md-2 col-md-offset-4"><h4>REFERÊNCIA PAGTO</h4>
-			<input type="text" class="form-control" placeholder="Referência Pagto">
+	<form action="/payments/search" method="get">
+		<div class="row">
+			<div class="col-md-2"><h3 class="filtro">Busca:</h3></div>
+			<div class="col-md-2 col-md-offset-4"><h4>REFERÊNCIA PAGTO</h4>
+				<input type="text" id="referenceSearch" name="reference" class="form-control" oninput="disableSearch(this.id, this.value)" placeholder="Referência Pagto">
+			</div>
+			<div class="col-md-2"><h4>PESQUISA</h4>
+				<input type="text" id="surveySearch" name="survey" class="form-control" oninput="disableSearch(this.id, this.value)" placeholder="Nº da Pesquisa">
+			</div>
+			<div class="col-md-2"><h4>&nbsp;</h4>
+				<button type="submit" value="submit" class="btn btn-primary">BUSCAR</button>
+			</div>
 		</div>
-		<div class="col-md-2"><h4>PESQUISA</h4>
-			<input type="text" class="form-control" placeholder="Nº da Pesquisa">
-		</div>
-		<div class="col-md-2"><h4>&nbsp;</h4>
-			<button type="button" class="btn btn-primary">BUSCAR</button>
-		</div>
-	</div>
+	</form>
 	<hr />
+	
+	<script>
+			function disableSearch(field, value) 
+			{
+				document.getElementById("referenceSearch").disabled = false;
+				document.getElementById("surveySearch").disabled = false;
+				
+				if(field == "referenceSearch" && value.length>0)
+					document.getElementById("surveySearch").disabled = true;
+				else if(field == "surveySearch" && value.length>0)
+					document.getElementById("referenceSearch").disabled = true;
+			}
+		</script>
 
 	<!-- TABELA DE USUÁRIOS -->
 

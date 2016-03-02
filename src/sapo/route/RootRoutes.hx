@@ -75,11 +75,11 @@ class RootRoutes extends AccessControl {
 		//Sys.println(sapo.view.Summary.render());
 
 	@authorize(PSurveyor, PSuperUser)
-	public function doPayments()
+	public function doPayments(d:Dispatch)
 	{
 		switch Context.loop.privilege {
 		case PSurveyor: Sys.println(sapo.view.Payments.surveyorPage());
-		case PSuperUser: Sys.println(sapo.view.Payments.superPage());
+		case PSuperUser: d.dispatch(new PaymentRoutes());
 		case other: throw 'access control model failure: got $other';
 		}
 	}
