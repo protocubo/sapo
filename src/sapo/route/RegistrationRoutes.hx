@@ -9,11 +9,11 @@ import sapo.spod.User;
  */
 class RegistrationRoutes extends AccessControl {
 	@authorize(PSuperUser)
-	public function doDefault(?args:{ ?active:String })
+	public function doDefault(?args:{ ?activeFilter:String })
 	{
 		if (args == null) args = { };
-		var users;
-		if(args.active == "deactivated")
+		var users = new List<User>();
+		if(args.activeFilter == "deactivated")
 			users = User.manager.search($deactivated_at != null);
 		else
 			users = User.manager.search($deactivated_at == null);
@@ -24,7 +24,14 @@ class RegistrationRoutes extends AccessControl {
 	public function doEdit(?args:{ ?user:User, ?name:String, ?email:String, ?group:Group, ?supervisor:User })
 	{
 		if (args == null) args = { };
+		var u = args.user;
 		
+		u.lock();
+		u.name = args.name;
+		u.email = new EmailAddress(args.email);
+		u.group = args.group;
+		u.supervisor = (args.supervisor != null? args.supervisor:null);
+		u.update();
 		Web.redirect("/registration");
 	}
 	@authorize(PSuperUser)
@@ -40,6 +47,7 @@ class RegistrationRoutes extends AccessControl {
 	public function doDeactivate(?args:{ ?user:User })
 	{
 		if (args == null) args = { };
+		args.user.lock();
 		args.user.deactivated_at = Context.loop.now;
 		args.user.update();
 		Web.redirect("/registration");
