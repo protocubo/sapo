@@ -9,11 +9,6 @@ To use an hypothetical flag `foo`, add `-D foo` to the command line options or
 
 Note that hyphens in flag names automatically become underscores in Haxe code.
 
-## Essentials
-
-**-D sapo-sync**: required to build the Sync subsystem, since it uses the SAPO
-Context but has no access to the tink_template library (Sync only)
-
 ## Tracing and debug
 
 **-D trace-sqlite**: trace all requests made to SQLite databases (SAPO only)

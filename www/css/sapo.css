@@ -61,7 +61,10 @@ a:focus, a:hover {
 .unavailable {
     display: none;
 }
-
+.tags {
+    float: right;
+    color: #999;
+}
 /*CORES GRUPOS*/
 
 .super {
