@@ -1,5 +1,6 @@
 (: import sapo.Spod :)
 (: import common.db.MoreTypes :)
+(: import sapo.spod.User :)
 (: static function render(plotData : Map<String,Map<String,Int>>, header : Array<String>) :)
 <!DOCTYPE html>
 <html>
@@ -20,21 +21,26 @@
 	function drawChart() {
 
 		// Create the data table.
-		var data = new google.visualization.arrayToDataTable([
-			(: header.map(function(v) { return "'" + v + "'";}) :),
+		var data = new google.visualization.DataTable();
+		(: for h in header :)
+			(: if h == "Data" :) data.addColumn('string', 'Data'); 
+			(: else :) data.addColumn("number", '(: h :)'); (: end :)
+		(: end :)
+		
+		data.addRows([
 			(: for data in plotData.keys() :)
 				
-				(: do var line = ["'" + DateTools.format(Date.fromString(data),"%d/%m/%Y") + "'"] :)
+			(: do var line = ["'" + DateTools.format(Date.fromString(data),"%d/%m/%Y") + "'"] :)
 				
-				(: for categories in 1...header.length :)
-					(: do var v = plotData.get(data).get(header[categories]) == null ? 0 : plotData.get(data).get(header[categories]) :)
-					(: do line.push(v +'') :)
-				(: end :)
+			(: for categories in 1...header.length :)
+				(: do var v = plotData.get(data).get(header[categories]) == null ? 0 : plotData.get(data).get(header[categories]) :)
+				(: do line.push(v +'') :)
+			(: end :)
 				
 			(: line :),
 			
 			(: end :)
-			
+		
 		]);
 
 		var data2 = new google.visualization.DataTable();
@@ -116,27 +122,26 @@
 	<hr />
 
 		<!-- FILTROS -->
-		<form>
+		<form method="POST" action="/summary/user">
 			<div class="row">
 				<div class="col-md-2">
 					<h3 class="filtro">Filtros:</h3>
 				</div>
-				<div class="col-md-2 col-md-offset-4"><h4>TIPO</h4>
-					<select class="form-control">
-						<option>Status</option>
-						<option>Histórico</option>
-					</select>
-				</div>
 				<div class="col-md-2"><h4>USUÁRIO</h4>
-					<select class="form-control">
+					<select class="form-control" name="user">
 						<option>Todos</option>
 						<optgroup label="Supervisores">
-							<!-- SUPERVISORES -->
-							<option>Fulano</option>
+						(: do var group = Group.manager.select($privilege == Privilege.PSupervisor, null, false) :)
+						(: for u in User.manager.search($group == group, null, false) :)
+							<option value='(:u.id:)'>(:u.name:)</option>
+						(: end :)
 						</optgroup>
 						<optgroup label="Pesquisadores">
 							<!-- PESQUISADORES -->
-							<option>Ciclano</option>
+							(: do group = Group.manager.select($privilege == Privilege.PSurveyor, null, false) :)
+							(: for u in User.manager.search($group == group, null, false) :)
+								<option value='(:u.id:)'>(:u.name:)</option>
+							(: end :)
 						</optgroup>
 					</select>
 				</div>
