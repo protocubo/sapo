@@ -14,8 +14,9 @@ import sys.db.*;
 class Context {
 	static var DBPATH = Sys.getEnv("SAPO_DB");
 
-	public static var loop:Context;
-	public static var db:common.db.SaneConnection;
+	public static var version(default,null) = { commit : Version.getGitCommitHash() }
+	public static var loop(default,null):Context;
+	public static var db(default,null):common.db.AutocommitConnection;
 
 	var dispatch:Dispatch;
 
@@ -75,7 +76,7 @@ class Context {
 			sys.FileSystem.deleteFile(DBPATH);
 		init();
 
-		Manager.cnx.request("BEGIN");
+		startTransaction();
 		try {
 			// system groups
 			var surveyors = new Group(PSurveyor, new AccessName("pesquisador"), "Pesquisador");
@@ -129,10 +130,10 @@ class Context {
 			new TicketMessage(ticket2, ford, "Time is an illusion, lunchtime doubly so. ").insert();
 			new TicketMessage(ticket2, arthur, "Very deep. You should send that in to the Reader's Digest. They've got a page for people like you.").insert();
 		} catch (e:Dynamic) {
-			Manager.cnx.request("ROLLBACK");
+			rollback();
 			neko.Lib.rethrow(e);
 		}
-		Manager.cnx.request("COMMIT");
+		commit();
 	}
 
 	public static function init()

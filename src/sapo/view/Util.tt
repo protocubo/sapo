@@ -75,7 +75,8 @@
 			<h3 class="rodape">
 				<b>SAPO</b> OD DF 2016 |
 				<a href="/about">SOBRE</a> |
-				<a href="/licenses">LICENÇAS</a>
+				<a href="/licenses">LICENÇAS</a> |
+				(:Context.version.commit.substr(0,7):)
 			</h3>
 			<img src="/resources/sapo_logo.png" class="rodape_logo">
 		</div>
