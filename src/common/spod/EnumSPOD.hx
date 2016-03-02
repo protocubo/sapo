@@ -163,20 +163,20 @@ class AguaEncanada_Tbl extends EnumTable {}
  
   @dbNullVal(101) enum Idade
  {
-	@dbVal(1) De00Ate04;
-	@dbVal(2) De05Ate09;
-	@dbVal(3) De10Ate14;
-	@dbVal(4) De15Ate17;
-	@dbVal(5) De18Ate19;
-	@dbVal(6) De20Ate24;
-	@dbVal(7) De25Ate29;
-	@dbVal(8) De30Ate39;
-	@dbVal(9) De40Ate49;
-	@dbVal(10) De50Ate59;
-	@dbVal(11) De60Ate69;
-	@dbVal(12) De70Ate79;
-	@dbVal(13) Mais80;
-	@dbVal(101) NaoRespondeu;
+	@dbVal(1) @tt("0 - 4") De00Ate04;
+	@dbVal(2) @tt("5 - 9") De05Ate09;
+	@dbVal(3) @tt("10 - 14") De10Ate14;
+	@dbVal(4) @tt("15 - 17") De15Ate17;
+	@dbVal(5) @tt("18 - 19") De18Ate19;
+	@dbVal(6) @tt("20 - 24") De20Ate24;
+	@dbVal(7) @tt("25 - 29") De25Ate29;
+	@dbVal(8) @tt("30 - 39") De30Ate39;
+	@dbVal(9) @tt("40 - 49") De40Ate49;
+	@dbVal(10) @tt("50 - 59") De50Ate59;
+	@dbVal(11) @tt("60 - 69") De60Ate69;
+	@dbVal(12) @tt("70 - 79") De70Ate79;
+	@dbVal(13) @tt(" 80 - 120") Mais80;
+	@dbVal(101) @tt(" N/I ") NaoRespondeu;
  }
  
   class Idade_Tbl extends EnumTable {

@@ -43,7 +43,7 @@
 					<p><b>Moradores:</b></p>
 					(: for m in common.spod.Morador.manager.search($survey_id == survey.id)  :)
 						(: var dash = false :)
-							<p> (: m.nomeMorador :) ( (: m.idade :) ) :
+							<p> (: m.nomeMorador :) ( (: Util.en2str(m.idade) :) ) :
 							(: for p in common.spod.Ponto.manager.search($morador_id == m.id)  :)
 								(: if dash :) - (: end :)(: p.motivo :) (: do dash = true :)
 							(: end :)

@@ -21,7 +21,7 @@ class DataBaseMetaToTemplateTests {
 
         var meta = haxe.rtti.Meta.getFields(e);
         var cnMeta = Reflect.field(meta, cons);
-        var tmeta:Array<Dynamic> = cnMeta.tempstring;
+        var tmeta:Array<Dynamic> = cnMeta.tot;
         for (text in tmeta) {
             if (Type.getClassName(Type.getClass(text)) != "String")
                 trace (' $text  not a string!');
@@ -29,7 +29,7 @@ class DataBaseMetaToTemplateTests {
                 trace('v to text = $text');
         }
 
-
+    }
 	public function new() {}
 }
 
