@@ -113,13 +113,15 @@ class Context {
 			var recipientCol = authorCol.concat([judite]);
 			var ticketCol = [];
 			for (i in 0...20) {
-				var s= surveyCol[i%surveyCol.length];
+				var s = surveyCol[i%surveyCol.length];
 				var a = authorCol[i%authorCol.length];
 				var r = recipientCol[(recipientCol.length + i)%recipientCol.length];
 				var t = new Ticket(s, a, r, 'Lorem ${s.id} ipsum ${a.name} ${r.name}');
 				t.insert();
 				var m = new TicketMessage(t, a, 'Heyy!!  Just letting you know I found an issue with survey ${s.id}');
 				m.insert();
+				var ts = new TicketSubscription(t, a);
+				ts.insert();
 			}
 			var ticket1 = new Ticket(survey1, arthur, ford, "Overpass???");
 			ticket1.insert();
