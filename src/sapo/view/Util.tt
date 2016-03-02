@@ -82,11 +82,11 @@
 	</footer>
 (: end :)
 
-(: static function en2str(v) :)
+(: static function enumText(v:EnumValue) :)
 (: do {
+        if (v == null) return "";
         var e = Type.getEnum(v);
         var cons = Type.enumConstructor(v);
-
         var meta = haxe.rtti.Meta.getFields(e);
         var cnMeta = Reflect.field(meta, cons);
         var tmeta:Array<Dynamic> = cnMeta.tt;

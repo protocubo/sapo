@@ -35,15 +35,15 @@
 				<div class="col-md-12 barraderolagem">
 					<!-- DADOS DA PESQUISA -->
 					<div class="bloco"><b>Endereço:</b>  (: survey.logradouro :) , (: survey.numero :)	(: survey.complemento :), (: survey.bairro :) </div>
-					(: for d in common.spod.Familia.manager.search($survey_id == survey.id, { orderBy:-syncTimestamp, limit : 1 }) :) (:* FIXME syncTimestamp  *:)
+					(: for d in sapo.spod.Survey.Familia.manager.search($survey_id == survey.id, { orderBy:-syncTimestamp, limit : 1 }) :) (:* FIXME syncTimestamp  *:)
 					<div class="bloco"><b>Contato:</b> (: d.nomeContato :) - (: d.telefoneContato :) </div>
 					(: end :)
 					<div class="bloco"><b>Senha:</b> (: survey.pin :) </div>
 					<hr>
 					<p><b>Moradores:</b></p>
-					(: for m in common.spod.Morador.manager.search($survey_id == survey.id)  :)
+					(: for m in sapo.spod.Survey.Morador.manager.search($survey_id == survey.id)  :)
 						(: var dash = false :)
-							<p> (: m.nomeMorador :) ( (: Util.en2str(m.idade) :) ) :
+							<p> (: m.nomeMorador :) ( (: Util.enumText(m.idade) :) ) :
 							(: for p in common.spod.Ponto.manager.search($morador_id == m.id)  :)
 								(: if dash :) - (: end :)(: p.motivo :) (: do dash = true :)
 							(: end :)
