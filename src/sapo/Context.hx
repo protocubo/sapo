@@ -16,7 +16,7 @@ class Context {
 
 	public static var version(default,null) = { commit : Version.getGitCommitHash() }
 	public static var loop(default,null):Context;
-	public static var db(default,null):common.db.SaneConnection;
+	public static var db(default,null):common.db.AutocommitConnection;
 
 	var dispatch:Dispatch;
 
