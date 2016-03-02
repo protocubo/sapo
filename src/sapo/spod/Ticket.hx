@@ -48,3 +48,18 @@ class TicketMessage extends sys.db.Object {
 	}
 }
 
+@:id(ticket_id, group_id, user_id)
+class TicketSubscription extends sys.db.Object {
+	@:relation(ticket_id) public var ticket:Ticket;
+	@:relation(group_id) public var group:Null<Group>;
+	@:relation(user_id) public var user:Null<User>;
+
+	public function new(ticket, ?user, ?group)
+	{
+		this.ticket = ticket;
+		this.group = group;
+		this.user = user;
+		super();
+	}
+}
+

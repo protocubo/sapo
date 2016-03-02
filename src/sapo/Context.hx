@@ -15,6 +15,7 @@ class Context {
 	static var DBPATH = Sys.getEnv("SAPO_DB");
 
 	public static var loop:Context;
+	public static var db:common.db.SaneConnection;
 
 	var dispatch:Dispatch;
 
@@ -34,7 +35,7 @@ class Context {
 		this.uri = uri;
 		this.params = params;
 		dispatch = new Dispatch(uri, params, method);
-		
+
 		if (session == null)
 			return;
 		if (session.expired(now)) {
@@ -56,6 +57,7 @@ class Context {
 			Session.manager,
 			Ticket.manager,
 			TicketMessage.manager,
+			TicketSubscription.manager,
 			User.manager
 		];
 		for (m in managers)
@@ -85,7 +87,7 @@ class Context {
 
 			// users
 			var arthur = new User(superUsers, new EmailAddress("arthur@sapo"), "Arthur Dent");
-			var ford = new User(superUsers, new EmailAddress("ford@sapo"), "Ford Prefect");
+			var ford = new User(superUsers, new EmailAddress("ford@sapo"), "Ford efect");
 			var judite = new User(phoneOperators, new EmailAddress("judite@sapo"), "Judite da NET");
 			var magentoCol = [ for (i in 0...4) new User(supervisors, new EmailAddress('magento.${i+1}@sapo'), 'Magento Maria #${i+1}') ];
 			for (u in [arthur, ford, judite].concat(magentoCol)) {
@@ -103,8 +105,21 @@ class Context {
 			var survey2 = new NewSurvey(maneCol[1], "Betelgeuse, or somewhere near that planet", 6352344);
 			survey1.insert();
 			survey2.insert();
+			var surveyCol = [survey1, survey2];
 
 			// some tickets
+			var authorCol = [arthur, ford].concat(magentoCol);
+			var recipientCol = authorCol.concat([judite]);
+			var ticketCol = [];
+			for (i in 0...20) {
+				var s= surveyCol[i%surveyCol.length];
+				var a = authorCol[i%authorCol.length];
+				var r = recipientCol[(recipientCol.length + i)%recipientCol.length];
+				var t = new Ticket(s, a, r, 'Lorem ${s.id} ipsum ${a.name} ${r.name}');
+				t.insert();
+				var m = new TicketMessage(t, a, 'Heyy!!  Just letting you know I found an issue with survey ${s.id}');
+				m.insert();
+			}
 			var ticket1 = new Ticket(survey1, arthur, ford, "Overpass???");
 			ticket1.insert();
 			new TicketMessage(ticket1, arthur, "Hey, I was distrought over they wanting to build an overpass over my house").insert();
@@ -124,13 +139,23 @@ class Context {
 	{
 		InitDB.run();
 		dbInit();
+		db = Manager.cnx;
 	}
+
+	public static function startTransaction()
+		db.request("BEGIN");
+
+	public static function commit()
+		db.request("COMMIT");
+
+	public static function rollback()
+		db.request("ROLLBACK");
 
 	public static function shutdown()
 	{
 		if (Manager.cnx == null) return;
 		Manager.cnx.close();
-		Manager.cnx = null;
+		db = Manager.cnx = null;
 	}
 
 #if !sapo_sync

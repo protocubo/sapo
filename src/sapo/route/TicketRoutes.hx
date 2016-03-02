@@ -14,9 +14,18 @@ class TicketRoutes extends AccessControl {
 		if (args == null) args = {};
 		var u = Context.loop.user;
 
-		var tickets = Ticket.manager.search(
-			(args.inbox == PARAM_OUTBOX ? $author == u : $author != u) &&
-			(args.state == PARAM_CLOSED ? $closed_at != null : $closed_at == null));
+		var tickets;
+
+		if (args.inbox == PARAM_OUTBOX) {
+			tickets = Ticket.manager.search(
+					$author == u &&
+					(args.state == PARAM_CLOSED ? $closed_at != null : $closed_at == null));
+		} else {
+			var subs = TicketSubscription.manager.search($user == u || $group == u.group);
+			tickets = Ticket.manager.search(
+					// TODO ticket in subs
+					(args.state == PARAM_CLOSED ? $closed_at != null : $closed_at == null));
+		}
 
 		Sys.println(page(tickets));
 	}
@@ -44,8 +53,22 @@ class TicketRoutes extends AccessControl {
 		case _: throw "Assertion failed";
 		}
 
-		var msg = new TicketMessage(t, Context.loop.user, args.text);
-		msg.insert();
+		var u = Context.loop.user;
+		try {
+			Context.db.startTransaction();
+			var msg = new TicketMessage(t, u, args.text);
+			msg.insert();
+			var sub = TicketSubscription.manager.select($user == u);
+			if (sub == null) {
+				sub = new TicketSubscription(t, u);
+				sub.insert();
+			}
+			Context.db.commit();
+		} catch (e:Dynamic) {
+			Context.db.rollback();
+			Web.setReturnCode(500);
+			return;
+		}
 		Web.redirect('/tickets/search?ticket=${t.id}');
 	}
 

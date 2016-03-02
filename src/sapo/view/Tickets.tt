@@ -4,6 +4,9 @@
 (: static var PARAM_OUTBOX = "outbox" :)
 (: static var PARAM_OPEN = "open" :)
 (: static var PARAM_CLOSED = "closed" :)
+(: static var PARAM_ALL = "all" :)
+(: static var PARAM_GROUP = "group" :)
+(: static var PARAM_INDIVIDUAL = "individual" :)
 
 (: private static function hideClose(ticket:Spod.Ticket) :)
 (: if ticket.closed_at != null || (Context.loop.user != ticket.author && !Context.loop.privilege.match(PSuperUser)) :)
@@ -114,23 +117,23 @@ unavailable
 				<div class="col-md-1"><h4>CAIXA</h4></div>
 				<div class="col-md-2">
 					<select class="form-control" name="inbox" onchange="disableRecipients(this.value)">
-						<option value="(: PARAM_INBOX :)">Entrada</option>
-						<option value="(: PARAM_OUTBOX :)">Enviados</option>
+						<option value="(:PARAM_INBOX:)">Entrada</option>
+						<option value="(:PARAM_OUTBOX:)">Enviados</option>
 					</select>
 				</div>
 				<div class="col-md-1"><h4>DESTINO</h4></div>
 				<div class="col-md-2">
 					<select class="form-control" id="recipientID" name="recipient">
-						<option value="all">Todos</option>
-						<option value="group">Grupo</option>
-						<option value="individual">Individual</option>
+						<option value="(:PARAM_ALL:)">Todos</option>
+						<option value="(:PARAM_GROUP:)">Grupo</option>
+						<option value="(:PARAM_INDIVIDUAL:)">Individual</option>
 					</select>
 				</div>
 				<div class="col-md-1"><h4>ESTADO</h4></div>
 				<div class="col-md-2">
 					<select class="form-control" name="state">
-						<option value="(: PARAM_OPEN :)">Não Fechadas</option>
-						<option value="(: PARAM_CLOSED :)">Fechadas</option>
+						<option value="(:PARAM_OPEN:)">Não Fechadas</option>
+						<option value="(:PARAM_CLOSED:)">Fechadas</option>
 					</select>
 				</div>
 				<div class="col-md-2 col-md-offset-1">
