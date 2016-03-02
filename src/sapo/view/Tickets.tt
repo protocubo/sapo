@@ -1,12 +1,5 @@
 (: import sapo.Spod :)
-
-(: static var PARAM_INBOX = "inbox" :)
-(: static var PARAM_OUTBOX = "outbox" :)
-(: static var PARAM_OPEN = "open" :)
-(: static var PARAM_CLOSED = "closed" :)
-(: static var PARAM_ALL = "all" :)
-(: static var PARAM_GROUP = "group" :)
-(: static var PARAM_INDIVIDUAL = "individual" :)
+(: import sapo.route.TicketRoutes.* :)
 
 (: private static function hideClose(ticket:Spod.Ticket) :)
 (: if ticket.closed_at != null || (Context.loop.user != ticket.author && !Context.loop.privilege.match(PSuperUser)) :)
@@ -116,13 +109,7 @@ unavailable
 				<div class="col-md-2">
 					<h3 class="filtro">Filtros:</h3>
 				</div>
-				<div class="col-md-2 col-md-offset-2"><h4>CAIXA</h4>
-					<select class="form-control" name="inbox" onchange="disableRecipients(this.value)">
-						<option value="(:PARAM_INBOX:)">Entrada</option>
-						<option value="(:PARAM_OUTBOX:)">Enviados</option>
-					</select>
-				</div>
-				<div class="col-md-2"><h4>DESTINO</h4>
+				<div class="col-md-2 col-md-offset-4"><h4>DESTINO</h4>
 					<select class="form-control" id="recipientID" name="recipient">
 						<option value="(:PARAM_ALL:)">Todos</option>
 						<option value="(:PARAM_GROUP:)">Grupo</option>
