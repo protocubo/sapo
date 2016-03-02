@@ -88,16 +88,6 @@
 		</tfoot>
 	</table>
 
-	<!-- PAGINATION -->
-	<div class="row">
-		<div class="col-md-2">
-			<button class="btn btn-primary">PÁGINA ANTERIOR</button>
-		</div>
-		<div class="col-md-2 col-md-offset-8">
-			<button class="btn btn-primary">PRÓXIMA PÁGINA</button>
-		</div>
-	</div>
-	<hr />
 </div>
 
 (: Util.footer() :)
