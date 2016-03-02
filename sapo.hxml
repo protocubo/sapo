@@ -6,6 +6,7 @@
 -main sapo.Index
 -lib tink_template
 -lib compiletime
+-lib version
 -D dump=pretty
 -D no-deprecation-warnings
 -D trace-sqlite

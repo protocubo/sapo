@@ -14,8 +14,9 @@ import sys.db.*;
 class Context {
 	static var DBPATH = Sys.getEnv("SAPO_DB");
 
-	public static var loop:Context;
-	public static var db:common.db.SaneConnection;
+	public static var version(default,null) = { commit : Version.getGitCommitHash() }
+	public static var loop(default,null):Context;
+	public static var db(default,null):common.db.SaneConnection;
 
 	var dispatch:Dispatch;
 
