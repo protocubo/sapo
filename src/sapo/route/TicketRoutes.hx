@@ -2,32 +2,46 @@ package sapo.route;
 
 import common.Dispatch;
 import common.Web;
+import common.db.MoreTypes;
 import sapo.spod.Other;
 import sapo.spod.Ticket;
 import sapo.spod.User;
-import sapo.view.Tickets.*;
 
 class TicketRoutes extends AccessControl {
+	public static inline var PARAM_ALL = "all";
+	public static inline var PARAM_GROUP = "group";
+	public static inline var PARAM_INDIVIDUAL = "individual";
+	public static inline var PARAM_OPEN = "open";
+	public static inline var PARAM_CLOSED = "closed";
+
 	@authorize(PSupervisor, PPhoneOperator, PSuperUser)
-	public function doDefault(?args:{ ?inbox:String, ?recipient:String, ?state:String })
+	public function doDefault(?args:{?recipient:String, ?state:String })
 	{
 		if (args == null) args = {};
 		var u = Context.loop.user;
 
-		var tickets;
-
-		if (args.inbox == PARAM_OUTBOX) {
-			tickets = Ticket.manager.search(
-					$author == u &&
-					(args.state == PARAM_CLOSED ? $closed_at != null : $closed_at == null));
-		} else {
-			var subs = TicketSubscription.manager.search($user == u || $group == u.group);
-			tickets = Ticket.manager.search(
-					// TODO ticket in subs
-					(args.state == PARAM_CLOSED ? $closed_at != null : $closed_at == null));
+		var subs = switch args.recipient {
+		case null, PARAM_ALL if (Context.loop.privilege.match(PSupervisor | PPhoneOperator)):
+			TicketSubscription.manager.search($user == u || $group == u.group);
+		case null, PARAM_ALL:
+			TicketSubscription.manager.all();  // TODO optimize this
+		case PARAM_GROUP:
+			TicketSubscription.manager.search($group == u.group);
+		case PARAM_INDIVIDUAL:
+			TicketSubscription.manager.search($user == u);
+		case other:
+			throw 'Unexpected recipient value: $other';
 		}
 
-		Sys.println(page(tickets));
+		var tickets = new List();
+		var open = args.state == null || args.state == PARAM_OPEN;
+		if (!open && args.state != PARAM_CLOSED) throw 'Unexpected state value: ${args.state}';
+		for (ts in subs) {
+			if (open == (ts.ticket.closed_at == null))
+				tickets.add(ts.ticket);
+		}
+
+		Sys.println(sapo.view.Tickets.page(tickets));
 	}
 
 	@authorize(PSupervisor, PPhoneOperator, PSuperUser)
@@ -39,7 +53,7 @@ class TicketRoutes extends AccessControl {
 			tickets.push(args.ticket);
 		else if (args.survey != null)
 			tickets = Ticket.manager.search($survey == args.survey);
-		Sys.println(page(tickets));
+		Sys.println(sapo.view.Tickets.page(tickets));
 	}
 
 	@authorize(PSupervisor, PPhoneOperator, PSuperUser)
