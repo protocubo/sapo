@@ -11,7 +11,7 @@ import sys.db.Types.SString;
  * ...
  * @author Caio
  */
-
+ 
  class EnumTable extends Object
  {
 	public var id : SId;
@@ -20,29 +20,55 @@ import sys.db.Types.SString;
  }
  
  //Classes de Relação com id/desc apenas
-@dbNullVal(0) enum AguaEncanada {
+ @dbNullVal(0) enum AguaEncanada {
 	@dbVal(1) Sim;
 	@dbVal(2) SimPropriedade;
 	@dbVal(3) Nao;
 }
 
- class AguaEncanada_Tbl extends EnumTable
-{}
+class AguaEncanada_Tbl extends EnumTable {}
 
- @dbNullVal(101) enum AnoVeiculoMaisRecente {
-	@dbVal(1) Mais2014;
-	@dbVal(2) De2010;
-	@dbVal(3) De2005;
-	@dbVal(4) De2000;
-	@dbVal(5) De1995;
-	@dbVal(6) De1990;
-	@dbVal(7) De1989;
-	@dbVal(90) NaoSabe;
-	@dbVal(101) NaoRespondeu;
+ @dbNullVal(101) @tempstring("Ano de fabricação do veículo mais novo:") enum AnoVeiculoMaisRecente {
+	@dbVal(1) @tt("Posterior a 2014") Mais2014;
+	@dbVal(2) @tt("De 2010 a 2013") De2010;
+	@dbVal(3) @tt("De 2005 a 2009") De2005;
+	@dbVal(4) @tt("De 2000 a 2004") De2000;
+	@dbVal(5) @tt("De 1995 a 1999") De1995;
+	@dbVal(6) @tt("De 1990 a 1994") De1990;
+	@dbVal(7) @tt("Anterior a 1989") De1989;
+	@dbVal(90) @tt("Não sabe") NaoSabe;
+	@dbVal(101) @tt("Não respondeu") NaoRespondeu;
 }
 
  class AnoVeiculoMaisRecente_Tbl extends EnumTable
 {}
+
+@dbNullVal(8) enum FrequenciaViagem {
+	@dbVal(1) Raramente;
+	@dbVal(2) Menos1Mes;
+	@dbVal(3) Vez1Mes;
+	@dbVal(4) Vez2Mes;
+	@dbVal(5) Semana1a2;
+	@dbVal(6) Semana3a4;
+	@dbVal(7) MaisSemana5;
+	@dbVal(8) NaoRespondeu;
+ }
+ 
+//@:keep class FrequenciaViagem_Tbl extends EnumTable {}
+  
+@dbNullVal(9) enum TempoPermanenciaEstacionamento {
+	 @dbVal(1) MeiaHora;
+	 @dbVal(2) UmaHora;
+	 @dbVal(3) DuasHoras;
+	 @dbVal(4) Turno;
+	 @dbVal(5) Diaria;
+	 @dbVal(6) Pernoite;
+	 @dbVal(7) MaisDeUmDia;
+	 @dbVal(8) NaoSabe;
+	 @dbVal(9) NaoRespondeu;
+ }
+ 
+//  class TempoPermanenciaEstacionamento_Tbl extends EnumTable {}
 
 @dbNullVal(101) enum AtividadeMorador
 {
@@ -114,21 +140,7 @@ import sys.db.Types.SString;
 	 
  }
  
-  @dbNullVal(8) enum FrequenciaViagem {
-	@dbVal(1) Raramente;
-	@dbVal(2) Menos1Mes;
-	@dbVal(3) Vez1Mes;
-	@dbVal(4) Vez2Mes;
-	@dbVal(5) Semana1a2;
-	@dbVal(6) Semana3a4;
-	@dbVal(7) MaisSemana5;
-	@dbVal(8) NaoRespondeu;
- }
- 
-  class FrequenciaViagem_Tbl extends EnumTable {
-	 
- }
- 
+   
   @dbNullVal(99) enum GrauInstrucao
  {
 	 @dbVal(1) Analfabeto;
@@ -241,7 +253,9 @@ import sys.db.Types.SString;
   class OcupacaoDomicilio_Tbl extends EnumTable {
 	 
  }
- 
+
+
+
  @dbNullVal(0) enum PortadorNecessidadesEspeciais
  {
 	@dbVal(1) NaoAplica;
@@ -339,23 +353,7 @@ import sys.db.Types.SString;
 	 
  }
  
- @dbNullVal(9) enum TempoPermanenciaEstacionamento
- {
-	 @dbVal(1) MeiaHora;
-	 @dbVal(2) UmaHora;
-	 @dbVal(3) DuasHoras;
-	 @dbVal(4) Turno;
-	 @dbVal(5) Diaria;
-	 @dbVal(6) Pernoite;
-	 @dbVal(7) MaisDeUmDia;
-	 @dbVal(8) NaoSabe;
-	 @dbVal(9) NaoRespondeu;
- }
- 
-  class TempoPermanenciaEstacionamento_Tbl extends EnumTable {
-	 
- }
- 
+  
  @dbNullVal(0) enum TipoImovel
  {
 	 @dbVal(1) Apartamento;

@@ -1,6 +1,7 @@
 -cp src
 -lib utest
 -lib hxBitcoin
+-lib compiletime
 
 --each
 
