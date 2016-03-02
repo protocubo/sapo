@@ -109,7 +109,7 @@ unavailable
 
 		<!-- FILTROS -->
 		<h3>Filtros:</h3>
-		<form method="get" name="filter">
+		<form method="get" name="filter" action="/tickets">
 			<div class="row">
 				<div class="col-md-1"><h4>CAIXA</h4></div>
 				<div class="col-md-2">
