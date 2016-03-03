@@ -1,6 +1,8 @@
 package sapo;
 
 import common.Dispatch;
+import common.spod.EnumSPOD.EstadoPesquisa;
+import common.spod.Survey;
 import common.Web;
 import common.crypto.Password;
 import common.db.MoreTypes;
@@ -136,6 +138,42 @@ class Context {
 			neko.Lib.rethrow(e);
 		}
 		commit();
+	}
+	
+	static function surveyGen()
+	{
+		var surveyorgroup = Group.manager.select($privilege == Privilege.PSurveyor, null, false);
+		var supervisorGroup = Group.manager.select($privilege == Privilege.PSupervisor, null, false);
+		var supervisor = new User(supervisorGroup, new EmailAddress("Sup@sup.com.br"), Supervisor5000);
+		var i = 0;
+		
+		var userarr = [];
+		while (i < 5)
+		{
+			var surveyor = new User(surveyorgroup, new EmailAddress("Bla" + i + "@blabla.com.br"), "Bla " + i, false, supervisor);
+			surveyor.password = Password.make("secret");
+			surveyor.insert();
+			
+			userarr.push(surveyor);
+			
+			i++;
+		}
+		
+		i = 0;
+		while (i < 1000)
+		{
+			var s = new Survey();
+			s.user_id = Std.random(userarr.length);
+			s.isRestored = false;
+			s.isValid = false;
+			s.lastPageVisited = "END";
+			s.endereco_id = Std.random(9999);
+			s.estadoPesquisa = EstadoPesquisa.Concluida;
+			s.
+			
+			i++;
+		}
+		
 	}
 
 	public static function init()
