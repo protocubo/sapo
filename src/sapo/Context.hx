@@ -182,7 +182,7 @@ class Context {
 		while (i < 1000)
 		{
 			var s = new Survey();
-			s.user_id = rnd.int(userarr.length);
+			s.user_id = userarr[rnd.int(userarr.length)];
 			s.isRestored = false;
 			s.isValid = false;
 			s.lastPageVisited = "END";
