@@ -185,8 +185,11 @@ class MainSync
 				"date_create", "date_started", "date_finished", "date_completed",
 				"endereco_id", "pin", "latitude", "longitude",
 				"municipio", "bairro", "logradouro", "numero", "complemento","cep",
-				"zona","macrozona","lote","estratoSocioEconomico", "json":
+				"zona","macrozona","lote","estratoSocioEconomico":
 					Reflect.setField(new_sess, f, Reflect.field(dbSession, f));
+				case "json":
+						if (checkJson("Survey", Reflect.field(dbSession, f)))
+							Reflect.setField(new_sess, f, Reflect.field(dbSession, f));
 				//Enum
 				case "estadoPesquisa_id":
 					Macros.setEnumField(f, new_sess, dbSession);
@@ -262,8 +265,11 @@ class MainSync
 						Macros.setEnumField(field, new_familia, f);
 					//Fields ctrl+c ctrl+v
 					case "date", "isEdited", "numeroResidentes", "banheiros", "quartos", 
-					"veiculos", "bicicletas", "motos",  "nomeContato", "telefoneContato","tentativa_id", "json":
+					"veiculos", "bicicletas", "motos",  "nomeContato", "telefoneContato","tentativa_id":
 						Reflect.setField(new_familia, field, Reflect.field(f, field));
+					case "json":
+						if (checkJson("Familia", Reflect.field(f, field)))
+							Reflect.setField(new_familia, field, Reflect.field(f, field));
 					//Bool simples
 					case "isDeleted","ruaPavimentada_id", "recebeBolsaFamilia_id":
 						Reflect.setProperty(new_familia, field, Reflect.field(f, field) == 1);
@@ -316,8 +322,11 @@ class MainSync
 						var f = (Reflect.field(m, field) == null) ? null : (Reflect.field(m, field) == 1);
 						Reflect.setField(new_morador, field, f);
 					//ctrl+c ctrl+v
-					case "date", "isEdited", "nomeMorador", "genero_id", "json":
+					case "date", "isEdited", "nomeMorador", "genero_id":
 						Reflect.setField(new_morador, field, Reflect.field(m, field));
+					case "json":
+						if (checkJson("Morador", Reflect.field(m, field)))
+							Reflect.setField(new_morador, field, Reflect.field(m, field));
 					case "gps_id","codigoReagendamento":
 						continue;
 					default:
@@ -363,8 +372,11 @@ class MainSync
 					case "ref_id":
 						new_point.ref = Referencias.manager.get(p.ref_id);
 					//ctrl+c ctrl+v
-					case "date", "isEdited", "uf_id", "city_id", "regadm_id", "street_id", "complement_id", "complement_two_id", "complement2_str", "ref_str", "tempo_saida", "tempo_chegada", "json":
+					case "date", "isEdited", "uf_id", "city_id", "regadm_id", "street_id", "complement_id", "complement_two_id", "complement2_str", "ref_str", "tempo_saida", "tempo_chegada":
 						Reflect.setField(new_point, field, Reflect.field(p, field));
+					case "json":
+						if (checkJson("Ponto", Reflect.field(p, field)))
+							Reflect.setField(new_point, field, Reflect.field(p, field));
 					//Enums
 					case "motivoID", "motivoOutraPessoaID":
 						Macros.setEnumField("motivo", new_point, p);
@@ -420,8 +432,11 @@ class MainSync
 					case "isDeleted":
 						new_modo.isDeleted = (m.isDeleted == 1);
 					//Ctrl+c ctrl+v
-					case "date", "isEdited", "json":
+					case "date", "isEdited":
 						Reflect.setField(new_modo, f, Reflect.field(m, f));
+					case "json":
+						if (checkJson("Modo", Reflect.field(m, f)))
+							Reflect.setField(new_modo, f, Reflect.field(m, f));
 					//Conversoes de um mte de field pra um 
 					case "valorPagoTaxi", "valorViagem", "custoEstacionamento":
 						new_modo.valorViagem = m.valorViagem;
@@ -459,8 +474,11 @@ class MainSync
 					case "session_id":
 						c.survey = sessHash.get(r.session_id);
 						c.old_survey_id = r.session_id;
-					case "desc", "datetime", "json":
+					case "desc", "datetime":
 						Reflect.setField(c, f, Reflect.field(r, f));
+					case "json":
+						if (checkJson("Ocorrencias", Reflect.field(r, f)))
+							Reflect.setField(c, f, Reflect.field(r, f));
 					case "sessionTime_id", "gps_id":
 						continue;
 					default:
@@ -520,6 +538,24 @@ class MainSync
 		}
 		http.request();
 		
+	}
+	
+	static function checkJson(table : String, str : String)
+	{
+		try 
+		{	if (str != null && str.length > 0)
+			{
+				var json = Json.parse(str);
+				return json != null;
+			}
+			else 
+				return false;
+		}
+		catch (e : Dynamic)
+		{
+			Macros.criticalError(table, str + " is not a valid JSON!");
+			return false;
+		}
 	}
 
 }

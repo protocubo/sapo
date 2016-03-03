@@ -378,7 +378,7 @@ class Context {
 		db = Manager.cnx = null;
 	}
 
-#if !sapo_sync
+#if tink_template
 	public static function iterate()
 	{
 		var uri = Web.getURI();
