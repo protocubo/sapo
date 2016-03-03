@@ -185,7 +185,7 @@ class MainSync
 				"date_create", "date_started", "date_finished", "date_completed",
 				"endereco_id", "pin", "latitude", "longitude",
 				"municipio", "bairro", "logradouro", "numero", "complemento","cep",
-				"zona","macrozona","lote","estratoSocioEconomico":
+				"zona","macrozona","lote","estratoSocioEconomico", "json":
 					Reflect.setField(new_sess, f, Reflect.field(dbSession, f));
 				//Enum
 				case "estadoPesquisa_id":
@@ -262,7 +262,7 @@ class MainSync
 						Macros.setEnumField(field, new_familia, f);
 					//Fields ctrl+c ctrl+v
 					case "date", "isEdited", "numeroResidentes", "banheiros", "quartos", 
-					"veiculos", "bicicletas", "motos",  "nomeContato", "telefoneContato","tentativa_id":
+					"veiculos", "bicicletas", "motos",  "nomeContato", "telefoneContato","tentativa_id", "json":
 						Reflect.setField(new_familia, field, Reflect.field(f, field));
 					//Bool simples
 					case "isDeleted","ruaPavimentada_id", "recebeBolsaFamilia_id":
@@ -316,7 +316,7 @@ class MainSync
 						var f = (Reflect.field(m, field) == null) ? null : (Reflect.field(m, field) == 1);
 						Reflect.setField(new_morador, field, f);
 					//ctrl+c ctrl+v
-					case "date", "isEdited", "nomeMorador", "genero_id":
+					case "date", "isEdited", "nomeMorador", "genero_id", "json":
 						Reflect.setField(new_morador, field, Reflect.field(m, field));
 					case "gps_id","codigoReagendamento":
 						continue;
@@ -363,7 +363,7 @@ class MainSync
 					case "ref_id":
 						new_point.ref = Referencias.manager.get(p.ref_id);
 					//ctrl+c ctrl+v
-					case "date", "isEdited", "uf_id", "city_id", "regadm_id", "street_id", "complement_id", "complement_two_id", "complement2_str", "ref_str", "tempo_saida", "tempo_chegada":
+					case "date", "isEdited", "uf_id", "city_id", "regadm_id", "street_id", "complement_id", "complement_two_id", "complement2_str", "ref_str", "tempo_saida", "tempo_chegada", "json":
 						Reflect.setField(new_point, field, Reflect.field(p, field));
 					//Enums
 					case "motivoID", "motivoOutraPessoaID":
@@ -405,7 +405,8 @@ class MainSync
 						new_modo.morador = morHash.get(m.morador_id);
 						new_modo.old_morador_id = m.morador_id;
 					case "firstpoint_id", "secondpoint_id":
-						Reflect.setProperty(new_modo, f, (pointhash.get(Reflect.field(m, f)) != null) ? pointhash.get(Reflect.field(m,f)).id : null );
+						Reflect.setProperty(new_modo, f, (pointhash.get(Reflect.field(m, f)) != null) ? pointhash.get(Reflect.field(m, f)).id : null );
+					//Enums
 					case "meiotransporte_id":
 						if (Macros.checkEnumValue(MeioTransporte, m.meiotransporte_id))
 							new_modo.meiotransporte = Macros.getStaticEnum(MeioTransporte, m.meiotransporte_id);
@@ -415,9 +416,11 @@ class MainSync
 						new_modo.linhaOnibus = LinhaOnibus.manager.get(m.linhaOnibus_id);
 					case "formaPagamento_id", "tipoEstacionamento_id":
 						Macros.setEnumField(f, new_modo, m);
+					//Bools
 					case "isDeleted":
 						new_modo.isDeleted = (m.isDeleted == 1);
-					case "date", "isEdited":
+					//Ctrl+c ctrl+v
+					case "date", "isEdited", "json":
 						Reflect.setField(new_modo, f, Reflect.field(m, f));
 					//Conversoes de um mte de field pra um 
 					case "valorPagoTaxi", "valorViagem", "custoEstacionamento":
@@ -427,6 +430,7 @@ class MainSync
 					case "naoRespondeuLinhaOnibus", "naoRespondeuEstacaoEmbarque", "naoRespondeuEstacaoDesembarque", "naoRespondeuValorViagem", "naoRespondeuValorPagoTaxi","naoRespondeuCustoEstacionamento":
 						new_modo.naoRespondeu = (new_modo.naoRespondeu) ? true : (Reflect.field(m, f) != 0);
 					//fim conversao
+					//Ignore
 					case "anterior_id", "posterior_id","ordem", "gps_id", "linhaOnibus_str","estacaoEmbarque_str", "estacaoDesembarque_str":
 						continue;
 					default:
@@ -455,7 +459,7 @@ class MainSync
 					case "session_id":
 						c.survey = sessHash.get(r.session_id);
 						c.old_survey_id = r.session_id;
-					case "desc", "datetime":
+					case "desc", "datetime", "json":
 						Reflect.setField(c, f, Reflect.field(r, f));
 					case "sessionTime_id", "gps_id":
 						continue;
