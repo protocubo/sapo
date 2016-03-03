@@ -44,18 +44,17 @@
 (: Util.head("SAPO - Pagamento") :)
 </head>
 <body>
-	(: Util.navbar() :)
 
 	<!-- PAGAMENTOS / PESQUISADOR -->
 	<div class="container">
-
+	(: Util.navbar() :)
 		<!-- HEAD -->
-		<h2>PESQUISAS</h2>
-		<hr />
-
+		<ol class="breadcrumb">
+			<li class="active">PAGAMENTOS</li>
+		</ol>
+		
 		<!-- TABELA DE USUÁRIOS -->
-
-		<table class="table">
+		<table class="table" style="margin-top: 60px;">
 			<thead>
 				<tr>
 					<!-- HEAD -->
@@ -68,11 +67,9 @@
 				</tr>
 			</thead>
 			<tbody>
-
 				(: for p in Spod.NewSurvey.manager.all() :)
 					(: surveySimpleStatus(p) :)
 				(: end :)
-
 			</tbody>
 			<tfoot>
 				<tr>
@@ -83,7 +80,7 @@
 
 	</div>
 
-(: Util.footer() :)
+	(: Util.footer() :)
 </body>
 </html>
 (: end :)
@@ -95,95 +92,87 @@
 (: Util.head("SAPO - Pagamento") :)
 </head>
 <body>
-(: Util.navbar() :)
 
-<!-- PAGAMENTOS / PESQUISADOR -->
-<div class="container">
+	<!-- PAGAMENTOS / PESQUISADOR -->
+	<div class="container">
+	(: Util.navbar() :)
+		<!-- HEAD -->
+		<ol class="breadcrumb">
+			<li class="active">PAGAMENTOS</li>
+		</ol>
 
-	<!-- HEAD -->
-	<h2>PAGAMENTOS</h2>
-	<hr />
+		<div class="row">
+			<!-- FILTROS -->
+			<div class="col-md-2"><h5>PESQUISADOR:</h5>
+				<select class="form-control input-sm">
+					<option>Selecione</option>
+					<!-- lista de pesquisadores por ordem alfabética -->
+				</select>
+			</div>
+			<div class="col-md-2"><h5>PAGA</h5>
+				<select class="form-control input-sm">
+					<option>Não</option>
+					<option>Sim</option>
+				</select>
+			</div>
+			<div class="col-md-2"><h5>STATUS</h5>
+				<select class="form-control input-sm">
+					<option>Abertas</option>
+					<option>Completas</option>
+					<option>Verificadas</option>
+					<option>Aceitas</option>
+				</select>
+			</div>
+			<div class="col-md-1"><h5>&nbsp;</h5>
+				<button type="button" class="btn btn-primary btn-sm">FILTRAR</button>
+			</div>
+			<!-- BUSCA -->
+			<div class="col-md-2"><h5>REFERÊNCIA PAGTO</h5>
+				<input type="text" class="form-control input-sm" placeholder="Referência Pagto">
+			</div>
+			<div class="col-md-2"><h5>PESQUISA</h5>
+				<input type="text" class="form-control input-sm" placeholder="Nº da Pesquisa">
+			</div>
+			<div class="col-md-1"><h5>&nbsp;</h5>
+				<button type="button" class="btn btn-primary btn-sm">BUSCAR</button>
+			</div>
+		</div>
 
-	<!-- FILTROS -->
-	<div class="row">
-		<div class="col-md-2"><h3 class="filtro">Filtros:</h3></div>
-		<div class="col-md-2 col-md-offset-2"><h4>PESQUISADOR:</h4>
-			<select class="form-control">
-				<option>Selecione</option>
-				<!-- lista de pesquisadores por ordem alfabética -->
-			</select>
-		</div>
-		<div class="col-md-2"><h4>PAGA</h4>
-			<select class="form-control">
-				<option>Não</option>
-				<option>Sim</option>
-			</select>
-		</div>
-		<div class="col-md-2"><h4>STATUS</h4>
-			<select class="form-control">
-				<option>Abertas</option>
-				<option>Completas</option>
-				<option>Verificadas</option>
-				<option>Aceitas</option>
-			</select>
-		</div>
-		<div class="col-md-2"><h4>&nbsp;</h4>
-			<button type="button" class="btn btn-primary">APLICAR</button>
-		</div>
+		<!-- TABELA DE USUÁRIOS -->
+		<table class="table" style="margin-top: 60px;">
+			<thead>
+				<tr>
+					<!-- HEAD -->
+					<th width="40px">
+						<input type="checkbox" />
+					</th>
+					<th>Pesquisador</th>
+					<th>Nº da Pesquisa</th>
+					<th>Status da Pesquisa</th>
+					<th>Data</th>
+					<th>Ref. Pagto</th>
+					<th>Data Pagto</th>
+					<th width="40px"></th>
+				</tr>
+			</thead>
+			<tbody>
+
+				(: for p in Spod.NewSurvey.manager.all() :)
+					(: surveySuperStatus(p) :)
+				(: end :)
+
+			</tbody>
+			<tfoot>
+				<tr>
+					<td colspan="7" align="right">
+						<button type="button" class="btn btn-success btn-xs" aria-label="Desativar" style="width:auto;" data-toggle="modal" data-target="#pagar_selecionadas">
+							REGISTRAR PAGAMENTO NAS SELECIONADAS
+						</button>
+					</td>
+				</tr>
+			</tfoot>
+		</table>
 	</div>
-	<hr />
-	
-	<!-- BUSCA -->
-	<div class="row">
-		<div class="col-md-2"><h3 class="filtro">Busca:</h3></div>
-		<div class="col-md-2 col-md-offset-4"><h4>REFERÊNCIA PAGTO</h4>
-			<input type="text" class="form-control" placeholder="Referência Pagto">
-		</div>
-		<div class="col-md-2"><h4>PESQUISA</h4>
-			<input type="text" class="form-control" placeholder="Nº da Pesquisa">
-		</div>
-		<div class="col-md-2"><h4>&nbsp;</h4>
-			<button type="button" class="btn btn-primary">BUSCAR</button>
-		</div>
-	</div>
-	<hr />
-
-	<!-- TABELA DE USUÁRIOS -->
-
-	<table class="table">
-		<thead>
-			<tr>
-				<!-- HEAD -->
-				<th width="40px">
-					<input type="checkbox" />
-				</th>
-				<th>Pesquisador</th>
-				<th>Nº da Pesquisa</th>
-				<th>Status da Pesquisa</th>
-				<th>Data</th>
-				<th>Ref. Pagto</th>
-				<th>Data Pagto</th>
-				<th width="40px"></th>
-			</tr>
-		</thead>
-		<tbody>
-
-			(: for p in Spod.NewSurvey.manager.all() :)
-				(: surveySuperStatus(p) :)
-			(: end :)
-
-		</tbody>
-		<tfoot>
-			<tr>
-				<td colspan="7" align="right">
-					<button type="button" class="btn btn-success btn-xs" aria-label="Desativar" style="width:auto;" data-toggle="modal" data-target="#pagar_selecionadas">
-						REGISTRAR PAGAMENTO NAS SELECIONADAS
-					</button>
-				</td>
-			</tr>
-		</tfoot>
-	</table>
-</div>
 
 (: Util.footer() :)
 

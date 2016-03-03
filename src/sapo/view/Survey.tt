@@ -33,246 +33,241 @@ function imprimir() {
 
 </head>
 <body>
-(: Util.navbar() :)
 
 <!-- PESQUISA -->
-<div class="container">
-
-	<!-- HEAD -->
-	<div class="row">
-		<div class="col-md-12">
-			<h2 style=" float:left;">
-				PESQUISA #(:survey.id:)
-			</h2>
-			<h2 class="tags">
-				(: Util.status( true, true, true ) :)
-			</h2>
-		</div>
-	</div>
-</div>
-
-<div class="container apagar">
-	<hr />
-
-	<!-- ACTIONS -->
-	<div class="row">
-		<div class="col-md-2 col-md-offset-1">
-			<a class="btn btn-default" onclick="imprimir()">IMPRIMIR</a>
-		</div>
-		<div class="col-md-2">
-			<a class="btn btn-default" data-toggle="modal" data-target="#pesquisa_ticket">ABRIR TICKET</a>
-		</div>
-		<div class="col-md-2">
-			<a href="/tickets/search?survey=(:survey.id:)" class="btn btn-default">TICKETS</a>
-		</div>
-		<div class="col-md-2">
-			<a type="button" class="btn btn-danger" id="corrigir">CORRIGIR</a>
-		</div>
-		<div class="col-md-2">
-			<a type="button" class="btn btn-primary" data-toggle="modal" data-target="#pesquisa_status">MUDAR STATUS</a>
-		</div>
-	</div>
-	<hr />
-</div>
-
-<div class="container">
-	<!-- BODY - PESQUISA -->
-	<div class="row">
-		<div class="col-md-12">
-			<h3><span class="glyphicon glyphicon-file" aria-hidden="true"></span> INFORMAÇÕES DA PESQUISA</h3>
-			<div class="bloco">
-				<a href="#" class="corrigir escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
-				<b>1ºVisita:</b> 17/03/2016
-			</div>
-			<div class="bloco">
-				<a href="#" class="corrigir escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
-				<b>Completada:</b> 17/03/2016
-			</div>
-			<div class="bloco">
-				<a href="#" class="corrigir escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
-				<b>Senha: </b>ALNVD86960
-			</div>
-			<div class="bloco">
-				<a href="#" class="corrigir escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
-				<b class="pesquisador">Pesquisador:</b> (: survey.surveyor.name :)
-			</div>
-			<div class="bloco">
-				<a href="#" class="corrigir escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
-				<b class="supervisor">Supervisor:</b> Rúben Fabricio
+	<div class="container">
+	(: Util.navbar() :)
+		<!-- HEAD -->
+		<ol class="breadcrumb apagar">
+			<li><a href="/surveys">TICKETS</a></li>
+			<li class="active">PESQUISA #(:survey.id:)</li>
+		</ol>
+		<div class="row">
+			<div class="col-md-12">
+				<h2 style=" float:left;">
+					PESQUISA #(:survey.id:)
+				</h2>
+				<h2 class="tags">
+					(: Util.status( true, true, true ) :)
+				</h2>
 			</div>
 		</div>
 	</div>
-	<hr />
 
-	<!-- BODY - DOMICÍLIO -->
-	<div class="row">
-		<div class="col-md-12">
-			<h3><span class="glyphicon glyphicon-home" aria-hidden="true"></span> DOMICÍLIO / FAMÍLIA</h3>
-
-			<!-- BLOCK - botão de edit, <b>campo, info do campo -->
-			<div class="bloco">
-				<a href="#" class="corrigir escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
-				<b>#Campo:</b> #Dado
+	<div class="container apagar" style="margin-top:30px; margin-bottom:30px;">
+		<!-- ACTIONS -->
+		<div class="row">
+			<div class="col-md-2 col-md-offset-1">
+				<a class="btn btn-default" onclick="imprimir()">IMPRIMIR</a>
 			</div>
-			<!-- FIM DO BLOCK -->
+			<div class="col-md-2">
+				<a class="btn btn-default" data-toggle="modal" data-target="#pesquisa_ticket">ABRIR TICKET</a>
+			</div>
+			<div class="col-md-2">
+				<a href="/tickets/search?survey=(:survey.id:)" class="btn btn-default">TICKETS</a>
+			</div>
+			<div class="col-md-2">
+				<a type="button" class="btn btn-danger" id="corrigir">CORRIGIR</a>
+			</div>
+			<div class="col-md-2">
+				<a type="button" class="btn btn-primary" data-toggle="modal" data-target="#pesquisa_status">MUDAR STATUS</a>
+			</div>
 		</div>
 	</div>
-	<hr />
 
-	<!-- BODY - MORADOR -->
-	<div class="row">
-		<div class="col-md-12">
-			<h3><span class="glyphicon glyphicon-user" aria-hidden="true"></span> MORADOR / #NomeDoMorador (#IdadeDoMorador) </h3>
-
-			<!-- BLOCK - botão de edit, <b>campo, info do campo -->
-			<div class="bloco">
-				<a href="#" class="corrigir escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
-				<b>#Campo:</b> #Dado
-			</div>
-			<!-- FIM DO BLOCK -->
-
-			<hr />
-
-			<!-- VIAGEM -->
-			<div class="viagem">
-				<!-- PONTO -->
-				<p>
+	<div class="container">
+		<!-- BODY - PESQUISA -->
+		<div class="row">
+			<div class="col-md-12">
+				<h3><span class="glyphicon glyphicon-file" aria-hidden="true"></span> INFORMAÇÕES DA PESQUISA</h3>
+				<div class="bloco">
 					<a href="#" class="corrigir escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
-					<b><span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Ponto (#Ponto1):</b> #DadosDoPonto
-				</p>
-				<!-- SAÍDA -->
-				<p>
-					<a href="#" class="corrigir escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
-					<b><span class="glyphicon glyphicon-time" aria-hidden="true"></span> Saída:</b> #Saída
-				</p>
-				<!-- MODO-->
-				<p>
-					<a href="#" class="corrigir escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
-					<b><span class="glyphicon glyphicon-transfer" aria-hidden="true"></span> Modo (#Modo1):</b> #DadosDoModo
-				</p>
-				<!-- CHEGADA -->
-				<p>
-					<a href="#" class="corrigir escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
-					<b><span class="glyphicon glyphicon-time" aria-hidden="true"></span> Chegada:</b> #Chegada
-				</p>
-			</div>
-			<!-- FIM VIAGEM -->
-
-		</div>
-	</div>
-	<hr />
-	<!-- FIM BODY - MORADOR -->
-
-</div>
-
-(: Util.footer() :)
-
-<!-- MODAL TICKET -->
-<div class="modal fade" id="pesquisa_ticket" tabindex="-1" role="dialog" aria-labelledby="pesquisa_ticket_label">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<h4 class="modal-title" id="pesquisa_ticket_label">ABRIR TICKET</h4>
-			</div>
-			<div class="modal-body">
-				<div class="row">
-					<div class="col-md-2"><h4>Assunto:</h4></div>
-					<div class="col-md-10"><input type="text" class="form-control"></div>
+					<b>1ºVisita:</b> 17/03/2016
 				</div>
-				<div class="row">
-					<div class="col-md-2"><h4>Destino:</h4></div>
-					<div class="col-md-10">
-						<select class="form-control">
-							<option disabled selected>Selecione</option>
-							<option>Supervisor</option>
-							<option>Telefonista</option>
-							<option>Super</option>
-						</select>
+				<div class="bloco">
+					<a href="#" class="corrigir escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+					<b>Completada:</b> 17/03/2016
+				</div>
+				<div class="bloco">
+					<a href="#" class="corrigir escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+					<b>Senha: </b>ALNVD86960
+				</div>
+				<div class="bloco">
+					<a href="#" class="corrigir escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+					<b class="pesquisador">Pesquisador:</b> (: survey.surveyor.name :)
+				</div>
+				<div class="bloco">
+					<a href="#" class="corrigir escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+					<b class="supervisor">Supervisor:</b> Rúben Fabricio
+				</div>
+			</div>
+		</div>
+		<hr />
+
+		<!-- BODY - DOMICÍLIO -->
+		<div class="row">
+			<div class="col-md-12">
+				<h3><span class="glyphicon glyphicon-home" aria-hidden="true"></span> DOMICÍLIO / FAMÍLIA</h3>
+
+				<!-- BLOCK - botão de edit, <b>campo, info do campo -->
+				<div class="bloco">
+					<a href="#" class="corrigir escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+					<b>#Campo:</b> #Dado
+				</div>
+				<!-- FIM DO BLOCK -->
+			</div>
+		</div>
+		<hr />
+
+		<!-- BODY - MORADOR -->
+		<div class="row">
+			<div class="col-md-12">
+				<h3><span class="glyphicon glyphicon-user" aria-hidden="true"></span> MORADOR / #NomeDoMorador (#IdadeDoMorador) </h3>
+				<!-- BLOCK - botão de edit, <b>campo, info do campo -->
+				<div class="bloco">
+					<a href="#" class="corrigir escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+					<b>#Campo:</b> #Dado
+				</div>
+				<!-- FIM DO BLOCK -->
+				<hr />
+				<!-- VIAGEM -->
+				<div class="viagem">
+					<!-- PONTO -->
+					<p>
+						<a href="#" class="corrigir escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+						<b><span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Ponto (#Ponto1):</b> #DadosDoPonto
+					</p>
+					<!-- SAÍDA -->
+					<p>
+						<a href="#" class="corrigir escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+						<b><span class="glyphicon glyphicon-time" aria-hidden="true"></span> Saída:</b> #Saída
+					</p>
+					<!-- MODO-->
+					<p>
+						<a href="#" class="corrigir escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+						<b><span class="glyphicon glyphicon-transfer" aria-hidden="true"></span> Modo (#Modo1):</b> #DadosDoModo
+					</p>
+					<!-- CHEGADA -->
+					<p>
+						<a href="#" class="corrigir escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+						<b><span class="glyphicon glyphicon-time" aria-hidden="true"></span> Chegada:</b> #Chegada
+					</p>
+				</div>
+				<!-- FIM VIAGEM -->
+			</div>
+		</div>
+		<hr />
+		<!-- FIM BODY - MORADOR -->
+	</div>
+
+	(: Util.footer() :)
+
+	<!-- MODAL TICKET -->
+	<div class="modal fade" id="pesquisa_ticket" tabindex="-1" role="dialog" aria-labelledby="pesquisa_ticket_label">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="pesquisa_ticket_label">ABRIR TICKET</h4>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-2"><h4>Assunto:</h4></div>
+						<div class="col-md-10"><input type="text" class="form-control"></div>
+					</div>
+					<div class="row">
+						<div class="col-md-2"><h4>Destino:</h4></div>
+						<div class="col-md-10">
+							<select class="form-control">
+								<option disabled selected>Selecione</option>
+								<option>Supervisor</option>
+								<option>Telefonista</option>
+								<option>Super</option>
+							</select>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-2"><h4>Mensagem:</h4></div>
+						<div class="col-md-10"><textarea class="form-control" style="height: 200px;"></textarea></div>
 					</div>
 				</div>
-				<div class="row">
-					<div class="col-md-2"><h4>Mensagem:</h4></div>
-					<div class="col-md-10"><textarea class="form-control" style="height: 200px;"></textarea></div>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<div class="row">
-					<div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
-					<div class="col-md-6"><button type="button" class="btn btn-success">ENVIAR</button></div>
+				<div class="modal-footer">
+					<div class="row">
+						<div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
+						<div class="col-md-6"><button type="button" class="btn btn-success">ENVIAR</button></div>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-</div>
 
-<!-- MODAL STATUS -->
-<div class="modal fade" id="pesquisa_status" tabindex="-1" role="dialog" aria-labelledby="pesquisa_status_label">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<h4 class="modal-title" id="pesquisa_status_label">MUDAR STATUS</h4>
-			</div>
-			<div class="modal-body">
-				<div class="row">
-					<div class="col-md-4 col-md-offset-2 supervisor"><h4>Supervisor:</h4></div>
-					<div class="col-md-4">
-						<div class="btn-group" data-toggle="buttons">
-							<label class="btn btn-default active" style="width:auto;">
-								<input type="radio" name="options" id="option1" autocomplete="off" checked> <span class="glyphicon glyphicon-minus supervisor" aria-hidden="true"></span>
-							</label>
-							<label class="btn btn-default" style="width:auto;">
-								<input type="radio" name="options" id="option2" autocomplete="off"> <span class="glyphicon glyphicon-ok supervisor" aria-hidden="true"></span>
-							</label>
-							<label class="btn btn-default" style="width:auto;">
-								<input type="radio" name="options" id="option3" autocomplete="off"> <span class="glyphicon glyphicon-remove supervisor" aria-hidden="true"></span>
-							</label>
+	<!-- MODAL STATUS -->
+	<div class="modal fade" id="pesquisa_status" tabindex="-1" role="dialog" aria-labelledby="pesquisa_status_label">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="pesquisa_status_label">MUDAR STATUS</h4>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-4 col-md-offset-2 supervisor"><h4>Supervisor:</h4></div>
+						<div class="col-md-4">
+							<div class="btn-group" data-toggle="buttons">
+								<label class="btn btn-default active" style="width:auto;">
+									<input type="radio" name="options" id="option1" autocomplete="off" checked> <span class="glyphicon glyphicon-minus supervisor" aria-hidden="true"></span>
+								</label>
+								<label class="btn btn-default" style="width:auto;">
+									<input type="radio" name="options" id="option2" autocomplete="off"> <span class="glyphicon glyphicon-ok supervisor" aria-hidden="true"></span>
+								</label>
+								<label class="btn btn-default" style="width:auto;">
+									<input type="radio" name="options" id="option3" autocomplete="off"> <span class="glyphicon glyphicon-remove supervisor" aria-hidden="true"></span>
+								</label>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-4 col-md-offset-2 telefonista"><h4>Telefonista:</h4></div>
+						<div class="col-md-4">
+							<div class="btn-group" data-toggle="buttons">
+								<label class="btn btn-default active" style="width:auto;">
+									<input type="radio" name="options" id="option1" autocomplete="off" checked> <span class="glyphicon glyphicon-minus telefonista" aria-hidden="true"></span>
+								</label>
+								<label class="btn btn-default" style="width:auto;">
+									<input type="radio" name="options" id="option2" autocomplete="off"> <span class="glyphicon glyphicon-ok telefonista" aria-hidden="true"></span>
+								</label>
+								<label class="btn btn-default" style="width:auto;">
+									<input type="radio" name="options" id="option3" autocomplete="off"> <span class="glyphicon glyphicon-remove telefonista" aria-hidden="true"></span>
+								</label>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-4 col-md-offset-2 super"><h4>Superusuário:</h4></div>
+						<div class="col-md-4">
+							<div class="btn-group" data-toggle="buttons">
+								<label class="btn btn-default active" style="width:auto;">
+									<input type="radio" name="options" id="option1" autocomplete="off" checked> <span class="glyphicon glyphicon-minus super" aria-hidden="true"></span>
+								</label>
+								<label class="btn btn-default" style="width:auto;">
+									<input type="radio" name="options" id="option2" autocomplete="off"> <span class="glyphicon glyphicon-ok super" aria-hidden="true"></span>
+								</label>
+								<label class="btn btn-default" style="width:auto;">
+									<input type="radio" name="options" id="option3" autocomplete="off"> <span class="glyphicon glyphicon-remove super" aria-hidden="true"></span>
+								</label>
+							</div>
 						</div>
 					</div>
 				</div>
-				<div class="row">
-					<div class="col-md-4 col-md-offset-2 telefonista"><h4>Telefonista:</h4></div>
-					<div class="col-md-4">
-						<div class="btn-group" data-toggle="buttons">
-							<label class="btn btn-default active" style="width:auto;">
-								<input type="radio" name="options" id="option1" autocomplete="off" checked> <span class="glyphicon glyphicon-minus telefonista" aria-hidden="true"></span>
-							</label>
-							<label class="btn btn-default" style="width:auto;">
-								<input type="radio" name="options" id="option2" autocomplete="off"> <span class="glyphicon glyphicon-ok telefonista" aria-hidden="true"></span>
-							</label>
-							<label class="btn btn-default" style="width:auto;">
-								<input type="radio" name="options" id="option3" autocomplete="off"> <span class="glyphicon glyphicon-remove telefonista" aria-hidden="true"></span>
-							</label>
-						</div>
+				<div class="modal-footer">
+					<div class="row">
+						<div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
+						<div class="col-md-6"><button type="button" class="btn btn-success">MUDAR</button></div>
 					</div>
-				</div>
-				<div class="row">
-					<div class="col-md-4 col-md-offset-2 super"><h4>Superusuário:</h4></div>
-					<div class="col-md-4">
-						<div class="btn-group" data-toggle="buttons">
-							<label class="btn btn-default active" style="width:auto;">
-								<input type="radio" name="options" id="option1" autocomplete="off" checked> <span class="glyphicon glyphicon-minus super" aria-hidden="true"></span>
-							</label>
-							<label class="btn btn-default" style="width:auto;">
-								<input type="radio" name="options" id="option2" autocomplete="off"> <span class="glyphicon glyphicon-ok super" aria-hidden="true"></span>
-							</label>
-							<label class="btn btn-default" style="width:auto;">
-								<input type="radio" name="options" id="option3" autocomplete="off"> <span class="glyphicon glyphicon-remove super" aria-hidden="true"></span>
-							</label>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<div class="row">
-					<div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
-					<div class="col-md-6"><button type="button" class="btn btn-success">MUDAR</button></div>
 				</div>
 			</div>
 		</div>
 	</div>
-</div>
 
 </body>
 </html>
