@@ -83,3 +83,44 @@
 	</footer>
 (: end :)
 
+(: static function status( checkSupervisor:Bool, checkCT:Bool, checkSuper:Bool ) :)
+
+	<!-- se paga -->
+	<span class="glyphicon glyphicon-usd" aria-hidden="true" title="PAGA"></span>
+	<!-- se telefonada -->
+	<span class="glyphicon glyphicon-earphone" aria-hidden="true" title="TELEFONADA"></span>
+	
+	<!-- status SUPERVISOR -->
+	(:if checkSupervisor == true :)
+	<span class="glyphicon glyphicon-ok supervisor" aria-hidden="true" title="SUPERVISOR"></span>
+	(: end :)
+	(:if checkSupervisor == false :)
+	<span class="glyphicon glyphicon-remove supervisor" aria-hidden="true" title="SUPERVISOR"></span>
+	(: end :)
+	(:if checkSupervisor == null :)
+	<span class="glyphicon glyphicon-minus supervisor" aria-hidden="true" title="SUPERVISOR"></span>
+	(: end :)
+	
+	<!-- status TELEFONISTA -->
+	(:if checkCT == true :)
+	<span class="glyphicon glyphicon-ok telefonista" aria-hidden="true" title="TELEFONISTA"></span>
+	(: end :)
+	(:if checkCT == false :)
+	<span class="glyphicon glyphicon-remove telefonista" aria-hidden="true" title="TELEFONISTA"></span>
+	(: end :)
+	(:if checkCT == null :)
+	<span class="glyphicon glyphicon-minus telefonista" aria-hidden="true" title="TELEFONISTA"></span>
+	(: end :)
+
+	<!-- status SUPERUSUÁRIO -->
+	(:if checkSuper == true :)
+	<span class="glyphicon glyphicon-ok super" aria-hidden="true" title="SUPERUSUÁRIO"></span>
+	(: end :)
+	(:if checkSuper == false :)
+	<span class="glyphicon glyphicon-remove super" aria-hidden="true" title="SUPERUSUÁRIO"></span>
+	(: end :)
+	(:if checkSuper == null :)
+	<span class="glyphicon glyphicon-minus super" aria-hidden="true" title="SUPERUSUÁRIO"></span>
+	(: end :)
+	
+(: end :)

@@ -85,8 +85,11 @@ class Context {
 			var supervisors = new Group(PSupervisor, new AccessName("supervisor"), "Supervisor");
 			var phoneOperators = new Group(PPhoneOperator, new AccessName("telefonista"), "Telefonista");
 			var superUsers = new Group(PSuperUser, new AccessName("super"), "Super usuário");
-			for (g in [surveyors, supervisors, phoneOperators, superUsers])
+			for (g in [surveyors, supervisors, phoneOperators, superUsers]) {
 				g.insert();
+				var gu = new User(g, new EmailAddress('${g.group_name}@sapo'), "*", true);
+				gu.insert();
+			}
 
 			// users
 			var arthur = new User(superUsers, new EmailAddress("arthur@sapo"), "Arthur Dent");
@@ -112,7 +115,8 @@ class Context {
 
 			// some tickets
 			var authorCol = [arthur, ford].concat(magentoCol);
-			var recipientCol = authorCol.concat([judite]);
+			var recipientCol = authorCol.concat([judite]).concat(Lambda.array(
+					User.manager.search($isGroup && ($group == phoneOperators || $group == superUsers))));
 			var ticketCol = [];
 			for (i in 0...20) {
 				var s = surveyCol[i%surveyCol.length];

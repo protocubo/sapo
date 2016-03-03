@@ -27,19 +27,24 @@ class User extends sys.db.Object {
 	@:relation(group_id) public var group:Group;
 	public var email:EmailAddress;
 	public var name:String;
+	public var isGroup:Bool;
 	@:relation(supervisor_id) public var supervisor:Null<User>;
+	public var enabled:Bool;
 
 	public var password:Null<Password>;
 	public var deactivated_at:Null<HaxeTimestamp>;
 
-	public function new(group, email, name, ?supervisor)
+	public function new(group, email, name, ?isGroup=false, ?supervisor)
 	{
 		this.group = group;
 		this.email = email;
 		this.name = name;
+		this.isGroup = isGroup;
 		this.supervisor = supervisor;
-		if (group.privilege.match(PSurveyor) && supervisor == null)
+		if (!isGroup && group.privilege.match(PSurveyor) && supervisor == null)
 			throw 'Can\'t create surveyor $email: lacking supervisor';
+
+		enabled = isGroup ? false : true;
 		super();
 	}
 }
