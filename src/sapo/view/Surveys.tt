@@ -1,6 +1,7 @@
-(: import common.spod.Survey :)
+(: import sapo.spod.Survey :)
+(: import sapo.spod.User :)
 
-(: static function surveySummary(survey:common.spod.Survey) :)
+(: static function surveySummary(survey:sapo.spod.Survey) :)
 <!-- PESQUISA -->
 <div class="panel panel-default">
 	<!-- HEAD PESQUISA -->
@@ -9,7 +10,9 @@
 			<div class="col-md-4 panel-title">
 				<!-- Nº da Pesquisa, Data da Pesquisa -->
 				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyPesquisa(: survey.id :)" aria-expanded="true" aria-controls="BodyPesquisa(: survey.id :)">
-					Pesquisa #(: survey.id :) - (: survey.date_completed :) - <b class="pesquisador"> (:* survey.surveyor *:) Dilbert</b> - <b class="supervisor">(:* survey.supervisor *:) Magali</b>
+				(:var surveyor = User.manager.get(survey.user_id) :)
+				(:var supervisor = surveyor.supervisor :)
+					Pesquisa #(: survey.id :) - (: survey.date_completed :) - <b class="pesquisador"> (: surveyor.name :)</b> - <b class="supervisor"> </b>
 				</a>
 			</div>
 			<div class="col-md-6 panel-title">
@@ -63,7 +66,6 @@
 (: Util.head("SAPO - Pesquisas") :)
 </head>
 <body>
-
 	<!-- PESQUISAS -->
 	<div class="container">
 	(: Util.navbar() :)
@@ -76,7 +78,7 @@
 			<!-- FILTROS -->
 			<form method="get">
 				<div class="col-md-2"><h5>USUÁRIO</h5>
-					<select class="form-control input-sm" name="group" id="userID0">
+					<select class="form-control input-sm" name="user" id="userID">
 						<option value=0>Todos</option>
 						(: for g in Spod.Group.manager.all() :)
 						<optgroup label=(:g.group_name:)>

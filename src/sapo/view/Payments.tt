@@ -85,7 +85,7 @@
 </html>
 (: end :)
 
-(: static function superPage() :)
+(: static function superPage(?surveys:List<Survey>) :)
 <!DOCTYPE html>
 <html>
 <head>
@@ -104,15 +104,17 @@
 		<div class="row">
 			<!-- FILTROS -->
 			<div class="col-md-2"><h5>PESQUISADOR:</h5>
-				<select class="form-control input-sm">
-					<option>Selecione</option>
-					<!-- lista de pesquisadores por ordem alfabética -->
+				<select name="surveyor"  class="form-control input-sm" >
+					<option value =0 >Todos</option>
+					(:for u in Spod.User.manager.search($group_id== Spod.Group.manager.select($group_name=="pesquisador").id) :)
+						<option value=(:u.id:) >(:u.name:)</option>
+					(: end :)
 				</select>
 			</div>
 			<div class="col-md-2"><h5>PAGA</h5>
 				<select class="form-control input-sm">
-					<option>Não</option>
-					<option>Sim</option>
+					<option value=false>Não</option>
+					<option value=true>Sim</option>
 				</select>
 			</div>
 			<div class="col-md-2"><h5>STATUS</h5>

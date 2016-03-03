@@ -160,6 +160,7 @@ class Context {
 		var surveyorgroup = Group.manager.select($privilege == Privilege.PSurveyor, null, false);
 		var supervisorGroup = Group.manager.select($privilege == Privilege.PSupervisor, null, false);
 		var supervisor = new User(supervisorGroup, new EmailAddress("Sup@sup.com.br"), "Supervisor5000");
+		supervisor.insert();
 		var i = 0;
 		
 		var userarr = [];
@@ -169,7 +170,7 @@ class Context {
 			surveyor.password = Password.make("secret");
 			surveyor.insert();
 			
-			userarr.push(surveyor);
+			userarr.push(surveyor.id);
 			
 			i++;
 		}
@@ -182,7 +183,7 @@ class Context {
 		while (i < 1000)
 		{
 			var s = new Survey();
-			s.user_id = rnd.int(userarr.length);
+			s.user_id = userarr[rnd.int(userarr.length)];
 			s.isRestored = false;
 			s.isValid = false;
 			s.lastPageVisited = "END";
@@ -201,9 +202,9 @@ class Context {
 			s.checkCT = randomBool(rnd);
 			s.checkSupervisor = randomBool(rnd);
 			s.checkSuper = randomBool(rnd);
-			s.date_create = DateTools.delta(Date.now(), -1000.0 * 60 * 60 * 24 * rnd.int(5));
+			s.date_create = DateTools.delta(Date.now(), -1000.0*60*60*24*rnd.int(5) + 1000.0*60*60*rnd.int(24) + 1000.0*60*rnd.int(60) );
 			s.date_started = s.date_create;
-			s.date_finished = DateTools.delta(Date.now(), 1000.0 * 60 * 60 * 24 * rnd.int(5));
+			s.date_finished = DateTools.delta(Date.now(), 1000.0*60*60*24*rnd.int(5) + 1000.0*60*60*rnd.int(24) + 1000.0*60*rnd.int(60) );
 			s.date_completed = s.date_finished;
 			var g = group[s.user_id];
 			if (g == null)
