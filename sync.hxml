@@ -1,5 +1,7 @@
 -cp src
 -lib compiletime
+-lib version
+-D sapo-sync
 
 --each
 

@@ -12,4 +12,5 @@ RUN haxelib --always install compiletime
 RUN haxelib --always install hxBitcoin
 RUN haxelib --always install tink_template
 RUN haxelib --always install utest
+RUN haxelib --always install version
 

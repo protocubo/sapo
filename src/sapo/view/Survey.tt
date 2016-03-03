@@ -45,14 +45,7 @@ function imprimir() {
 				PESQUISA #(:survey.id:)
 			</h2>
 			<h2 class="tags">
-				<!-- se paga -->
-				<span class="glyphicon glyphicon-usd" aria-hidden="true"></span>
-				<!-- se telefonada -->
-				<span class="glyphicon glyphicon-earphone" aria-hidden="true"></span>
-				<!-- status -->
-				<span class="glyphicon glyphicon-minus supervisor" aria-hidden="true"></span>
-				<span class="glyphicon glyphicon-ok telefonista" aria-hidden="true"></span>
-				<span class="glyphicon glyphicon-remove super" aria-hidden="true"></span>
+				(: Util.status( true, true, true ) :)
 			</h2>
 		</div>
 	</div>

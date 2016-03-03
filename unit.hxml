@@ -2,6 +2,7 @@
 -lib utest
 -lib hxBitcoin
 -lib compiletime
+-lib version
 
 --each
 

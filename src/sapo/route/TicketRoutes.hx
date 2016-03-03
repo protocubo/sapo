@@ -2,32 +2,51 @@ package sapo.route;
 
 import common.Dispatch;
 import common.Web;
+import common.db.MoreTypes;
 import sapo.spod.Other;
 import sapo.spod.Ticket;
 import sapo.spod.User;
-import sapo.view.Tickets.*;
 
 class TicketRoutes extends AccessControl {
+	public static inline var PAGE_SIZE = 10;
+	public static inline var PARAM_ALL = "all";
+	public static inline var PARAM_GROUP = "group";
+	public static inline var PARAM_INDIVIDUAL = "individual";
+	public static inline var PARAM_OPEN = "open";
+	public static inline var PARAM_CLOSED = "closed";
+
 	@authorize(PSupervisor, PPhoneOperator, PSuperUser)
-	public function doDefault(?args:{ ?inbox:String, ?recipient:String, ?state:String })
+	public function doDefault(?args:{?recipient:String, ?state:String })
 	{
 		if (args == null) args = {};
+		var open = args.state == null || args.state == PARAM_OPEN;
+		if (!open && args.state != PARAM_CLOSED) throw 'Unexpected state value: ${args.state}';
+
 		var u = Context.loop.user;
+		var g = Context.loop.group;
+		var p = Context.loop.privilege;
 
-		var tickets;
-
-		if (args.inbox == PARAM_OUTBOX) {
-			tickets = Ticket.manager.search(
-					$author == u &&
-					(args.state == PARAM_CLOSED ? $closed_at != null : $closed_at == null));
-		} else {
-			var subs = TicketSubscription.manager.search($user == u || $group == u.group);
-			tickets = Ticket.manager.search(
-					// TODO ticket in subs
-					(args.state == PARAM_CLOSED ? $closed_at != null : $closed_at == null));
+		var sql = "SELECT t.* FROM Ticket t";
+		sql += switch args.recipient {
+		case null, PARAM_ALL if (p.match(PSuperUser)):
+			' WHERE';  // done: all
+		case null, PARAM_ALL:
+			' JOIN TicketSubscription ts ON t.id = ts.ticket_id
+					WHERE (ts.user_id = ${u.id} OR ts.group_id = ${g.id}) AND';
+		case PARAM_GROUP:
+			' JOIN TicketSubscription ts ON t.id = ts.ticket_id
+					WHERE (ts.group_id = ${g.id}) AND';
+		case PARAM_INDIVIDUAL:
+			' JOIN TicketSubscription ts ON t.id = ts.ticket_id
+					WHERE (ts.user_id = ${u.id}) AND';
+		case other:
+			throw 'Unexpected recipient value: $other';
 		}
+		sql += ' t.closed_at ${open ? "IS" : "NOT"} NULL';
+		sql += ' ORDER BY t.opened_at LIMIT $PAGE_SIZE';
 
-		Sys.println(page(tickets));
+		var tickets = Ticket.manager.unsafeObjects(sql, false);
+		Sys.println(sapo.view.Tickets.page(tickets));
 	}
 
 	@authorize(PSupervisor, PPhoneOperator, PSuperUser)
@@ -39,7 +58,7 @@ class TicketRoutes extends AccessControl {
 			tickets.push(args.ticket);
 		else if (args.survey != null)
 			tickets = Ticket.manager.search($survey == args.survey);
-		Sys.println(page(tickets));
+		Sys.println(sapo.view.Tickets.page(tickets));
 	}
 
 	@authorize(PSupervisor, PPhoneOperator, PSuperUser)
