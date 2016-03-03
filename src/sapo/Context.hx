@@ -202,9 +202,9 @@ class Context {
 			s.checkCT = randomBool(rnd);
 			s.checkSupervisor = randomBool(rnd);
 			s.checkSuper = randomBool(rnd);
-			s.date_create = DateTools.delta(Date.now(), -1000.0 * 60 * 60 * 24 * rnd.int(5));
+			s.date_create = DateTools.delta(Date.now(), -1000.0*60*60*24*rnd.int(5) + 1000.0*60*60*rnd.int(24) + 1000.0*60*rnd.int(60) );
 			s.date_started = s.date_create;
-			s.date_finished = DateTools.delta(Date.now(), 1000.0 * 60 * 60 * 24 * rnd.int(5));
+			s.date_finished = DateTools.delta(Date.now(), 1000.0*60*60*24*rnd.int(5) + 1000.0*60*60*rnd.int(24) + 1000.0*60*rnd.int(60) );
 			s.date_completed = s.date_finished;
 			var g = group[s.user_id];
 			if (g == null)

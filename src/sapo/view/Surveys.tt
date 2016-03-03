@@ -1,6 +1,7 @@
-(: import common.spod.Survey :)
+(: import sapo.spod.Survey :)
+(: import sapo.spod.User :)
 
-(: static function surveySummary(survey:common.spod.Survey) :)
+(: static function surveySummary(survey:sapo.spod.Survey) :)
 <!-- PESQUISA -->
 <div class="panel panel-default">
 	<!-- HEAD PESQUISA -->
@@ -9,7 +10,9 @@
 			<div class="col-md-4 panel-title">
 				<!-- Nº da Pesquisa, Data da Pesquisa -->
 				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyPesquisa(: survey.id :)" aria-expanded="true" aria-controls="BodyPesquisa(: survey.id :)">
-					Pesquisa #(: survey.id :) - (: survey.date_completed :) - <b class="pesquisador"> (:* survey.surveyor *:) Dilbert</b> - <b class="supervisor">(:* survey.supervisor *:) Magali</b>
+				(:var surveyor = User.manager.get(survey.user_id) :)
+				(:var supervisor = surveyor.supervisor :)
+					Pesquisa #(: survey.id :) - (: survey.date_completed :) - <b class="pesquisador"> (: surveyor.name :)</b> - <b class="supervisor"> </b>
 				</a>
 			</div>
 			<div class="col-md-6 panel-title">
@@ -80,14 +83,24 @@
 			for(i=0;i<(:Spod.Group.manager.all().length + 1:);i++)
 			{
 				document.getElementById("userID"+i).style.display='none';
+				document.getElementById("userID"+i).selectedIndex = "0";
 			}
 			document.getElementById("userID"+v).style.display = 'initial';
+			document.getElementById("hiddenField").value = 0;
 		}
 	</script>
 
+	<script>
+		function setHiddenValue(i) 
+		{
+			document.getElementById("hiddenField").value = i;
+		}
+	</script>
+	
 	<!-- FILTROS -->
 	
 	<form method="get">
+		<input type="hidden" id="hiddenField" name="user" value=0>
 		<div class="row">
 			<div class="col-md-2"><h3 class="filtro">Filtros:</h3></div>
 			<div class="col-md-2"><h4>GRUPO</h4>
@@ -100,11 +113,10 @@
 			</div>
 			<div class="col-md-2"><h4>USUÁRIO</h4>
 				<select class="form-control" id="userID0" disabled>
-					<option value="">---------</option>
-				</select>
-				
+					<option value=0>---------</option>
+				</select>			
 				(: for g in Spod.Group.manager.all() :)				
-					<select class="form-control" id="userID(:g.id:)" style="display: none;">
+					<select class="form-control" id="userID(:g.id:)" style="display: none;" onchange="setHiddenValue(this.value)">
 						<option value=0>todos</option>
 						(: for u in Spod.User.manager.search($group_id == g.id ) :)
 							<option value=(:u.id:)>(:u.name:)</option>
