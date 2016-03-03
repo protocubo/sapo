@@ -47,9 +47,10 @@ class Survey extends Object {
 	public var estratoSocioEconomico : SNull<SString<255>>;
 	
 	/** CHECKS -> Verificado? - TODO:IGNORAR NO SYNC! **/
-	public var checkSupervisor : SNull<SBool>;
+	public var checkSV : SNull<SBool>;
 	public var checkCT : SNull<SBool>;
-	public var checkSuper : SNull<SBool>;
+	public var checkCQ : SNull<SBool>;
+    public var isPhoned : SBool;
 	public var group : Null<Int>;
 	public var date_edited : SNull<SDateTime>;
 	/*********************************/

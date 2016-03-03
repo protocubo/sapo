@@ -1,5 +1,19 @@
-(: import sapo.Spod :)
-(: static function render(survey:Spod.NewSurvey) :)
+(: import sapo.spod.Survey :)
+(: import sapo.spod.User :)
+(: static function render(survey:sapo.spod.Survey) :)
+(: do { 
+    var dom : Familia; 
+    var fam : Familia; 
+    var user : sapo.spod.User;
+    for (d in Familia.manager.search($survey == survey, { orderBy:-syncTimestamp, limit : 1 })) //* FIXME syncTimestamp  
+    fam = d;
+    dom = fam;
+    for (u in User.manager.search($id == survey.user_id, { orderBy:-syncTimestamp, limit : 1 })) //* FIXME syncTimestamp  
+    user = u;
+    if (user.supervisor == null) 
+        throw ('assertion failed: surveyor id:${user.id} (${user.email}) has no supervisor' );
+    }  :)
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -45,7 +59,7 @@ function imprimir() {
 				PESQUISA #(:survey.id:)
 			</h2>
 			<h2 class="tags">
-				(: Util.status( true, true, true ) :)
+				(: Util.status(survey.checkSV, survey.checkCT, survey.checkCQ) :)
 			</h2>
 		</div>
 	</div>
@@ -80,25 +94,28 @@ function imprimir() {
 	<div class="row">
 		<div class="col-md-12">
 			<h3><span class="glyphicon glyphicon-file" aria-hidden="true"></span> INFORMAÇÕES DA PESQUISA</h3>
+            <div class="bloco"><b>Endereço:</b>  (: survey.logradouro :) , (: survey.numero :)	(: survey.complemento :), (: survey.bairro :) </div>
+            <div class="bloco"><b>Contato:</b> (: dom.nomeContato :) - (: dom.telefoneContato :) </div>
 			<div class="bloco">
 				<a href="#" class="corrigir escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
-				<b>1ºVisita:</b> 17/03/2016
+				<b>1ºVisita:</b> (: survey.date_started :)
 			</div>
 			<div class="bloco">
 				<a href="#" class="corrigir escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
-				<b>Completada:</b> 17/03/2016
+				<b>Completada:</b> (: survey.date_completed :)
 			</div>
 			<div class="bloco">
 				<a href="#" class="corrigir escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
-				<b>Senha: </b>ALNVD86960
+				<b>Senha: </b> (: survey.date_started :)
+			</div>
+
+			<div class="bloco">
+				<a href="#" class="corrigir escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+				<b class="pesquisador">Pesquisador:</b> (: user.name :)
 			</div>
 			<div class="bloco">
 				<a href="#" class="corrigir escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
-				<b class="pesquisador">Pesquisador:</b> (: survey.surveyor.name :)
-			</div>
-			<div class="bloco">
-				<a href="#" class="corrigir escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
-				<b class="supervisor">Supervisor:</b> Rúben Fabricio
+				<b class="supervisor">Supervisor:</b> (: user.supervisor.name :)
 			</div>
 		</div>
 	</div>

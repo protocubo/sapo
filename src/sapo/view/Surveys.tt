@@ -1,6 +1,20 @@
-(: import common.spod.Survey :)
+(: import sapo.spod.Survey :)
+(: import sapo.spod.User :)
 
-(: static function surveySummary(survey:common.spod.Survey) :)
+(: static function surveySummary(survey:sapo.spod.Survey) :)
+(: do { 
+    var dom : Familia; 
+    var fam : Familia; 
+    var user : User;
+    for (d in Familia.manager.search($survey == survey, { orderBy:-syncTimestamp, limit : 1 })) //* FIXME syncTimestamp  
+    fam = d;
+    dom = fam;
+    for (u in User.manager.search($id == survey.user_id, { orderBy:-syncTimestamp, limit : 1 })) //* FIXME syncTimestamp  
+    user = u;
+    if (user.supervisor == null) 
+        throw ('assertion failed: surveyor id:${user.id} (${user.email}) has no supervisor' );
+    }  :)
+
 <!-- PESQUISA -->
 <div class="panel panel-default">
 	<!-- HEAD PESQUISA -->
@@ -9,7 +23,7 @@
 			<div class="col-md-4 panel-title">
 				<!-- Nº da Pesquisa, Data da Pesquisa -->
 				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyPesquisa(: survey.id :)" aria-expanded="true" aria-controls="BodyPesquisa(: survey.id :)">
-					Pesquisa #(: survey.id :) - (: survey.date_completed :) - <b class="pesquisador"> (:* survey.surveyor *:) Dilbert</b> - <b class="supervisor">(:* survey.supervisor *:) Magali</b>
+					Pesquisa #(: survey.id :) - (: survey.date_completed :) - <b class="pesquisador"> (: user.name :)</b> - <b class="supervisor">(: user.supervisor.name :)</b>
 				</a>
 			</div>
 			<div class="col-md-6 panel-title">
@@ -18,10 +32,9 @@
 				(: survey.logradouro:) , (:survey.numero:)
 				</a>
 				<span class="tags">
-					(: Util.status( survey.checkSupervisor, survey.checkCT , survey.checkSuper ) :)
+					(: Util.status( survey.checkSV, survey.checkCT , survey.checkCQ ) :)
 				</span>
 			</div>
-
 		</div>
 	</div>
 	<!-- BODY PESQUISA -->
@@ -31,9 +44,7 @@
 				<div class="col-md-12 barraderolagem">
 					<!-- DADOS DA PESQUISA -->
 					<div class="bloco"><b>Endereço:</b>  (: survey.logradouro :) , (: survey.numero :)	(: survey.complemento :), (: survey.bairro :) </div>
-					(: for d in sapo.spod.Survey.Familia.manager.search($survey_id == survey.id, { orderBy:-syncTimestamp, limit : 1 }) :) (:* FIXME syncTimestamp  *:)
-					<div class="bloco"><b>Contato:</b> (: d.nomeContato :) - (: d.telefoneContato :) </div>
-					(: end :)
+					<div class="bloco"><b>Contato:</b> (: dom.nomeContato :) - (: dom.telefoneContato :) </div>
 					<div class="bloco"><b>Senha:</b> (: survey.pin :) </div>
 					<hr>
 					<p><b>Moradores:</b></p>
