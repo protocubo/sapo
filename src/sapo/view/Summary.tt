@@ -112,103 +112,96 @@
 </head>
 <body>
 
-	(: Util.navbar() :)
-
 	<!-- SUMÁRIO -->
 	<div class="container">
+(: Util.navbar() :)
+		<!-- HEAD -->
+		<ol class="breadcrumb">
+			<li class="active">SUMÁRIO</li>
+		</ol>
 
-	<!-- HEAD -->
-	<h2>SUMÁRIO</h2>
-	<hr />
-
-		<!-- FILTROS -->
-		<form method="POST" action="/summary/user">
+			<!-- FILTROS -->
 			<div class="row">
-				<div class="col-md-2">
-					<h3 class="filtro">Filtros:</h3>
-				</div>
-				<div class="col-md-2"><h4>USUÁRIO</h4>
-					<select class="form-control" name="user">
-						<option>Todos</option>
-						<optgroup label="Supervisores">
-						(: do var group = Group.manager.select($privilege == Privilege.PSupervisor, null, false) :)
-						(: for u in User.manager.search($group == group, null, false) :)
-							<option value='(:u.id:)'>(:u.name:)</option>
-						(: end :)
-						</optgroup>
-						<optgroup label="Pesquisadores">
-							<!-- PESQUISADORES -->
-							(: do group = Group.manager.select($privilege == Privilege.PSurveyor, null, false) :)
+				<form method="POST" action="/summary/user">
+					<div class="col-md-2"><h5>USUÁRIO</h5>
+						<select class="form-control input-sm" name="user">
+							<option>Todos</option>
+							<optgroup label="Supervisores">
+							(: do var group = Group.manager.select($privilege == Privilege.PSupervisor, null, false) :)
 							(: for u in User.manager.search($group == group, null, false) :)
 								<option value='(:u.id:)'>(:u.name:)</option>
 							(: end :)
-						</optgroup>
-					</select>
-				</div>
-				<div class="col-md-2"><h4>&nbsp;</h4>
-					<button type="submit" value="submit" class="btn btn-primary">APLICAR</button>
-				</div>
+							</optgroup>
+							<optgroup label="Pesquisadores">
+								<!-- PESQUISADORES -->
+								(: do group = Group.manager.select($privilege == Privilege.PSurveyor, null, false) :)
+								(: for u in User.manager.search($group == group, null, false) :)
+									<option value='(:u.id:)'>(:u.name:)</option>
+								(: end :)
+							</optgroup>
+						</select>
+					</div>
+					<div class="col-md-1"><h5>&nbsp;</h5>
+						<button type="submit" value="submit" class="btn btn-primary btn-sm">FILTRAR</button>
+					</div>
+				</form>
 			</div>
-		</form>
-		<hr />
-	
-	<div class="row" style="margin-top:50px;">
-		<div class="col-md-12">
-			<h4>
-				<span class="supervisor"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> SUPERVISOR</span> |
-				<span class="telefonista"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> TELEFONISTA</span> |
-				<span class="super"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> QUALIDADE</span>	|
-				<span class="completa"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> COMPLETA</span> |
-				<span class="pendente"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> PENDENTE</span>
-			</h4>
-			<div id="chart_div"></div>
+		
+		<div class="row" style="margin-top:60px;">
+			<div class="col-md-12">
+				<h4>
+					<span class="supervisor"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> SUPERVISOR</span> |
+					<span class="telefonista"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> TELEFONISTA</span> |
+					<span class="super"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> QUALIDADE</span>	|
+					<span class="completa"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> COMPLETA</span> |
+					<span class="pendente"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> PENDENTE</span>
+				</h4>
+				<div id="chart_div"></div>
+			</div>
 		</div>
-
-	</div>
-	<div class="row" style="margin-top:50px;">
-		<div class="col-md-6">
-			<h4>
-				TABELA
-			</h4>
-			<table class="table">
-				<thead>
-					<tr>
-						<th>STATUS</th>
-						<th>Nº de Pesquisas</th>
-					</tr>
-				</thead>
-				<tbody>
-				(: for h in 1...header.length :)
-					(: do var val = 0 :)
-					
-					(: for data in plotData.keys() :)
-						(: do val += plotData.get(data).get(header[h]) != null ? plotData.get(data).get(header[h]) : 0 :)
+		<div class="row" style="margin-top:50px;">
+			<div class="col-md-6">
+				<h4>
+					TABELA
+				</h4>
+				<table class="table">
+					<thead>
+						<tr>
+							<th>STATUS</th>
+							<th>Nº de Pesquisas</th>
+						</tr>
+					</thead>
+					<tbody>
+					(: for h in 1...header.length :)
+						(: do var val = 0 :)
+						
+						(: for data in plotData.keys() :)
+							(: do val += plotData.get(data).get(header[h]) != null ? plotData.get(data).get(header[h]) : 0 :)
+						(: end :)
+						
+						<tr>
+							<td>(: header[h] :):</td>
+							<td>(: val :)</td>
+						</tr>
 					(: end :)
-					
-					<tr>
-						<td>(: header[h] :):</td>
-						<td>(: val :)</td>
-					</tr>
-				(: end :)
-				</tbody>
-				<tfoot>
-					<tr>
-						<td colspan="2"></td>
-					</tr>
-				</tfoot>
-			</table>
-		</div>
-		<div class="col-md-6">
-			<h4 class="aceita"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> ACEITAS</h4>
-			<div id="chart_div2"></div>
-			<h4 class="recusada"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> RECUSADAS</h4>
-			<div id="chart_div3"></div>
+					</tbody>
+					<tfoot>
+						<tr>
+							<td colspan="2"></td>
+						</tr>
+					</tfoot>
+				</table>
+			</div>
+			<div class="col-md-6">
+				<h4 class="aceita"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> ACEITAS</h4>
+				<div id="chart_div2"></div>
+				<h4 class="recusada"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> RECUSADAS</h4>
+				<div id="chart_div3"></div>
+			</div>
 		</div>
 	</div>
-</div>
-<hr />
 
-(: Util.footer() :)
+	(: Util.footer() :)
 </body>
 </html>
 (: end :)
