@@ -340,15 +340,9 @@ class Context {
 				j++;
 			}
 			
-			if (i % 100 == 0)
-				Manager.cnx.commit();
-				
 			i++;
 			
 		}
-		
-		Manager.cnx.commit();
-		
 	}
 	static function randomBool(rnd : Random) : Null<Bool>
 	{
