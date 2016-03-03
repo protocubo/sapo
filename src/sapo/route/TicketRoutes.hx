@@ -31,17 +31,14 @@ class TicketRoutes extends AccessControl {
 		case null, PARAM_ALL if (p.match(PSuperUser)):
 			' WHERE';  // done: all
 		case null, PARAM_ALL:
-			' JOIN TicketSubscription ts
-				ON t.id = ts.ticket_id
-				WHERE (ts.user_id = ${u.id} OR ts.group_id = ${g.id}) AND';
+			' JOIN TicketSubscription ts ON t.id = ts.ticket_id
+					WHERE (ts.user_id = ${u.id} OR ts.group_id = ${g.id}) AND';
 		case PARAM_GROUP:
-			' JOIN TicketSubscription ts
-				ON t.id = ts.ticket_id
-				WHERE (ts.group_id = ${g.id}) AND';
+			' JOIN TicketSubscription ts ON t.id = ts.ticket_id
+					WHERE (ts.group_id = ${g.id}) AND';
 		case PARAM_INDIVIDUAL:
-			' JOIN TicketSubscription ts
-				ON t.id = ts.ticket_id
-				WHERE (ts.user_id = ${u.id}) AND';
+			' JOIN TicketSubscription ts ON t.id = ts.ticket_id
+					WHERE (ts.user_id = ${u.id}) AND';
 		case other:
 			throw 'Unexpected recipient value: $other';
 		}
