@@ -160,6 +160,7 @@ class Context {
 		var surveyorgroup = Group.manager.select($privilege == Privilege.PSurveyor, null, false);
 		var supervisorGroup = Group.manager.select($privilege == Privilege.PSupervisor, null, false);
 		var supervisor = new User(supervisorGroup, new EmailAddress("Sup@sup.com.br"), "Supervisor5000");
+		supervisor.insert();
 		var i = 0;
 		
 		var userarr = [];
