@@ -22,8 +22,8 @@
 
 (: static function navbar() :)
 <!-- NAVBAR -->
-	<div class="navbar navbar-default navbar-fixed-top">
-		<div class="container">
+	<div class="navbar navbar-default">
+		<div class="container-fluid">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
 					<span class="icon-bar"></span>
@@ -48,21 +48,24 @@
 							<li><a href="/summary">SUMÁRIO</a></li>
 						(:end:)
 						(:if Context.loop.privilege.match(PSuperUser):)
-							<li><a href="/payments">PAGAMENTOS</a></li>
-							<li><a href="/registration">CADASTRO</a></li>
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">ADMINISTRAÇÃO <span class="caret"></span></a>
+								<ul class="dropdown-menu">
+									<li><a href="/payments">PAGAMENTOS</a></li>
+									<li><a href="/registration">CADASTRO</a></li>
+								</ul>
+							</li>
 						(:end:)
 						(:if !Context.loop.privilege.match(PSurveyor):)
 							<li><a href="/help">AJUDA</a></li>
 						(:end:)
 					(:end:)
 				</ul>
-				<ul class="nav navbar-nav navbar-right">
-					<!-- sem logar: vazio; logado: nome do usuário + @ + grupo - (class: super, telefonista, supervisor e pesquisador) -->
+				<p class="navbar-text navbar-right">
 					(:if Context.loop.session != null:)
-					<li><a><b class="(:Context.loop.user.group.group_name:)">(:Context.loop.user.name:)@(:Context.loop.user.group.group_name:)</b></a></li> <!-- pós login -->
-					<li><a href="/bye">Sair</a></li>
+					<b class="(:Context.loop.user.group.group_name:)">(:Context.loop.user.name:)@(:Context.loop.user.group.group_name:)</b> | <a href="/bye">Sair</a>
 					(:end:)
-				</ul>
+				</p>
 			</div>
 		</div>
 	</div>

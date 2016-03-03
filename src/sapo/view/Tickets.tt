@@ -86,74 +86,60 @@ unavailable
 (: Util.head("SAPO - Tickets", {formCache:true}) :)
 </head>
 <body>
-	(: Util.navbar() :)
 
 	<!-- TICKETS -->
 	<div class="container">
-
+	(: Util.navbar() :)
 		<!-- HEAD -->
-		<h2>TICKETS</h2>
-		<hr />
+		<ol class="breadcrumb">
+			<li class="active">TICKETS</li>
+		</ol>
 
-		<!-- FILTROS -->
-		<form method="get" name="filter" action="/tickets">
-			<div class="row">
-				<div class="col-md-2">
-					<h3 class="filtro">Filtros:</h3>
-				</div>
-				<div class="col-md-2 col-md-offset-4"><h4>DESTINO</h4>
-					<select class="form-control" id="recipientID" name="recipient">
+		<div class="row">
+			<!-- FILTROS -->
+			<form method="get" name="filter" action="/tickets">
+				<div class="col-md-2"><h5>DESTINO</h5>
+					<select class="form-control input-sm" id="recipientID" name="recipient">
 						<option value="(:PARAM_ALL:)">Todos</option>
 						<option value="(:PARAM_GROUP:)">Grupo</option>
 						<option value="(:PARAM_INDIVIDUAL:)">Individual</option>
 					</select>
 				</div>
-				<div class="col-md-2"><h4>ESTADO</h4>
-					<select class="form-control" name="state">
+				<div class="col-md-2"><h5>ESTADO</h5>
+					<select class="form-control input-sm" name="state">
 						<option value="(:PARAM_OPEN:)">Não Fechadas</option>
 						<option value="(:PARAM_CLOSED:)">Fechadas</option>
 					</select>
 				</div>
-				<div class="col-md-2"><h4>&nbsp;</h4>
-					<button type="submit" value="submit" class="btn btn-primary">APLICAR</button>
+				<div class="col-md-1"><h5>&nbsp;</h5>
+					<button type="submit" value="submit" class="btn btn-primary btn-sm">FILTRAR</button>
 				</div>
-			</div>
-		</form>
-		<hr />
-
-		<script>
-			//Disable 'group' and 'all' options when inbox 'out' is selected
-
-			function disableRecipients(s) {
-				var shouldDisable = true;
-				if(s == "out")
-					document.getElementById('recipientID').selectedIndex = 2;
-				else
-					shouldDisable = false;
-				for (i = 0; i < 2; i++)
-					document.getElementById("recipientID").options[i].disabled = shouldDisable;
-			}
-		</script>
-
-		<!-- BUSCA -->
-		
-		<form action="/tickets/search" method="get">
-			<div class="row">
-				<div class="col-md-2">
-					<h3 class="filtro">Busca:</h3>
+			</form>
+			<script>
+				//Disable 'group' and 'all' options when inbox 'out' is selected
+				function disableRecipients(s) {
+					var shouldDisable = true;
+					if(s == "out")
+						document.getElementById('recipientID').selectedIndex = 2;
+					else
+						shouldDisable = false;
+					for (i = 0; i < 2; i++)
+						document.getElementById("recipientID").options[i].disabled = shouldDisable;
+				}
+			</script>
+			<!-- BUSCA -->
+			<form action="/tickets/search" method="get">
+				<div class="col-md-2  col-md-offset-2"><h5>TICKET</h5>
+					<input type="text" name="ticket" id="ticketSearch" class="form-control input-sm" oninput="disableSearch(this.name, this.value)" placeholder="Nº do Ticket">
 				</div>
-				<div class="col-md-2 col-md-offset-4"><h4>TICKET</h4>
-					<input type="text" name="ticket" id="ticketSearch" class="form-control" oninput="disableSearch(this.name, this.value)" placeholder="Nº do Ticket">
+				<div class="col-md-2"><h5>PESQUISA</h5>
+					<input type="text" name="survey" id="surveySearch" class="form-control input-sm" oninput="disableSearch(this.name, this.value)" placeholder="Nº da Pesquisa">
 				</div>
-				<div class="col-md-2"><h4>PESQUISA</h4>
-					<input type="text" name="survey" id="surveySearch" class="form-control" oninput="disableSearch(this.name, this.value)" placeholder="Nº da Pesquisa">
+				<div class="col-md-1"><h5>&nbsp;</h5>
+					<button type="submit" value="submit" class="btn btn-primary btn-sm">BUSCAR</button>
 				</div>
-				<div class="col-md-2"><h4>&nbsp;</h4>
-					<button type="submit" value="submit" class="btn btn-primary">BUSCAR</button>
-				</div>
-			</div>
-		</form>
-		<hr />
+			</form>
+		</div>
 
 		<script>
 			//if ticket field is used survey field is disable and vice versa
@@ -166,7 +152,6 @@ unavailable
 					document.getElementById("ticketSearch").disabled = true;
 			}
 		</script>
-
 
 		<!-- TICKETS -->
 		<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" style="margin-top: 60px;">
