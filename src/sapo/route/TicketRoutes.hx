@@ -8,6 +8,7 @@ import sapo.spod.Ticket;
 import sapo.spod.User;
 
 class TicketRoutes extends AccessControl {
+	public static inline var PAGE_SIZE = 10;
 	public static inline var PARAM_ALL = "all";
 	public static inline var PARAM_GROUP = "group";
 	public static inline var PARAM_INDIVIDUAL = "individual";
@@ -18,29 +19,36 @@ class TicketRoutes extends AccessControl {
 	public function doDefault(?args:{?recipient:String, ?state:String })
 	{
 		if (args == null) args = {};
-		var u = Context.loop.user;
+		var open = args.state == null || args.state == PARAM_OPEN;
+		if (!open && args.state != PARAM_CLOSED) throw 'Unexpected state value: ${args.state}';
 
-		var subs = switch args.recipient {
-		case null, PARAM_ALL if (Context.loop.privilege.match(PSupervisor | PPhoneOperator)):
-			TicketSubscription.manager.search($user == u || $group == u.group);
+		var u = Context.loop.user;
+		var g = Context.loop.group;
+		var p = Context.loop.privilege;
+
+		var sql = "SELECT t.* FROM Ticket t";
+		sql += switch args.recipient {
+		case null, PARAM_ALL if (p.match(PSuperUser)):
+			' WHERE';  // done: all
 		case null, PARAM_ALL:
-			TicketSubscription.manager.all();  // TODO optimize this
+			' JOIN TicketSubscription ts
+				ON t.id = ts.ticket_id
+				WHERE (ts.user_id = ${u.id} OR ts.group_id = ${g.id}) AND';
 		case PARAM_GROUP:
-			TicketSubscription.manager.search($group == u.group);
+			' JOIN TicketSubscription ts
+				ON t.id = ts.ticket_id
+				WHERE (ts.group_id = ${g.id}) AND';
 		case PARAM_INDIVIDUAL:
-			TicketSubscription.manager.search($user == u);
+			' JOIN TicketSubscription ts
+				ON t.id = ts.ticket_id
+				WHERE (ts.user_id = ${u.id}) AND';
 		case other:
 			throw 'Unexpected recipient value: $other';
 		}
+		sql += ' t.closed_at ${open ? "IS" : "NOT"} NULL';
+		sql += ' ORDER BY t.opened_at LIMIT $PAGE_SIZE';
 
-		var tickets = new List();
-		var open = args.state == null || args.state == PARAM_OPEN;
-		if (!open && args.state != PARAM_CLOSED) throw 'Unexpected state value: ${args.state}';
-		for (ts in subs) {
-			if (open == (ts.ticket.closed_at == null))
-				tickets.add(ts.ticket);
-		}
-
+		var tickets = Ticket.manager.unsafeObjects(sql, false);
 		Sys.println(sapo.view.Tickets.page(tickets));
 	}
 
