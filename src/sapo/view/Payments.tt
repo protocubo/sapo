@@ -8,6 +8,7 @@
 	</td>
 	<td>(: payments.surveyor.name :)</td>
 	<td>(: payments.id :)</td>
+	<td class"tags">(: Util.status( true, true , true) :)</td>
 	<td>(: payments.closed_at :)</td>
 	<td></td>
 	<td></td>
@@ -177,6 +178,7 @@
 				</th>
 				<th>Pesquisador</th>
 				<th>Nº da Pesquisa</th>
+				<th>Status da Pesquisa</th>
 				<th>Data</th>
 				<th>Ref. Pagto</th>
 				<th>Data Pagto</th>
