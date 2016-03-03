@@ -232,16 +232,16 @@ class Context {
 			f.old_id = i;
 			f.old_survey_id = s.old_survey_id;
 			f.quartos = rnd.int(4);
-			f.recebeBolsaFamilia = randomBool();
+			f.recebeBolsaFamilia = randomBool(rnd);
 			f.rendaDomiciliar = Type.createEnumIndex(RendaDomiciliar, rnd.int(12));
-			f.ruaPavimentada_id = randomBool();
+			f.ruaPavimentada_id = randomBool(rnd);
 			f.survey = s;
 			f.syncTimestamp = s.syncTimestamp;
 			f.telefoneContato = "9999-9999";
 			f.tentativa_id = 1;
 			f.tipoImovel = Type.createEnumIndex(TipoImovel, rnd.int(7));
-			f.tvCabo_id = randomBool();
-			f.vagaPropriaEstacionamento_id = randomBool();
+			f.tvCabo_id = randomBool(rnd);
+			f.vagaPropriaEstacionamento_id = randomBool(rnd);
 			f.veiculos = rnd.int(4);
 			f.insert();
 			
@@ -262,8 +262,8 @@ class Context {
 				m.old_id = i + j;
 				m.old_survey_id = s.old_survey_id;
 				m.portadorNecessidadesEspeciais = Type.createEnumIndex(PortadorNecessidadesEspeciais, rnd.int(7));
-				m.possuiHabilitacao_id = randomBool();
-				m.proprioMorador_id = randomBool();
+				m.possuiHabilitacao_id = randomBool(rnd);
+				m.proprioMorador_id = randomBool(rnd);
 				m.quemResponde = null;
 				m.setorAtividadeEmpresaPrivada = Type.createEnumIndex(SetorAtividadeEmpresaPrivada, rnd.int(8)); 
 				m.setorAtividadeEmpresaPublica = Type.createEnumIndex(SetorAtividadeEmpresaPublica, rnd.int(4));
@@ -285,7 +285,7 @@ class Context {
 					p.date = DateTools.delta(m.date, 1000 * 60 * rnd.float());
 					p.isDeleted = false;
 					p.isEdited = 0;
-					p.isPontoProx = randomBool();
+					p.isPontoProx = randomBool(rnd);
 					p.morador = m;
 					p.motivo = Type.createEnumIndex(Motivo, rnd.int(14));
 					p.motivoOutraPessoa = Type.createEnumIndex(Motivo, rnd.int(14));
@@ -318,8 +318,8 @@ class Context {
 						mo.linhaOnibus = LinhaOnibus.manager.get(rnd.int(50));
 						mo.meiotransporte = Type.createEnumIndex(MeioTransporte, rnd.int(16));
 						mo.morador = m;
-						mo.naoRespondeu = randomBool();
-						mo.naoSabe = randomBool();
+						mo.naoRespondeu = randomBool(rnd);
+						mo.naoSabe = randomBool(rnd);
 						mo.old_id = i + j + o;
 						mo.old_morador_id = m.old_id;
 						mo.old_survey_id = s.old_survey_id;
@@ -347,7 +347,7 @@ class Context {
 		Manager.cnx.commit();
 		
 	}
-	static function randomBool() : Null<Bool>
+	static function randomBool(rnd : Random) : Null<Bool>
 	{
 		var v = rnd.int(3);
 		return ((v == 2) ? null : (v == 1));
