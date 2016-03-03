@@ -169,7 +169,7 @@ class Context {
 			surveyor.password = Password.make("secret");
 			surveyor.insert();
 			
-			userarr.push(surveyor);
+			userarr.push(surveyor.id);
 			
 			i++;
 		}
