@@ -7,6 +7,8 @@ import common.spod.Ponto;
 import common.spod.statics.EstacaoMetro;
 import common.spod.statics.LinhaOnibus;
 import common.spod.statics.UF;
+import neko.Lib;
+import neko.Random;
 import sapo.spod.Survey;
 import common.Web;
 import common.crypto.Password;
@@ -171,15 +173,18 @@ class Context {
 		}
 		
 		i = 0;
+		var rnd = new Random();
+		rnd.setSeed(42);
+		
 		var group = [];
 		while (i < 1000)
 		{
 			var s = new Survey();
-			s.user_id = Std.random(userarr.length);
+			s.user_id = rnd.int(userarr.length);
 			s.isRestored = false;
 			s.isValid = false;
 			s.lastPageVisited = "END";
-			s.endereco_id = Std.random(9999);
+			s.endereco_id = rnd.int(9999);
 			s.estadoPesquisa = EstadoPesquisa.Concluida;
 			s.bairro = "Asa Centro Oeste";
 			s.logradouro = "Rua GWD";
@@ -194,9 +199,9 @@ class Context {
 			s.checkCT = false;
 			s.checkSupervisor = false;
 			s.checkSuper = false;
-			s.date_create = DateTools.delta(Date.now(), -1000.0 * 60 * 60 * 24 * Std.random(5));
+			s.date_create = DateTools.delta(Date.now(), -1000.0 * 60 * 60 * 24 * rnd.int(5));
 			s.date_started = s.date_create;
-			s.date_finished = DateTools.delta(Date.now(), 1000.0 * 60 * 60 * 24 * Std.random(5));
+			s.date_finished = DateTools.delta(Date.now(), 1000.0 * 60 * 60 * 24 * rnd.int(5));
 			s.date_completed = s.date_finished;
 			var g = group[s.user_id];
 			if (g == null)
@@ -211,106 +216,107 @@ class Context {
 			s.insert();
 			
 			var f = new Familia();
-			f.aguaEncanada = Type.createEnumIndex(AguaEncanada, Std.random(2));
-			f.anoVeiculoMaisRecente = Type.createEnumIndex(AnoVeiculoMaisRecente, Std.random(8));
-			f.banheiros = Std.random(3);
-			f.bicicletas = Std.random(1);
-			f.condicaoMoradia = Type.createEnumIndex(CondicaoMoradia, Std.random(7));
-			f.date = DateTools.delta(s.date_create, 1000 * 60 * Std.random(60));
-			f.empregadosDomesticos = Type.createEnumIndex(EmpregadosDomesticos, Std.random(4));
+			f.aguaEncanada = Type.createEnumIndex(AguaEncanada, rnd.int(2));
+			f.anoVeiculoMaisRecente = Type.createEnumIndex(AnoVeiculoMaisRecente, rnd.int(8));
+			f.banheiros = rnd.int(3);
+			f.bicicletas = rnd.int(1);
+			f.condicaoMoradia = Type.createEnumIndex(CondicaoMoradia, rnd.int(7));
+			f.date = DateTools.delta(s.date_create, 1000 * 60 * rnd.int(60));
+			f.empregadosDomesticos = Type.createEnumIndex(EmpregadosDomesticos, rnd.int(4));
 			f.isDeleted = false;
 			f.isEdited = 0;
-			f.motos = Std.random(3);
+			f.motos = rnd.int(3);
 			f.nomeContato = "Red Herring " + i;
-			f.numeroResidentes = Std.random(4);
-			f.ocupacaoDomicilio = Type.createEnumIndex(OcupacaoDomicilio, Std.random(4));
+			f.numeroResidentes = rnd.int(4);
+			f.ocupacaoDomicilio = Type.createEnumIndex(OcupacaoDomicilio, rnd.int(4));
 			f.old_id = i;
 			f.old_survey_id = s.old_survey_id;
-			f.quartos = Std.random(4);
+			f.quartos = rnd.int(4);
 			f.recebeBolsaFamilia = randomBool();
-			f.rendaDomiciliar = Type.createEnumIndex(RendaDomiciliar, Std.random(12));
+			f.rendaDomiciliar = Type.createEnumIndex(RendaDomiciliar, rnd.int(12));
 			f.ruaPavimentada_id = randomBool();
 			f.survey = s;
 			f.syncTimestamp = s.syncTimestamp;
 			f.telefoneContato = "9999-9999";
 			f.tentativa_id = 1;
-			f.tipoImovel = Type.createEnumIndex(TipoImovel, Std.random(7));
+			f.tipoImovel = Type.createEnumIndex(TipoImovel, rnd.int(7));
 			f.tvCabo_id = randomBool();
 			f.vagaPropriaEstacionamento_id = randomBool();
-			f.veiculos = Std.random(4);
+			f.veiculos = rnd.int(4);
 			f.insert();
 			
 			var j = 0;
 			while (j < f.numeroResidentes)
 			{
 				var m = new Morador();
-				m.atividadeMorador = Type.createEnumIndex(AtividadeMorador, Std.random(15));
-				m.date = DateTools.delta(f.date, 1000 * 60 * Std.random(60));
+				m.atividadeMorador = Type.createEnumIndex(AtividadeMorador, rnd.int(15));
+				m.date = DateTools.delta(f.date, 1000 * 60 * rnd.int(60));
 				m.familia = f;
-				m.genero_id = Std.random(1);
-				m.grauInstrucao = Type.createEnumIndex(GrauInstrucao, Std.random(12));
-				m.idade = Type.createEnumIndex(Idade, Std.random(14));
+				m.genero_id = rnd.int(1);
+				m.grauInstrucao = Type.createEnumIndex(GrauInstrucao, rnd.int(12));
+				m.idade = Type.createEnumIndex(Idade, rnd.int(14));
 				m.isDeleted = false;
 				m.isEdited = 0;
-				m.motivoSemViagem = Type.createEnumIndex(MotivoSemViagem, Std.random(3));
+				m.motivoSemViagem = Type.createEnumIndex(MotivoSemViagem, rnd.int(3));
 				m.nomeMorador = "Zacarias José " + i;
 				m.old_id = i + j;
 				m.old_survey_id = s.old_survey_id;
-				m.portadorNecessidadesEspeciais = Type.createEnumIndex(PortadorNecessidadesEspeciais, Std.random(7));
+				m.portadorNecessidadesEspeciais = Type.createEnumIndex(PortadorNecessidadesEspeciais, rnd.int(7));
 				m.possuiHabilitacao_id = randomBool();
 				m.proprioMorador_id = randomBool();
 				m.quemResponde = null;
-				m.setorAtividadeEmpresaPrivada = Type.createEnumIndex(SetorAtividadeEmpresaPrivada, Std.random(8)); 
-				m.setorAtividadeEmpresaPublica = Type.createEnumIndex(SetorAtividadeEmpresaPublica, Std.random(4));
-				m.situacaoFamiliar = Type.createEnumIndex(SituacaoFamiliar, Std.random(10));
+				m.setorAtividadeEmpresaPrivada = Type.createEnumIndex(SetorAtividadeEmpresaPrivada, rnd.int(8)); 
+				m.setorAtividadeEmpresaPublica = Type.createEnumIndex(SetorAtividadeEmpresaPublica, rnd.int(4));
+				m.situacaoFamiliar = Type.createEnumIndex(SituacaoFamiliar, rnd.int(10));
 				m.survey = s;
 				m.syncTimestamp = s.syncTimestamp;
 				m.insert();
 				
+				
 				var n = 0;
-				while (n < Std.random(4))
+				while (n < rnd.int(4))
 				{
 					var p = new Ponto();
-					p.city_id = Std.random(10000);
-					p.complement_id = Std.random(1000);
-					p.complement_two_id = Std.random(1000);
+					p.city_id = rnd.int(10000);
+					p.complement_id = rnd.int(1000);
+					p.complement_two_id = rnd.int(1000);
 					p.complement2_str = "random";
 					p.copiedFrom = null;
-					p.date = DateTools.delta(m.date, 1000 * 60 * Math.random());
+					p.date = DateTools.delta(m.date, 1000 * 60 * rnd.float());
 					p.isDeleted = false;
 					p.isEdited = 0;
 					p.isPontoProx = randomBool();
 					p.morador = m;
-					p.motivo = Type.createEnumIndex(Motivo, Std.random(14));
-					p.motivoOutraPessoa = Type.createEnumIndex(Motivo, Std.random(14));
-					p.old_id = Std.random(4);
+					p.motivo = Type.createEnumIndex(Motivo, rnd.int(14));
+					p.motivoOutraPessoa = Type.createEnumIndex(Motivo, rnd.int(14));
+					p.old_id = rnd.int(4);
 					p.old_survey_id = s.old_survey_id;
 					p.pontoProx = null;
 					p.ref = null;
 					p.ref_str = "Random place ";
-					p.regadm_id = Std.random(9999);
-					p.street_id = Std.random(9999);
+					p.regadm_id = rnd.int(9999);
+					p.street_id = rnd.int(9999);
 					p.survey = s;
 					p.syncTimestamp = m.syncTimestamp;
-					p.tempo_chegada = Std.random(24)  + ":" + Std.random(60);
-					p.tempo_saida = Std.random(24) + ":" + Std.random(60);
+					p.tempo_chegada = rnd.int(24)  + ":" + rnd.int(60);
+					p.tempo_saida = rnd.int(24) + ":" + rnd.int(60);
 					p.uf = UF.manager.get(1);
 					p.insert();
 					
 					var o = 0;
-					while ( o < Std.random(2) && n%2 == 0)
+					while ( o < rnd.int(2) && n%2 == 0)
 					{
 						var mo = new Modo();
-						mo.date = DateTools.delta(p.date, 1000 * 60 * Std.random(40));
-						mo.estacaoDesembarque = EstacaoMetro.manager.get(Std.random(20));
-						mo.estacaoEmbarque = EstacaoMetro.manager.get(Std.random(20));
+						mo.date = DateTools.delta(p.date, 1000 * 60 * rnd.int(40));
+						mo.estacaoDesembarque = EstacaoMetro.manager.get(rnd.int(20));
+						mo.estacaoEmbarque = EstacaoMetro.manager.get(rnd.int(20));
 						mo.firstpoint = Ponto.manager.get(Manager.cnx.lastInsertId());
 						mo.secondpoint = p;
-						mo.formaPagamento = Type.createEnumIndex(FormaPagamento, Std.random(7));
+						mo.formaPagamento = Type.createEnumIndex(FormaPagamento, rnd.int(7));
 						mo.isDeleted = false;
 						mo.isEdited = 0;
-						mo.linhaOnibus = LinhaOnibus.manager.get(Std.random(50));
-						mo.meiotransporte = Type.createEnumIndex(MeioTransporte, Std.random(16));
+						mo.linhaOnibus = LinhaOnibus.manager.get(rnd.int(50));
+						mo.meiotransporte = Type.createEnumIndex(MeioTransporte, rnd.int(16));
 						mo.morador = m;
 						mo.naoRespondeu = randomBool();
 						mo.naoSabe = randomBool();
@@ -319,8 +325,8 @@ class Context {
 						mo.old_survey_id = s.old_survey_id;
 						mo.survey = s;
 						mo.syncTimestamp = s.syncTimestamp;
-						mo.tipoEstacionamento = Type.createEnumIndex(TipoEstacionamento, Std.random(8));
-						mo.valorViagem = Math.random() * Std.random(40);
+						mo.tipoEstacionamento = Type.createEnumIndex(TipoEstacionamento, rnd.int(8));
+						mo.valorViagem = rnd.float() * rnd.int(40);
 						mo.insert();
 						
 						
@@ -343,7 +349,7 @@ class Context {
 	}
 	static function randomBool() : Null<Bool>
 	{
-		var v = Std.random(3);
+		var v = rnd.int(3);
 		return ((v == 2) ? null : (v == 1));
 	}
 	public static function init()
