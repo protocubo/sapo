@@ -1,13 +1,14 @@
-(: import sapo.Spod :)
 (: import sapo.route.TicketRoutes.* :)
+(: import sapo.spod.Ticket :)
+(: import sapo.spod.User :)
 
-(: private static function hideClose(ticket:Spod.Ticket) :)
+(: private static function hideClose(ticket:Ticket) :)
 (: if ticket.closed_at != null || (Context.loop.user != ticket.author && !Context.loop.privilege.match(PSuperUser)) :)
 unavailable
 (: end :)
 (: end :)
 
-(: static function ticketSummary(ticket:Spod.Ticket, ?open=false) :)
+(: static function ticketSummary(ticket:Ticket, ?open=false) :)
 <!-- TICKET -->
 <div class="panel panel-default">
 	<!-- HEAD TICKET -->
@@ -40,7 +41,7 @@ unavailable
 			<div class="row">
 				<div class="col-md-7 barraderolagem">
 				(: var first = true :)
-				(: for message in Spod.TicketMessage.manager.search($ticket == ticket) :)
+				(: for message in TicketMessage.manager.search($ticket == ticket) :)
 					<p>
 						<strong>
 							<!-- DATETIME + DE + PARA (class: super, telefonista, supervisor e pesquisador) -->
@@ -79,7 +80,7 @@ unavailable
 <!-- FIM TICKET -->
 (: end :)
 
-(: static function page(?tickets:List<Spod.Ticket> ) :)
+(: static function page(?tickets:List<Ticket> ) :)
 <!DOCTYPE html>
 <html>
 <head>
