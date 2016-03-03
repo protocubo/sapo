@@ -83,8 +83,8 @@ class SummaryRoutes extends AccessControl
 					curDateHash.set(AceitaKey, curval + r.pesqGrupo);
 				case PesqStatus.Recusada:
 					var curval = curDateHash.get(RecusadasKey);
-					curDateHash.set(RecusadasKey, curval + r.pesqGrupo);
-				case PesqStatus.Pendente:
+					curDateHash.set(RecusadasKey, curval.getVal() + r.pesqGrupo);
+					case PesqStatus.Pendente:
 					if (r.nullCT == r.pesqGrupo)
 						curDateHash.set(CTKey, curDateHash.get(CTKey).getVal() + r.pesqGrupo);
 					curDateHash.set(SupKey,curDateHash.get(SupKey).getVal() +  r.pesqGrupo);
