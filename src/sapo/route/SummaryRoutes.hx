@@ -21,6 +21,16 @@ class SummaryRoutes extends AccessControl
 	//Constante de dia para a query de Histórico (usando %w no STRFTIME)
 	static inline var HistoricDay = 5;
 	
+	static inline var DateKey = "Date";
+	static inline var SupKey = "Supervisores";
+	static inline var CTKey = "CT";
+	static inline var SuperKey = "Super";
+	static inline var CompletaKey = "Completas";
+	static inline var RecusadasKey = "Recusadas";
+	static inline var AceitaKey = "Aceitas";
+	
+	
+	//static inline var 
 	//TODO: Pegar params de filtro
 	@authorize(PSupervisor, PSuperUser)
 	public function doDefault(?args : {?data : String})
@@ -51,7 +61,7 @@ class SummaryRoutes extends AccessControl
 		//Query path: docs/queries/user_summary.sql
 		var resultsQuery = Manager.cnx.request("SELECT s.user_id as user, s.`group` as grupo,STRFTIME('%Y-%m-%d', s.date_finished) as date_end , COUNT(*) as pesqGrupo,  SUM( CASE WHEN checkSupervisor IS NULL THEN 1 ELSE 0 END) as nullSupervisor, SUM( CASE WHEN checkCT IS NULL THEN 1 ELSE 0 END) as nullCT, SUM(CASE WHEN checkSuper IS NULL THEN 1 ELSE 0 END) AS nullSuper FROM Survey s JOIN UpdatedSurvey us ON s.old_survey_id = us.old_survey_id AND s.syncTimestamp = us.syncTimestamp WHERE s.syncTimestamp > 1000 "+ wherestr+" GROUP BY s.user_id, s.`group`, date_end ORDER BY s.user_id, s.`group`, date_end").results();
 		
-		var header = ["Data", "Supervisor", "CT", "Super", "Completas", "Recusadas", "Aceitas"];
+		var header = [DateKey, SupKey, CTKey, SuperKey, CompletaKey, RecusadasKey, AceitaKey];
 		for (r in resultsQuery)
 		{
 			if (r.date_end == null)
@@ -69,22 +79,22 @@ class SummaryRoutes extends AccessControl
 			{
 				//Obrigatoriamente todos responderam...n sobe barra, sobem os controles
 				case PesqStatus.Aceita:
-					var curval = curDateHash.get("Aceitas");
-					curDateHash.set("Aceitas", curval + r.pesqGrupo);
+					var curval = curDateHash.get(AceitaKey);
+					curDateHash.set(AceitaKey, curval + r.pesqGrupo);
 				case PesqStatus.Recusada:
-					var curval = curDateHash.get("Recusadas");
-					curDateHash.set("Recusadas", curval + r.pesqGrupo);
+					var curval = curDateHash.get(RecusadasKey);
+					curDateHash.set(RecusadasKey, curval + r.pesqGrupo);
 				case PesqStatus.Pendente:
 					if (r.nullCT == r.pesqGrupo)
-						curDateHash.set("CT", curDateHash.get("CT").getVal() + r.pesqGrupo);
-					curDateHash.set("Supervisor",curDateHash.get("Supervisor").getVal() +  r.pesqGrupo);
-					curDateHash.set("Super", curDateHash.get("Super").getVal() + r.pesqGrupo);
+						curDateHash.set(CTKey, curDateHash.get(CTKey).getVal() + r.pesqGrupo);
+					curDateHash.set(SupKey,curDateHash.get(SupKey).getVal() +  r.pesqGrupo);
+					curDateHash.set(SuperKey, curDateHash.get(SuperKey).getVal() + r.pesqGrupo);
 				case PesqStatus.Completa:
-					curDateHash.set("Completas", curDateHash.get("Completas").getVal() + r.pesqGrupo);
+					curDateHash.set(CompletaKey, curDateHash.get(CompletaKey).getVal() + r.pesqGrupo);
 					if (r.nullCT == r.pesqGrupo)
-						curDateHash.set("CT", curDateHash.get("CT").getVal() + r.pesqGrupo);
-					curDateHash.set("Supervisor",curDateHash.get("Supervisor").getVal() +  r.pesqGrupo);
-					curDateHash.set("Super", curDateHash.get("Super").getVal() + r.pesqGrupo);
+						curDateHash.set(CTKey, curDateHash.get(CTKey).getVal() + r.pesqGrupo);
+					curDateHash.set(SupKey,curDateHash.get(SupKey).getVal() +  r.pesqGrupo);
+					curDateHash.set(SuperKey, curDateHash.get(SuperKey).getVal() + r.pesqGrupo);
 			}
 			
 			dateVal.set(r.date_end, curDateHash);
@@ -116,7 +126,7 @@ class SummaryRoutes extends AccessControl
 		var userCheck = statusGen();
 		
 		var dateVal : Map<String,Map<String,Int>> = new Map();
-		var headers = ['Date', 'Supervisor', 'CT', 'Super', 'Completas', 'Aceitas', 'Recusadas'];
+		var headers = [DateKey, SupKey, CTKey, SuperKey, CompletaKey, AceitaKey, RecusadasKey];
 		//docs/queries/User_historic_friday.sql
 		var queryDay = Manager.cnx.request("SELECT s.user_id as user, s.`group` as grupo,	DATE(s.date_finished, 'weekday "+HistoricDay+"') as date_end , COUNT(*) as pesqGrupo,  SUM( CASE WHEN checkSupervisor IS NULL THEN 1 ELSE 0 END) as nullSupervisor, SUM( CASE WHEN checkCT IS NULL THEN 1 ELSE 0 END) as nullCT, SUM(CASE WHEN checkSuper IS NULL THEN 1 ELSE 0 END) AS nullSuper FROM Survey s JOIN UpdatedSurvey us 	ON s.old_survey_id = us.old_survey_id AND s.syncTimestamp = us.syncTimestamp "+((wherestr != "") ? wherestr : "WHERE ")+" STRFTIME('%w',s.date_finished) = '"+ HistoricDay+ "' GROUP BY s.user_id, s.`group`, date_end ORDER BY s.user_id, s.`group`, date_end ").results();
 		for (q in queryDay)
@@ -133,14 +143,14 @@ class SummaryRoutes extends AccessControl
 			{
 				case PesqStatus.Pendente:
 					if (q.nullCT == q.pesqGrupo)
-						dateMap.set("CT", dateMap.get("CT").getVal() + q.pesqGrupo);
-					dateMap.set("Supervisor", dateMap.get("Supervisor").getVal() + q.pesqGrupo);
-					dateMap.set("Super", dateMap.get("Super").getVal() + q.pesqGrupo);
+						dateMap.set(CTKey, dateMap.get(CTKey).getVal() + q.pesqGrupo);
+					dateMap.set(SupKey, dateMap.get(SupKey).getVal() + q.pesqGrupo);
+					dateMap.set(SuperKey, dateMap.get(SuperKey).getVal() + q.pesqGrupo);
 				case PesqStatus.Completa:
-					dateMap.set("Completas", dateMap.get("Completas").getVal() + q.pesqGrupo);
-					dateMap.set("Supervisor", dateMap.get("Supervisor").getVal() + q.pesqGrupo);
-					dateMap.set("CT", dateMap.get("CT").getVal() + q.pesqGrupo);
-					dateMap.set("Super", dateMap.get("Super").getVal() + q.pesqGrupo);
+					dateMap.set(CompletaKey, dateMap.get(CompletaKey).getVal() + q.pesqGrupo);
+					dateMap.set(SupKey, dateMap.get(SupKey).getVal() + q.pesqGrupo);
+					dateMap.set(CTKey, dateMap.get(CTKey).getVal() + q.pesqGrupo);
+					dateMap.set(SuperKey, dateMap.get(SuperKey).getVal() + q.pesqGrupo);
 				case PesqStatus.Aceita, PesqStatus.Recusada:
 					continue;
 			}
@@ -164,9 +174,9 @@ class SummaryRoutes extends AccessControl
 			switch(userCheck.get(q.user).get(q.grupo))
 			{
 				case PesqStatus.Aceita:
-					dateMap.set("Aceitas", dateMap.get("Aceitas").getVal() + q.pesqGrupo);
+					dateMap.set(AceitaKey, dateMap.get(AceitaKey).getVal() + q.pesqGrupo);
 				case PesqStatus.Recusada:
-					dateMap.set("Recusadas", dateMap.get("Recusadas").getVal() + q.pesqGrupo);
+					dateMap.set(RecusadasKey, dateMap.get(RecusadasKey).getVal() + q.pesqGrupo);
 				case PesqStatus.Pendente, PesqStatus.Completa:
 					continue;
 			}
