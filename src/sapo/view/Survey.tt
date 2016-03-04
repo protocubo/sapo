@@ -140,7 +140,11 @@ function imprimir() {
 			<!-- BLOCK - botão de edit, <b>campo, info do campo -->
 			<div class="bloco">
 				<a href="#" class="corrigir escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
-				<b>#Campo:</b> #Dado
+				<b>Ocupação Domicílio:</b> (:  Util.enumText(dom.ocupacaoDomicilio) :) 
+				<b>Banheiros:</b> (: dom.banheiros :) 
+				<b>Quartos:</b> (: dom.quartos :) 
+				<b>Veículos:</b> (: dom.veiculos :) 
+
 			</div>
 			<!-- FIM DO BLOCK -->
 		</div>
