@@ -34,8 +34,13 @@ class SummaryRoutes extends AccessControl
 			
 			for (u in users)
 			{
-				wherestr = wherestr + " AND user_id = " + u;
+				if (wherestr == "")
+					wherestr = "AND ( user_id = " + u;
+				else
+					wherestr = wherestr + " OR user_id = " + u;
 			}
+			
+			wherestr = wherestr + ")";
 		}
 		
 		//Todos os estados atuais da pesquisa por grupo
@@ -50,7 +55,7 @@ class SummaryRoutes extends AccessControl
 		//TODO: Comment this line
 		//Query path: docs/queries/user_summary.sql
 		var resultsQuery = Manager.cnx.request("SELECT s.user_id as user, s.`group` as grupo,STRFTIME('%Y-%m-%d', s.date_finished) as date_end , COUNT(*) as pesqGrupo,  SUM( CASE WHEN checkSupervisor IS NULL THEN 1 ELSE 0 END) as nullSupervisor, SUM( CASE WHEN checkCT IS NULL THEN 1 ELSE 0 END) as nullCT, SUM(CASE WHEN checkSuper IS NULL THEN 1 ELSE 0 END) AS nullSuper FROM Survey s JOIN UpdatedSurvey us ON s.old_survey_id = us.old_survey_id AND s.syncTimestamp = us.syncTimestamp WHERE s.syncTimestamp > 1000 "+ wherestr+" GROUP BY s.user_id, s.`group`, date_end ORDER BY s.user_id, s.`group`, date_end").results();
-		
+		trace("SELECT s.user_id as user, s.`group` as grupo,STRFTIME('%Y-%m-%d', s.date_finished) as date_end , COUNT(*) as pesqGrupo,  SUM( CASE WHEN checkSupervisor IS NULL THEN 1 ELSE 0 END) as nullSupervisor, SUM( CASE WHEN checkCT IS NULL THEN 1 ELSE 0 END) as nullCT, SUM(CASE WHEN checkSuper IS NULL THEN 1 ELSE 0 END) AS nullSuper FROM Survey s JOIN UpdatedSurvey us ON s.old_survey_id = us.old_survey_id AND s.syncTimestamp = us.syncTimestamp WHERE s.syncTimestamp > 1000 " + wherestr + " GROUP BY s.user_id, s.`group`, date_end ORDER BY s.user_id, s.`group`, date_end");
 		var header = ["Data", "Supervisor", "CT", "Super", "Completas", "Recusadas", "Aceitas"];
 		for (r in resultsQuery)
 		{
@@ -203,7 +208,7 @@ class SummaryRoutes extends AccessControl
 		var referer = Web.getClientHeader("Referer");
 		var serializer = new Serializer();
 		serializer.serialize(ret);
-		
+		referer = referer.split("?")[0];
 		Web.redirect(referer + "?data=" + serializer.toString());
 		
 	}

@@ -1,13 +1,14 @@
-(: import sapo.Spod :)
 (: import sapo.route.TicketRoutes.* :)
+(: import sapo.spod.Ticket :)
+(: import sapo.spod.User :)
 
-(: private static function hideClose(ticket:Spod.Ticket) :)
+(: private static function hideClose(ticket:Ticket) :)
 (: if ticket.closed_at != null || (Context.loop.user != ticket.author && !Context.loop.privilege.match(PSuperUser)) :)
 unavailable
 (: end :)
 (: end :)
 
-(: static function ticketSummary(ticket:Spod.Ticket, ?open=false) :)
+(: static function ticketSummary(ticket:Ticket, ?open=false) :)
 <!-- TICKET -->
 <div class="panel panel-default">
 	<!-- HEAD TICKET -->
@@ -17,7 +18,7 @@ unavailable
 				<!-- DE/PARA (class: super, telefonista, supervisor e pesquisador) -->
 				<span class="glyphicon glyphicon glyphicon-user (: ticket.author.group.group_name :)" aria-hidden="true"></span>
 				<span class="glyphicon glyphicon-arrow-right text-muted" aria-hidden="true" style="color: #999;"></span>
-				<span class="glyphicon glyphicon glyphicon-user (: ticket.recipient.group.group_name :)" aria-hidden="true"></span>
+				<span class="glyphicon glyphicon glyphicon-user (: ticket.recipient.group_name :)" aria-hidden="true"></span>
 				<!-- Nº do Ticket, Data da criação do Ticket, Hora da criação do Ticket -->
 				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyTicket(: ticket.id :)" aria-expanded="true" aria-controls="BodyTicket(: ticket.id :)">
 					<b>Ticket #(: ticket.id :)</b> - (: ticket.opened_at :) - (: ticket.subject :)
@@ -40,11 +41,11 @@ unavailable
 			<div class="row">
 				<div class="col-md-7 barraderolagem">
 				(: var first = true :)
-				(: for message in Spod.TicketMessage.manager.search($ticket == ticket) :)
+				(: for message in TicketMessage.manager.search($ticket == ticket) :)
 					<p>
 						<strong>
 							<!-- DATETIME + DE + PARA (class: super, telefonista, supervisor e pesquisador) -->
-							(: message.posted_at :) - <span class="(: message.author.group.group_name:)">(: message.author.name :)@(: message.author.group.group_name:)</span>(: if first :) - <span class="(: ticket.recipient.group.group_name:)">(: ticket.recipient.name :)@(: ticket.recipient.group.group_name:)</span>(: end :) :
+							(: message.posted_at :) - <span class="(: message.author.group.group_name:)">(: message.author.name :)@(: message.author.group.group_name:)</span>(: if first :) - <span class="(: ticket.recipient.group_name:)">(: ticket.recipient.name :)@(: ticket.recipient.group_name:)</span>(: end :) :
 						</strong>
 					<!-- MENSAGEM -->
 						(: message.text :)
@@ -79,7 +80,7 @@ unavailable
 <!-- FIM TICKET -->
 (: end :)
 
-(: static function page(?tickets:List<Spod.Ticket> ) :)
+(: static function page(?tickets:List<Ticket> ) :)
 <!DOCTYPE html>
 <html>
 <head>
