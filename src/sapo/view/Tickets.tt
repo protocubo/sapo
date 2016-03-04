@@ -70,7 +70,7 @@ unavailable
 				<div class="col-md-2"><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_incluir">INCLUIR</button></div>
 				<div class="col-md-2"><button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_responder">RESPONDER</button></div>
 				<div class="col-md-2"><button type="button" class="btn btn-success btn-sm (: hideClose(ticket) :)" data-toggle="modal" data-target="#ticket(: ticket.id :)_fechar">FECHAR</button></div>
-				<div class="col-md-2 col-md-offset-1"><a href="/survey/(: ticket.survey.id :)" type="button" class="btn btn-primary btn-sm" target="_blank">VER PESQUISA</a></div>
+				<div class="col-md-2 col-md-offset-1"><a href="/survey/(: ticket.id :)" type="button" class="btn btn-primary btn-sm" target="_blank">VER PESQUISA</a></div>
 				<div class="col-md-2"><button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_status">MUDAR STATUS</button></div>
 			</div>
 		</div>
@@ -163,7 +163,16 @@ unavailable
 				(: end :)
 			(: end :)
 		</div>
+		
+		<nav>
+			<ul class="pager">
+				<li class="previous"><a href="#"><span aria-hidden="true">&larr;</span> ANTERIOR</a></li>
+				<li class="next"><a href="#">PRÓXIMA <span aria-hidden="true">&rarr;</span></a></li>
+			</ul>
+		</nav>
+		
 	</div>
+	
 	(: for t in tickets :)
 		(: Modal.modalticketfechar(t) :)
 		(: Modal.modalticketresponder(t) :)

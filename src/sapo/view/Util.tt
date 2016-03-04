@@ -45,7 +45,13 @@
 						(:end:)
 						(:if Context.loop.privilege.match(PSupervisor|PSuperUser) :)
 							<li><a href="/surveys">PESQUISAS</a></li>
-							<li><a href="/summary">SUMÁRIO</a></li>
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">SUMÁRIO <span class="caret"></span></a>
+								<ul class="dropdown-menu">
+									<li><a href="/summary">STATUS</a></li>
+									<li><a href="/summary/historic">HISTÓRICO</a></li>
+								</ul>
+							</li>
 						(:end:)
 						(:if Context.loop.privilege.match(PSuperUser):)
 							<li class="dropdown">

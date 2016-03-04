@@ -7,7 +7,7 @@
 	<!-- HEAD PESQUISA -->
 	<div class="panel-heading" role="tab" id="HeadPesquisa(: survey.id :)">
 		<div class="row">
-			<div class="col-md-4 panel-title">
+			<div class="col-md-6 panel-title">
 				<!-- Nº da Pesquisa, Data da Pesquisa -->
 				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyPesquisa(: survey.id :)" aria-expanded="true" aria-controls="BodyPesquisa(: survey.id :)">
 				(:var surveyor = User.manager.get(survey.user_id) :)
@@ -24,7 +24,6 @@
 					(: Util.status( survey.checkSupervisor, survey.checkCT , survey.checkSuper ) :)
 				</span>
 			</div>
-
 		</div>
 	</div>
 	<!-- BODY PESQUISA -->
@@ -33,6 +32,9 @@
 			<div class="row">
 				<div class="col-md-12 barraderolagem">
 					<!-- DADOS DA PESQUISA -->
+					<div class="bloco"><b class="pesquisador">Pesquisador:</b> BLÁ</div>
+					<div class="bloco"><b class="supervisor">Supervisor:</b> Rúben Fabricio</div>
+					<hr>
 					<div class="bloco"><b>Endereço:</b>  (: survey.logradouro :) , (: survey.numero :)	(: survey.complemento :), (: survey.bairro :) </div>
 					(: for d in common.spod.Familia.manager.search($survey_id == survey.id, { orderBy:-syncTimestamp, limit : 1 }) :) (:* FIXME syncTimestamp  *:)
 					<div class="bloco"><b>Contato:</b> (: d.nomeContato :) - (: d.telefoneContato :) </div>
@@ -51,7 +53,7 @@
 				</div>
 			</div>
 			<div class="row" style="margin-top: 30px;">
-				<div class="col-md-2 col-md-offset-10"><a href="/survey/(: survey.id :)" class="btn btn-primary btn-sm">VER PESQUISA</a></div>
+				<div class="col-md-2 col-md-offset-10"><a href="/survey/(: survey.id :)" class="btn btn-primary btn-sm" target="_blank">VER PESQUISA</a></div>
 			</div>
 		</div>
 	</div>
@@ -129,6 +131,13 @@
 				(: surveySummary(s) :)
 			(: end :)
 		</div>
+		
+		<nav>
+			<ul class="pager">
+				<li class="previous"><a href="#"><span aria-hidden="true">&larr;</span> ANTERIOR</a></li>
+				<li class="next"><a href="#">PRÓXIMA <span aria-hidden="true">&rarr;</span></a></li>
+			</ul>
+		</nav>
 		
 	</div>
 

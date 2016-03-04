@@ -64,7 +64,7 @@ function imprimir() {
 				<a class="btn btn-default" data-toggle="modal" data-target="#pesquisa_ticket">ABRIR TICKET</a>
 			</div>
 			<div class="col-md-2">
-				<a href="/tickets/search?survey=(:survey.id:)" class="btn btn-default">TICKETS</a>
+				<a href="/tickets/search?ticket=(:survey.id:)" class="btn btn-default">TICKETS</a>
 			</div>
 			<div class="col-md-2">
 				<a type="button" class="btn btn-danger" id="corrigir">CORRIGIR</a>

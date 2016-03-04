@@ -161,6 +161,15 @@
 		</div>
 		<div class="row" style="margin-top:50px;">
 			<div class="col-md-6">
+				<h4 class="aceita"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> ACEITAS</h4>
+				<div id="chart_div2"></div>
+			</div>
+			<div class="col-md-6">
+				<h4 class="recusada"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> RECUSADAS</h4>
+				<div id="chart_div3"></div>
+			</div>
+			(:*
+			<div class="col-md-6">
 				<h4>
 					TABELA
 				</h4>
@@ -192,12 +201,7 @@
 					</tfoot>
 				</table>
 			</div>
-			<div class="col-md-6">
-				<h4 class="aceita"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> ACEITAS</h4>
-				<div id="chart_div2"></div>
-				<h4 class="recusada"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> RECUSADAS</h4>
-				<div id="chart_div3"></div>
-			</div>
+			*:)
 		</div>
 	</div>
 
