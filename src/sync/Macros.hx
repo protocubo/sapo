@@ -46,8 +46,7 @@ class Macros {
 			else
 				true;
 		};
-	}
-	
+	}	
 	
 	public static macro function validateEntry(tableClass : Expr, ignoreParams : Expr, whereParams : Expr, curEntry : Expr)
 	{
@@ -76,8 +75,13 @@ class Macros {
 				{
 					var field = info.name;
 					
-					if ($ignoreParams.indexOf(field) == -1 && Std.string(Reflect.getProperty($curEntry, field)) != Std.string(Reflect.getProperty(old_entry, field)))
+					
+					if($ignoreParams.indexOf(field) == -1 && Std.string(Reflect.getProperty($curEntry, field)) != Std.string(Reflect.getProperty(old_entry, field)))
 					{
+						//If no field "date_completed", then null :)
+						if(Reflect.field(old_entry,"date_completed") != null)
+							Macros.criticalError("Survey", "SYNC WILL OVERRIDE THIS VALUE " + old_entry.id + ". Please don't sync completed entries.");
+							
 						return true;
 					}
 				}
@@ -103,12 +107,11 @@ class Macros {
 		}
 	}
 	
+	
 	public static macro function criticalError(table : Expr, error : Expr)
 	{
 		return macro {
 				trace("Critical error on table " + $table + " : " + $error);
-				//trace("Press enter");
-				//Sys.stdin().readLine();
 		}
 	}
 	public static macro function warnTable(table : Expr, field : Expr, val : Expr)
