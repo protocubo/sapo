@@ -1,8 +1,10 @@
 package sapo.route;
 import common.crypto.Password;
 import common.db.MoreTypes.EmailAddress;
+import comn.LocalEnqueuer;
 import neko.Web;
 import sapo.spod.User;
+import sys.db.Manager;
 
 /**
  * ...
@@ -42,6 +44,13 @@ class RegistrationRoutes extends AccessControl {
 		var u = new User(args.group, new EmailAddress(args.email), args.name, (args.supervisor != null? args.supervisor:null));
 		u.insert();
 		
+		var t = new Token(u);
+		t.invalidateOthers();
+		t.insert();
+		Manager.cnx.commit();
+		
+		//var enq = new LocalEnqueuer();
+		//enq.enqueue(new comn.message.Email( { from:"sapo@sapoide.com.br", to:u.email, subject:"Confirme sua conta", text: "Acesse o link: " + "www.sapo.com.br/registration/token?token=" +  t.token + " para validar sua conta!" } );
 		Web.redirect("/registration");
 	}
 	@authorize(PSuperUser)
@@ -77,11 +86,17 @@ class RegistrationRoutes extends AccessControl {
 	{
 		if (args.pass != null && args.pass.length >= 6 && args.pass == args.confirm && args.token != null && args.token.length > 0)
 		{
+			trace("WOOOOW");
 			var t = Token.manager.get(args.token, true);
 			if (t != null)
 			{
+				t.user.lock();
 				t.user.password = Password.make(args.pass);
+				t.user.update();
+				
+				t.setExpired();
 				t.update();
+				//Manager.cnx.commit();
 			}
 		}
 		

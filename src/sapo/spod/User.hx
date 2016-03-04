@@ -96,8 +96,14 @@ class Token extends sys.db.Object
 		this.user = user;
 		
 		//Porco..corrigir depois
-		token = Random.global.readHex(64);
-		expirationTime = DateTools.delta(Context.now.toDate(), 1000.0 * 60 * 60 * 24 * 7).getTime();
+		this.token = Random.global.readHex(64);
+		this.expirationTime = DateTools.delta(Context.now.toDate(), 1000.0 * 60 * 60 * 24 * 7).getTime();
+		
+	}
+	
+	public function setExpired()
+	{
+		this.isExpired = true;
 	}
 	
 	public function invalidateOthers()
