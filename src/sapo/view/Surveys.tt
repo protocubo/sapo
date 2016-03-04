@@ -110,7 +110,7 @@
 					</select>
 				</div>
 				<div class="col-md-1"><h5>&nbsp;</h5>
-					<button type="submit" value="submit" class="btn btn-primary btn-sm">FILTRAR</button>
+					<button type="submit" value="submit" class="btn btn-primary btn-sm">Filtrar</button>
 				</div>
 			
 			</form>
@@ -120,7 +120,7 @@
 					<input type="text" name="survey" class="form-control input-sm" placeholder="Nº da Pesquisa">
 				</div>
 				<div class="col-md-1"><h5>&nbsp;</h5>
-					<button type="submit" value="submit" class="btn btn-primary btn-sm">BUSCAR</button>
+					<button type="submit" value="submit" class="btn btn-primary btn-sm">Buscar</button>
 				</div>
 			</form>
 		</div>
@@ -141,7 +141,8 @@
 		
 	</div>
 
-(: Util.footer() :)
+	(: Util.footer() :)
+	
 </body>
 </html>
 (: end :)

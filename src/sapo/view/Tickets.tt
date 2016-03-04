@@ -112,7 +112,7 @@ unavailable
 					</select>
 				</div>
 				<div class="col-md-1"><h5>&nbsp;</h5>
-					<button type="submit" value="submit" class="btn btn-primary btn-sm">FILTRAR</button>
+					<button type="submit" value="submit" class="btn btn-primary btn-sm">Filtrar</button>
 				</div>
 			</form>
 			<script>
@@ -136,7 +136,7 @@ unavailable
 					<input type="text" name="survey" id="surveySearch" class="form-control input-sm" oninput="disableSearch(this.name, this.value)" placeholder="Nº da Pesquisa">
 				</div>
 				<div class="col-md-1"><h5>&nbsp;</h5>
-					<button type="submit" value="submit" class="btn btn-primary btn-sm">BUSCAR</button>
+					<button type="submit" value="submit" class="btn btn-primary btn-sm">Buscar</button>
 				</div>
 			</form>
 		</div>
