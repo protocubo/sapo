@@ -3,14 +3,10 @@ package sapo.spod;
 import common.db.MoreTypes;
 import sapo.spod.Other;
 import sapo.spod.User;
+import sys.db.Object;
 import sys.db.Types;
 
-enum TicketRecipient {
-	RUser(u:User);
-	RGroup(g:Group):
-}
-
-class Ticket extends sys.db.Object {
+class Ticket extends Object {
 	public var id:SId;
 	@:relation(survey_id) public var survey:NewSurvey;
 	@:relation(author_id) public var author:User;
@@ -18,11 +14,12 @@ class Ticket extends sys.db.Object {
 	public var opened_at:HaxeTimestamp;
 
 	public var closed_at:Null<HaxeTimestamp>;
-	@:skip public var recipient(get,never):TicketRecipient;
+	@:skip public var recipient(get,never):TicketSubscription;
 		function get_recipient()
 		{
-			var ts = TicketSubscription.manager.seach($ticket == this && isRecipient == true);
-			return ts.user != null ? RUser(ts.user) : RGroup(ts.group);
+			var tr = TicketRecipient.manager.select($ticket == this);
+			if (tr == null || tr.subscription == null) throw 'Assert failed: no recipient for ticket $id';
+			return tr.subscription;
 		}
 
 	public function isClosed()
@@ -30,7 +27,7 @@ class Ticket extends sys.db.Object {
 
 	public function new(survey, author, subject, ?opened_at)
 	{
-		if (opened_at == null) opened_at = Context.loop.now;
+		if (opened_at == null) opened_at = Context.now;
 		this.survey = survey;
 		this.author = author;
 		this.opened_at = opened_at;
@@ -39,7 +36,7 @@ class Ticket extends sys.db.Object {
 	}
 }
 
-class TicketMessage extends sys.db.Object {
+class TicketMessage extends Object {
 	public var id:SId;
 	@:relation(ticket_id) public var ticket:Ticket;
 	@:relation(author_id) public var author:User;
@@ -48,7 +45,7 @@ class TicketMessage extends sys.db.Object {
 
 	public function new(ticket, author, text, ?now)
 	{
-		if (now == null) now = Date.now();
+		if (now == null) now = Context.now;
 		this.ticket = ticket;
 		this.author = author;
 		this.text = text;
@@ -57,21 +54,39 @@ class TicketMessage extends sys.db.Object {
 	}
 }
 
-@:id(ticket_id, group_id, user_id)
-@:index(ticket_id, isRecipient, unique)
-class TicketSubscription extends sys.db.Object {
+@:index(ticket_id, group_id, user_id, unique)
+class TicketSubscription extends Object {
+	public var id:SId;
 	@:relation(ticket_id) public var ticket:Ticket;
 	@:relation(group_id) public var group:Null<Group>;
 	@:relation(user_id) public var user:Null<User>;
-	public var isRecipient:Bool;
 
-	public function new(ticket, ?group, ?user, ?isRecipient=false)
+	@:skip public var privilege(get,never):Privilege;
+		function get_privilege() return (group != null ? group : user.group).privilege;
+	@:skip public var group_name(get,never):AccessName;
+		function get_group_name() return (group != null ? group : user.group).group_name;
+	@:skip public var name(get,never):String;
+		function get_name() return user != null ? user.name : "";
+
+	public function new(ticket, ?group, ?user)
 	{
 		if (group != null && user != null) throw "Can't simultaneously subscribe group and user";
 		this.ticket = ticket;
 		this.group = group;
 		this.user = user;
-		this.isRecipient = isRecipient;
+		super();
+	}
+}
+
+@:id(ticket_id, subscription_id)
+class TicketRecipient extends Object {
+	@:relation(ticket_id) public var ticket:Ticket;
+	@:relation(subscription_id) public var subscription:TicketSubscription;
+
+	public function new(ticket, subscription)
+	{
+		this.ticket = ticket;
+		this.subscription = subscription;
 		super();
 	}
 }

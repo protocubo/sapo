@@ -18,7 +18,7 @@ unavailable
 				<!-- DE/PARA (class: super, telefonista, supervisor e pesquisador) -->
 				<span class="glyphicon glyphicon glyphicon-user (: ticket.author.group.group_name :)" aria-hidden="true"></span>
 				<span class="glyphicon glyphicon-arrow-right text-muted" aria-hidden="true"></span>
-				<span class="glyphicon glyphicon glyphicon-user (: ticket.recipient.group.group_name :)" aria-hidden="true"></span>
+				<span class="glyphicon glyphicon glyphicon-user (: ticket.recipient.group_name :)" aria-hidden="true"></span>
 				<!-- Nº do Ticket, Data da criação do Ticket, Hora da criação do Ticket -->
 				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyTicket(: ticket.id :)" aria-expanded="true" aria-controls="BodyTicket(: ticket.id :)">
 					Ticket #(: ticket.id :) - (: ticket.opened_at :) - (: ticket.subject :)
@@ -45,7 +45,7 @@ unavailable
 					<p>
 						<strong>
 							<!-- DATETIME + DE + PARA (class: super, telefonista, supervisor e pesquisador) -->
-							(: message.posted_at :) - <span class="(: message.author.group.group_name:)">(: message.author.name :)@(: message.author.group.group_name:)</span>(: if first :) - <span class="(: ticket.recipient.group.group_name:)">(: ticket.recipient.name :)@(: ticket.recipient.group.group_name:)</span>(: end :) :
+							(: message.posted_at :) - <span class="(: message.author.group.group_name:)">(: message.author.name :)@(: message.author.group.group_name:)</span>(: if first :) - <span class="(: ticket.recipient.group_name:)">(: ticket.recipient.name :)@(: ticket.recipient.group_name:)</span>(: end :) :
 						</strong>
 					<!-- MENSAGEM -->
 						(: message.text :)

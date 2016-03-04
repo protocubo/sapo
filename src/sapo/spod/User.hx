@@ -58,14 +58,14 @@ class Session extends sys.db.Object {
 
 	public function expired(?at:HaxeTimestamp)
 	{
-		if (at == null) at = Context.loop.now;
+		if (at == null) at = Context.now;
 		return expired_at != null || (expires_at < at);
 	}
 
 	public function expire(?autoUpdate=true)
 	{
 		if (expired_at != null) return;
-		expired_at = expires_at < Context.loop.now ? expires_at : Context.loop.now;
+		expired_at = expires_at < Context.now ? expires_at : Context.now;
 		if (autoUpdate)
 			update();
 	}
@@ -74,8 +74,8 @@ class Session extends sys.db.Object {
 	{
 		this.user = user;
 		id = common.crypto.Random.global.readSimpleBytes(16).toHex();
-		created_at = Context.loop.now;
-		expires_at = Context.loop.now + duration;
+		created_at = Context.now;
+		expires_at = created_at + duration;
 		super();
 	}
 }

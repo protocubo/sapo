@@ -15,12 +15,12 @@ class Context {
 	static var DBPATH = Sys.getEnv("SAPO_DB");
 
 	public static var version(default,null) = { commit : Version.getGitCommitHash() }
-	public static var loop(default,null):Context;
+	public static var now(default,null):HaxeTimestamp;
 	public static var db(default,null):common.db.AutocommitConnection;
+	public static var loop(default,null):Context;
 
 	var dispatch:Dispatch;
 
-	public var now(default,null):HaxeTimestamp;
 	public var uri(default,null):String;
 	public var params(default,null):Map<String,String>;
 	public var method(default,null):String;
@@ -30,9 +30,8 @@ class Context {
 	public var group(default,null):Null<Group>;
 	public var privilege(default,null):Null<Privilege>;
 
-	function new(now, uri:String, params:Map<String, String>, method:String, session:Null<Session>)
+	function new(uri:String, params:Map<String, String>, method:String, session:Null<Session>)
 	{
-		this.now = now;
 		this.uri = uri;
 		this.params = params;
 		dispatch = new Dispatch(uri, params, method);
@@ -58,6 +57,7 @@ class Context {
 			Session.manager,
 			Ticket.manager,
 			TicketMessage.manager,
+			TicketRecipient.manager,
 			TicketSubscription.manager,
 			User.manager
 		];
@@ -118,7 +118,9 @@ class Context {
 				var r = recipientCol[(recipientCol.length + i)%recipientCol.length];
 				var t = new Ticket(s, a, 'Lorem ${s.id} ipsum ${a.name} ${r.name}');
 				t.insert();
-				new TicketSubscription(t, null, r, true).insert();
+				var trs = new TicketSubscription(t, null, r);
+				trs.insert();
+				new TicketRecipient(t, trs).insert();
 				var m = new TicketMessage(t, a, 'Heyy!!  Just letting you know I found an issue with survey ${s.id}');
 				new TicketSubscription(t, null, a).insert();
 				m.insert();
@@ -126,7 +128,9 @@ class Context {
 
 			var ticket1 = new Ticket(survey1, arthur, "Overpass???");
 			ticket1.insert();
-			new TicketSubscription(ticket1, superUsers, true).insert();
+			var trs = new TicketSubscription(ticket1, superUsers);
+			trs.insert();
+			new TicketRecipient(ticket1, trs).insert();
 			new TicketMessage(ticket1, arthur, "Hey, I was distrought over they wanting to build an overpass over my house").insert();
 			new TicketSubscription(ticket1, null, arthur).insert();
 			new TicketMessage(ticket1, ford, "Don't panic... don't panic...").insert();
@@ -134,7 +138,9 @@ class Context {
 
 			var ticket2 = new Ticket(survey2, ford, "About Time...");
 			ticket2.insert();
-			new TicketSubscription(ticket2, phoneOperators, true).insert();
+			var trs = new TicketSubscription(ticket2, phoneOperators);
+			trs.insert();
+			new TicketRecipient(ticket2, trs).insert();
 			new TicketMessage(ticket2, ford, "Time is an illusion, lunchtime doubly so. ").insert();
 			new TicketSubscription(ticket2, null, ford).insert();
 			new TicketMessage(ticket2, arthur, "Very deep. You should send that in to the Reader's Digest. They've got a page for people like you.").insert();
@@ -146,11 +152,17 @@ class Context {
 		commit();
 	}
 
-	public static function init()
+	public static function init(?now)
 	{
 		InitDB.run();
 		dbInit();
 		db = Manager.cnx;
+		updateClock();
+	}
+
+	public static function updateClock()
+	{
+		now = Date.now();
 	}
 
 	public static function startTransaction()
@@ -172,6 +184,8 @@ class Context {
 #if !sapo_sync
 	public static function iterate()
 	{
+		updateClock();
+
 		var uri = Web.getURI();
 		var params = Web.getParams();
 		var method = Web.getMethod();
@@ -186,7 +200,7 @@ class Context {
 		var sid = Web.getCookies()[key];  // FIXME
 		var session = Session.manager.get(sid);
 
-		loop = new Context(Date.now(), uri, cparams, method, session);
+		loop = new Context(uri, cparams, method, session);
 
 		trace(loop.session);
 		if (loop.session != null) trace(loop.session.expires_at.toDate());

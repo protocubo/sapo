@@ -8,7 +8,7 @@
 -lib compiletime
 -lib version
 -D dump=pretty
-# -D trace-sqlite
+-D trace-sqlite
 -D no-deprecation-warnings
 
 --next
