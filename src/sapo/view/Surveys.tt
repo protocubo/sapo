@@ -1,15 +1,18 @@
-(: import common.spod.Survey :)
+(: import sapo.spod.Survey :)
+(: import sapo.spod.User :)
 
-(: static function surveySummary(survey:common.spod.Survey) :)
+(: static function surveySummary(survey:sapo.spod.Survey) :)
 <!-- PESQUISA -->
 <div class="panel panel-default">
 	<!-- HEAD PESQUISA -->
 	<div class="panel-heading" role="tab" id="HeadPesquisa(: survey.id :)">
 		<div class="row">
-			<div class="col-md-4 panel-title">
+			<div class="col-md-6 panel-title">
 				<!-- Nº da Pesquisa, Data da Pesquisa -->
 				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyPesquisa(: survey.id :)" aria-expanded="true" aria-controls="BodyPesquisa(: survey.id :)">
-					Pesquisa #(: survey.id :) - (: survey.date_completed :) - <b class="pesquisador"> (:* survey.surveyor *:) Dilbert</b> - <b class="supervisor">(:* survey.supervisor *:) Magali</b>
+				(:var surveyor = User.manager.get(survey.user_id) :)
+				(:var supervisor = surveyor.supervisor :)
+					<b>Pesquisa #(: survey.id :)</b> - (: survey.date_completed :) - <span class="pesquisador"> (: surveyor.name :)</span> - <span class="supervisor"> </span>
 				</a>
 			</div>
 			<div class="col-md-6 panel-title">
@@ -21,7 +24,6 @@
 					(: Util.status( survey.checkSupervisor, survey.checkCT , survey.checkSuper ) :)
 				</span>
 			</div>
-
 		</div>
 	</div>
 	<!-- BODY PESQUISA -->
@@ -30,11 +32,14 @@
 			<div class="row">
 				<div class="col-md-12 barraderolagem">
 					<!-- DADOS DA PESQUISA -->
+					<div class="bloco"><b class="pesquisador">Pesquisador:</b> BLÁ</div>
+					<div class="bloco"><b class="supervisor">Supervisor:</b> Rúben Fabricio</div>
+					<hr>
 					<div class="bloco"><b>Endereço:</b>  (: survey.logradouro :) , (: survey.numero :)	(: survey.complemento :), (: survey.bairro :) </div>
 					(: for d in common.spod.Familia.manager.search($survey_id == survey.id, { orderBy:-syncTimestamp, limit : 1 }) :) (:* FIXME syncTimestamp  *:)
 					<div class="bloco"><b>Contato:</b> (: d.nomeContato :) - (: d.telefoneContato :) </div>
 					(: end :)
-					<div class="bloco"><b>Senha:</b> (: survey.pin :) </div>
+					<div class="bloco"><b>Senha:</b> <span class="pin">(: survey.pin :)<span></div>
 					<hr>
 					<p><b>Moradores:</b></p>
 					(: for m in common.spod.Morador.manager.search($survey_id == survey.id)  :)
@@ -47,8 +52,8 @@
 					(: end :)
 				</div>
 			</div>
-			<div class="row" style="margin-top: 30px;">
-				<div class="col-md-2 col-md-offset-10"><a href="/survey/(: survey.id :)" class="btn btn-primary btn-sm">VER PESQUISA</a></div>
+			<div class="row mt30">
+				<div class="col-md-2 col-md-offset-10"><a href="/survey/(: survey.id :)" class="btn btn-primary btn-sm" target="_blank">VER PESQUISA</a></div>
 			</div>
 		</div>
 	</div>
@@ -63,122 +68,81 @@
 (: Util.head("SAPO - Pesquisas") :)
 </head>
 <body>
-(: Util.navbar() :)
-
-
-<!-- PESQUISAS -->
-<div class="container">
-
-	<!-- HEAD -->
-	<h2>PESQUISAS</h2>
-	<hr />
-
-	<script>
-		//Disable 'User field' if 'group field' is not selected	else get all users in the group		
-		function disableUserField(v) 
-		{
-			for(i=0;i<(:Spod.Group.manager.all().length + 1:);i++)
-			{
-				document.getElementById("userID"+i).style.display='none';
-			}
-			document.getElementById("userID"+v).style.display = 'initial';
-		}
-	</script>
-
-	<!-- FILTROS -->
-	
-	<form method="get">
-		<div class="row">
-			<div class="col-md-2"><h3 class="filtro">Filtros:</h3></div>
-			<div class="col-md-2"><h4>GRUPO</h4>
-				<select class="form-control" name="group" onchange="disableUserField(this.value)">
-					<option value="0" >Selecione</option>
-					(: for g in Spod.Group.manager.all() :)
-					<option value=(:g.id:)>(:g.group_name:)</option>
-					(: end :)
-				</select>
-			</div>
-			<div class="col-md-2"><h4>USUÁRIO</h4>
-				<select class="form-control" id="userID0" disabled>
-					<option value="">---------</option>
-				</select>
-				
-				(: for g in Spod.Group.manager.all() :)				
-					<select class="form-control" id="userID(:g.id:)" style="display: none;">
-						<option value=0>todos</option>
-						(: for u in Spod.User.manager.search($group_id == g.id ) :)
-							<option value=(:u.id:)>(:u.name:)</option>
-						(: end :)
-					</select>			
-				(: end :)
-				
-			</div>
-			(:*
-			<div class="col-md-2"><h4>VÁLIDA</h4>
-				<select class="form-control" name="valid">
-					<option value="all">Todas</option>
-					<option value="yes">Sim</option>
-					<option value="no">Não</option>
-					<option>Todas</option>
-				</select>
-			</div>
-			<div class="col-md-2"><h4>PAGA</h4>
-				<select class="form-control" name="payment">
-					<option value="all">Todas</option>
-					<option value="no">Não</option>
-					<option value="yes">Sim</option>
-				</select>
-			</div>
-			*:)
-			<div class="col-md-2"><h4>STATUS</h4>
-				<select class="form-control" name="status">
-					<option value="" >Todas</option>
-					<option value="SOpen" >Abertas</option>
-					<option value="sClosed" >Fechadas</option>
-					<option value="Sverified" >Verificadas</option>
-					<option value="SCT" >CT</option>
-					<option value="SAccepted" >Aceitas</option>
-					<option value="SRejected" >Rejeitadas</option>
-					<option value="SSubJudice" >Sob Judice</option>
-				</select>
-			</div>
-			<div class="col-md-2"><h4>ORDEM</h4>
-				<select class="form-control" name="order">
-					<option value="cres" >Data Crescente</option>
-					<option value="desc" >Data Decrescente</option>
-				</select>
-			</div>
-			<div class="col-md-2"><h4>&nbsp;</h4>
-				<button type="submit" value="submit" class="btn btn-primary">APLICAR</button>
-			</div>
-		</div>
-	</form>
-	<hr />
-
-	<!-- BUSCA -->
-	
-	<form action="/surveys/search" method="get">
-		<div class="row">
-			<div class="col-md-2"><h3 class="filtro">Busca:</h3></div>
-			<div class="col-md-2 col-md-offset-6"><h4>PESQUISA</h4>
-				<input type="text" name="survey" class="form-control" placeholder="Nº da Pesquisa">
-			</div>
-			<div class="col-md-2"><h4>&nbsp;</h4>
-				<button type="submit" value="submit" class="btn btn-primary">BUSCAR</button>
-			</div>
-		</div>
-	</form>
-	<hr />
-
 	<!-- PESQUISAS -->
-	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" style="margin-top: 60px;">
-		(: for s in surveys :)
-			(: surveySummary(s) :)
-		(: end :)
-	</div>
-</div>
+	<div class="container">
+	(: Util.navbar() :)
+		<!-- HEAD -->
+		<ol class="breadcrumb">
+			<li class="active">PESQUISAS</li>
+		</ol>
+		
+		<div class="row">
+			<!-- FILTROS -->
+			<form method="get">
+				<div class="col-md-2"><h5>USUÁRIO</h5>
+					<select class="form-control input-sm" name="user" id="userID">
+						<option value=0>Todos</option>
+						(: for g in Spod.Group.manager.all() :)
+						<optgroup label=(:g.group_name:)>
+							(: for u in Spod.User.manager.search($group_id == g.id ) :)
+								<option value=(:u.id:)>(:u.name:)</option>
+							(: end :)
+						</optgroup>
+						(: end :)
+					</select>
+				</div>
+				<div class="col-md-2"><h5>STATUS</h5>
+					<select class="form-control input-sm" name="status">
+						<option value="" >Todas</option>
+						<option value="SOpen" >Abertas</option>
+						<option value="sClosed" >Fechadas</option>
+						<option value="Sverified" >Verificadas</option>
+						<option value="SCT" >CT</option>
+						<option value="SAccepted" >Aceitas</option>
+						<option value="SRejected" >Rejeitadas</option>
+						<option value="SSubJudice" >Sob Judice</option>
+					</select>
+				</div>
+				<div class="col-md-2"><h5>ORDEM</h5>
+					<select class="form-control input-sm" name="order">
+						<option value="cres" >Data Crescente</option>
+						<option value="desc" >Data Decrescente</option>
+					</select>
+				</div>
+				<div class="col-md-1"><h5>&nbsp;</h5>
+					<button type="submit" value="submit" class="btn btn-primary btn-sm">Filtrar</button>
+				</div>
+			
+			</form>
+			<!-- BUSCA -->
+			<form action="/surveys/search" method="get">
+				<div class="col-md-2 col-md-offset-2"><h5>PESQUISA</h5>
+					<input type="text" name="survey" class="form-control input-sm" placeholder="Nº da Pesquisa">
+				</div>
+				<div class="col-md-1"><h5>&nbsp;</h5>
+					<button type="submit" value="submit" class="btn btn-primary btn-sm">Buscar</button>
+				</div>
+			</form>
+		</div>
 
-(: Util.footer() :)
+		<!-- PESQUISAS -->
+		<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" style="margin-top: 60px;">
+			(: for s in surveys :)
+				(: surveySummary(s) :)
+			(: end :)
+		</div>
+		
+		<nav>
+			<ul class="pager mt30">
+				<li class="previous"><a href="#"><span aria-hidden="true">&larr;</span> ANTERIOR</a></li>
+				<li class="next"><a href="#">PRÓXIMA <span aria-hidden="true">&rarr;</span></a></li>
+			</ul>
+		</nav>
+		
+	</div>
+
+	(: Util.footer() :)
+	
 </body>
 </html>
 (: end :)
