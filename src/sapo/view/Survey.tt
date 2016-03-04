@@ -1,18 +1,10 @@
 (: import sapo.spod.Survey :)
 (: import sapo.spod.User :)
 (: static function render(survey:sapo.spod.Survey) :)
-(: do { 
-    var dom : Familia; 
-    var fam : Familia; 
-    var user : sapo.spod.User;
-    for (d in Familia.manager.search($survey == survey, { orderBy:-syncTimestamp, limit : 1 })) //* FIXME syncTimestamp  
-    fam = d;
-    dom = fam;
-    for (u in User.manager.search($id == survey.user_id, { orderBy:-syncTimestamp, limit : 1 })) //* FIXME syncTimestamp  
-    user = u;
-    if (user.supervisor == null) 
-        throw ('assertion failed: surveyor id:${user.id} (${user.email}) has no supervisor' );
-    }  :)
+(:    var dom = Familia.manager.select($survey == survey, { orderBy:-syncTimestamp, limit : 1 }) :) (:*FIXME syncTimestampi*:) 
+(:    var fam = dom :) 
+(:    var user = User.manager.search($id == survey.user_id, { orderBy:-syncTimestamp, limit : 1 }) :) (:*FIXME syncTimestamp*:) 
+(:    if (user.supervisor == null) throw ('assertion failed: surveyor id:${user.id} (${user.email}) has no supervisor' ) :)
 
 <!DOCTYPE html>
 <html>
