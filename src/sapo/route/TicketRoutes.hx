@@ -103,7 +103,7 @@ class TicketRoutes extends AccessControl {
 		case _: throw "Assertion failed";
 		}
 
-		t.closed_at = Context.loop.now;
+		t.closed_at = Context.now;
 		t.update();
 		Web.redirect('/tickets/search?ticket=${t.id}');
 	}

@@ -5,6 +5,7 @@ import common.Web;
 import common.crypto.Password;
 import common.db.MoreTypes;
 import common.spod.InitDB;
+import sapo.model.TicketModel;
 import sapo.route.AccessControl;
 import sapo.spod.Other;
 import sapo.spod.Ticket;
@@ -15,12 +16,12 @@ class Context {
 	static var DBPATH = Sys.getEnv("SAPO_DB");
 
 	public static var version(default,null) = { commit : Version.getGitCommitHash() }
-	public static var loop(default,null):Context;
+	public static var now(default,null):HaxeTimestamp;
 	public static var db(default,null):common.db.AutocommitConnection;
+	public static var loop(default,null):Context;
 
 	var dispatch:Dispatch;
 
-	public var now(default,null):HaxeTimestamp;
 	public var uri(default,null):String;
 	public var params(default,null):Map<String,String>;
 	public var method(default,null):String;
@@ -30,9 +31,8 @@ class Context {
 	public var group(default,null):Null<Group>;
 	public var privilege(default,null):Null<Privilege>;
 
-	function new(now, uri:String, params:Map<String, String>, method:String, session:Null<Session>)
+	function new(uri:String, params:Map<String, String>, method:String, session:Null<Session>)
 	{
-		this.now = now;
 		this.uri = uri;
 		this.params = params;
 		dispatch = new Dispatch(uri, params, method);
@@ -58,6 +58,7 @@ class Context {
 			Session.manager,
 			Ticket.manager,
 			TicketMessage.manager,
+			TicketRecipient.manager,
 			TicketSubscription.manager,
 			User.manager
 		];
@@ -83,11 +84,8 @@ class Context {
 			var supervisors = new Group(PSupervisor, new AccessName("supervisor"), "Supervisor");
 			var phoneOperators = new Group(PPhoneOperator, new AccessName("telefonista"), "Telefonista");
 			var superUsers = new Group(PSuperUser, new AccessName("super"), "Super usuário");
-			for (g in [surveyors, supervisors, phoneOperators, superUsers]) {
+			for (g in [surveyors, supervisors, phoneOperators, superUsers])
 				g.insert();
-				var gu = new User(g, new EmailAddress('${g.group_name}@sapo'), "*", true);
-				gu.insert();
-			}
 
 			// users
 			var arthur = new User(superUsers, new EmailAddress("arthur@sapo"), "Arthur Dent");
@@ -113,28 +111,27 @@ class Context {
 
 			// some tickets
 			var authorCol = [arthur, ford].concat(magentoCol);
-			var recipientCol = authorCol.concat([judite]).concat(Lambda.array(
-					User.manager.search($isGroup && ($group == phoneOperators || $group == superUsers))));
+			var recipientCol = authorCol.concat([judite]);  // TODO create some for groups too
 			var ticketCol = [];
 			for (i in 0...20) {
 				var s = surveyCol[i%surveyCol.length];
 				var a = authorCol[i%authorCol.length];
 				var r = recipientCol[(recipientCol.length + i)%recipientCol.length];
-				var t = new Ticket(s, a, r, 'Lorem ${s.id} ipsum ${a.name} ${r.name}');
-				t.insert();
-				var m = new TicketMessage(t, a, 'Heyy!!  Just letting you know I found an issue with survey ${s.id}');
-				m.insert();
-				var ts = new TicketSubscription(t, a);
-				ts.insert();
+				TicketModel.open(s, a,
+						'Lorem ${s.id} ipsum ${a.name} ${r.name}',
+						'Heyy!!  Just letting you know I found an issue with survey ${s.id}',
+						r);
 			}
-			var ticket1 = new Ticket(survey1, arthur, ford, "Overpass???");
-			ticket1.insert();
-			new TicketMessage(ticket1, arthur, "Hey, I was distrought over they wanting to build an overpass over my house").insert();
-			new TicketMessage(ticket1, ford, "Don't panic... don't panic...").insert();
-			var ticket2 = new Ticket(survey2, ford, arthur, "About Time...");
-			ticket2.insert();
-			new TicketMessage(ticket2, ford, "Time is an illusion, lunchtime doubly so. ").insert();
-			new TicketMessage(ticket2, arthur, "Very deep. You should send that in to the Reader's Digest. They've got a page for people like you.").insert();
+			var ticket1 = TicketModel.open(survey1, arthur,
+					"Overpass???",
+					"Hey, I was distrought over they wanting to build an overpass over my house",
+					superUsers);
+			TicketModel.addMessage(ticket1, ford, "Don't panic... don't panic...");
+			var ticket2 = TicketModel.open(survey2, arthur,
+					"About Time...",
+					"Time is an illusion, luchtime doubly so.",
+					phoneOperators);
+			TicketModel.addMessage(ticket2, arthur, "Very deep. You should send that in to the Reader's Digest. They've got a page for people like you.");
 		} catch (e:Dynamic) {
 			rollback();
 			neko.Lib.rethrow(e);
@@ -142,11 +139,17 @@ class Context {
 		commit();
 	}
 
-	public static function init()
+	public static function init(?now)
 	{
 		InitDB.run();
 		dbInit();
 		db = Manager.cnx;
+		updateClock();
+	}
+
+	public static function updateClock()
+	{
+		now = Date.now();
 	}
 
 	public static function startTransaction()
@@ -168,6 +171,8 @@ class Context {
 #if tink_template
 	public static function iterate()
 	{
+		updateClock();
+
 		var uri = Web.getURI();
 		var params = Web.getParams();
 		var method = Web.getMethod();
@@ -182,7 +187,7 @@ class Context {
 		var sid = Web.getCookies()[key];  // FIXME
 		var session = Session.manager.get(sid);
 
-		loop = new Context(Date.now(), uri, cparams, method, session);
+		loop = new Context(uri, cparams, method, session);
 
 		trace(loop.session);
 		if (loop.session != null) trace(loop.session.expires_at.toDate());
