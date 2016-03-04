@@ -102,8 +102,11 @@ class Macros {
 					Macros.criticalError(tblname, e);
 				}
 			}
+			
 			var v = syncex.get(tblname) != null ? syncex.get(tblname) : 0;
 			syncex.set(tblname, v + 1);
+			
+			old_entry;
 		}
 	}
 	

@@ -235,20 +235,20 @@ class MainSync
 		
 		}
 		
-		Macros.validateEntry(Survey, ["syncTimestamp", "id","paid","checkSupervisor","checkCT","checkSuper","group"], [ { key : "old_survey_id", value : new_sess.old_survey_id } ], new_sess);
-		//untyped old_entry;
-		//if (insertMode && old_entry.date_completed != null )
-		//{
-			//
-			//new_sess.lock();
-			//new_sess.checkSupervisor = old_entry.checkSupervisor;
-			//new_sess.checkCT = old_entry.checkCT;
-			//new_sess.checkSuper = old_entry.checkSuper;
-			//new_sess.date_edited = old_entry.date_edited;
-			//new_sess.group = old_entry.group;
-			//new_sess.paid = old_entry.paid;
-			//new_sess.update();
-		//}
+		//o = old_entry from Macros.validateEntry (old_entry is an old reference to the same survey)
+		var o : Survey = Macros.validateEntry(Survey, ["syncTimestamp", "id","paid","checkSupervisor","checkCT","checkSuper","group"], [ { key : "old_survey_id", value : new_sess.old_survey_id } ], new_sess);
+		if (insertMode && o.date_completed != null )
+		{
+			
+			new_sess.lock();
+			new_sess.checkSupervisor = o.checkSupervisor;
+			new_sess.checkCT = o.checkCT;
+			new_sess.checkSuper = o.checkSuper;
+			new_sess.date_edited = o.date_edited;
+			new_sess.group = o.group;
+			new_sess.paid = o.paid;
+			new_sess.update();
+		}
 		
 		sessHash.set(new_sess.old_survey_id, new_sess);
 		return false;
