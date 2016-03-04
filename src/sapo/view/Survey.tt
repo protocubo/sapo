@@ -3,8 +3,8 @@
 (: static function render(survey:sapo.spod.Survey) :)
 (:    var dom = Familia.manager.select($survey == survey, { orderBy:-syncTimestamp, limit : 1 }) :) (:*FIXME syncTimestampi*:) 
 (:    var fam = dom :) 
-(:    var user = User.manager.search($id == survey.user_id, { orderBy:-syncTimestamp, limit : 1 }) :) (:*FIXME syncTimestamp*:) 
-(:    if (user.supervisor == null) throw ('assertion failed: surveyor id:${user.id} (${user.email}) has no supervisor' ) :)
+(:    var user = User.manager.select($id == survey.user_id) :) (:*FIXME syncTimestamp*:) 
+(:    do{ if (user.supervisor == null) throw ('assertion failed: surveyor id:${user.id} (${user.email}) has no supervisor');} :)
 
 <!DOCTYPE html>
 <html>
