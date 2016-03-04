@@ -1,4 +1,5 @@
 package sapo.route;
+import common.crypto.Password;
 import common.db.MoreTypes.EmailAddress;
 import neko.Web;
 import sapo.spod.User;
@@ -52,6 +53,39 @@ class RegistrationRoutes extends AccessControl {
 		args.user.update();
 		Web.redirect("/registration");
 	}
-
+	
+	@authorize(all)
+	public function doChangepassword(args : { token : String } )
+	{
+		if (args.token == null)
+		{
+			Web.redirect("index");
+			return;
+		}
+		
+		var t = Token.manager.get(args.token);
+		if (t != null && !t.isExpired && t.expirationTime > Context.now)
+			Sys.println(sapo.view.Password.render(args.token));
+		else
+			Web.redirect("index");
+		
+		
+	}
+	
+	@authorize(all)
+	public function postChange(args : { pass : String, confirm : String, token : String } )
+	{
+		if (args.pass != null && args.pass.length >= 6 && args.pass == args.confirm && args.token != null && args.token.length > 0)
+		{
+			var t = Token.manager.get(args.token, true);
+			if (t != null)
+			{
+				t.user.password = Password.make(args.pass);
+				t.update();
+			}
+		}
+		
+		Web.redirect("index");
+	}
 	public function new() {}
 }
