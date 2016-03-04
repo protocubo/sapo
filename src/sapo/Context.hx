@@ -5,6 +5,7 @@ import common.Web;
 import common.crypto.Password;
 import common.db.MoreTypes;
 import common.spod.InitDB;
+import sapo.model.TicketModel;
 import sapo.route.AccessControl;
 import sapo.spod.Other;
 import sapo.spod.Ticket;
@@ -116,35 +117,21 @@ class Context {
 				var s = surveyCol[i%surveyCol.length];
 				var a = authorCol[i%authorCol.length];
 				var r = recipientCol[(recipientCol.length + i)%recipientCol.length];
-				var t = new Ticket(s, a, 'Lorem ${s.id} ipsum ${a.name} ${r.name}');
-				t.insert();
-				var trs = new TicketSubscription(t, null, r);
-				trs.insert();
-				new TicketRecipient(t, trs).insert();
-				var m = new TicketMessage(t, a, 'Heyy!!  Just letting you know I found an issue with survey ${s.id}');
-				new TicketSubscription(t, null, a).insert();
-				m.insert();
+				TicketModel.open(s, a,
+						'Lorem ${s.id} ipsum ${a.name} ${r.name}',
+						'Heyy!!  Just letting you know I found an issue with survey ${s.id}',
+						r);
 			}
-
-			var ticket1 = new Ticket(survey1, arthur, "Overpass???");
-			ticket1.insert();
-			var trs = new TicketSubscription(ticket1, superUsers);
-			trs.insert();
-			new TicketRecipient(ticket1, trs).insert();
-			new TicketMessage(ticket1, arthur, "Hey, I was distrought over they wanting to build an overpass over my house").insert();
-			new TicketSubscription(ticket1, null, arthur).insert();
-			new TicketMessage(ticket1, ford, "Don't panic... don't panic...").insert();
-			new TicketSubscription(ticket1, null, ford).insert();
-
-			var ticket2 = new Ticket(survey2, ford, "About Time...");
-			ticket2.insert();
-			var trs = new TicketSubscription(ticket2, phoneOperators);
-			trs.insert();
-			new TicketRecipient(ticket2, trs).insert();
-			new TicketMessage(ticket2, ford, "Time is an illusion, lunchtime doubly so. ").insert();
-			new TicketSubscription(ticket2, null, ford).insert();
-			new TicketMessage(ticket2, arthur, "Very deep. You should send that in to the Reader's Digest. They've got a page for people like you.").insert();
-			new TicketSubscription(ticket2, null, arthur).insert();
+			var ticket1 = TicketModel.open(survey1, arthur,
+					"Overpass???",
+					"Hey, I was distrought over they wanting to build an overpass over my house",
+					superUsers);
+			TicketModel.addMessage(ticket1, ford, "Don't panic... don't panic...");
+			var ticket2 = TicketModel.open(survey2, arthur,
+					"About Time...",
+					"Time is an illusion, luchtime doubly so.",
+					phoneOperators);
+			TicketModel.addMessage(ticket2, arthur, "Very deep. You should send that in to the Reader's Digest. They've got a page for people like you.");
 		} catch (e:Dynamic) {
 			rollback();
 			neko.Lib.rethrow(e);

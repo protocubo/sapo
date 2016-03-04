@@ -25,12 +25,12 @@ class Ticket extends Object {
 	public function isClosed()
 		return closed_at == null;
 
-	public function new(survey, author, subject, ?opened_at)
+	public function new(survey, author, subject, ?now)
 	{
-		if (opened_at == null) opened_at = Context.now;
+		if (now == null) now = Context.now;
 		this.survey = survey;
 		this.author = author;
-		this.opened_at = opened_at;
+		this.opened_at = now;
 		this.subject = subject;
 		super();
 	}
