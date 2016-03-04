@@ -48,7 +48,7 @@ class RegistrationRoutes extends AccessControl {
 	{
 		if (args == null) args = { };
 		args.user.lock();
-		args.user.deactivated_at = Context.loop.now;
+		args.user.deactivated_at = Context.now;
 		args.user.update();
 		Web.redirect("/registration");
 	}

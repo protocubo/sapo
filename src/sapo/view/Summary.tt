@@ -1,5 +1,7 @@
 (: import sapo.Spod :)
 (: import common.db.MoreTypes :)
+(: import sapo.spod.User :)
+(: import sapo.route.SummaryRoutes.* :)
 (: static function render(plotData : Map<String,Map<String,Int>>, header : Array<String>) :)
 <!DOCTYPE html>
 <html>
@@ -18,30 +20,36 @@
 
 	// Callback that creates and populates a data table, instantiates the pie chart, passes in the data and draws it.
 	function drawChart() {
-
+		(: do var sortedDateKeys = [for(k in plotData.keys()) k] :)
+		(: do sortedDateKeys.sort(function(a,b) { if (a < b) return -1; else if (a > b) return 1; return 0;}) :)
 		// Create the data table.
-		var data = new google.visualization.arrayToDataTable([
-			(: header.map(function(v) { return "'" + v + "'";}) :),
-			(: for data in plotData.keys() :)
+		var data = new google.visualization.DataTable();
+		(: for h in header :)
+			(: if h == DATE_KEY :) data.addColumn('string', '(:DATE_KEY:)'); 
+			(: else :) data.addColumn("number", '(: h :)'); (: end :)
+		(: end :)
+		
+		data.addRows([
+			(: for data in sortedDateKeys :)
 				
-				(: do var line = ["'" + DateTools.format(Date.fromString(data),"%d/%m/%Y") + "'"] :)
+			(: do var line = ["'" + DateTools.format(Date.fromString(data),"%d/%m/%Y") + "'"] :)
 				
-				(: for categories in 1...header.length :)
-					(: do var v = plotData.get(data).get(header[categories]) == null ? 0 : plotData.get(data).get(header[categories]) :)
-					(: do line.push(v +'') :)
-				(: end :)
+			(: for categories in 1...header.length :)
+				(: do var v = plotData.get(data).get(header[categories]) == null ? 0 : plotData.get(data).get(header[categories]) :)
+				(: do line.push(v +'') :)
+			(: end :)
 				
 			(: line :),
 			
 			(: end :)
-			
+		
 		]);
-
+		
 		var data2 = new google.visualization.DataTable();
 		data2.addColumn('string', 'Data');
 		data2.addColumn('number', 'Pesquisas');
 		data2.addRows([
-			(: for data in plotData.keys() :)
+			(: for data in sortedDateKeys :)
 				(: do var line = ["'"+DateTools.format(Date.fromString(data),"%d/%m/%Y")+"'"] :)
 				(: do var v = plotData.get(data).get("Aceitas") == null ? 0 : plotData.get(data).get("Aceitas") :)
 				(: do line.push(v+ '') :)
@@ -53,7 +61,7 @@
 		data3.addColumn('string', 'Data');
 		data3.addColumn('number', 'Pesquisas');
 		data3.addRows([
-			(: for data in plotData.keys() :)
+			(: for data in sortedDateKeys :)
 				(: do var line = ["'"+DateTools.format(Date.fromString(data),"%d/%m/%Y")+"'"] :)
 				(: do var v = plotData.get(data).get("Recusadas") == null ? 0 : plotData.get(data).get("Recusadas") :)
 				(: do line.push(v+'') :)
@@ -116,27 +124,26 @@
 	<hr />
 
 		<!-- FILTROS -->
-		<form>
+		<form method="POST" action="/summary/user">
 			<div class="row">
 				<div class="col-md-2">
 					<h3 class="filtro">Filtros:</h3>
 				</div>
-				<div class="col-md-2 col-md-offset-4"><h4>TIPO</h4>
-					<select class="form-control">
-						<option>Status</option>
-						<option>Histórico</option>
-					</select>
-				</div>
 				<div class="col-md-2"><h4>USUÁRIO</h4>
-					<select class="form-control">
+					<select class="form-control" name="user">
 						<option>Todos</option>
 						<optgroup label="Supervisores">
-							<!-- SUPERVISORES -->
-							<option>Fulano</option>
+						(: do var group = Group.manager.select($privilege == Privilege.PSupervisor, null, false) :)
+						(: for u in User.manager.search($group == group, null, false) :)
+							<option value='(:u.id:)'>(:u.name:)</option>
+						(: end :)
 						</optgroup>
 						<optgroup label="Pesquisadores">
 							<!-- PESQUISADORES -->
-							<option>Ciclano</option>
+							(: do group = Group.manager.select($privilege == Privilege.PSurveyor, null, false) :)
+							(: for u in User.manager.search($group == group, null, false) :)
+								<option value='(:u.id:)'>(:u.name:)</option>
+							(: end :)
 						</optgroup>
 					</select>
 				</div>

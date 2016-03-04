@@ -4,6 +4,8 @@ import common.spod.statics.EstacaoMetro;
 import common.spod.statics.LinhaOnibus;
 import common.spod.statics.Referencias;
 import common.spod.statics.UF;
+import comn.LocalEnqueuer;
+import comn.Spod.QueuedMessage;
 import haxe.Http;
 import haxe.Json;
 import haxe.Log;
@@ -11,6 +13,7 @@ import haxe.PosInfos;
 import common.spod.InitDB;
 import sapo.Context;
 import sapo.spod.Survey;
+import sys.db.TableCreate;
 
 import sys.db.Connection;
 import sys.db.Manager;
@@ -25,6 +28,7 @@ import common.tools.StringTools;
  * @author Caio
  */
 using Lambda;
+//TODO: MUDAR NOMES!
 class MainSync
 {
 
@@ -47,6 +51,8 @@ class MainSync
 	static var ours : Map<String,Int>;
 	static var warning : Int = 0;
 	
+	static var enq : LocalEnqueuer;
+	
 	public static function main()
 	{
 		Log.trace = function(txt : Dynamic, ?infos : PosInfos)
@@ -59,8 +65,14 @@ class MainSync
 		}
 		//TODO:Apagar
 		{
-			Context.resetMainDb();
+			//TODO: Linkar lugar correto no DB
+			//Context.resetMainDb();
+			InitDB.run();
 			//Context.init();
+			if (!TableCreate.exists(QueuedMessage.manager))
+				TableCreate.create(QueuedMessage.manager);
+			enq = new LocalEnqueuer(QueuedMessage.manager);
+			
 		}
 		//END
 		syncex = new Map();
@@ -123,7 +135,7 @@ class MainSync
 		// Query -> ../../extras/main.sql
 		//Session_id only 
 		//var updateVars = targetCnx.request("SELECT DISTINCT session_id FROM ((SELECT ep.session_id as session_id FROM SyncMap sm join EnderecoProp ep ON sm.tbl = 'EnderecoProp' AND sm.new_id = ep.id /*AND sm.timestamp > x*/) UNION ALL (SELECT  s.id as session_id FROM SyncMap sm JOIN Session s ON sm.tbl = 'Session' AND sm.new_id = s.id /*AND sm.timestamp > x*/) UNION ALL ( select f.session_id as session_id FROM SyncMap sm JOIN Familia f ON f.id = sm.new_id AND sm.tbl = 'Familia'  /*AND sm.timestamp > x*/) UNION ALL (select  m.session_id as session_id FROM SyncMap sm JOIN Morador m ON m.id = sm.new_id AND sm.tbl = 'Morador'  /*AND sm.timestamp > x*/) UNION ( select  p.session_id as session_id FROM SyncMap sm JOIN Ponto p ON  sm.tbl = 'Ponto' AND p.id = sm.new_id  /*AND sm.timestamp > x*/) UNION ALL (select m.session_id as session_id FROM SyncMap sm JOIN Modo m ON m.id = sm.new_id AND sm.tbl = 'Modo'  /*AND sm.timestamp > x*/)	) ack WHERE session_id IS NOT NULL ORDER BY session_id ASC").results().map(function(v) { return v.session_id; } ).array();
-		var updateVars = targetCnx.request("SELECT id as session_id FROM Session WHERE id < 100").results().map(function(v) { return v.session_id; } ).array();
+		var updateVars = targetCnx.request("SELECT id as session_id FROM Session WHERE id < 20").results().map(function(v) { return v.session_id; } ).array();
 		#if debug
 		maxtimestamp = Date.now().getTime();
 		#else
@@ -141,19 +153,24 @@ class MainSync
 			var shouldInsert = processSessionID(u, false);
 		}
 		
-		Manager.cleanup();
-		Manager.cnx.close();
-		targetCnx.close();
 		
 		//TODO: Mandar mensagem
 		for (k in syncex.keys())
 		{
 			var v = ours.get(k);
 			v = (v != null) ? v : 0;
-			trace("Table " + k + ": Syncex had " + syncex.get(k) + " entries. Updated : " + v);
+			var txt = "Table " + k + ": Syncex detected " + syncex.get(k) + " entries. Updated : " + v;
+			trace(txt);
+			enq.enqueue(new comn.message.Slack({ text : txt , username : "SyncBot" } ));
 		}
 		
 		trace("Done with only " + warning + " warnings!");
+		enq.enqueue(new comn.message.Slack( { text : "Done with only " + warning + " warnings!" , username : "SyncBot" } ));
+		
+		Manager.cleanup();
+		Manager.cnx.close();
+		targetCnx.close();
+		
 	}
 	
 	static function processSessionID(u : Int, insertMode : Bool) : Bool
@@ -187,6 +204,9 @@ class MainSync
 				"municipio", "bairro", "logradouro", "numero", "complemento","cep",
 				"zona","macrozona","lote","estratoSocioEconomico":
 					Reflect.setField(new_sess, f, Reflect.field(dbSession, f));
+				case "json":
+						if (checkJson("Survey", Reflect.field(dbSession, f)))
+							Reflect.setField(new_sess, f, Reflect.field(dbSession, f));
 				//Enum
 				case "estadoPesquisa_id":
 					Macros.setEnumField(f, new_sess, dbSession);
@@ -210,7 +230,6 @@ class MainSync
 				if (k > biggest)
 					biggest = k;
 			}
-			trace("cur? " + biggest);
 			
 			//trace(groups != null);
 			if (groups.get(biggest) == null || groups.get(biggest) < 10)
@@ -223,8 +242,6 @@ class MainSync
 			}
 			else
 			{
-				trace("null? ");
-				
 				var v = biggest + 1;
 				groups.set(v, 1);
 				userGroup.set(new_sess.user_id, groups);
@@ -234,7 +251,20 @@ class MainSync
 		
 		}
 		
-		Macros.validateEntry(Survey, ["syncTimestamp", "id"], [ { key : "old_survey_id", value : new_sess.old_survey_id } ], new_sess);
+		//o = old_entry from Macros.validateEntry (old_entry is an old reference to the same survey)
+		var o : Survey = Macros.validateEntry(Survey, ["syncTimestamp", "id","paid","checkSupervisor","checkCT","checkSuper","group","date_edited"], [ { key : "old_survey_id", value : new_sess.old_survey_id } ], new_sess);
+		if (insertMode && o != null && o.date_completed != null )
+		{
+			
+			new_sess.lock();
+			new_sess.checkSupervisor = o.checkSupervisor;
+			new_sess.checkCT = o.checkCT;
+			new_sess.checkSuper = o.checkSuper;
+			new_sess.date_edited = o.date_edited;
+			new_sess.group = o.group;
+			new_sess.paid = o.paid;
+			new_sess.update();
+		}
 		
 		sessHash.set(new_sess.old_survey_id, new_sess);
 		return false;
@@ -264,6 +294,9 @@ class MainSync
 					case "date", "isEdited", "numeroResidentes", "banheiros", "quartos", 
 					"veiculos", "bicicletas", "motos",  "nomeContato", "telefoneContato","tentativa_id":
 						Reflect.setField(new_familia, field, Reflect.field(f, field));
+					case "json":
+						if (checkJson("Familia", Reflect.field(f, field)))
+							Reflect.setField(new_familia, field, Reflect.field(f, field));
 					//Bool simples
 					case "isDeleted","ruaPavimentada_id", "recebeBolsaFamilia_id":
 						Reflect.setProperty(new_familia, field, Reflect.field(f, field) == 1);
@@ -318,6 +351,9 @@ class MainSync
 					//ctrl+c ctrl+v
 					case "date", "isEdited", "nomeMorador", "genero_id":
 						Reflect.setField(new_morador, field, Reflect.field(m, field));
+					case "json":
+						if (checkJson("Morador", Reflect.field(m, field)))
+							Reflect.setField(new_morador, field, Reflect.field(m, field));
 					case "gps_id","codigoReagendamento":
 						continue;
 					default:
@@ -365,6 +401,9 @@ class MainSync
 					//ctrl+c ctrl+v
 					case "date", "isEdited", "uf_id", "city_id", "regadm_id", "street_id", "complement_id", "complement_two_id", "complement2_str", "ref_str", "tempo_saida", "tempo_chegada":
 						Reflect.setField(new_point, field, Reflect.field(p, field));
+					case "json":
+						if (checkJson("Ponto", Reflect.field(p, field)))
+							Reflect.setField(new_point, field, Reflect.field(p, field));
 					//Enums
 					case "motivoID", "motivoOutraPessoaID":
 						Macros.setEnumField("motivo", new_point, p);
@@ -405,7 +444,8 @@ class MainSync
 						new_modo.morador = morHash.get(m.morador_id);
 						new_modo.old_morador_id = m.morador_id;
 					case "firstpoint_id", "secondpoint_id":
-						Reflect.setProperty(new_modo, f, (pointhash.get(Reflect.field(m, f)) != null) ? pointhash.get(Reflect.field(m,f)).id : null );
+						Reflect.setProperty(new_modo, f, (pointhash.get(Reflect.field(m, f)) != null) ? pointhash.get(Reflect.field(m, f)).id : null );
+					//Enums
 					case "meiotransporte_id":
 						if (Macros.checkEnumValue(MeioTransporte, m.meiotransporte_id))
 							new_modo.meiotransporte = Macros.getStaticEnum(MeioTransporte, m.meiotransporte_id);
@@ -415,10 +455,15 @@ class MainSync
 						new_modo.linhaOnibus = LinhaOnibus.manager.get(m.linhaOnibus_id);
 					case "formaPagamento_id", "tipoEstacionamento_id":
 						Macros.setEnumField(f, new_modo, m);
+					//Bools
 					case "isDeleted":
 						new_modo.isDeleted = (m.isDeleted == 1);
+					//Ctrl+c ctrl+v
 					case "date", "isEdited":
 						Reflect.setField(new_modo, f, Reflect.field(m, f));
+					case "json":
+						if (checkJson("Modo", Reflect.field(m, f)))
+							Reflect.setField(new_modo, f, Reflect.field(m, f));
 					//Conversoes de um mte de field pra um 
 					case "valorPagoTaxi", "valorViagem", "custoEstacionamento":
 						new_modo.valorViagem = m.valorViagem;
@@ -427,6 +472,7 @@ class MainSync
 					case "naoRespondeuLinhaOnibus", "naoRespondeuEstacaoEmbarque", "naoRespondeuEstacaoDesembarque", "naoRespondeuValorViagem", "naoRespondeuValorPagoTaxi","naoRespondeuCustoEstacionamento":
 						new_modo.naoRespondeu = (new_modo.naoRespondeu) ? true : (Reflect.field(m, f) != 0);
 					//fim conversao
+					//Ignore
 					case "anterior_id", "posterior_id","ordem", "gps_id", "linhaOnibus_str","estacaoEmbarque_str", "estacaoDesembarque_str":
 						continue;
 					default:
@@ -457,6 +503,9 @@ class MainSync
 						c.old_survey_id = r.session_id;
 					case "desc", "datetime":
 						Reflect.setField(c, f, Reflect.field(r, f));
+					case "json":
+						if (checkJson("Ocorrencias", Reflect.field(r, f)))
+							Reflect.setField(c, f, Reflect.field(r, f));
 					case "sessionTime_id", "gps_id":
 						continue;
 					default:
@@ -516,6 +565,24 @@ class MainSync
 		}
 		http.request();
 		
+	}
+	
+	static function checkJson(table : String, str : String)
+	{
+		try 
+		{	if (str != null && str.length > 0)
+			{
+				var json = Json.parse(str);
+				return json != null;
+			}
+			else 
+				return false;
+		}
+		catch (e : Dynamic)
+		{
+			Macros.criticalError(table, str + " is not a valid JSON!");
+			return false;
+		}
 	}
 
 }
