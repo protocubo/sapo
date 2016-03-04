@@ -17,7 +17,8 @@ class PaymentRoutes extends AccessControl
 			$paid == args.paid
 			// to do survey state
 		);
-		Sys.println(sapo.view.Payments.superPage());
+		trace("LENGHT: " + surveys.length);
+		Sys.println(sapo.view.Payments.superPage(surveys));
 	}
 	
 	@authorize(PSuperUser)
@@ -30,7 +31,7 @@ class PaymentRoutes extends AccessControl
 		if (args.reference !=  null)
 		{}//select reference
 			
-		Sys.println(sapo.view.Payments.superPage());
+		Sys.println(sapo.view.Payments.superPage(surveys));
 	}
 	
 	public function new() {}
