@@ -2,21 +2,16 @@ package sapo;
 
 import common.Dispatch;
 import common.spod.EnumSPOD;
-import common.spod.Modo;
-import common.spod.Ponto;
-import common.spod.statics.EstacaoMetro;
-import common.spod.statics.LinhaOnibus;
-import common.spod.statics.UF;
-import neko.Lib;
-import neko.Random;
-import sapo.spod.Survey;
+import common.spod.statics.*;
 import common.Web;
 import common.crypto.Password;
 import common.db.MoreTypes;
 import common.spod.InitDB;
+import neko.Random;
 import sapo.model.TicketModel;
 import sapo.route.AccessControl;
 import sapo.spod.Other;
+import sapo.spod.Survey;
 import sapo.spod.Ticket;
 import sapo.spod.User;
 import sys.db.*;
@@ -141,10 +136,10 @@ class Context {
 					"Time is an illusion, luchtime doubly so.",
 					phoneOperators);
 			TicketModel.addMessage(ticket2, arthur, "Very deep. You should send that in to the Reader's Digest. They've got a page for people like you.");
-			
+
 			Manager.cnx.request("CREATE VIEW UpdatedSurvey AS SELECT MAX(id) as session_id, old_survey_id, MAX(syncTimestamp) as syncTimestamp FROM Survey GROUP BY old_survey_id");
 			surveyGen();
-			
+
 		} catch (e:Dynamic) {
 			rollback();
 			neko.Lib.rethrow(e);
@@ -152,7 +147,7 @@ class Context {
 		commit();
 	}
 
-	
+
 	static function surveyGen()
 	{
 		var surveyorgroup = Group.manager.select($privilege == Privilege.PSurveyor, null, false);
@@ -160,23 +155,23 @@ class Context {
 		var supervisor = new User(supervisorGroup, new EmailAddress("Sup@sup.com.br"), "Supervisor5000");
 		supervisor.insert();
 		var i = 0;
-		
+
 		var userarr = [];
 		while (i < 5)
 		{
 			var surveyor = new User(surveyorgroup, new EmailAddress("Bla" + i + "@blabla.com.br"), "Bla " + i,  supervisor);
 			surveyor.password = Password.make("secret");
 			surveyor.insert();
-			
+
 			userarr.push(surveyor);
-			
+
 			i++;
 		}
-		
+
 		i = 0;
 		var rnd = new Random();
 		rnd.setSeed(42);
-		
+
 		var group = [];
 		while (i < 1000)
 		{
@@ -215,7 +210,7 @@ class Context {
 				group[s.user_id] = [group1 + 1, 1];
 			s.group = group[s.user_id][0];
 			s.insert();
-			
+
 			var f = new Familia();
 			f.aguaEncanada = Type.createEnumIndex(AguaEncanada, rnd.int(2));
 			f.anoVeiculoMaisRecente = Type.createEnumIndex(AnoVeiculoMaisRecente, rnd.int(8));
@@ -245,7 +240,7 @@ class Context {
 			f.vagaPropriaEstacionamento_id = randomBool(rnd);
 			f.veiculos = rnd.int(4);
 			f.insert();
-			
+
 			var j = 0;
 			while (j < f.numeroResidentes)
 			{
@@ -266,14 +261,14 @@ class Context {
 				m.possuiHabilitacao_id = randomBool(rnd);
 				m.proprioMorador_id = randomBool(rnd);
 				m.quemResponde = null;
-				m.setorAtividadeEmpresaPrivada = Type.createEnumIndex(SetorAtividadeEmpresaPrivada, rnd.int(8)); 
+				m.setorAtividadeEmpresaPrivada = Type.createEnumIndex(SetorAtividadeEmpresaPrivada, rnd.int(8));
 				m.setorAtividadeEmpresaPublica = Type.createEnumIndex(SetorAtividadeEmpresaPublica, rnd.int(4));
 				m.situacaoFamiliar = Type.createEnumIndex(SituacaoFamiliar, rnd.int(10));
 				m.survey = s;
 				m.syncTimestamp = s.syncTimestamp;
 				m.insert();
-				
-				
+
+
 				var n = 0;
 				while (n < rnd.int(4))
 				{
@@ -303,7 +298,7 @@ class Context {
 					p.tempo_saida = rnd.int(24) + ":" + rnd.int(60);
 					p.uf = UF.manager.get(1);
 					p.insert();
-					
+
 					var o = 0;
 					while ( o < rnd.int(2) && n%2 == 0)
 					{
@@ -329,24 +324,24 @@ class Context {
 						mo.tipoEstacionamento = Type.createEnumIndex(TipoEstacionamento, rnd.int(8));
 						mo.valorViagem = rnd.float() * rnd.int(40);
 						mo.insert();
-						
-						
+
+
 						o++;
 					}
 					n++;
 				}
 				j++;
 			}
-			
+
 			if (i % 100 == 0)
 				Manager.cnx.commit();
-				
+
 			i++;
-			
+
 		}
-		
+
 		Manager.cnx.commit();
-		
+
 	}
 	static function randomBool(rnd : Random) : Null<Bool>
 	{
