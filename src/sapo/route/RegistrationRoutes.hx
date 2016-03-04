@@ -66,18 +66,18 @@ class RegistrationRoutes extends AccessControl {
 	@authorize(all)
 	public function doChangepassword(args : { token : String } )
 	{
-		if (args.token == null)
+		/*if (args.token == null)
 		{
 			Web.redirect("/");
 			return;
 		}
 		
 		var t = Token.manager.get(args.token);
-		if (t != null && !t.isExpired && t.expirationTime > Context.now)
-			Sys.println(sapo.view.Password.render(args.token));
-		else
+		if (t != null && !t.isExpired && t.expirationTime > Context.now)*/
+			Sys.println(sapo.view.Password.render("asdjsdajkdsaojidsa"));
+		/*else
 			Web.redirect("/");
-		
+		*/
 		
 	}
 	
@@ -103,11 +103,12 @@ class RegistrationRoutes extends AccessControl {
 	}
 	
 	
+	@authorize(all)
 	public function postForgotPassword(args : {email : String})
 	{
 		if (args != null && args.email != null)
 		{
-			var u = User.manager.get(args.email);
+			var u = User.manager.select($email == new EmailAddress(args.email));
 			if (u != null)
 			{
 				var t = new Token(u);
