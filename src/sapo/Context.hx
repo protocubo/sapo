@@ -158,6 +158,7 @@ class Context {
 		var surveyorgroup = Group.manager.select($privilege == Privilege.PSurveyor, null, false);
 		var supervisorGroup = Group.manager.select($privilege == Privilege.PSupervisor, null, false);
 		var supervisor = new User(supervisorGroup, new EmailAddress("Sup@sup.com.br"), "Supervisor5000");
+		supervisor.insert();
 		var i = 0;
 		
 		var userarr = [];
@@ -180,7 +181,7 @@ class Context {
 		while (i < 1000)
 		{
 			var s = new Survey();
-			s.user_id = rnd.int(userarr.length);
+			s.user_id = userarr[rnd.int(userarr.length)].id;
 			s.isRestored = false;
 			s.isValid = false;
 			s.lastPageVisited = "END";
