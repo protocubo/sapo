@@ -90,10 +90,14 @@
         var cons = Type.enumConstructor(v);
         var meta = haxe.rtti.Meta.getFields(e);
         var cnMeta = Reflect.field(meta, cons);
+        if (cnMeta == null) 
+            return cons;
         var tmeta:Array<Dynamic> = cnMeta.tt;
+        if (tmeta == null) 
+            return cons;
         for (text in tmeta) {
             if (Type.getClassName(Type.getClass(text)) != "String")
-                return "";
+                return cons;
             else
                 return text;
         }
