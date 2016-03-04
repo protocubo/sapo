@@ -40,31 +40,7 @@ import sys.db.Types.SString;
  }
  class AnoVeiculoMaisRecente_Tbl extends EnumTable { }
 
-@dbNullVal(8) @tt("Frequência  com que faz a viagem:") enum FrequenciaViagem {
-	@dbVal(1) @tt("Raramente") Raramente;
-	@dbVal(2) @tt("Menos de 1 vez por mês") Menos1Mes;
-	@dbVal(3) @tt("Até 1 vez por mês") Vez1Mes;
-	@dbVal(4) @tt("Até 2 vezes por mês") Vez2Mes;
-	@dbVal(5) @tt("De 1 a 2 vezes por semana") Semana1a2;
-	@dbVal(6) @tt("De 3 a 4 vezes por semana") Semana3a4;
-	@dbVal(7) @tt("Mais de 5 vezes por semana") MaisSemana5;
-	@dbVal(8) @tt("Não Respondeu") NaoRespondeu;
- }
-//@:keep class FrequenciaViagem_Tbl extends EnumTable { }
   
-@dbNullVal(9) @tt("Tempo de Permanência no Estacionamento:") enum TempoPermanenciaEstacionamento {
-	 @dbVal(1) @tt("Meia hora") MeiaHora;
-	 @dbVal(2) @tt("Uma hora") UmaHora;
-	 @dbVal(3) @tt("Duas horas") DuasHoras;
-	 @dbVal(4) @tt("Um turno") Turno;
-	 @dbVal(5) @tt("Um dia") Diaria;
-	 @dbVal(6) @tt("Pernoite") Pernoite;
-	 @dbVal(7) @tt("Mais de um dia") MaisDeUmDia;
-	 @dbVal(8) @tt("Não Sabe") NaoSabe;
-	 @dbVal(9) @tt("Não Respondeu") NaoRespondeu;
- }
-//  class TempoPermanenciaEstacionamento_Tbl extends EnumTable { }
-
 @dbNullVal(101) @tt("Principal Atividade:")enum AtividadeMorador
 {
 	@dbVal(1)@tt("Empregado de Empresa Privada")  EmpresaPrivada;
@@ -125,7 +101,19 @@ import sys.db.Types.SString;
 	@dbVal(101) @tt("Não Respondeu") NaoRespondeu;
  }
  class FormaPagamento_Tbl extends EnumTable { }
-   
+  @dbNullVal(8) @tt("Frequência  com que faz a viagem:") enum FrequenciaViagem {
+	@dbVal(1) @tt("Raramente") Raramente;
+	@dbVal(2) @tt("Menos de 1 vez por mês") Menos1Mes;
+	@dbVal(3) @tt("Até 1 vez por mês") Vez1Mes;
+	@dbVal(4) @tt("Até 2 vezes por mês") Vez2Mes;
+	@dbVal(5) @tt("De 1 a 2 vezes por semana") Semana1a2;
+	@dbVal(6) @tt("De 3 a 4 vezes por semana") Semana3a4;
+	@dbVal(7) @tt("Mais de 5 vezes por semana") MaisSemana5;
+	@dbVal(8) @tt("Não Respondeu") NaoRespondeu;
+ }
+ class FrequenciaViagem_Tbl extends EnumTable { }
+
+ 
   @dbNullVal(99) enum GrauInstrucao {
 	 @dbVal(1) @tt("Analfabeto") Analfabeto;
 	 @dbVal(2) @tt("Alfabetizado") Alfabetizado;
@@ -297,7 +285,20 @@ import sys.db.Types.SString;
 	@dbVal(101) @tt("Não Respondeu") NaoRespondeu;
  }
  class TipoEstacionamento_Tbl extends EnumTable { }
- 
+
+ @dbNullVal(9) @tt("Tempo de Permanência no Estacionamento:") enum TempoPermanenciaEstacionamento {
+	 @dbVal(1) @tt("Meia hora") MeiaHora;
+	 @dbVal(2) @tt("Uma hora") UmaHora;
+	 @dbVal(3) @tt("Duas horas") DuasHoras;
+	 @dbVal(4) @tt("Um turno") Turno;
+	 @dbVal(5) @tt("Um dia") Diaria;
+	 @dbVal(6) @tt("Pernoite") Pernoite;
+	 @dbVal(7) @tt("Mais de um dia") MaisDeUmDia;
+	 @dbVal(8) @tt("Não Sabe") NaoSabe;
+	 @dbVal(9) @tt("Não Respondeu") NaoRespondeu;
+ }
+ class TempoPermanenciaEstacionamento_Tbl extends EnumTable { }
+
  @dbNullVal(0) @tt("Tipo de Imóvel") enum TipoImovel
  {
 	 @dbVal(1) @tt("Apartamento")  Apartamento;
