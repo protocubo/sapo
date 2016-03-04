@@ -25,7 +25,7 @@ class Index {
 		try {
 			if (Web.getURI() == "/reset") {
 				trace("WARNING route handled manually; /reset");
-				Context.resetMainDb();
+				Populate.reset();
 				Web.redirect("/login");
 				return;
 			}
