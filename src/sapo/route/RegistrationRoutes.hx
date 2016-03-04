@@ -50,7 +50,7 @@ class RegistrationRoutes extends AccessControl {
 		Manager.cnx.commit();
 		
 		//var enq = new LocalEnqueuer();
-		//enq.enqueue(new comn.message.Email( { from:"sapo@sapoide.com.br", to:u.email, subject:"Confirme sua conta", text: "Acesse o link: " + "www.sapo.com.br/registration/token?token=" +  t.token + " para validar sua conta!" } );
+		//enq.enqueue(new comn.message.Email( { from:"sapo@sapoide.com.br", to:u.email, subject:"[SAPO] Confirme sua conta", text: "Acesse o link: " + "www.sapo.com.br/registration/token?token=" +  t.token + " para validar sua conta!" } );
 		Web.redirect("/registration");
 	}
 	@authorize(PSuperUser)
@@ -68,7 +68,7 @@ class RegistrationRoutes extends AccessControl {
 	{
 		if (args.token == null)
 		{
-			Web.redirect("index");
+			Web.redirect("/");
 			return;
 		}
 		
@@ -76,7 +76,7 @@ class RegistrationRoutes extends AccessControl {
 		if (t != null && !t.isExpired && t.expirationTime > Context.now)
 			Sys.println(sapo.view.Password.render(args.token));
 		else
-			Web.redirect("index");
+			Web.redirect("/");
 		
 		
 	}
@@ -86,7 +86,6 @@ class RegistrationRoutes extends AccessControl {
 	{
 		if (args.pass != null && args.pass.length >= 6 && args.pass == args.confirm && args.token != null && args.token.length > 0)
 		{
-			trace("WOOOOW");
 			var t = Token.manager.get(args.token, true);
 			if (t != null)
 			{
@@ -100,7 +99,27 @@ class RegistrationRoutes extends AccessControl {
 			}
 		}
 		
-		Web.redirect("index");
+		Web.redirect("/");
 	}
+	
+	
+	public function postForgotPassword(args : {email : String})
+	{
+		if (args != null && args.email != null)
+		{
+			var u = User.manager.get(args.email);
+			if (u != null)
+			{
+				var t = new Token(u);
+				t.invalidateOthers();
+				t.insert();			
+				
+				//var enq = new LocalEnqueuer();
+				//enq.enqueue(new comn.message.Email( { from:"sapo@sapoide.com.br", to:u.email, subject:"[SAPO] Resete sua senha", text: "Acesse o link: " + "www.sapo.com.br/registration/token?token=" +  t.token + " para alterar sua senha!" } );
+			}
+		}
+		Web.redirect("/");
+	}
+	
 	public function new() {}
 }
