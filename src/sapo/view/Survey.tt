@@ -151,16 +151,17 @@ function imprimir() {
 	</div>
 	<hr />
 
-
-	<!-- BODY - MORADOR -->
+(: for m in sapo.spod.Survey.Morador.manager.search($survey_id == survey.id)  :)
+	<!-- BODY - MORADOR : UM BLOCO DESSES POR MORADOR -->
 	<div class="row">
 		<div class="col-md-12">
-			<h3><span class="glyphicon glyphicon-user" aria-hidden="true"></span> MORADOR / #NomeDoMorador (#IdadeDoMorador) </h3>
+			<h3><span class="glyphicon glyphicon-user" aria-hidden="true"></span> MORADOR / (:m.nomeMorador :) ((: Util.enumText(m.idade) :) anos)</h3>
 
 			<!-- BLOCK - botão de edit, <b>campo, info do campo -->
 			<div class="bloco">
 				<a href="#" class="corrigir escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
-				<b>#Campo:</b> #Dado
+				<b>Grau de instrução:</b> (:  Util.enumText(m.grauInstrucao) :) 
+				<b>Necessidades Especiais:</b> (:  Util.enumText(m.portadorNecessidadesEspeciais) :) 
 			</div>
 			<!-- FIM DO BLOCK -->
 
@@ -195,7 +196,7 @@ function imprimir() {
 	</div>
 	<hr />
 	<!-- FIM BODY - MORADOR -->
-
+(: end :)
 </div>
 
 (: Util.footer() :)

@@ -43,7 +43,7 @@
 					(: for m in sapo.spod.Survey.Morador.manager.search($survey_id == survey.id)  :)
 						(: var dash = false :)
 							<p> (: m.nomeMorador :) ( (: Util.enumText(m.idade) :) ) :
-							(: for p in common.spod.Ponto.manager.search($morador_id == m.id)  :)
+							(: for p in sapo.spod.Ponto.manager.search($morador_id == m.id)  :)
 								(: if dash :) - (: end :)(: p.motivo :) (: do dash = true :)
 							(: end :)
 							</p>
