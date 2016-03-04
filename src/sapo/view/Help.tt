@@ -17,62 +17,63 @@
 			<li class="active">AJUDA</li>
 		</ol>
 
-		<div class="row">
+		<div class="row mt30">
 			<div class="col-md-12">
-				<h3>BLÁ</h3>
+				<h3>SAPO</h3>
 				<p>Nullam mi nisi, accumsan ac dapibus at, suscipit in dolor. Integer laoreet ex ex, at maximus quam maximus sed. Aenean dignissim, magna vitae pellentesque mattis, ante lacus malesuada arcu, quis sollicitudin massa enim sed mauris. Nunc commodo augue finibus urna laoreet, vitae luctus quam sagittis. Nulla facilisi. Donec viverra quis ex ac cursus. Vestibulum feugiat finibus felis eu dignissim.</p>
 			</div>
 		</div>
 
 		<hr>
-		<h2>USUÁRIOS</h2>
+		<h3>USUÁRIOS</h3>
 		<hr>
 
 		<div class="row">
 			<div class="col-md-3">
-				<h3 class="pesquisador"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> PESQUISADOR</h3>
+				<h4 class="pesquisador"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> PESQUISADOR</h4>
 				<p>Nullam mi nisi, accumsan ac dapibus at, suscipit in dolor. Integer laoreet ex ex, at maximus quam maximus sed. Aenean dignissim, magna vitae pellentesque mattis, ante lacus malesuada arcu, quis sollicitudin massa enim sed mauris. Nunc commodo augue finibus urna laoreet, vitae luctus quam sagittis. Nulla facilisi. Donec viverra quis ex ac cursus. Vestibulum feugiat finibus felis eu dignissim.</p>
 			</div>
 			<div class="col-md-3">
-				<h3 class="supervisor"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> SUPERVISOR</h3>
+				<h4 class="supervisor"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> SUPERVISOR</h4>
 				<p>Nullam mi nisi, accumsan ac dapibus at, suscipit in dolor. Integer laoreet ex ex, at maximus quam maximus sed. Aenean dignissim, magna vitae pellentesque mattis, ante lacus malesuada arcu, quis sollicitudin massa enim sed mauris. Nunc commodo augue finibus urna laoreet, vitae luctus quam sagittis. Nulla facilisi. Donec viverra quis ex ac cursus. Vestibulum feugiat finibus felis eu dignissim.</p>
 			</div>
 			<div class="col-md-3">
-				<h3 class="telefonista"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> TELEFONISTA</h3>
+				<h4 class="telefonista"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> TELEFONISTA</h4>
 				<p>Nullam mi nisi, accumsan ac dapibus at, suscipit in dolor. Integer laoreet ex ex, at maximus quam maximus sed. Aenean dignissim, magna vitae pellentesque mattis, ante lacus malesuada arcu, quis sollicitudin massa enim sed mauris. Nunc commodo augue finibus urna laoreet, vitae luctus quam sagittis. Nulla facilisi. Donec viverra quis ex ac cursus. Vestibulum feugiat finibus felis eu dignissim.</p>
 			</div>
 			<div class="col-md-3">
-				<h3 class="super"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> SUPER</h3>
+				<h4 class="super"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> SUPER</h4>
 				<p>Nullam mi nisi, accumsan ac dapibus at, suscipit in dolor. Integer laoreet ex ex, at maximus quam maximus sed. Aenean dignissim, magna vitae pellentesque mattis, ante lacus malesuada arcu, quis sollicitudin massa enim sed mauris. Nunc commodo augue finibus urna laoreet, vitae luctus quam sagittis. Nulla facilisi. Donec viverra quis ex ac cursus. Vestibulum feugiat finibus felis eu dignissim.</p>
 			</div>
 		</div>
 
 		<hr>
-		<h2>ESTADOS DA PESQUISA</h2>
+		<h3>ESTADOS DA PESQUISA</h3>
 		<hr>
 
 		<div class="row">
 			<div class="col-md-3">
-				<h3 class="completa"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> COMPLETA</h3>
+				<h4 class="completa"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> COMPLETA</h4>
 				<p>Nullam mi nisi, accumsan ac dapibus at, suscipit in dolor. Integer laoreet ex ex, at maximus quam maximus sed. Aenean dignissim, magna vitae pellentesque mattis, ante lacus malesuada arcu, quis sollicitudin massa enim sed mauris. Nunc commodo augue finibus urna laoreet, vitae luctus quam sagittis. Nulla facilisi. Donec viverra quis ex ac cursus. Vestibulum feugiat finibus felis eu dignissim.</p>
 			</div>
 			<div class="col-md-3">
-				<h3 class="pendente"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> PENDENTE</h3>
+				<h4 class="pendente"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> PENDENTE</h4>
 				<p>Nullam mi nisi, accumsan ac dapibus at, suscipit in dolor. Integer laoreet ex ex, at maximus quam maximus sed. Aenean dignissim, magna vitae pellentesque mattis, ante lacus malesuada arcu, quis sollicitudin massa enim sed mauris. Nunc commodo augue finibus urna laoreet, vitae luctus quam sagittis. Nulla facilisi. Donec viverra quis ex ac cursus. Vestibulum feugiat finibus felis eu dignissim.</p>
 			</div>
 			<div class="col-md-3">
-				<h3 class="recusada"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> RECUSADA</h3>
+				<h4 class="recusada"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> RECUSADA</h4>
 				<p>Nullam mi nisi, accumsan ac dapibus at, suscipit in dolor. Integer laoreet ex ex, at maximus quam maximus sed. Aenean dignissim, magna vitae pellentesque mattis, ante lacus malesuada arcu, quis sollicitudin massa enim sed mauris. Nunc commodo augue finibus urna laoreet, vitae luctus quam sagittis. Nulla facilisi. Donec viverra quis ex ac cursus. Vestibulum feugiat finibus felis eu dignissim.</p>
 			</div>
 			<div class="col-md-3">
-				<h3 class="aceita"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> ACEITA</h3>
+				<h4 class="aceita"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> ACEITA</h4>
 				<p>Nullam mi nisi, accumsan ac dapibus at, suscipit in dolor. Integer laoreet ex ex, at maximus quam maximus sed. Aenean dignissim, magna vitae pellentesque mattis, ante lacus malesuada arcu, quis sollicitudin massa enim sed mauris. Nunc commodo augue finibus urna laoreet, vitae luctus quam sagittis. Nulla facilisi. Donec viverra quis ex ac cursus. Vestibulum feugiat finibus felis eu dignissim.</p>
 			</div>
 		</div>
 	</div>
 
 	(: Util.footer() :)
-</body>
+
+	</body>
 </html>
 (: end :)
 

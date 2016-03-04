@@ -7,7 +7,7 @@
 		<input type="checkbox" />
 	</td>
 	<td>(: payments.surveyor.name :)</td>
-	<td>(: payments.id :)</td>
+	<td><a href="/survey/(: payments.id :)" target="_blank">#(: payments.id :)</a></td>
 	<td class"tags">(: Util.status( true, true , true) :)</td>
 	<td>(: payments.closed_at :)</td>
 	<td></td>
@@ -61,8 +61,8 @@
 					<th>Pesquisa</th>
 					<th>Data</th>
 					<th>Endereço</th>
-					<th>RefPagto</th>
-					<th>Data Pgto</th>
+					<th>Ref. Pagto.</th>
+					<th>Data Pgto.</th>
 					<th class="text-right">Status</th>
 				</tr>
 			</thead>
@@ -141,7 +141,7 @@
 		</div>
 
 		<!-- TABELA DE USUÁRIOS -->
-		<table class="table" style="margin-top: 60px;">
+		<table class="table mt60">
 			<thead>
 				<tr>
 					<!-- HEAD -->
@@ -149,11 +149,11 @@
 						<input type="checkbox" />
 					</th>
 					<th>Pesquisador</th>
-					<th>Nº da Pesquisa</th>
+					<th>Pesquisa</th>
 					<th>Status da Pesquisa</th>
-					<th>Data</th>
-					<th>Ref. Pagto</th>
-					<th>Data Pagto</th>
+					<th>Data da Pesquisa</th>
+					<th>Ref. Pagto.</th>
+					<th>Data Pagto.</th>
 					<th width="40px"></th>
 				</tr>
 			</thead>
@@ -176,7 +176,7 @@
 		</table>
 		
 		<nav>
-			<ul class="pager">
+			<ul class="pager mt30">
 				<li class="previous"><a href="#"><span aria-hidden="true">&larr;</span> ANTERIOR</a></li>
 				<li class="next"><a href="#">PRÓXIMA <span aria-hidden="true">&rarr;</span></a></li>
 			</ul>
@@ -184,7 +184,7 @@
 		
 	</div>
 
-(: Util.footer() :)
+	(: Util.footer() :)
 
 	(: for m in Spod.NewSurvey.manager.all() :)
 	(: Modal.modalpagamentospagar(m) :)

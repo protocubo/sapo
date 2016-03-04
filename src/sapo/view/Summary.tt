@@ -147,7 +147,7 @@
 				</form>
 			</div>
 		
-		<div class="row" style="margin-top:60px;">
+		<div class="row mt60">
 			<div class="col-md-12">
 				<h4>
 					<span class="supervisor"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> SUPERVISOR</span> |

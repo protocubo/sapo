@@ -36,7 +36,7 @@
 		</div>
 		
 		<!-- TABELA DE USUÁRIOS -->
-		<table class="table" style="margin-top: 60px;">
+		<table class="table mt60">
 			<thead>
 				<tr>
 					<!-- HEAD -->

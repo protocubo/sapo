@@ -12,7 +12,7 @@
 				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyPesquisa(: survey.id :)" aria-expanded="true" aria-controls="BodyPesquisa(: survey.id :)">
 				(:var surveyor = User.manager.get(survey.user_id) :)
 				(:var supervisor = surveyor.supervisor :)
-					Pesquisa #(: survey.id :) - (: survey.date_completed :) - <b class="pesquisador"> (: surveyor.name :)</b> - <b class="supervisor"> </b>
+					<b>Pesquisa #(: survey.id :)</b> - (: survey.date_completed :) - <span class="pesquisador"> (: surveyor.name :)</span> - <span class="supervisor"> </span>
 				</a>
 			</div>
 			<div class="col-md-6 panel-title">
@@ -39,7 +39,7 @@
 					(: for d in common.spod.Familia.manager.search($survey_id == survey.id, { orderBy:-syncTimestamp, limit : 1 }) :) (:* FIXME syncTimestamp  *:)
 					<div class="bloco"><b>Contato:</b> (: d.nomeContato :) - (: d.telefoneContato :) </div>
 					(: end :)
-					<div class="bloco"><b>Senha:</b> (: survey.pin :) </div>
+					<div class="bloco"><b>Senha:</b> <span class="pin">(: survey.pin :)<span></div>
 					<hr>
 					<p><b>Moradores:</b></p>
 					(: for m in common.spod.Morador.manager.search($survey_id == survey.id)  :)
@@ -52,7 +52,7 @@
 					(: end :)
 				</div>
 			</div>
-			<div class="row" style="margin-top: 30px;">
+			<div class="row mt30">
 				<div class="col-md-2 col-md-offset-10"><a href="/survey/(: survey.id :)" class="btn btn-primary btn-sm" target="_blank">VER PESQUISA</a></div>
 			</div>
 		</div>
@@ -133,7 +133,7 @@
 		</div>
 		
 		<nav>
-			<ul class="pager">
+			<ul class="pager mt30">
 				<li class="previous"><a href="#"><span aria-hidden="true">&larr;</span> ANTERIOR</a></li>
 				<li class="next"><a href="#">PRÓXIMA <span aria-hidden="true">&rarr;</span></a></li>
 			</ul>

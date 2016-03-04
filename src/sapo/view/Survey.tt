@@ -35,51 +35,50 @@ function imprimir() {
 <body>
 
 <!-- PESQUISA -->
-	<div class="container">
+	<div class="container apagar">
 	(: Util.navbar() :)
 		<!-- HEAD -->
-		<ol class="breadcrumb apagar">
+		<ol class="breadcrumb">
 			<li><a href="/surveys">TICKETS</a></li>
 			<li class="active">PESQUISA #(:survey.id:)</li>
 		</ol>
-		<div class="row">
-			<div class="col-md-12">
-				<h2 style=" float:left;">
-					PESQUISA #(:survey.id:)
-				</h2>
-				<h2 class="tags">
-					(: Util.status( true, true, true ) :)
-				</h2>
-			</div>
-		</div>
-	</div>
-
-	<div class="container apagar" style="margin-top:30px; margin-bottom:30px;">
+		
 		<!-- ACTIONS -->
 		<div class="row">
-			<div class="col-md-2 col-md-offset-1">
-				<a class="btn btn-default" onclick="imprimir()">IMPRIMIR</a>
+			<div class="col-md-2"><h5>IMPRESSÃO</h5>
+				<a class="btn btn-default btn-sm" onclick="imprimir()">Imprimir</a>
 			</div>
-			<div class="col-md-2">
-				<a class="btn btn-default" data-toggle="modal" data-target="#pesquisa_ticket">ABRIR TICKET</a>
+			<div class="col-md-2 col-md-offset-1"><h5>TICKET</h5>
+				<a class="btn btn-default btn-sm" data-toggle="modal" data-target="#pesquisa_ticket">Abrir</a>
 			</div>
-			<div class="col-md-2">
-				<a href="/tickets/search?ticket=(:survey.id:)" class="btn btn-default">TICKETS</a>
+			<div class="col-md-2"><h5>&nbsp;</h5>
+				<a href="/tickets/search?ticket=(:survey.id:)" class="btn btn-default btn-sm" target="_blank">Ver</a>
 			</div>
-			<div class="col-md-2">
-				<a type="button" class="btn btn-danger" id="corrigir">CORRIGIR</a>
+			<div class="col-md-2 col-md-offset-1"><h5>CORREÇÃO</h5>
+				<a type="button" class="btn btn-danger btn-sm" id="corrigir">Corrigir</a>
 			</div>
-			<div class="col-md-2">
-				<a type="button" class="btn btn-primary" data-toggle="modal" data-target="#pesquisa_status">MUDAR STATUS</a>
+			<div class="col-md-2"><h5>STATUS</h5>
+				<a type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#pesquisa_status">Mudar Status</a>
 			</div>
 		</div>
 	</div>
 
 	<div class="container">
-		<!-- BODY - PESQUISA -->
-		<div class="row">
+		<!-- HEAD - PESQUISA -->
+		<div class="row mt30">
 			<div class="col-md-12">
-				<h3><span class="glyphicon glyphicon-file" aria-hidden="true"></span> INFORMAÇÕES DA PESQUISA</h3>
+				<h3 style="float:left;">
+					PESQUISA #(:survey.id:)
+				</h3>
+				<h3 class="tags">
+					(: Util.status( true, true, true ) :)
+				</h3>
+			</div>
+		</div>
+		<!-- BODY - PESQUISA -->
+		<div class="row mt30">
+			<div class="col-md-12">
+				<h4><span class="glyphicon glyphicon-file" aria-hidden="true"></span> INFORMAÇÕES DA PESQUISA</h4>
 				<div class="bloco">
 					<a href="#" class="corrigir escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
 					<b>1ºVisita:</b> 17/03/2016
@@ -107,7 +106,7 @@ function imprimir() {
 		<!-- BODY - DOMICÍLIO -->
 		<div class="row">
 			<div class="col-md-12">
-				<h3><span class="glyphicon glyphicon-home" aria-hidden="true"></span> DOMICÍLIO / FAMÍLIA</h3>
+				<h4><span class="glyphicon glyphicon-home" aria-hidden="true"></span> DOMICÍLIO / FAMÍLIA</h4>
 
 				<!-- BLOCK - botão de edit, <b>campo, info do campo -->
 				<div class="bloco">
@@ -122,7 +121,7 @@ function imprimir() {
 		<!-- BODY - MORADOR -->
 		<div class="row">
 			<div class="col-md-12">
-				<h3><span class="glyphicon glyphicon-user" aria-hidden="true"></span> MORADOR / #NomeDoMorador (#IdadeDoMorador) </h3>
+				<h4><span class="glyphicon glyphicon-user" aria-hidden="true"></span> MORADOR / #NomeDoMorador (#IdadeDoMorador) </h4>
 				<!-- BLOCK - botão de edit, <b>campo, info do campo -->
 				<div class="bloco">
 					<a href="#" class="corrigir escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>

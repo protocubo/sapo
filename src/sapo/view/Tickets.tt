@@ -16,17 +16,17 @@ unavailable
 			<div class="col-md-7 panel-title">
 				<!-- DE/PARA (class: super, telefonista, supervisor e pesquisador) -->
 				<span class="glyphicon glyphicon glyphicon-user (: ticket.author.group.group_name :)" aria-hidden="true"></span>
-				<span class="glyphicon glyphicon-arrow-right text-muted" aria-hidden="true"></span>
+				<span class="glyphicon glyphicon-arrow-right text-muted" aria-hidden="true" style="color: #999;"></span>
 				<span class="glyphicon glyphicon glyphicon-user (: ticket.recipient.group.group_name :)" aria-hidden="true"></span>
 				<!-- Nº do Ticket, Data da criação do Ticket, Hora da criação do Ticket -->
 				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyTicket(: ticket.id :)" aria-expanded="true" aria-controls="BodyTicket(: ticket.id :)">
-					Ticket #(: ticket.id :) - (: ticket.opened_at :) - (: ticket.subject :)
+					<b>Ticket #(: ticket.id :)</b> - (: ticket.opened_at :) - (: ticket.subject :)
 				</a>
 			</div>
 			<div class="col-md-5 panel-title">
 				<!-- Número da pesquisa, data da pesquisa, Nome do pesquisador (class: super, telefonista, supervisor e pesquisador) -->
 				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyTicket(: ticket.id :)" aria-expanded="true" aria-controls="BodyTicket(: ticket.id :)">
-					Pesquisa #(:ticket.survey.id:) - <b class="pesquisador">(:ticket.survey.surveyor.name:)</b>
+					<b>Pesquisa #(:ticket.survey.id:)</b> - <span class="pesquisador">(:ticket.survey.surveyor.name:)</span>
 				</a>
 			<span class="tags">
 				(: Util.status( true, true , true) :)
@@ -66,11 +66,11 @@ unavailable
 				</div>
 			</div>
 			<!-- AÇÕES -->
-			<div class="row" style="margin-top: 30px;">
+			<div class="row mt30">
 				<div class="col-md-2"><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_incluir">INCLUIR</button></div>
 				<div class="col-md-2"><button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_responder">RESPONDER</button></div>
 				<div class="col-md-2"><button type="button" class="btn btn-success btn-sm (: hideClose(ticket) :)" data-toggle="modal" data-target="#ticket(: ticket.id :)_fechar">FECHAR</button></div>
-				<div class="col-md-2 col-md-offset-1"><a href="/survey/(: ticket.id :)" type="button" class="btn btn-primary btn-sm" target="_blank">VER PESQUISA</a></div>
+				<div class="col-md-2 col-md-offset-1"><a href="/survey/(:ticket.survey.id:)" type="button" class="btn btn-primary btn-sm" target="_blank">VER PESQUISA</a></div>
 				<div class="col-md-2"><button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_status">MUDAR STATUS</button></div>
 			</div>
 		</div>
@@ -154,7 +154,7 @@ unavailable
 		</script>
 
 		<!-- TICKETS -->
-		<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" style="margin-top: 60px;">
+		<div class="panel-group mt60" id="accordion" role="tablist" aria-multiselectable="true">
 			(: if tickets.length == 1 :)
 				(: ticketSummary(tickets.first(), true) :)
 			(: else :)
@@ -165,7 +165,7 @@ unavailable
 		</div>
 		
 		<nav>
-			<ul class="pager">
+			<ul class="pager mt30">
 				<li class="previous"><a href="#"><span aria-hidden="true">&larr;</span> ANTERIOR</a></li>
 				<li class="next"><a href="#">PRÓXIMA <span aria-hidden="true">&rarr;</span></a></li>
 			</ul>
