@@ -4,6 +4,8 @@ import common.spod.statics.EstacaoMetro;
 import common.spod.statics.LinhaOnibus;
 import common.spod.statics.Referencias;
 import common.spod.statics.UF;
+import comn.LocalEnqueuer;
+import comn.Spod.QueuedMessage;
 import haxe.Http;
 import haxe.Json;
 import haxe.Log;
@@ -11,6 +13,7 @@ import haxe.PosInfos;
 import common.spod.InitDB;
 import sapo.Context;
 import sapo.spod.Survey;
+import sys.db.TableCreate;
 
 import sys.db.Connection;
 import sys.db.Manager;
@@ -47,6 +50,8 @@ class MainSync
 	static var ours : Map<String,Int>;
 	static var warning : Int = 0;
 	
+	static var enq : LocalEnqueuer;
+	
 	public static function main()
 	{
 		Log.trace = function(txt : Dynamic, ?infos : PosInfos)
@@ -59,8 +64,14 @@ class MainSync
 		}
 		//TODO:Apagar
 		{
-			Context.resetMainDb();
+			//TODO: Linkar lugar correto no DB
+			//Context.resetMainDb();
+			InitDB.run();
 			//Context.init();
+			if (!TableCreate.exists(QueuedMessage.manager))
+				TableCreate.create(QueuedMessage.manager);
+			enq = new LocalEnqueuer(QueuedMessage.manager);
+			
 		}
 		//END
 		syncex = new Map();
@@ -123,7 +134,7 @@ class MainSync
 		// Query -> ../../extras/main.sql
 		//Session_id only 
 		//var updateVars = targetCnx.request("SELECT DISTINCT session_id FROM ((SELECT ep.session_id as session_id FROM SyncMap sm join EnderecoProp ep ON sm.tbl = 'EnderecoProp' AND sm.new_id = ep.id /*AND sm.timestamp > x*/) UNION ALL (SELECT  s.id as session_id FROM SyncMap sm JOIN Session s ON sm.tbl = 'Session' AND sm.new_id = s.id /*AND sm.timestamp > x*/) UNION ALL ( select f.session_id as session_id FROM SyncMap sm JOIN Familia f ON f.id = sm.new_id AND sm.tbl = 'Familia'  /*AND sm.timestamp > x*/) UNION ALL (select  m.session_id as session_id FROM SyncMap sm JOIN Morador m ON m.id = sm.new_id AND sm.tbl = 'Morador'  /*AND sm.timestamp > x*/) UNION ( select  p.session_id as session_id FROM SyncMap sm JOIN Ponto p ON  sm.tbl = 'Ponto' AND p.id = sm.new_id  /*AND sm.timestamp > x*/) UNION ALL (select m.session_id as session_id FROM SyncMap sm JOIN Modo m ON m.id = sm.new_id AND sm.tbl = 'Modo'  /*AND sm.timestamp > x*/)	) ack WHERE session_id IS NOT NULL ORDER BY session_id ASC").results().map(function(v) { return v.session_id; } ).array();
-		var updateVars = targetCnx.request("SELECT id as session_id FROM Session WHERE id < 100").results().map(function(v) { return v.session_id; } ).array();
+		var updateVars = targetCnx.request("SELECT id as session_id FROM Session WHERE id < 20").results().map(function(v) { return v.session_id; } ).array();
 		#if debug
 		maxtimestamp = Date.now().getTime();
 		#else
@@ -141,19 +152,24 @@ class MainSync
 			var shouldInsert = processSessionID(u, false);
 		}
 		
-		Manager.cleanup();
-		Manager.cnx.close();
-		targetCnx.close();
 		
 		//TODO: Mandar mensagem
 		for (k in syncex.keys())
 		{
 			var v = ours.get(k);
 			v = (v != null) ? v : 0;
-			trace("Table " + k + ": Syncex had " + syncex.get(k) + " entries. Updated : " + v);
+			var txt = "Table " + k + ": Syncex detected " + syncex.get(k) + " entries. Updated : " + v;
+			trace(txt);
+			enq.enqueue(new comn.message.Slack({ text : txt , username : "SyncBot" } ));
 		}
 		
 		trace("Done with only " + warning + " warnings!");
+		enq.enqueue(new comn.message.Slack( { text : "Done with only " + warning + " warnings!" , username : "SyncBot" } ));
+		
+		Manager.cleanup();
+		Manager.cnx.close();
+		targetCnx.close();
+		
 	}
 	
 	static function processSessionID(u : Int, insertMode : Bool) : Bool
@@ -213,7 +229,6 @@ class MainSync
 				if (k > biggest)
 					biggest = k;
 			}
-			trace("cur? " + biggest);
 			
 			//trace(groups != null);
 			if (groups.get(biggest) == null || groups.get(biggest) < 10)
@@ -236,8 +251,8 @@ class MainSync
 		}
 		
 		//o = old_entry from Macros.validateEntry (old_entry is an old reference to the same survey)
-		var o : Survey = Macros.validateEntry(Survey, ["syncTimestamp", "id","paid","checkSupervisor","checkCT","checkSuper","group"], [ { key : "old_survey_id", value : new_sess.old_survey_id } ], new_sess);
-		if (insertMode && o.date_completed != null )
+		var o : Survey = Macros.validateEntry(Survey, ["syncTimestamp", "id","paid","checkSupervisor","checkCT","checkSuper","group","date_edited"], [ { key : "old_survey_id", value : new_sess.old_survey_id } ], new_sess);
+		if (insertMode && o != null && o.date_completed != null )
 		{
 			
 			new_sess.lock();
