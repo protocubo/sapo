@@ -83,11 +83,8 @@ class Context {
 			var supervisors = new Group(PSupervisor, new AccessName("supervisor"), "Supervisor");
 			var phoneOperators = new Group(PPhoneOperator, new AccessName("telefonista"), "Telefonista");
 			var superUsers = new Group(PSuperUser, new AccessName("super"), "Super usuário");
-			for (g in [surveyors, supervisors, phoneOperators, superUsers]) {
+			for (g in [surveyors, supervisors, phoneOperators, superUsers])
 				g.insert();
-				var gu = new User(g, new EmailAddress('${g.group_name}@sapo'), "*", true);
-				gu.insert();
-			}
 
 			// users
 			var arthur = new User(superUsers, new EmailAddress("arthur@sapo"), "Arthur Dent");
@@ -113,28 +110,35 @@ class Context {
 
 			// some tickets
 			var authorCol = [arthur, ford].concat(magentoCol);
-			var recipientCol = authorCol.concat([judite]).concat(Lambda.array(
-					User.manager.search($isGroup && ($group == phoneOperators || $group == superUsers))));
+			var recipientCol = authorCol.concat([judite]);  // TODO create some for groups too
 			var ticketCol = [];
 			for (i in 0...20) {
 				var s = surveyCol[i%surveyCol.length];
 				var a = authorCol[i%authorCol.length];
 				var r = recipientCol[(recipientCol.length + i)%recipientCol.length];
-				var t = new Ticket(s, a, r, 'Lorem ${s.id} ipsum ${a.name} ${r.name}');
+				var t = new Ticket(s, a, 'Lorem ${s.id} ipsum ${a.name} ${r.name}');
 				t.insert();
+				new TicketSubscription(t, null, r, true).insert();
 				var m = new TicketMessage(t, a, 'Heyy!!  Just letting you know I found an issue with survey ${s.id}');
+				new TicketSubscription(t, null, a).insert();
 				m.insert();
-				var ts = new TicketSubscription(t, a);
-				ts.insert();
 			}
-			var ticket1 = new Ticket(survey1, arthur, ford, "Overpass???");
+
+			var ticket1 = new Ticket(survey1, arthur, "Overpass???");
 			ticket1.insert();
+			new TicketSubscription(ticket1, superUsers, true).insert();
 			new TicketMessage(ticket1, arthur, "Hey, I was distrought over they wanting to build an overpass over my house").insert();
+			new TicketSubscription(ticket1, null, arthur).insert();
 			new TicketMessage(ticket1, ford, "Don't panic... don't panic...").insert();
-			var ticket2 = new Ticket(survey2, ford, arthur, "About Time...");
+			new TicketSubscription(ticket1, null, ford).insert();
+
+			var ticket2 = new Ticket(survey2, ford, "About Time...");
 			ticket2.insert();
+			new TicketSubscription(ticket2, phoneOperators, true).insert();
 			new TicketMessage(ticket2, ford, "Time is an illusion, lunchtime doubly so. ").insert();
+			new TicketSubscription(ticket2, null, ford).insert();
 			new TicketMessage(ticket2, arthur, "Very deep. You should send that in to the Reader's Digest. They've got a page for people like you.").insert();
+			new TicketSubscription(ticket2, null, arthur).insert();
 		} catch (e:Dynamic) {
 			rollback();
 			neko.Lib.rethrow(e);
