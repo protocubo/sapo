@@ -194,8 +194,8 @@ class Context {
 			s.syncTimestamp = Date.now().getTime();
 			s.tentativa_id = 1;
 			s.checkCT = randomBool(rnd);
-			s.checkSupervisor = randomBool(rnd);
-			s.checkSuper = randomBool(rnd);
+			s.checkSV = randomBool(rnd);
+			s.checkCQ = randomBool(rnd);
 			s.date_create = DateTools.delta(Date.now(), -1000.0 * 60 * 60 * 24 * rnd.int(5));
 			s.date_started = s.date_create;
 			s.date_finished = DateTools.delta(Date.now(), 1000.0 * 60 * 60 * 24 * rnd.int(5));

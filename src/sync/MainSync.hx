@@ -28,6 +28,7 @@ import common.tools.StringTools;
  * @author Caio
  */
 using Lambda;
+//TODO: MUDAR NOMES!
 class MainSync
 {
 
