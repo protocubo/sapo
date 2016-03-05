@@ -11,7 +11,7 @@ class RegistrationRoutes extends AccessControl {
 	@authorize(PSuperUser)
 	public function doDefault(?args:{ ?activeFilter:String })
 	{
-		// TODO paginate
+		// TODO paginate, orderBy user.name
 		if (args == null) args = { };
 		var users = new List<User>();
 		if(args.activeFilter == "deactivated")
@@ -63,63 +63,6 @@ class RegistrationRoutes extends AccessControl {
 		args.user.deactivated_at = Context.now;
 		args.user.update();
 		Web.redirect("/registration");
-	}
-
-	@authorize(all)
-	public function doChangepassword(args : { token : String } )
-	{
-		// TODO rename to pwd
-		if (args.token == null)
-		{
-			Web.redirect("/");
-			return;
-		}
-
-		var t = Token.manager.get(args.token);
-		if (t != null && !t.isExpired && t.expirationTime > Context.now)
-			Sys.println(sapo.view.Password.render(args.token));
-		Web.redirect("/");
-	}
-
-	@authorize(all)
-	public function postChange(args : { pass : String, confirm : String, token : String } )
-	{
-		// TODO rename to pwd
-		if (args.pass != null && args.pass.length >= 6 && args.pass == args.confirm && args.token != null && args.token.length > 0)
-		{
-			var t = Token.manager.get(args.token, true);
-			if (t != null)
-			{
-				t.user.lock();
-				t.user.password = Password.make(args.pass);
-				t.user.update();
-
-				t.setExpired();
-				t.update();
-				//Manager.cnx.commit();
-			}
-		}
-
-		Web.redirect("/");
-	}
-
-	@authorize(all)
-	public function postForgotPassword(args : {email : String})
-	{
-		if (args != null && args.email != null)
-		{
-			var u = User.manager.select($email == new EmailAddress(args.email));
-			if (u != null)
-			{
-				var t = new Token(u);
-				t.invalidateOthers();
-				t.insert();
-
-				//var enq = new LocalEnqueuer();
-				//enq.enqueue(new comn.message.Email( { from:"sapo@sapoide.com.br", to:u.email, subject:"[SAPO] Resete sua senha", text: "Acesse o link: " + "www.sapo.com.br/registration/token?token=" +  t.token + " para alterar sua senha!" } );
-			}
-		}
-		Web.redirect("/");
 	}
 
 	public function new() {}
