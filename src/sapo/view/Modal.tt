@@ -176,7 +176,7 @@
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 					<h4 class="modal-title" id="cadastro(: cadastro.id :)_editar_label">EDITAR USUÁRIO</h4>
 				</div>
-				<form action="/registration/edit" method="get">				
+				<form action="/registration/edit" method="post">
 					<input type="hidden" name="user" value=(:cadastro.id:)>
 					<div class="modal-body">
 						<div class="row">
@@ -224,7 +224,7 @@
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 					<h4 class="modal-title" id="cadastro(: cadastro.id :)_desativar_label">DESATIVAR USUÁRIO</h4>
 				</div>
-				<form action="/registration/deactivate" method="get">				
+				<form action="/registration/deactivate" method="get">
 					<input type="hidden" name="user" value=(:cadastro.id:)>
 					<div class="modal-body">
 						<div class="row">
@@ -265,7 +265,7 @@
 						<div class="row">
 							<div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
 							<form action="/payments/pay" method="get">
-							<div class="col-md-6"><button type="submit" value="submit" class="btn btn-success">PAGAR</button></div>							
+							<div class="col-md-6"><button type="submit" value="submit" class="btn btn-success">PAGAR</button></div>
 						</div>
 					</div>
 				</form>

@@ -19,11 +19,11 @@
 		<ol class="breadcrumb">
 			<li class="active">CADASTRO</li>
 		</ol>
-		
+
 		<div class="row">
 			<form action="" method="get">
 				<div class="col-md-2"><h5>SITUAÇÃO:</h5>
-				<!-- FILTRO -->				
+				<!-- FILTRO -->
 					<select class="form-control input-sm" name="activeFilter">
 						<option value="active">Ativos</option>
 						<option value="deactivated">Desativados</option>
@@ -38,7 +38,7 @@
 				<button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#cadastro_adicionar">Adicionar Usuário</button>
 			</div>
 		</div>
-		
+
 		<!-- TABELA DE USUÁRIOS -->
 		<table class="table mt60">
 			<thead>
@@ -95,7 +95,7 @@
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 				<h4 class="modal-title" id="cadastro_adicionar_label">ADICIONAR USUÁRIO</h4>
 				</div>
-				<form action="/registration/add" method="get">				
+				<form action="/registration/add" method="post">
 					<div class="modal-body">
 						<div class="row">
 							<div class="col-md-2"><h4>Nome:</h4></div>
@@ -136,14 +136,14 @@
 			</div>
 		</div>
 	</div>
-	
+
 	(: for user in User.manager.all() :)
 	(: Modal.modalcadastroeditar(user) :)
 	(: Modal.modalcadastrodesativar(user) :)
 	(: end :)
-	
+
 	<script>
-		function disableSupervisorField(idg,ids) 
+		function disableSupervisorField(idg,ids)
 		{
 			var eGrp = document.getElementById(idg);
 			var eSup = document.getElementById(ids);

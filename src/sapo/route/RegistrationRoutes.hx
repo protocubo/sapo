@@ -11,6 +11,7 @@ class RegistrationRoutes extends AccessControl {
 	@authorize(PSuperUser)
 	public function doDefault(?args:{ ?activeFilter:String })
 	{
+		// TODO paginate
 		if (args == null) args = { };
 		var users = new List<User>();
 		if(args.activeFilter == "deactivated")
@@ -29,7 +30,7 @@ class RegistrationRoutes extends AccessControl {
 		// TODO add "selecione" to UI elements
 		if (args == null) args = { };
 		var u = args.user;
-		
+
 		u.lock();
 		u.name = args.name;
 		u.group = args.group;
@@ -44,12 +45,12 @@ class RegistrationRoutes extends AccessControl {
 		if (args == null) args = { };
 		var u = new User(args.group, new EmailAddress(args.email), args.name, (args.supervisor != null? args.supervisor:null));
 		u.insert();
-		
+
 		var t = new Token(u);
 		t.invalidateOthers();
 		t.insert();
 		Manager.cnx.commit();
-		
+
 		//var enq = new LocalEnqueuer();
 		//enq.enqueue(new comn.message.Email( { from:"sapo@sapoide.com.br", to:u.email, subject:"[SAPO] Confirme sua conta", text: "Acesse o link: " + "www.sapo.com.br/registration/token?token=" +  t.token + " para validar sua conta!" } );
 		Web.redirect("/registration");
@@ -63,25 +64,27 @@ class RegistrationRoutes extends AccessControl {
 		args.user.update();
 		Web.redirect("/registration");
 	}
-	
+
 	@authorize(all)
-	public function postChangepassword(args : { token : String } )
+	public function doChangepassword(args : { token : String } )
 	{
+		// TODO rename to pwd
 		if (args.token == null)
 		{
 			Web.redirect("/");
 			return;
 		}
-		
+
 		var t = Token.manager.get(args.token);
 		if (t != null && !t.isExpired && t.expirationTime > Context.now)
 			Sys.println(sapo.view.Password.render(args.token));
 		Web.redirect("/");
 	}
-	
+
 	@authorize(all)
 	public function postChange(args : { pass : String, confirm : String, token : String } )
 	{
+		// TODO rename to pwd
 		if (args.pass != null && args.pass.length >= 6 && args.pass == args.confirm && args.token != null && args.token.length > 0)
 		{
 			var t = Token.manager.get(args.token, true);
@@ -90,16 +93,16 @@ class RegistrationRoutes extends AccessControl {
 				t.user.lock();
 				t.user.password = Password.make(args.pass);
 				t.user.update();
-				
+
 				t.setExpired();
 				t.update();
 				//Manager.cnx.commit();
 			}
 		}
-		
+
 		Web.redirect("/");
 	}
-	
+
 	@authorize(all)
 	public function postForgotPassword(args : {email : String})
 	{
@@ -110,14 +113,14 @@ class RegistrationRoutes extends AccessControl {
 			{
 				var t = new Token(u);
 				t.invalidateOthers();
-				t.insert();			
-				
+				t.insert();
+
 				//var enq = new LocalEnqueuer();
 				//enq.enqueue(new comn.message.Email( { from:"sapo@sapoide.com.br", to:u.email, subject:"[SAPO] Resete sua senha", text: "Acesse o link: " + "www.sapo.com.br/registration/token?token=" +  t.token + " para alterar sua senha!" } );
 			}
 		}
 		Web.redirect("/");
 	}
-	
+
 	public function new() {}
 }
