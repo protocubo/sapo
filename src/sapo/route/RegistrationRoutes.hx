@@ -21,19 +21,19 @@ class RegistrationRoutes extends AccessControl {
 	}
 
 	@authorize(PSuperUser)
-	public function doEdit(?args:{ ?user:User, ?name:String, ?email:String, ?group:Group, ?supervisor:User })
+	public function doEdit(?args:{ ?user:User, ?name:String, ?group:Group, ?supervisor:User })
 	{
 		if (args == null) args = { };
 		var u = args.user;
 		
 		u.lock();
 		u.name = args.name;
-		u.email = new EmailAddress(args.email);
 		u.group = args.group;
 		u.supervisor = (args.supervisor != null? args.supervisor:null);
 		u.update();
 		Web.redirect("/registration");
 	}
+
 	@authorize(PSuperUser)
 	public function doAdd(?args:{ ?name:String, ?email:String, ?group:Group, ?supervisor:User })
 	{
