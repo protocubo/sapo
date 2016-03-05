@@ -1,6 +1,12 @@
-(: import common.spod.Survey :)
+(: import sapo.spod.Survey :)
+(: import sapo.spod.User :)
 
-(: static function surveySummary(survey:common.spod.Survey) :)
+(: static function surveySummary(survey:sapo.spod.Survey) :)
+(:    var dom = Familia.manager.select($survey == survey, { orderBy:-syncTimestamp, limit : 1 }) :) (:*FIXME syncTimestampi*:) 
+(:    var fam = dom :) 
+(:    var user = User.manager.select($id == survey.user_id) :) (:*FIXME syncTimestamp*:) 
+(:    do{ if (user.supervisor == null) throw ('assertion failed: surveyor id:${user.id} (${user.email}) has no supervisor');} :)
+
 <!-- PESQUISA -->
 <div class="panel panel-default">
 	<!-- HEAD PESQUISA -->
@@ -9,7 +15,7 @@
 			<div class="col-md-4 panel-title">
 				<!-- Nº da Pesquisa, Data da Pesquisa -->
 				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyPesquisa(: survey.id :)" aria-expanded="true" aria-controls="BodyPesquisa(: survey.id :)">
-					Pesquisa #(: survey.id :) - (: survey.date_completed :) - <b class="pesquisador"> (:* survey.surveyor *:) Dilbert</b> - <b class="supervisor">(:* survey.supervisor *:) Magali</b>
+					Pesquisa #(: survey.id :) - (: survey.date_completed :) - <b class="pesquisador"> (: user.name :)</b> - <b class="supervisor">(: user.supervisor.name :)</b>
 				</a>
 			</div>
 			<div class="col-md-6 panel-title">
@@ -18,10 +24,9 @@
 				(: survey.logradouro:) , (:survey.numero:)
 				</a>
 				<span class="tags">
-					(: Util.status( survey.checkSupervisor, survey.checkCT , survey.checkSuper ) :)
+					(: Util.status( survey.checkSV, survey.checkCT , survey.checkCQ ) :)
 				</span>
 			</div>
-
 		</div>
 	</div>
 	<!-- BODY PESQUISA -->
@@ -31,16 +36,14 @@
 				<div class="col-md-12 barraderolagem">
 					<!-- DADOS DA PESQUISA -->
 					<div class="bloco"><b>Endereço:</b>  (: survey.logradouro :) , (: survey.numero :)	(: survey.complemento :), (: survey.bairro :) </div>
-					(: for d in common.spod.Familia.manager.search($survey_id == survey.id, { orderBy:-syncTimestamp, limit : 1 }) :) (:* FIXME syncTimestamp  *:)
-					<div class="bloco"><b>Contato:</b> (: d.nomeContato :) - (: d.telefoneContato :) </div>
-					(: end :)
+					<div class="bloco"><b>Contato:</b> (: dom.nomeContato :) - (: dom.telefoneContato :) </div>
 					<div class="bloco"><b>Senha:</b> (: survey.pin :) </div>
 					<hr>
 					<p><b>Moradores:</b></p>
-					(: for m in common.spod.Morador.manager.search($survey_id == survey.id)  :)
+					(: for m in sapo.spod.Survey.Morador.manager.search($survey_id == survey.id)  :)
 						(: var dash = false :)
-							<p> (: m.nomeMorador :) ( (: m.idade :) ) :
-							(: for p in common.spod.Ponto.manager.search($morador_id == m.id)  :)
+							<p> (: m.nomeMorador :) ( (: Util.enumText(m.idade) :) ) :
+							(: for p in sapo.spod.Ponto.manager.search($morador_id == m.id)  :)
 								(: if dash :) - (: end :)(: p.motivo :) (: do dash = true :)
 							(: end :)
 							</p>

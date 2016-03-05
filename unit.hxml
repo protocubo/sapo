@@ -1,7 +1,9 @@
 -cp src
 -lib utest
 -lib hxBitcoin
+-lib compiletime
 -lib version
+-lib tink_template
 
 --each
 

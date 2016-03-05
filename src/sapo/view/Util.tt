@@ -83,7 +83,28 @@
 	</footer>
 (: end :)
 
-(: static function status( checkSupervisor:Bool, checkCT:Bool, checkSuper:Bool ) :)
+(: static function enumText(v:EnumValue) :)
+(: do {
+        if (v == null) return "";
+        var e = Type.getEnum(v);
+        var cons = Type.enumConstructor(v);
+        var meta = haxe.rtti.Meta.getFields(e);
+        var cnMeta = Reflect.field(meta, cons);
+        if (cnMeta == null) 
+            return cons;
+        var tmeta:Array<Dynamic> = cnMeta.tt;
+        if (tmeta == null) 
+            return cons;
+        for (text in tmeta) {
+            if (Type.getClassName(Type.getClass(text)) != "String")
+                return cons;
+            else
+                return text;
+        }
+      } :)
+(:end:)
+
+(: static function status( checkSV:Bool, checkCT:Bool, checkCQ:Bool ) :)
 
 	<!-- se paga -->
 	<span class="glyphicon glyphicon-usd" aria-hidden="true" title="PAGA"></span>
@@ -91,13 +112,13 @@
 	<span class="glyphicon glyphicon-earphone" aria-hidden="true" title="TELEFONADA"></span>
 	
 	<!-- status SUPERVISOR -->
-	(:if checkSupervisor == true :)
+	(:if checkSV == true :)
 	<span class="glyphicon glyphicon-ok supervisor" aria-hidden="true" title="SUPERVISOR"></span>
 	(: end :)
-	(:if checkSupervisor == false :)
+	(:if checkSV == false :)
 	<span class="glyphicon glyphicon-remove supervisor" aria-hidden="true" title="SUPERVISOR"></span>
 	(: end :)
-	(:if checkSupervisor == null :)
+	(:if checkSV == null :)
 	<span class="glyphicon glyphicon-minus supervisor" aria-hidden="true" title="SUPERVISOR"></span>
 	(: end :)
 	
@@ -113,13 +134,13 @@
 	(: end :)
 
 	<!-- status SUPERUSUÁRIO -->
-	(:if checkSuper == true :)
+	(:if checkCQ == true :)
 	<span class="glyphicon glyphicon-ok super" aria-hidden="true" title="SUPERUSUÁRIO"></span>
 	(: end :)
-	(:if checkSuper == false :)
+	(:if checkCQ == false :)
 	<span class="glyphicon glyphicon-remove super" aria-hidden="true" title="SUPERUSUÁRIO"></span>
 	(: end :)
-	(:if checkSuper == null :)
+	(:if checkCQ == null :)
 	<span class="glyphicon glyphicon-minus super" aria-hidden="true" title="SUPERUSUÁRIO"></span>
 	(: end :)
 	

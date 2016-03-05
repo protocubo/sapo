@@ -66,7 +66,7 @@ class RootRoutes extends AccessControl {
 		d.dispatch(new SurveyRoutes());
 
 	@authorize(PSupervisor, PPhoneOperator, PSuperUser)
-	public function doSurvey(s:NewSurvey)
+	public function doSurvey(s:sapo.spod.Survey)
 		Sys.println(sapo.view.Survey.render(s));
 
 	@authorize(PSupervisor, PSuperUser)

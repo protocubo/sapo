@@ -21,18 +21,18 @@ class Survey extends Object {
 
 	public var isRestored : SBool;
 
-	public var dataInicioPesquisaPapel : SNull<SDateTime>;
-	public var dataFimPesquisaPapel : SNull<SDateTime>;
-	public var codigoFormularioPapel : SNull<SString<255>>;
+	public var dataInicioPesquisaPapel : SNull<SDateTime>; //
+	public var dataFimPesquisaPapel : SNull<SDateTime>; //
+	public var codigoFormularioPapel : SNull<SString<255>>; //
 
 	public var date_create : SDateTime;
-	public var date_started : SNull<SDateTime>;
-	public var date_finished : SNull<SDateTime>;
-	public var date_completed : SNull<SDateTime>;
+	public var date_started : SNull<SDateTime>; // 
+	public var date_finished : SNull<SDateTime>; 
+	public var date_completed : SNull<SDateTime>; //
 	public var estadoPesquisa : SNull<SEnum<EstadoPesquisa>>;
 
 	public var endereco_id : SNull<SInt>;
-	public var pin : SNull<SString<255>>;
+	public var pin : SNull<SString<255>>; //
 	public var latitude : SNull<SFloat>;
 	public var longitude : SNull<SFloat>;
 	public var municipio : SNull<SString<255>>;
@@ -48,9 +48,10 @@ class Survey extends Object {
 	public var json : Null<String>;
 	
 	/** CHECKS -> Verificado? - TODO:IGNORAR NO SYNC! **/
-	public var checkSupervisor : SNull<SBool>;
-	public var checkCT : SNull<SBool>;
-	public var checkSuper : SNull<SBool>;
+	public var checkSV : SNull<SBool>; 
+	public var checkCT : SNull<SBool>; 
+	public var checkCQ : SNull<SBool>; 
+    public var isPhoned : SBool; 
 	public var group : Null<Int>;
 	public var date_edited : SNull<SDateTime>;
 	/*********************************/
@@ -68,7 +69,7 @@ class Survey extends Object {
 class Ocorrencias extends Object {
 	public var id : SId;
 	//?
-	public var desc : SNull<SString<4096>>;
+	public var desc : SNull<SString<4096>>; //
 	@:relation(survey_id) public var survey : Survey;
 	public var datetime : SDateTime;
 	public var json : Null<String>;
@@ -161,9 +162,9 @@ class Ponto extends Object {
 	/*
 	public var anterior_id : SNull<SInt>;
 	public var posterior_id : SNull<SInt>;
-
-	public var ordem : SNull<SInt>;
 	*/
+	public var ordem : SNull<SInt>;
+	
 	@:relation(uf_id) public var uf : UF;
 	public var city_id : SInt;
 	public var regadm_id : SNull<SInt>;

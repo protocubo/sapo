@@ -55,7 +55,7 @@ class InitDB
 				for (c in classes)
 					TableCreate.create(Reflect.field(c, "manager"));
 				populateEnumTable();
-				//TODO:Populate statics
+				//TODO:Populate statics <--ain't this done already?
 
 			} catch (e:Dynamic) {
 				Manager.cnx.request("ROLLBACK");
