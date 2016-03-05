@@ -15,7 +15,8 @@ private typedef Groups = {
 	surveyors : Group,
 	supervisors : Group,
 	phoneOperators : Group,
-	superUsers : Group
+	superUsers : Group,
+	lessSuperUsers:Group
 }
 
 private typedef Users = {
@@ -58,10 +59,11 @@ class Populate {
 		var supervisors = new Group(PSupervisor, new AccessName("supervisor"), "Supervisor");
 		var phoneOperators = new Group(PPhoneOperator, new AccessName("telefonista"), "Telefonista");
 		var superUsers = new Group(PSuperUser, new AccessName("super"), "Super usuário");
-		for (g in [surveyors, supervisors, phoneOperators, superUsers])
+		var lessSuperUsers = new Group(PSuperUser, new AccessName("darth"), "Darth's guild");
+		for (g in [surveyors, supervisors, phoneOperators, superUsers, lessSuperUsers])
 			g.insert();
 		return { surveyors : surveyors, supervisors : supervisors,
-				phoneOperators : phoneOperators, superUsers : superUsers };
+				phoneOperators : phoneOperators, superUsers : superUsers, lessSuperUsers : lessSuperUsers };
 	}
 
 	static function makeUsers(g:Groups)
@@ -71,7 +73,8 @@ class Populate {
 		var judite = new User(g.phoneOperators, new EmailAddress("judite@sapo"), "Judite da NET");
 		var magentoCol = [ for (i in 0...4) new User(g.supervisors, new EmailAddress('magento.${i+1}@sapo'),
 				'Magento Maria #${i+1}') ];
-		for (u in [arthur, ford, judite].concat(magentoCol)) {
+		var darthMall = new User(g.lessSuperUsers, new EmailAddress("mall@sapo"), "Darth Mall");
+		for (u in [arthur, ford, judite, darthMall].concat(magentoCol)) {
 			u.password = Password.make("secret");
 			u.insert();
 		}
