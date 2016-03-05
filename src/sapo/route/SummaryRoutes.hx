@@ -44,8 +44,12 @@ class SummaryRoutes extends AccessControl
 			
 			for (u in users)
 			{
-				wherestr = wherestr + " AND user_id = " + u;
+				if (wherestr == "")
+					wherestr = " AND ( user_id = " + u;
+				else
+					wherestr = wherestr + " OR user_id = " + u;
 			}
+			wherestr = wherestr + ")";
 		}
 		
 		//Todos os estados atuais da pesquisa por grupo
@@ -121,6 +125,8 @@ class SummaryRoutes extends AccessControl
 				
 				i++;
 			}
+			
+	
 		}
 		
 		var userCheck = statusGen();
@@ -128,7 +134,7 @@ class SummaryRoutes extends AccessControl
 		var dateVal : Map<String,Map<String,Int>> = new Map();
 		var headers = [DATE_KEY, SUP_KEY, CT_KEY, SUPER_KEY, COMPLETA_KEY, ACEITA_KEY, RECUSADAS_KEY];
 		//docs/queries/User_historic_friday.sql
-		var queryDay = Manager.cnx.request("SELECT s.user_id as user, s.`group` as grupo,	DATE(s.date_finished, 'weekday "+HistoricDay+"') as date_end , COUNT(*) as pesqGrupo,  SUM( CASE WHEN checkSV IS NULL THEN 1 ELSE 0 END) as nullSupervisor, SUM( CASE WHEN checkCT IS NULL THEN 1 ELSE 0 END) as nullCT, SUM(CASE WHEN checkCQ IS NULL THEN 1 ELSE 0 END) AS nullSuper FROM Survey s JOIN UpdatedSurvey us 	ON s.old_survey_id = us.old_survey_id AND s.syncTimestamp = us.syncTimestamp "+((wherestr != "") ? wherestr : "WHERE ")+" STRFTIME('%w',s.date_finished) = '"+ HistoricDay+ "' GROUP BY s.user_id, s.`group`, date_end ORDER BY s.user_id, s.`group`, date_end ").results();
+		var queryDay = Manager.cnx.request("SELECT s.user_id as user, s.`group` as grupo,	DATE(s.date_finished, 'weekday "+HistoricDay+"') as date_end , COUNT(*) as pesqGrupo,  SUM( CASE WHEN checkSV IS NULL THEN 1 ELSE 0 END) as nullSupervisor, SUM( CASE WHEN checkCT IS NULL THEN 1 ELSE 0 END) as nullCT, SUM(CASE WHEN checkCQ IS NULL THEN 1 ELSE 0 END) AS nullSuper FROM Survey s JOIN UpdatedSurvey us 	ON s.old_survey_id = us.old_survey_id AND s.syncTimestamp = us.syncTimestamp AND STRFTIME('%w',s.date_finished) = '"+ HistoricDay+ "'  "+((wherestr != "") ? wherestr : "")+" GROUP BY s.user_id, s.`group`, date_end ORDER BY s.user_id, s.`group`, date_end ").results();
 		for (q in queryDay)
 		{
 			if (q.date_end == null)
@@ -189,14 +195,14 @@ class SummaryRoutes extends AccessControl
 	}
 	
 	@authorize(PSupervisor, PSuperUser)
-	public function postUser(?args : {user:User})
+	public function postUser(?args : {?user:User})
 	{
 		if (args == null)
 		{
-			Web.redirect("index");
-			return;
+			args = { user : null};
 		}
 		 var user = args.user;
+		
 		
 		var ret = [];
 		switch(user.group.privilege)
@@ -206,16 +212,19 @@ class SummaryRoutes extends AccessControl
 			case Privilege.PSupervisor:
 				ret = User.manager.search($supervisor == user, null, false).map(function (v) { return v.id; } ).array();
 			default:
-				Web.redirect("index");
-				return;
+				ret = [];
 		}
 		
 		var referer = Web.getClientHeader("Referer");
+		referer = referer.split("?")[0];
 		var serializer = new Serializer();
-		serializer.serialize(ret);
-		
-		Web.redirect(referer + "?data=" + serializer.toString());
-		
+		if(ret.length > 0)
+			serializer.serialize(ret);
+		trace(referer);
+		if(ret.length > 0)
+			Web.redirect(referer + "?data=" + serializer.toString());
+		else
+			Web.redirect(referer);		
 	}
 	
 	//Pega todos os status por grupo e um Map de user_id, grupo, e enum de estado
