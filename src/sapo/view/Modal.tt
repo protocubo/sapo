@@ -224,7 +224,7 @@
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 					<h4 class="modal-title" id="cadastro(: cadastro.id :)_desativar_label">DESATIVAR USUÁRIO</h4>
 				</div>
-				<form action="/registration/deactivate" method="get">
+				<form action="/registration/deactivate" method="post">
 					<input type="hidden" name="user" value=(:cadastro.id:)>
 					<div class="modal-body">
 						<div class="row">

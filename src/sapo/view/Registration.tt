@@ -3,7 +3,7 @@
 (:import sapo.spod.Ticket:)
 (:import sapo.spod.User:)
 
-(: static function page(?users:List<User>) :)
+(: static function page(?users:List<User>, ?params:{ ?activeFilter:String, ?page:Int }, ?showPrev:Bool = false, ?showNext:Bool = false) :)
 <!DOCTYPE html>
 <html>
 <head>
@@ -84,8 +84,12 @@
 		</table>
 		<nav>
 			<ul class="pager mt30">
-				<li class="previous"><a href="#"><span aria-hidden="true">&larr;</span> ANTERIOR</a></li>
-				<li class="next"><a href="#">PRÓXIMA <span aria-hidden="true">&rarr;</span></a></li>
+			(:if showPrev:)
+				<li class="previous"><a href="registration?activeFilter=(:params.activeFilter:)&page=(:params.page-1:)"><span aria-hidden="true">&larr;</span> ANTERIOR</a></li>
+			(:end:)
+			(:if showNext:)
+				<li class="next"><a href="registration?activeFilter=(:params.activeFilter:)&page=(:params.page+1:)">PRÓXIMA <span aria-hidden="true">&rarr;</span></a></li>
+			(:end:)
 			</ul>
 		</nav>
 
