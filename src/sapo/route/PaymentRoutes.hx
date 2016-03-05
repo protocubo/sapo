@@ -1,4 +1,5 @@
 package sapo.route;
+import neko.Web;
 import sapo.spod.Survey;
 import sapo.spod.User;
 
@@ -12,6 +13,7 @@ class PaymentRoutes extends AccessControl
 	public function doDefault(?args:{ ?surveyor:Int, ?paid:Bool, ?state:String })
 	{
 		if (args == null) args = { };
+		if (args.surveyor == null) { args.surveyor = 0; }
 		var surveys = Survey.manager.search(
 			(args.surveyor == 0? 1 == 1 : $user_id == args.surveyor) &&
 			$paid == args.paid
@@ -38,17 +40,27 @@ class PaymentRoutes extends AccessControl
 	public function doPay(?args:{ ?toPay:String, ?reference:String })
 	{
 		if (args == null) args = { };
-		var ids = args.toPay.split("e");
-		for (id in ids)
+		if (args.toPay.length > 1)
 		{
-			var s = Survey.manager.get(Std.parseInt(id));
-			if (!s.paid)
+			var ids = args.toPay.split("e");
+			for (id in ids)
 			{
-				
+				if (Std.parseInt(id) == null)
+					continue;
+				var s = Survey.manager.get(Std.parseInt(id));
+				if (s.paid != null)
+				{
+					s.lock();
+					s.paymentRef = args.reference;
+					s.date_paid = Context.loop.now;
+					s.paid = true;
+					s.update();
+				}
 			}
 		}
-			
-		//Sys.println(sapo.view.Payments.superPage());
+		
+		var surveys = new List<Survey>();
+		Web.redirect("/payments");
 	}
 	
 	public function new() {}

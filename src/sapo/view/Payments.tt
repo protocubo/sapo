@@ -14,12 +14,14 @@
 	<td>(: payment.id :)</td>
 	<td class"tags">(: Util.status( true, true , true) :)</td>
 	<td>(: payment.date_completed :)</td>
-	<td>(: payment.paid? payment.date_paid : "" :)</td>
 	<td>(: payment.paid? payment.paymentRef : "" :)</td>
+	<td>(: payment.paid? payment.date_paid : "" :)</td>
 	<td align="right">
+	(: if !payment.paid :)
 		<button type="button" class="btn btn-success btn-xs" aria-label="Desativar" style="width:auto;" data-toggle="modal" data-target="#pagar(: payment.id :)_um">
 			<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
 		</button>
+	(: end:)
 	</td>
 </tr>
 <!-- FIM LINHA -->
