@@ -1,6 +1,10 @@
-(: import sapo.Spod :)
+(:import common.db.MoreTypes:)
+(:import sapo.spod.Other:)
+(:import sapo.spod.Survey:)
+(:import sapo.spod.Ticket:)
+(:import sapo.spod.User:)
 
-(: static function surveySuperStatus(payments:Spod.NewSurvey) :)
+(: static function surveySuperStatus(payments:NewSurvey) :)
 <!-- LINHA: checkbox, nome do pesquisador, número da pesquisa, data da pesquisa, refpagto, datapagto, pagar -->
 <tr>
 	<td>
@@ -21,7 +25,7 @@
 <!-- FIM LINHA -->
 (: end :)
 
-(: static function surveySimpleStatus(payment:Spod.NewSurvey) :)
+(: static function surveySimpleStatus(payment:NewSurvey) :)
 <!-- LINHA: número da pesquisa, data da pesquisa, endereço, refpagto, datapagto, status -->
 <tr>
 	<td>(: payment.id:)</td>
@@ -67,7 +71,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				(: for p in Spod.NewSurvey.manager.all() :)
+				(: for p in NewSurvey.manager.all() :)
 					(: surveySimpleStatus(p) :)
 				(: end :)
 			</tbody>
@@ -106,7 +110,7 @@
 			<div class="col-md-2"><h5>PESQUISADOR:</h5>
 				<select name="surveyor"  class="form-control input-sm" >
 					<option value =0 >Todos</option>
-					(:for u in Spod.User.manager.search($group_id== Spod.Group.manager.select($group_name=="pesquisador").id) :)
+					(:for u in User.manager.search($group_id== Group.manager.select($privilege==PSurveyor).id) :)
 						<option value=(:u.id:) >(:u.name:)</option>
 					(: end :)
 				</select>
@@ -159,7 +163,7 @@
 			</thead>
 			<tbody>
 
-				(: for p in Spod.NewSurvey.manager.all() :)
+				(: for p in NewSurvey.manager.all() :)
 					(: surveySuperStatus(p) :)
 				(: end :)
 
@@ -186,7 +190,7 @@
 
 	(: Util.footer() :)
 
-	(: for m in Spod.NewSurvey.manager.all() :)
+	(: for m in NewSurvey.manager.all() :)
 	(: Modal.modalpagamentospagar(m) :)
 	(: end :)
 

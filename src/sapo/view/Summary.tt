@@ -1,7 +1,8 @@
-(: import sapo.Spod :)
 (: import common.db.MoreTypes :)
-(: import sapo.spod.User :)
+(: import sapo.Spod :)
 (: import sapo.route.SummaryRoutes.* :)
+(: import sapo.spod.User :)
+
 (: static function render(plotData : Map<String,Map<String,Int>>, header : Array<String>) :)
 <!DOCTYPE html>
 <html>
@@ -152,9 +153,9 @@
 		<div class="row mt60">
 			<div class="col-md-12">
 				<h4>
-					<span class="supervisor"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> SUPERVISOR</span> |
-					<span class="telefonista"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> TELEFONISTA</span> |
-					<span class="super"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> QUALIDADE</span>	|
+					<span class="PSupervisor"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> SUPERVISOR</span> |
+					<span class="PPhoneOperator"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> TELEFONISTA</span> |
+					<span class="PSuperUser"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> QUALIDADE</span>	|
 					<span class="completa"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> COMPLETA</span> |
 					<span class="pendente"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> PENDENTE</span>
 				</h4>

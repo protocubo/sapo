@@ -79,16 +79,16 @@ a:focus, a:hover {
 
 /*CORES GRUPOS*/
 
-.super {
+.PSuperUser {
     color: #59B7A8;
 }
-.telefonista {
+.PPhoneOperator {
     color: #AD54C3;
 }
-.supervisor {
+.PSupervisor {
     color: #B76A40;
 }
-.pesquisador {
+.PSurveyor {
     color: #646A31;
 }
 

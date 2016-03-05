@@ -1,6 +1,10 @@
-(: import sapo.Spod:)
+(:import common.db.MoreTypes:)
+(:import sapo.spod.Other:)
+(:import sapo.spod.Survey:)
+(:import sapo.spod.Ticket:)
+(:import sapo.spod.User:)
 
-(: static function modalticketfechar(ticket:Spod.Ticket) :)
+(: static function modalticketfechar(ticket:Ticket) :)
 	<div class="modal fade" id="ticket(: ticket.id :)_fechar" tabindex="-1" role="dialog" aria-labelledby="ticket(: ticket.id :)_fechar_label">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
@@ -28,7 +32,7 @@
 	</div>
 (: end :)
 
-(: static function modalticketresponder(ticket:Spod.Ticket) :)
+(: static function modalticketresponder(ticket:Ticket) :)
 	<div class="modal fade" id="ticket(: ticket.id :)_responder" tabindex="-1" role="dialog" aria-labelledby="ticket(: ticket.id :)_responder_label">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
@@ -54,7 +58,7 @@
 	</div>
 (: end :)
 
-(: static function modalticketincluir(ticket:Spod.Ticket) :)
+(: static function modalticketincluir(ticket:Ticket) :)
 	<div class="modal fade" id="ticket(: ticket.id :)_incluir" tabindex="-1" role="dialog" aria-labelledby="ticket(: ticket.id :)_incluir_label">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
@@ -95,7 +99,7 @@
 	</div>
 (: end :)
 
-(: static function modalticketstatus(ticket:Spod.Ticket) :)
+(: static function modalticketstatus(ticket:Ticket) :)
 <div class="modal fade" id="ticket(: ticket.id :)_status" tabindex="-1" role="dialog" aria-labelledby="ticket(: ticket.id :)_status_label">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
@@ -109,13 +113,13 @@
 						<div class="col-md-4">
 							<div class="btn-group" data-toggle="buttons">
 								<label class="btn btn-default active" style="width:auto;">
-									<input type="radio" name="options" id="option1" autocomplete="off" checked> <span class="glyphicon glyphicon-minus supervisor" aria-hidden="true"></span>
+									<input type="radio" name="options" id="option1" autocomplete="off" checked> <span class="glyphicon glyphicon-minus PSupervisor" aria-hidden="true"></span>
 								</label>
 								<label class="btn btn-default" style="width:auto;">
-									<input type="radio" name="options" id="option2" autocomplete="off"> <span class="glyphicon glyphicon-ok supervisor" aria-hidden="true"></span>
+									<input type="radio" name="options" id="option2" autocomplete="off"> <span class="glyphicon glyphicon-ok PSupervisor" aria-hidden="true"></span>
 								</label>
 								<label class="btn btn-default" style="width:auto;">
-									<input type="radio" name="options" id="option3" autocomplete="off"> <span class="glyphicon glyphicon-remove supervisor" aria-hidden="true"></span>
+									<input type="radio" name="options" id="option3" autocomplete="off"> <span class="glyphicon glyphicon-remove PSupervisor" aria-hidden="true"></span>
 								</label>
 							</div>
 						</div>
@@ -125,13 +129,13 @@
 						<div class="col-md-4">
 							<div class="btn-group" data-toggle="buttons">
 								<label class="btn btn-default active" style="width:auto;">
-									<input type="radio" name="options" id="option1" autocomplete="off" checked> <span class="glyphicon glyphicon-minus telefonista" aria-hidden="true"></span>
+									<input type="radio" name="options" id="option1" autocomplete="off" checked> <span class="glyphicon glyphicon-minus PPhoneOperator" aria-hidden="true"></span>
 								</label>
 								<label class="btn btn-default" style="width:auto;">
-									<input type="radio" name="options" id="option2" autocomplete="off"> <span class="glyphicon glyphicon-ok telefonista" aria-hidden="true"></span>
+									<input type="radio" name="options" id="option2" autocomplete="off"> <span class="glyphicon glyphicon-ok PPhoneOperator" aria-hidden="true"></span>
 								</label>
 								<label class="btn btn-default" style="width:auto;">
-									<input type="radio" name="options" id="option3" autocomplete="off"> <span class="glyphicon glyphicon-remove telefonista" aria-hidden="true"></span>
+									<input type="radio" name="options" id="option3" autocomplete="off"> <span class="glyphicon glyphicon-remove PPhoneOperator" aria-hidden="true"></span>
 								</label>
 							</div>
 						</div>
@@ -141,13 +145,13 @@
 						<div class="col-md-4">
 							<div class="btn-group" data-toggle="buttons">
 								<label class="btn btn-default active" style="width:auto;">
-									<input type="radio" name="options" id="option1" autocomplete="off" checked> <span class="glyphicon glyphicon-minus super" aria-hidden="true"></span>
+									<input type="radio" name="options" id="option1" autocomplete="off" checked> <span class="glyphicon glyphicon-minus PSuperUser" aria-hidden="true"></span>
 								</label>
 								<label class="btn btn-default" style="width:auto;">
-									<input type="radio" name="options" id="option2" autocomplete="off"> <span class="glyphicon glyphicon-ok super" aria-hidden="true"></span>
+									<input type="radio" name="options" id="option2" autocomplete="off"> <span class="glyphicon glyphicon-ok PSuperUser" aria-hidden="true"></span>
 								</label>
 								<label class="btn btn-default" style="width:auto;">
-									<input type="radio" name="options" id="option3" autocomplete="off"> <span class="glyphicon glyphicon-remove super" aria-hidden="true"></span>
+									<input type="radio" name="options" id="option3" autocomplete="off"> <span class="glyphicon glyphicon-remove PSuperUser" aria-hidden="true"></span>
 								</label>
 							</div>
 						</div>
@@ -164,7 +168,7 @@
 	</div>
 (: end :)
 
-(: static function modalcadastroeditar(cadastro:Spod.User) :)
+(: static function modalcadastroeditar(cadastro:User) :)
 	<div class="modal fade" id="cadastro(: cadastro.id :)_editar" tabindex="-1" role="dialog" aria-labelledby="cadastro(: cadastro.id :)_editar_label">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
@@ -187,8 +191,8 @@
 							<div class="col-md-2"><h4>Grupo:</h4></div>
 							<div class="col-md-10">
 								<select class="form-control" id="groupFieldEdit(:cadastro.id:)" name="group" onchange="disableSupervisorField('groupFieldEdit(:cadastro.id:)','supervisorFieldEdit(:cadastro.id:)')">
-									(: for g in Spod.Group.manager.all() :)
-										<option value=(:g.id:) (: g.id == cadastro.group.id? "selected":"" :)>(:g.group_name:)</option>
+									(: for g in Group.manager.all() :)
+										<option value=(:g.id:) (: g.id == cadastro.group.id? "selected":"" :)>(:g.privilege:)</option>
 									(:end:)
 								</select>
 							</div>
@@ -196,8 +200,8 @@
 						<div class="row">
 							<div class="col-md-2"><h4>Supervisor:</h4></div>
 							<div class="col-md-10">
-								<select class="form-control" name="supervisor" id="supervisorFieldEdit(:cadastro.id:)" (:cadastro.group.group_name == "pesquisador"? "":"disabled":)>
-									(: for s in Spod.User.manager.search($group_id== Spod.Group.manager.select($group_name=="supervisor").id ) :)
+								<select class="form-control" name="supervisor" id="supervisorFieldEdit(:cadastro.id:)" (:cadastro.group.privilege == PSupervisor ? "":"disabled":)>
+									(: for s in User.manager.search($group_id == Group.manager.select($privilege==PSupervisor).id ) :)
 										<option value=(:s.id:)>(:s.name:)</option>
 									(:end:)
 								</select>
@@ -216,7 +220,7 @@
 	</div>
 (: end :)
 
-(: static function modalcadastrodesativar(cadastro:Spod.User) :)
+(: static function modalcadastrodesativar(cadastro:User) :)
 	<div class="modal fade" id="cadastro(: cadastro.id :)_desativar" tabindex="-1" role="dialog" aria-labelledby="cadastro(: cadastro.id :)_desativar_label">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
@@ -229,7 +233,7 @@
 					<div class="modal-body">
 						<div class="row">
 							<div class="col-md-12">
-								<p>Deseja realmente desativar o usuário <b class="pesquisador">(:cadastro.name:)</b>?</p>
+								<p>Deseja realmente desativar o usuário <b class="PSurveyor">(:cadastro.name:)</b>?</p>
 							</div>
 						</div>
 					</div>
@@ -245,7 +249,7 @@
 	</div>
 (: end :)
 
-(: static function modalpagamentospagar(pagamentos:Spod.NewSurvey) :)
+(: static function modalpagamentospagar(pagamentos:NewSurvey) :)
 	<div class="modal fade" id="pagar(: pagamentos.id :)_um" tabindex="-1" role="dialog" aria-labelledby="pagar(: pagamentos.id :)_um_label">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">

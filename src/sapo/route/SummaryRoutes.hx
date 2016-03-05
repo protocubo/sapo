@@ -1,6 +1,6 @@
 package sapo.route;
-import common.db.MoreTypes.HaxeTimestamp;
-import common.db.MoreTypes.Privilege;
+
+import common.db.MoreTypes;
 import haxe.Serializer;
 import haxe.Unserializer;
 import neko.Web;
@@ -9,10 +9,6 @@ import sapo.spod.Survey;
 import sapo.spod.User;
 import sys.db.Manager;
 
-/**
- * ...
- * @author Caio
- */
 using Lambda;
 using sapo.route.SummaryRoutes.SummaryTools;
 
@@ -207,9 +203,9 @@ class SummaryRoutes extends AccessControl
 		var ret = [];
 		switch(user.group.privilege)
 		{
-			case Privilege.PSurveyor:
+			case PSurveyor:
 				ret.push(user.id);
-			case Privilege.PSupervisor:
+			case PSupervisor:
 				ret = User.manager.search($supervisor == user, null, false).map(function (v) { return v.id; } ).array();
 			default:
 				ret = [];

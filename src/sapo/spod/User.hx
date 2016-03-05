@@ -7,24 +7,21 @@ import sys.db.Manager;
 import sys.db.Object;
 import sys.db.Types;
 
-@:index(group_name, unique)
-class Group extends sys.db.Object {
+class Group extends Object {
 	public var id:SId;
 	public var privilege:SEnum<Privilege>;
-	public var group_name:AccessName;
 	public var name:String;
 
-	public function new(privilege, group_name, name)
+	public function new(privilege, name)
 	{
 		this.privilege = privilege;
-		this.group_name = group_name;
 		this.name = name;
 		super();
 	}
 }
 
 @:index(email, unique)
-class User extends sys.db.Object {
+class User extends Object {
 	public var id:SId;
 	@:relation(group_id) public var group:Group;
 	public var email:EmailAddress;
@@ -48,7 +45,7 @@ class User extends sys.db.Object {
 }
 
 @:id(id)
-class Session extends sys.db.Object {
+class Session extends Object {
 	public static inline var COOKIE_KEY = "session_id";
 	public static inline var DEFAULT_SESSION_DURATION = 24*3.6*1e6;  // unit: ms
 
@@ -83,8 +80,7 @@ class Session extends sys.db.Object {
 }
 
 @:id(token)
-class Token extends sys.db.Object
-{
+class Token extends Object {
 	public var token : SString<255>;
 	@:relation(user_id) public var user : User;
 	public var expirationTime(default,null) : HaxeTimestamp;

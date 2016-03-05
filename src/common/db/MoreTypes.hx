@@ -31,15 +31,7 @@ enum Privilege {
 	PSuperUser;
 }
 
-abstract AccessName(String) to String {
-	public inline function new(name)
-		this = name;
-}
-
 abstract EmailAddress(String) to String {
-	@:to public inline function toAccessName()
-		return new AccessName(this);
-
 	public inline function new(email)
 		this = email;
 }

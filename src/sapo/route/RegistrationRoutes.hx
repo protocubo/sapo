@@ -1,15 +1,12 @@
 package sapo.route;
+
 import common.crypto.Password;
-import common.db.MoreTypes.EmailAddress;
+import common.db.MoreTypes;
 import comn.LocalEnqueuer;
 import neko.Web;
 import sapo.spod.User;
 import sys.db.Manager;
 
-/**
- * ...
- * @author RV
- */
 class RegistrationRoutes extends AccessControl {
 	@authorize(PSuperUser)
 	public function doDefault(?args:{ ?activeFilter:String })

@@ -1,5 +1,8 @@
-(: import sapo.spod.Survey :)
-(: import sapo.spod.User :)
+(:import common.db.MoreTypes:)
+(:import sapo.spod.Survey:)
+(:import sapo.spod.Ticket:)
+(:import sapo.spod.User:)
+
 (: static function render(survey:sapo.spod.Survey) :)
 (:    var dom = Familia.manager.select($survey == survey, { orderBy:-syncTimestamp, limit : 1 }) :) (:*FIXME syncTimestampi*:) 
 (:    var fam = dom :) 
@@ -91,11 +94,11 @@ function imprimir() {
 
 				<div class="bloco">
 					<a href="#" class="corrigir escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
-					<b class="pesquisador">Pesquisador:</b> (: user.name :)
+					<b class="PSurveyor">Pesquisador:</b> (: user.name :)
 				</div>
 				<div class="bloco">
 					<a href="#" class="corrigir escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
-					<b class="supervisor">Supervisor:</b> (: user.supervisor.name :)
+					<b class="PSupervisor">Supervisor:</b> (: user.supervisor.name :)
 				</div>
 				<div class="bloco"><b>Lote:</b>  (: survey.lote :) </div>
 				(: if  survey.codigoFormularioPapel != null :)
@@ -278,49 +281,49 @@ function imprimir() {
 				</div>
 				<div class="modal-body">
 					<div class="row">
-						<div class="col-md-4 col-md-offset-2 supervisor"><h4>Supervisor:</h4></div>
+						<div class="col-md-4 col-md-offset-2 PSupervisor"><h4>Supervisor:</h4></div>
 						<div class="col-md-4">
 							<div class="btn-group" data-toggle="buttons">
 								<label class="btn btn-default active" style="width:auto;">
-									<input type="radio" name="options" id="option1" autocomplete="off" checked> <span class="glyphicon glyphicon-minus supervisor" aria-hidden="true"></span>
+									<input type="radio" name="options" id="option1" autocomplete="off" checked> <span class="glyphicon glyphicon-minus PSupervisor" aria-hidden="true"></span>
 								</label>
 								<label class="btn btn-default" style="width:auto;">
-									<input type="radio" name="options" id="option2" autocomplete="off"> <span class="glyphicon glyphicon-ok supervisor" aria-hidden="true"></span>
+									<input type="radio" name="options" id="option2" autocomplete="off"> <span class="glyphicon glyphicon-ok PSupervisor" aria-hidden="true"></span>
 								</label>
 								<label class="btn btn-default" style="width:auto;">
-									<input type="radio" name="options" id="option3" autocomplete="off"> <span class="glyphicon glyphicon-remove supervisor" aria-hidden="true"></span>
+									<input type="radio" name="options" id="option3" autocomplete="off"> <span class="glyphicon glyphicon-remove PSupervisor" aria-hidden="true"></span>
 								</label>
 							</div>
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-md-4 col-md-offset-2 telefonista"><h4>Telefonista:</h4></div>
+						<div class="col-md-4 col-md-offset-2 PPhoneOperator"><h4>Telefonista:</h4></div>
 						<div class="col-md-4">
 							<div class="btn-group" data-toggle="buttons">
 								<label class="btn btn-default active" style="width:auto;">
-									<input type="radio" name="options" id="option1" autocomplete="off" checked> <span class="glyphicon glyphicon-minus telefonista" aria-hidden="true"></span>
+									<input type="radio" name="options" id="option1" autocomplete="off" checked> <span class="glyphicon glyphicon-minus PPhoneOperator" aria-hidden="true"></span>
 								</label>
 								<label class="btn btn-default" style="width:auto;">
-									<input type="radio" name="options" id="option2" autocomplete="off"> <span class="glyphicon glyphicon-ok telefonista" aria-hidden="true"></span>
+									<input type="radio" name="options" id="option2" autocomplete="off"> <span class="glyphicon glyphicon-ok PPhoneOperator" aria-hidden="true"></span>
 								</label>
 								<label class="btn btn-default" style="width:auto;">
-									<input type="radio" name="options" id="option3" autocomplete="off"> <span class="glyphicon glyphicon-remove telefonista" aria-hidden="true"></span>
+									<input type="radio" name="options" id="option3" autocomplete="off"> <span class="glyphicon glyphicon-remove PPhoneOperator" aria-hidden="true"></span>
 								</label>
 							</div>
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-md-4 col-md-offset-2 super"><h4>Superusuário:</h4></div>
+						<div class="col-md-4 col-md-offset-2 PSuperUser"><h4>Superusuário:</h4></div>
 						<div class="col-md-4">
 							<div class="btn-group" data-toggle="buttons">
 								<label class="btn btn-default active" style="width:auto;">
-									<input type="radio" name="options" id="option1" autocomplete="off" checked> <span class="glyphicon glyphicon-minus super" aria-hidden="true"></span>
+									<input type="radio" name="options" id="option1" autocomplete="off" checked> <span class="glyphicon glyphicon-minus PSuperUser" aria-hidden="true"></span>
 								</label>
 								<label class="btn btn-default" style="width:auto;">
-									<input type="radio" name="options" id="option2" autocomplete="off"> <span class="glyphicon glyphicon-ok super" aria-hidden="true"></span>
+									<input type="radio" name="options" id="option2" autocomplete="off"> <span class="glyphicon glyphicon-ok PSuperUser" aria-hidden="true"></span>
 								</label>
 								<label class="btn btn-default" style="width:auto;">
-									<input type="radio" name="options" id="option3" autocomplete="off"> <span class="glyphicon glyphicon-remove super" aria-hidden="true"></span>
+									<input type="radio" name="options" id="option3" autocomplete="off"> <span class="glyphicon glyphicon-remove PSuperUser" aria-hidden="true"></span>
 								</label>
 							</div>
 						</div>

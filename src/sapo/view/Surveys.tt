@@ -15,7 +15,7 @@
 			<div class="col-md-6 panel-title">
 				<!-- Nº da Pesquisa, Data da Pesquisa -->
 				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyPesquisa(: survey.id :)" aria-expanded="true" aria-controls="BodyPesquisa(: survey.id :)">
-					<b>Pesquisa #(: survey.id :)</b> - (: survey.date_completed :) - <span class="pesquisador"> (: user.name :)</span> - <span class="supervisor">(: user.supervisor.name :)</span>
+					<b>Pesquisa #(: survey.id :)</b> - (: survey.date_completed :) - <span class="PSurveyor"> (: user.name :)</span> - <span class="PSupervisor">(: user.supervisor.name :)</span>
 				</a>
 			</div>
 			<div class="col-md-6 panel-title">
@@ -80,9 +80,9 @@
 				<div class="col-md-2"><h5>USUÁRIO</h5>
 					<select class="form-control input-sm" name="user" id="userID">
 						<option value=0>Todos</option>
-						(: for g in Spod.Group.manager.all() :)
-						<optgroup label=(:g.group_name:)>
-							(: for u in Spod.User.manager.search($group_id == g.id ) :)
+						(: for g in Group.manager.all() :)
+						<optgroup label=(:g.privilege:)>
+							(: for u in User.manager.search($group_id == g.id ) :)
 								<option value=(:u.id:)>(:u.name:)</option>
 							(: end :)
 						</optgroup>

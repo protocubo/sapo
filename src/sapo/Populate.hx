@@ -55,11 +55,11 @@ class Populate {
 
 	static function makeGroups()
 	{
-		var surveyors = new Group(PSurveyor, new AccessName("pesquisador"), "Pesquisador");
-		var supervisors = new Group(PSupervisor, new AccessName("supervisor"), "Supervisor");
-		var phoneOperators = new Group(PPhoneOperator, new AccessName("telefonista"), "Telefonista");
-		var superUsers = new Group(PSuperUser, new AccessName("super"), "Super usuário");
-		var lessSuperUsers = new Group(PSuperUser, new AccessName("darth"), "Darth's guild");
+		var surveyors = new Group(PSurveyor, "Pesquisador");
+		var supervisors = new Group(PSupervisor, "Supervisor");
+		var phoneOperators = new Group(PPhoneOperator, "Telefonista");
+		var superUsers = new Group(PSuperUser, "Super usuário");
+		var lessSuperUsers = new Group(PSuperUser, "Darth's guild");
 		for (g in [surveyors, supervisors, phoneOperators, superUsers, lessSuperUsers])
 			g.insert();
 		return { surveyors : surveyors, supervisors : supervisors,

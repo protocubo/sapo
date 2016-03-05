@@ -1,5 +1,3 @@
-(: import sapo.Spod :)
-
 (: static function render() :)
 <!DOCTYPE html>
 <html>
@@ -45,11 +43,11 @@
 
 						<div class="row">
 							<div class="col-md-3">
-								<h4 class="pesquisador"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> PESQUISADOR</h4>
+								<h4 class="PSurveyor"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> PESQUISADOR</h4>
 								<p>Nullam mi nisi, accumsan ac dapibus at, suscipit in dolor. Integer laoreet ex ex, at maximus quam maximus sed. Aenean dignissim, magna vitae pellentesque mattis, ante lacus malesuada arcu, quis sollicitudin massa enim sed mauris. Nunc commodo augue finibus urna laoreet, vitae luctus quam sagittis. Nulla facilisi. Donec viverra quis ex ac cursus. Vestibulum feugiat finibus felis eu dignissim.</p>
 							</div>
 							<div class="col-md-3">
-								<h4 class="supervisor"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> SUPERVISOR</h4>
+								<h4 class="PSupervisor"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> SUPERVISOR</h4>
 								<p>Nullam mi nisi, accumsan ac dapibus at, suscipit in dolor. Integer laoreet ex ex, at maximus quam maximus sed. Aenean dignissim, magna vitae pellentesque mattis, ante lacus malesuada arcu, quis sollicitudin massa enim sed mauris. Nunc commodo augue finibus urna laoreet, vitae luctus quam sagittis. Nulla facilisi. Donec viverra quis ex ac cursus. Vestibulum feugiat finibus felis eu dignissim.</p>
 							</div>
 							<div class="col-md-3">

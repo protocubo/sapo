@@ -1,5 +1,9 @@
-(: import sapo.Spod :)
-(: static function page(?users:List<Spod.User>) :)
+(:import common.db.MoreTypes:)
+(:import sapo.spod.Survey:)
+(:import sapo.spod.Ticket:)
+(:import sapo.spod.User:)
+
+(: static function page(?users:List<User>) :)
 <!DOCTYPE html>
 <html>
 <head>
@@ -53,11 +57,11 @@
 				<!-- LINHA: nome, grupo, e-mail, supervisor, editar, desativar -->
 				(: for user in users :)
 				<tr>
-					(:* <td><b class="pesquisador">(:user.name:)@</b></td> *:)
-					<td><b class="(:user.group.group_name:)">(:user.name:)</b></td>
-					<td><b class="(:user.group.group_name:)">(:user.group.group_name:)</b></td>
+					(:* <td><b class="PSurveyor">(:user.name:)@</b></td> *:)
+					<td><b class="(:user.group.privilege:)">(:user.name:)</b></td>
+					<td><b class="(:user.group.privilege:)">(:user.group.privilege:)</b></td>
 					<td>(:user.email:)</td>
-					<td>(:if user.supervisor != null:)<b class="(:user.supervisor.group.group_name:)">(:user.supervisor.name:)</b>(:end:)</td>
+					<td>(:if user.supervisor != null:)<b class="(:user.supervisor.group.privilege:)">(:user.supervisor.name:)</b>(:end:)</td>
 					<td>
 						<button type="button" class="btn btn-warning btn-xs" aria-label="Editar" style="width:auto;" data-toggle="modal" data-target="#cadastro(:user.id:)_editar">
 							<span class="glyphicon glyphicon glyphicon-pencil" aria-hidden="true"></span>
@@ -105,8 +109,8 @@
 							<div class="col-md-2"><h4>Grupo:</h4></div>
 							<div class="col-md-10">
 								<select class="form-control" id="groupFieldAdd" name="group" onchange="disableSupervisorField('groupFieldAdd','supervisorFieldAdd')">
-									(: for g in Spod.Group.manager.all() :)
-										<option value=(:g.id:)>(:g.group_name:)</option>
+									(: for g in Group.manager.all() :)
+										<option value=(:g.id:)>(:g.privilege:)</option>
 									(:end:)
 								</select>
 							</div>
@@ -115,7 +119,7 @@
 							<div class="col-md-2"><h4>Supervisor:</h4></div>
 							<div class="col-md-10">
 								<select class="form-control" id="supervisorFieldAdd" name="supervisor" disabled>
-									(: for s in Spod.User.manager.search($group_id== Spod.Group.manager.select($group_name=="supervisor").id ) :)
+									(: for s in User.manager.search($group_id== Group.manager.select($privilege==PSupervisor).id ) :)
 										<option value=(:s.id:)>(:s.name:)</option>
 									(:end:)
 								</select>
@@ -133,7 +137,7 @@
 		</div>
 	</div>
 	
-	(: for user in Spod.User.manager.all() :)
+	(: for user in User.manager.all() :)
 	(: Modal.modalcadastroeditar(user) :)
 	(: Modal.modalcadastrodesativar(user) :)
 	(: end :)

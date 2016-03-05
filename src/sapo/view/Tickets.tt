@@ -1,6 +1,8 @@
-(: import sapo.route.TicketRoutes.* :)
-(: import sapo.spod.Ticket :)
-(: import sapo.spod.User :)
+(:import sapo.route.TicketRoutes.* :)
+(:import common.db.MoreTypes:)
+(:import sapo.spod.Survey:)
+(:import sapo.spod.Ticket:)
+(:import sapo.spod.User:)
 
 (: private static function hideClose(ticket:Ticket) :)
 (: if ticket.closed_at != null || (Context.loop.user != ticket.author && !Context.loop.privilege.match(PSuperUser)) :)
@@ -16,9 +18,9 @@ unavailable
 		<div class="row">
 			<div class="col-md-7 panel-title">
 				<!-- DE/PARA (class: super, telefonista, supervisor e pesquisador) -->
-				<span class="glyphicon glyphicon glyphicon-user (: ticket.author.group.group_name :)" aria-hidden="true"></span>
+				<span class="glyphicon glyphicon glyphicon-user (: ticket.author.group.privilege :)" aria-hidden="true"></span>
 				<span class="glyphicon glyphicon-arrow-right text-muted" aria-hidden="true" style="color: #999;"></span>
-				<span class="glyphicon glyphicon glyphicon-user (: ticket.recipient.group_name :)" aria-hidden="true"></span>
+				<span class="glyphicon glyphicon glyphicon-user (: ticket.recipient.privilege :)" aria-hidden="true"></span>
 				<!-- Nº do Ticket, Data da criação do Ticket, Hora da criação do Ticket -->
 				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyTicket(: ticket.id :)" aria-expanded="true" aria-controls="BodyTicket(: ticket.id :)">
 					<b>Ticket #(: ticket.id :)</b> - (: ticket.opened_at :) - (: ticket.subject :)
@@ -27,7 +29,7 @@ unavailable
 			<div class="col-md-5 panel-title">
 				<!-- Número da pesquisa, data da pesquisa, Nome do pesquisador (class: super, telefonista, supervisor e pesquisador) -->
 				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyTicket(: ticket.id :)" aria-expanded="true" aria-controls="BodyTicket(: ticket.id :)">
-					<b>Pesquisa #(:ticket.survey.id:)</b> - <span class="pesquisador">(:ticket.survey.surveyor.name:)</span>
+					<b>Pesquisa #(:ticket.survey.id:)</b> - <span class="PSurveyor">(:ticket.survey.surveyor.name:)</span>
 				</a>
 			<span class="tags">
 				(: Util.status( true, true , true) :)
@@ -45,7 +47,7 @@ unavailable
 					<p>
 						<strong>
 							<!-- DATETIME + DE + PARA (class: super, telefonista, supervisor e pesquisador) -->
-							(: message.posted_at :) - <span class="(: message.author.group.group_name:)">(: message.author.name :)@(: message.author.group.group_name:)</span>(: if first :) - <span class="(: ticket.recipient.group_name:)">(: ticket.recipient.name :)@(: ticket.recipient.group_name:)</span>(: end :) :
+							(: message.posted_at :) - <span class="(: message.author.group.privilege:)">(: message.author.name :)@(: message.author.group.privilege:)</span>(: if first :) - <span class="(: ticket.recipient.privilege:)">(: ticket.recipient.name :)@(: ticket.recipient.privilege:)</span>(: end :) :
 						</strong>
 					<!-- MENSAGEM -->
 						(: message.text :)

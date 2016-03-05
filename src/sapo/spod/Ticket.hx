@@ -63,8 +63,6 @@ class TicketSubscription extends Object {
 
 	@:skip public var privilege(get,never):Privilege;
 		function get_privilege() return (group != null ? group : user.group).privilege;
-	@:skip public var group_name(get,never):AccessName;
-		function get_group_name() return (group != null ? group : user.group).group_name;
 	@:skip public var name(get,never):String;
 		function get_name() return user != null ? user.name : "";
 
