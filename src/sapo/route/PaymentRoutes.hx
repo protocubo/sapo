@@ -29,9 +29,26 @@ class PaymentRoutes extends AccessControl
 		if (args.survey != null)
 			surveys.add(args.survey);
 		if (args.reference !=  null)
-		{}//select reference
+			surveys = Survey.manager.search($paymentRef == args.reference);
 			
 		Sys.println(sapo.view.Payments.superPage(surveys));
+	}
+	
+	@authorize(PSuperUser)
+	public function doPay(?args:{ ?toPay:String, ?reference:String })
+	{
+		if (args == null) args = { };
+		var ids = args.toPay.split("e");
+		for (id in ids)
+		{
+			var s = Survey.manager.get(Std.parseInt(id));
+			if (!s.paid)
+			{
+				
+			}
+		}
+			
+		//Sys.println(sapo.view.Payments.superPage());
 	}
 	
 	public function new() {}

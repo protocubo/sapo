@@ -5,7 +5,9 @@
 <!-- LINHA: checkbox, nome do pesquisador, número da pesquisa, data da pesquisa, refpagto, datapagto, pagar -->
 <tr>
 	<td>
-		<input type="checkbox" />
+		(: if !payment.paid :)
+			<input type="checkbox" name="SurveyCheckBox" value=(:payment.id:) onchange="getCheckedCheckboxes()" />
+		(: end:)
 	</td>
 	(:var u = User.manager.select($id == payment.user_id):)
 	<td>(: u.name :)</td>
@@ -135,10 +137,10 @@
 			<form action="/payments/search" method="get">
 				<!-- BUSCA -->
 				<div class="col-md-2"><h5>REFERÊNCIA PAGTO</h5>
-					<input type="text" class="form-control input-sm" name="reference" placeholder="Referência Pagto">
+					<input type="text" class="form-control input-sm" id="referenceField" oninput="disableSearch(this.id, this.value)" name="reference" placeholder="Referência Pagto">
 				</div>
 				<div class="col-md-2"><h5>PESQUISA</h5>
-					<input type="text" class="form-control input-sm" name="survey" placeholder="Nº da Pesquisa">
+					<input type="text" class="form-control input-sm" id="surveyField" oninput="disableSearch(this.id, this.value)" name="survey" placeholder="Nº da Pesquisa">
 				</div>
 				<div class="col-md-1"><h5>&nbsp;</h5>
 					<button type="submit" value="submit" class="btn btn-primary btn-sm">BUSCAR</button>
@@ -153,7 +155,7 @@
 				<tr>
 					<!-- HEAD -->
 					<th width="40px">
-						<input type="checkbox" />
+						<input type="checkbox" onClick="toggleCheckBoxes(this)" />
 					</th>
 					<th>Pesquisador</th>
 					<th>Nº da Pesquisa</th>
@@ -169,7 +171,6 @@
 				(: for p in surveys :)
 					(: surveySuperStatus(p) :)
 				(: end :)
-
 			</tbody>
 			<tfoot>
 				<tr>
@@ -180,37 +181,84 @@
 					</td>
 				</tr>
 			</tfoot>
+			
+			<script>
+				function toggleCheckBoxes(source) 
+				{
+					varChkhdsad = "";
+					var checkboxes = document.getElementsByName("SurveyCheckBox");
+					for(i = 0;i < checkboxes.length; i++)
+						checkboxes[i].checked = source.checked;
+					if(source.checked)
+						for(i = 0;i < checkboxes.length; i++)
+							varChkhdsad += "e"+checkboxes[i].value;
+					document.getElementById("checkedSurveys").value = varChkhdsad;
+				}
+			</script>
+			
+			<script>
+				function getCheckedCheckboxes() 
+				{
+					document.getElementById("checkedSurveys").value = "";
+					varChkh = "";
+					var checkboxes = document.querySelectorAll('input[name="' + "SurveyCheckBox" + '"]:checked'), values = [];
+						Array.prototype.forEach.call(checkboxes, function(el) 
+						{
+							varChkh += "e"+el.value;
+							values.push(el.value);
+						});
+					document.getElementById("checkedSurveys").value = varChkh;
+				}
+			</script>
+			<script>
+			function disableSearch(field, value) 
+			{
+				var f1 = "referenceField";
+				var f2 = "surveyField";
+				document.getElementById(f1).disabled = false;
+				document.getElementById(f2).disabled = false;
+				if(field == f1 && value.length>0)
+					document.getElementById(f2).disabled = true;
+				else if(field == f2 && value.length>0)
+					document.getElementById(f1).disabled = true;
+			}
+			</script>
+			
+			
 		</table>
 	</div>
 
 (: Util.footer() :)
 
-	(: for m in Spod.NewSurvey.manager.all() :)
-	(: Modal.modalpagamentospagar(m) :)
+	(: for m in surveys :)
+		(: Modal.modalpagamentospagar(m) :)
 	(: end :)
 
 
 <!-- MODAL PAGAR -->
 <div class="modal fade" id="pagar_selecionadas" tabindex="-1" role="dialog" aria-labelledby="pagar_selecionadas_label">
 	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<h4 class="modal-title" id="pagar_selecionadas_label">PAGAR PESQUISAS</h4>
-			</div>
-			<div class="modal-body">
-				<div class="row">
-					<div class="col-md-4"><h4>Ref. Pagamento:</h4></div>
-					<div class="col-md-8"><input type="text" class="form-control" /></div>
+		<form action="/payments/pay" method="get">
+			<input type="hidden" id="checkedSurveys" name="toPay">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="pagar_selecionadas_label">PAGAR PESQUISAS</h4>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-4"><h4>Ref. Pagamento:</h4></div>
+						<div class="col-md-8"><input type="text" name="reference" class="form-control" /></div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div class="row">
+						<div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
+						<div class="col-md-6"><button type="submit" value="submit" class="btn btn-success">PAGAR</button></div>
+					</div>
 				</div>
 			</div>
-			<div class="modal-footer">
-				<div class="row">
-					<div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
-					<div class="col-md-6"><button type="button" class="btn btn-success">PAGAR</button></div>
-				</div>
-			</div>
-		</div>
+		</form>
 	</div>
 </div>
 

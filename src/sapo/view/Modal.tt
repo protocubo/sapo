@@ -1,4 +1,5 @@
 (: import sapo.Spod:)
+(: import sapo.spod.Survey :)
 
 (: static function modalticketfechar(ticket:Spod.Ticket) :)
 	<div class="modal fade" id="ticket(: ticket.id :)_fechar" tabindex="-1" role="dialog" aria-labelledby="ticket(: ticket.id :)_fechar_label">
@@ -245,7 +246,7 @@
 	</div>
 (: end :)
 
-(: static function modalpagamentospagar(pagamentos:Spod.NewSurvey) :)
+(: static function modalpagamentospagar(pagamentos:Survey) :)
 	<div class="modal fade" id="pagar(: pagamentos.id :)_um" tabindex="-1" role="dialog" aria-labelledby="pagar(: pagamentos.id :)_um_label">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
@@ -253,18 +254,22 @@
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 					<h4 class="modal-title" id="pagar(: pagamentos.id :)_um_label">PAGAR PESQUISA</h4>
 				</div>
-				<div class="modal-body">
-					<div class="row">
-						<div class="col-md-4"><h4>Ref. Pagamento:</h4></div>
-						<div class="col-md-8"><input type="text" class="form-control" /></div>
+				<form action="/payments/pay" method="get">
+					<input type="hidden" name="toPay" value="e(:pagamentos.id:)">
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-md-4"><h4>Ref. Pagamento:</h4></div>
+							<div class="col-md-8"><input type="text" name="reference" class="form-control" /></div>
+						</div>
 					</div>
-				</div>
-				<div class="modal-footer">
-					<div class="row">
-						<div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
-						<div class="col-md-6"><button type="button" class="btn btn-success">PAGAR</button></div>
+					<div class="modal-footer">
+						<div class="row">
+							<div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
+							<form action="/payments/pay" method="get">
+							<div class="col-md-6"><button type="submit" value="submit" class="btn btn-success">PAGAR</button></div>							
+						</div>
 					</div>
-				</div>
+				</form>
 			</div>
 		</div>
 	</div>
