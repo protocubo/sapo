@@ -17,13 +17,10 @@ class RegistrationRoutes extends AccessControl {
 		args.page = args.page == null?0:args.page;	
 		args.activeFilter = args.activeFilter == null?"active": args.activeFilter; "deactivated";
 		var users = new List<User>();
-		if(args.activeFilter == "deactivated")
-			users = User.manager.search($deactivated_at != null);
-		else
-			users = User.manager.search(
-				(args.activeFilter == "deactivated" ? $deactivated_at != null : $deactivated_at == null),
-				{ orderBy : name, limit : [elementsPerPage * args.page, elementsPerPage+1 ] } 
-			);
+		users = User.manager.search(
+			(args.activeFilter == "deactivated" ? $deactivated_at != null : $deactivated_at == null),
+			{ orderBy : name, limit : [elementsPerPage * args.page, elementsPerPage+1 ] } 
+		);
 		var showPrev = args.page == 0?false:true;
 		var showNext = false;
 		if (users.length == elementsPerPage+1)
