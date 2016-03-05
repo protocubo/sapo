@@ -46,13 +46,13 @@ class Survey extends Object {
 	public var estratoSocioEconomico : SNull<SString<255>>;
 	public var json : Null<String>;
 
-	/** CHECKS -> Verificado? - TODO:IGNORAR NO SYNC! **/
-	public var checkSV : SNull<SBool>;
-	public var checkCT : SNull<SBool>;
-	public var checkCQ : SNull<SBool>;
-	public var isPhoned : SBool;
+	/** CHECKS -> Verificado? -TODO:IGNORAR NO SYNC! **/
+	public var checkSV : Null<Bool>;
+	public var checkCT : Null<Bool>;
+	public var checkCQ : Null<Bool>;
+	public var isPhoned : Null<Bool>;
 	public var group : Null<Int>;
-	public var date_edited : SNull<SDateTime>;
+	public var date_edited : Null<SDateTime>;
 	/*********************************/
 
 	public var old_survey_id : SInt;

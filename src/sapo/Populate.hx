@@ -47,9 +47,12 @@ class Populate {
 
 	static function rndTrue(?p:Null<Float>)
 	{
-		if (p == null) p = 0.5;
+		if (p == null) p = .5;
 		return rnd.int(1000) < p*1000;
 	}
+
+	static function rndNullTrue(?pnull:Null<Float>, ?ptrue:Null<Float>)
+		return rndTrue(pnull) ? null : rndTrue(ptrue);
 
 	static function makeGroups()
 	{
@@ -116,9 +119,10 @@ class Populate {
 		s.pin = "ASD-Qer3-qwee";
 		s.syncTimestamp = Date.now().getTime();
 		s.tentativa_id = 1;
-		s.checkCT = rndTrue();
-		s.checkSV = rndTrue();
-		s.checkCQ = rndTrue();
+		s.checkCT = rndNullTrue();
+		s.checkSV = rndNullTrue();
+		s.checkCQ = rndNullTrue();
+		s.isPhoned = rndNullTrue(.1);
 		s.date_started = s.date_create;
 		s.date_finished = DateTools.delta(Date.now(), 1000.0 * 60 * 60 * 24 * rnd.int(5));
 		s.date_completed = s.date_finished;
@@ -136,6 +140,10 @@ class Populate {
 		if (rndTrue()) s.date_finished = rndDate(s.date_started);
 		if (rndTrue()) s.date_completed = rndDate(s.date_started);
 
+		// for (f in Survey.manager.dbInfos().fields) {
+		// 	if (!f.isNull && !f.t.match(DId) && Reflect.getProperty(s, f.name) == null)
+		// 		throw 'filed ${f.name} is null';
+		// }
 		s.insert();
 		return s;
 	}
@@ -238,10 +246,6 @@ class Populate {
 		p.tempo_chegada = rnd.int(24)  + ":" + rnd.int(60);
 		p.tempo_saida = rnd.int(24) + ":" + rnd.int(60);
 		p.uf = UF.manager.get(1);
-		for (f in Ponto.manager.dbInfos().fields) {
-			if (!f.isNull && !f.t.match(DId) && Reflect.getProperty(p, f.name) == null)
-				throw 'filed ${f.name} is null';
-		}
 		p.insert();
 		return p;
 	}
