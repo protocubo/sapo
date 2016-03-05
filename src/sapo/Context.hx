@@ -141,10 +141,6 @@ class Context {
 					"Time is an illusion, luchtime doubly so.",
 					phoneOperators);
 			TicketModel.addMessage(ticket2, arthur, "Very deep. You should send that in to the Reader's Digest. They've got a page for people like you.");
-			
-			Manager.cnx.request("CREATE VIEW UpdatedSurvey AS SELECT MAX(id) as session_id, old_survey_id, MAX(syncTimestamp) as syncTimestamp FROM Survey GROUP BY old_survey_id");
-			surveyGen();
-			
 		} catch (e:Dynamic) {
 			rollback();
 			neko.Lib.rethrow(e);
@@ -168,7 +164,7 @@ class Context {
 			surveyor.password = Password.make("secret");
 			surveyor.insert();
 			
-			userarr.push(surveyor);
+			userarr.push(surveyor.id);
 			
 			i++;
 		}
@@ -181,7 +177,7 @@ class Context {
 		while (i < 1000)
 		{
 			var s = new Survey();
-			s.user_id = userarr[rnd.int(userarr.length)].id;
+			s.user_id = userarr[rnd.int(userarr.length)];
 			s.isRestored = false;
 			s.isValid = false;
 			s.lastPageVisited = "END";
@@ -338,15 +334,9 @@ class Context {
 				j++;
 			}
 			
-			if (i % 100 == 0)
-				Manager.cnx.commit();
-				
 			i++;
 			
 		}
-		
-		Manager.cnx.commit();
-		
 	}
 	static function randomBool(rnd : Random) : Null<Bool>
 	{

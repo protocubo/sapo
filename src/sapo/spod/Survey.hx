@@ -45,6 +45,7 @@ class Survey extends Object {
 	public var macrozona : SNull<SString<255>>;
 	public var lote : SNull<SString<255>>;
 	public var estratoSocioEconomico : SNull<SString<255>>;
+	public var json : Null<String>;
 	
 	/** CHECKS -> Verificado? - TODO:IGNORAR NO SYNC! **/
 	public var checkSupervisor : SNull<SBool>;
@@ -70,7 +71,7 @@ class Ocorrencias extends Object {
 	public var desc : SNull<SString<4096>>;
 	@:relation(survey_id) public var survey : Survey;
 	public var datetime : SDateTime;
-
+	public var json : Null<String>;
 	public var syncTimestamp : SFloat;
 	public var old_id : SInt;
 	public var old_survey_id : SInt;
@@ -109,7 +110,8 @@ class Familia extends Object {
 	public var telefoneContato : SNull<SString<255>>;
 	public var rendaDomiciliar : SNull<SEnum<RendaDomiciliar>>;
 	public var recebeBolsaFamilia : SNull<SBool>;
-
+	
+	public var json : Null<String>;
 	public var syncTimestamp : SFloat;
 	public var old_id : SInt;
 	public var old_survey_id : SInt;
@@ -140,7 +142,7 @@ class Morador extends Object {
 	public var setorAtividadeEmpresaPublica : SNull<SEnum<SetorAtividadeEmpresaPublica>>;
 
 	public var motivoSemViagem : SNull<SEnum<MotivoSemViagem>>;
-
+	public var json : Null<String>;
 	public var syncTimestamp : SFloat;
 	public var old_id : SInt;
 	public var old_survey_id : SInt;
@@ -176,7 +178,8 @@ class Ponto extends Object {
 	public var motivoOutraPessoa : SNull<SEnum<Motivo>>;
 	public var tempo_saida : SNull<SString<255>>;
 	public var tempo_chegada : SNull<SString<255>>;
-
+	public var json : Null<String>;
+	
 	@:relation(copiedFrom_id) public var copiedFrom : SNull<Ponto>;
 	public var isPontoProx : SNull<SBool>;
 	@:relation(pontoProx_id) public var pontoProx : SNull<Ponto>;
@@ -217,6 +220,8 @@ class Modo extends Object {
 	public var naoSabe : SNull<SBool>;
 	public var naoRespondeu : SNull<SBool>;
 
+	public var json : Null<String>;
+	
 	public var syncTimestamp : SFloat;
 	public var old_survey_id : SInt;
 	public var old_morador_id : SInt;

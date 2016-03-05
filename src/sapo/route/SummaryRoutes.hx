@@ -21,6 +21,16 @@ class SummaryRoutes extends AccessControl
 	//Constante de dia para a query de Histórico (usando %w no STRFTIME)
 	static inline var HistoricDay = 5;
 	
+	public static inline var DATE_KEY = "Date";
+	public static inline var SUP_KEY = "Supervisores";
+	public static inline var CT_KEY = "CT";
+	public static inline var SUPER_KEY = "Super";
+	public static inline var COMPLETA_KEY =  "Completas";
+	public static inline var RECUSADAS_KEY = "Recusadas";
+	public static inline var ACEITA_KEY = "Aceitas";
+	
+	
+	//static inline var 
 	//TODO: Pegar params de filtro
 	@authorize(PSupervisor, PSuperUser)
 	public function doDefault(?args : {?data : String})
@@ -34,13 +44,8 @@ class SummaryRoutes extends AccessControl
 			
 			for (u in users)
 			{
-				if (wherestr == "")
-					wherestr = "AND ( user_id = " + u;
-				else
-					wherestr = wherestr + " OR user_id = " + u;
+				wherestr = wherestr + " AND user_id = " + u;
 			}
-			
-			wherestr = wherestr + ")";
 		}
 		
 		//Todos os estados atuais da pesquisa por grupo
@@ -55,8 +60,8 @@ class SummaryRoutes extends AccessControl
 		//TODO: Comment this line
 		//Query path: docs/queries/user_summary.sql
 		var resultsQuery = Manager.cnx.request("SELECT s.user_id as user, s.`group` as grupo,STRFTIME('%Y-%m-%d', s.date_finished) as date_end , COUNT(*) as pesqGrupo,  SUM( CASE WHEN checkSupervisor IS NULL THEN 1 ELSE 0 END) as nullSupervisor, SUM( CASE WHEN checkCT IS NULL THEN 1 ELSE 0 END) as nullCT, SUM(CASE WHEN checkSuper IS NULL THEN 1 ELSE 0 END) AS nullSuper FROM Survey s JOIN UpdatedSurvey us ON s.old_survey_id = us.old_survey_id AND s.syncTimestamp = us.syncTimestamp WHERE s.syncTimestamp > 1000 "+ wherestr+" GROUP BY s.user_id, s.`group`, date_end ORDER BY s.user_id, s.`group`, date_end").results();
-		trace("SELECT s.user_id as user, s.`group` as grupo,STRFTIME('%Y-%m-%d', s.date_finished) as date_end , COUNT(*) as pesqGrupo,  SUM( CASE WHEN checkSupervisor IS NULL THEN 1 ELSE 0 END) as nullSupervisor, SUM( CASE WHEN checkCT IS NULL THEN 1 ELSE 0 END) as nullCT, SUM(CASE WHEN checkSuper IS NULL THEN 1 ELSE 0 END) AS nullSuper FROM Survey s JOIN UpdatedSurvey us ON s.old_survey_id = us.old_survey_id AND s.syncTimestamp = us.syncTimestamp WHERE s.syncTimestamp > 1000 " + wherestr + " GROUP BY s.user_id, s.`group`, date_end ORDER BY s.user_id, s.`group`, date_end");
-		var header = ["Data", "Supervisor", "CT", "Super", "Completas", "Recusadas", "Aceitas"];
+		
+		var header = [DATE_KEY, SUP_KEY, CT_KEY, SUPER_KEY, COMPLETA_KEY, RECUSADAS_KEY, ACEITA_KEY];
 		for (r in resultsQuery)
 		{
 			if (r.date_end == null)
@@ -74,22 +79,22 @@ class SummaryRoutes extends AccessControl
 			{
 				//Obrigatoriamente todos responderam...n sobe barra, sobem os controles
 				case PesqStatus.Aceita:
-					var curval = curDateHash.get("Aceitas");
-					curDateHash.set("Aceitas", curval + r.pesqGrupo);
+					var curval = curDateHash.get(ACEITA_KEY);
+					curDateHash.set(ACEITA_KEY, curval + r.pesqGrupo);
 				case PesqStatus.Recusada:
-					var curval = curDateHash.get("Recusadas");
-					curDateHash.set("Recusadas", curval.getVal() + r.pesqGrupo);
-				case PesqStatus.Pendente:
+					var curval = curDateHash.get(RECUSADAS_KEY);
+					curDateHash.set(RECUSADAS_KEY, curval.getVal() + r.pesqGrupo);
+					case PesqStatus.Pendente:
 					if (r.nullCT == r.pesqGrupo)
-						curDateHash.set("CT", curDateHash.get("CT").getVal() + r.pesqGrupo);
-					curDateHash.set("Supervisor",curDateHash.get("Supervisor").getVal() +  r.pesqGrupo);
-					curDateHash.set("Super", curDateHash.get("Super").getVal() + r.pesqGrupo);
+						curDateHash.set(CT_KEY, curDateHash.get(CT_KEY).getVal() + r.pesqGrupo);
+					curDateHash.set(SUP_KEY,curDateHash.get(SUP_KEY).getVal() +  r.pesqGrupo);
+					curDateHash.set(SUPER_KEY, curDateHash.get(SUPER_KEY).getVal() + r.pesqGrupo);
 				case PesqStatus.Completa:
-					curDateHash.set("Completas", curDateHash.get("Completas").getVal() + r.pesqGrupo);
+					curDateHash.set(COMPLETA_KEY, curDateHash.get(COMPLETA_KEY).getVal() + r.pesqGrupo);
 					if (r.nullCT == r.pesqGrupo)
-						curDateHash.set("CT", curDateHash.get("CT").getVal() + r.pesqGrupo);
-					curDateHash.set("Supervisor",curDateHash.get("Supervisor").getVal() +  r.pesqGrupo);
-					curDateHash.set("Super", curDateHash.get("Super").getVal() + r.pesqGrupo);
+						curDateHash.set(CT_KEY, curDateHash.get(CT_KEY).getVal() + r.pesqGrupo);
+					curDateHash.set(SUP_KEY,curDateHash.get(SUP_KEY).getVal() +  r.pesqGrupo);
+					curDateHash.set(SUPER_KEY, curDateHash.get(SUPER_KEY).getVal() + r.pesqGrupo);
 			}
 			
 			dateVal.set(r.date_end, curDateHash);
@@ -121,7 +126,7 @@ class SummaryRoutes extends AccessControl
 		var userCheck = statusGen();
 		
 		var dateVal : Map<String,Map<String,Int>> = new Map();
-		var headers = ['Date', 'Supervisor', 'CT', 'Super', 'Completas', 'Aceitas', 'Recusadas'];
+		var headers = [DATE_KEY, SUP_KEY, CT_KEY, SUPER_KEY, COMPLETA_KEY, ACEITA_KEY, RECUSADAS_KEY];
 		//docs/queries/User_historic_friday.sql
 		var queryDay = Manager.cnx.request("SELECT s.user_id as user, s.`group` as grupo,	DATE(s.date_finished, 'weekday "+HistoricDay+"') as date_end , COUNT(*) as pesqGrupo,  SUM( CASE WHEN checkSupervisor IS NULL THEN 1 ELSE 0 END) as nullSupervisor, SUM( CASE WHEN checkCT IS NULL THEN 1 ELSE 0 END) as nullCT, SUM(CASE WHEN checkSuper IS NULL THEN 1 ELSE 0 END) AS nullSuper FROM Survey s JOIN UpdatedSurvey us 	ON s.old_survey_id = us.old_survey_id AND s.syncTimestamp = us.syncTimestamp "+((wherestr != "") ? wherestr : "WHERE ")+" STRFTIME('%w',s.date_finished) = '"+ HistoricDay+ "' GROUP BY s.user_id, s.`group`, date_end ORDER BY s.user_id, s.`group`, date_end ").results();
 		for (q in queryDay)
@@ -138,14 +143,14 @@ class SummaryRoutes extends AccessControl
 			{
 				case PesqStatus.Pendente:
 					if (q.nullCT == q.pesqGrupo)
-						dateMap.set("CT", dateMap.get("CT").getVal() + q.pesqGrupo);
-					dateMap.set("Supervisor", dateMap.get("Supervisor").getVal() + q.pesqGrupo);
-					dateMap.set("Super", dateMap.get("Super").getVal() + q.pesqGrupo);
+						dateMap.set(CT_KEY, dateMap.get(CT_KEY).getVal() + q.pesqGrupo);
+					dateMap.set(SUP_KEY, dateMap.get(SUP_KEY).getVal() + q.pesqGrupo);
+					dateMap.set(SUPER_KEY, dateMap.get(SUPER_KEY).getVal() + q.pesqGrupo);
 				case PesqStatus.Completa:
-					dateMap.set("Completas", dateMap.get("Completas").getVal() + q.pesqGrupo);
-					dateMap.set("Supervisor", dateMap.get("Supervisor").getVal() + q.pesqGrupo);
-					dateMap.set("CT", dateMap.get("CT").getVal() + q.pesqGrupo);
-					dateMap.set("Super", dateMap.get("Super").getVal() + q.pesqGrupo);
+					dateMap.set(COMPLETA_KEY, dateMap.get(COMPLETA_KEY).getVal() + q.pesqGrupo);
+					dateMap.set(SUP_KEY, dateMap.get(SUP_KEY).getVal() + q.pesqGrupo);
+					dateMap.set(CT_KEY, dateMap.get(CT_KEY).getVal() + q.pesqGrupo);
+					dateMap.set(SUPER_KEY, dateMap.get(SUPER_KEY).getVal() + q.pesqGrupo);
 				case PesqStatus.Aceita, PesqStatus.Recusada:
 					continue;
 			}
@@ -169,9 +174,9 @@ class SummaryRoutes extends AccessControl
 			switch(userCheck.get(q.user).get(q.grupo))
 			{
 				case PesqStatus.Aceita:
-					dateMap.set("Aceitas", dateMap.get("Aceitas").getVal() + q.pesqGrupo);
+					dateMap.set(ACEITA_KEY, dateMap.get(ACEITA_KEY).getVal() + q.pesqGrupo);
 				case PesqStatus.Recusada:
-					dateMap.set("Recusadas", dateMap.get("Recusadas").getVal() + q.pesqGrupo);
+					dateMap.set(RECUSADAS_KEY, dateMap.get(RECUSADAS_KEY).getVal() + q.pesqGrupo);
 				case PesqStatus.Pendente, PesqStatus.Completa:
 					continue;
 			}
@@ -208,7 +213,7 @@ class SummaryRoutes extends AccessControl
 		var referer = Web.getClientHeader("Referer");
 		var serializer = new Serializer();
 		serializer.serialize(ret);
-		referer = referer.split("?")[0];
+		
 		Web.redirect(referer + "?data=" + serializer.toString());
 		
 	}
