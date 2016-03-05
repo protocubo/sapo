@@ -39,7 +39,7 @@ class RegistrationRoutes extends AccessControl {
 	}
 
 	@authorize(PSuperUser)
-	public function doAdd(?args:{ ?name:String, ?email:String, ?group:Group, ?supervisor:User })
+	public function postAdd(?args:{ ?name:String, ?email:String, ?group:Group, ?supervisor:User })
 	{
 		if (args == null) args = { };
 		var u = new User(args.group, new EmailAddress(args.email), args.name, (args.supervisor != null? args.supervisor:null));
@@ -55,7 +55,7 @@ class RegistrationRoutes extends AccessControl {
 		Web.redirect("/registration");
 	}
 	@authorize(PSuperUser)
-	public function doDeactivate(?args:{ ?user:User })
+	public function postDeactivate(?args:{ ?user:User })
 	{
 		if (args == null) args = { };
 		args.user.lock();
@@ -65,7 +65,7 @@ class RegistrationRoutes extends AccessControl {
 	}
 	
 	@authorize(all)
-	public function doChangepassword(args : { token : String } )
+	public function postChangepassword(args : { token : String } )
 	{
 		if (args.token == null)
 		{
