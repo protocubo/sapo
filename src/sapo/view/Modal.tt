@@ -192,7 +192,7 @@
 							<div class="col-md-10">
 								<select class="form-control" id="groupFieldEdit(:cadastro.id:)" name="group" onchange="disableSupervisorField('groupFieldEdit(:cadastro.id:)','supervisorFieldEdit(:cadastro.id:)')">
 									(: for g in Group.manager.all() :)
-										<option value=(:g.id:) (: g.id == cadastro.group.id? "selected":"" :)>(:g.privilege:)</option>
+										<option value=(:g.id:) (: g.id == cadastro.group.id? "selected":"" :) x-privilege=(:g.privilege:)>(:g.name:)</option>
 									(:end:)
 								</select>
 							</div>
@@ -200,7 +200,7 @@
 						<div class="row">
 							<div class="col-md-2"><h4>Supervisor:</h4></div>
 							<div class="col-md-10">
-								<select class="form-control" name="supervisor" id="supervisorFieldEdit(:cadastro.id:)" (:cadastro.group.privilege == PSupervisor ? "":"disabled":)>
+								<select class="form-control" name="supervisor" id="supervisorFieldEdit(:cadastro.id:)" (:cadastro.group.privilege == PSurveyor ? "":"disabled":)>
 									(: for s in User.manager.search($group_id == Group.manager.select($privilege==PSupervisor).id ) :)
 										<option value=(:s.id:)>(:s.name:)</option>
 									(:end:)
