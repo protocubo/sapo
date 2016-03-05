@@ -44,7 +44,7 @@ class Populate {
 		if (d == null) d = Date.fromTime(0);
 		return rndDateDelta(d, rnd.float()*Date.now().getTime());
 	}
-	
+
 	static function rndTrue(?p:Null<Float>)
 	{
 		if (p == null) p = 0.5;
@@ -117,8 +117,8 @@ class Populate {
 		s.syncTimestamp = Date.now().getTime();
 		s.tentativa_id = 1;
 		s.checkCT = rndTrue();
-		s.checkSupervisor = rndTrue();
-		s.checkSuper = rndTrue();
+		s.checkSV = rndTrue();
+		s.checkCQ = rndTrue();
 		s.date_started = s.date_create;
 		s.date_finished = DateTools.delta(Date.now(), 1000.0 * 60 * 60 * 24 * rnd.int(5));
 		s.date_completed = s.date_finished;

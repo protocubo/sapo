@@ -16,41 +16,40 @@ $("document").ready(function()
 </script>
 </head>
 <body>
-(: Util.navbar() :)
 
 	<!-- INDEX -->
 	<div class="container">
+		(: Util.navbar() :)
 		(: var url = "/login" :)
 		(: do if (redirect != null) url += "?redirect=" + StringTools.urlEncode(redirect) :)
 		<form method="POST" action="(: url :)">
 			<!-- HEAD -->
-			<div class="row">
+			<div class="row mt60">
+				<div class="col-md-3">
+					<h1 style="font-weight:700;">SAPO</h1>
+				</div>
+				<div class="col-md-2 col-md-offset-3">
+					<h5>E-MAIL:</h5>
+					<input type="email" name="email" class="form-control input-sm" required placeholder="E-mail">
+				</div>
+				<div class="col-md-2">
+					<h5>SENHA:</h5>
+					<input type="password" name="password" class="form-control input-sm" required placeholder="Senha">
+				</div>
+				<div class="col-md-2">
+					<h5>&nbsp;</h5>
+					<button type="button" class="btn btn-success btn-sm">ENTRAR</button>
+				</div>
+			</div>
+			<div class="row mt60">
 				<div class="col-md-12">
-					<h2>SAPO</h2>
-					<hr />
 					<img src="/resources/sapo_foto.jpg" class="img-responsive">
-					<hr />
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-md-4">
-					<h3>E-mail:</h3>
-					<input type="email" name="email" class="form-control" required />
-				</div>
-				<div class="col-md-4">
-					<h3>Senha:</h3>
-					<input type="password" name="password" class="form-control" required />
-				</div>
-				<div class="col-md-4">
-					<h3>&nbsp;</h3>
-					<button type="button" class="btn btn-success">ENTRAR</button>
-				</div>
-			</div>
-			<hr />
 		</form>
 	</div>
 
-(: Util.footer() :)
+	(: Util.footer() :)
 </body>
 </html>
 (: end :)
