@@ -125,4 +125,11 @@ a:focus, a:hover {
     .col-md-12 {
         margin-top: 14px;
     }
+	.col-md-1 {
+		margin-bottom: 40px;
+	}
+	.rodape {
+		font-size: 10px;
+	}
+	
 }
