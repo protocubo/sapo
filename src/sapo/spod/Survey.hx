@@ -5,7 +5,6 @@ import common.spod.statics.EstacaoMetro;
 import common.spod.statics.LinhaOnibus;
 import common.spod.statics.Referencias;
 import common.spod.statics.UF;
-import sapo.Spod.SurveyStatus;
 import sys.db.Object;
 import sys.db.Types;
 

@@ -1,5 +1,6 @@
 package sync;
 import common.spod.EnumSPOD;
+import sapo.Populate;
 import common.spod.statics.EstacaoMetro;
 import common.spod.statics.LinhaOnibus;
 import common.spod.statics.Referencias;
@@ -59,7 +60,7 @@ class MainSync
 		}
 		//TODO:Apagar
 		{
-			Context.resetMainDb();
+			Populate.reset();
 			//Context.init();
 		}
 		//END
