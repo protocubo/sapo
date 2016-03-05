@@ -63,7 +63,7 @@ class RootRoutes extends AccessControl {
 		var t = Token.manager.get(args.token);
 		if (t != null && !t.isExpired && t.expirationTime > Context.now)
 			Sys.println(sapo.view.Password.render(args.token));
-		else 
+		else
 			Web.redirect("/");
 	}
 
@@ -91,17 +91,26 @@ class RootRoutes extends AccessControl {
 	@authorize(all, guest)
 	public function postForgotPassword(args : {email : String})
 	{
-		if (args != null && args.email != null)
-		{
+		if (args != null && args.email != null) {
 			var u = User.manager.select($email == new EmailAddress(args.email));
-			if (u != null)
-			{
-				var t = new Token(u);
-				t.invalidateOthers();
-				t.insert();
+			if (u != null) {
+				Context.db.startTransaction();
+				try {
+					Token.invalidate(u);
+					var t = new Token(u);
+					t.insert();
 
-				//var enq = new LocalEnqueuer();
-				//enq.enqueue(new comn.message.Email( { from:"sapo@sapoide.com.br", to:u.email, subject:"[SAPO] Resete sua senha", text: "Acesse o link: " + "www.sapo.com.br/registration/token?token=" +  t.token + " para alterar sua senha!" } );
+					var email = new comn.message.Email({
+						from : "sapo@sapo.robrt.io",
+						to : [u.email],
+						subject : sapo.view.email.PasswordResetEmail.subject(),
+						text : sapo.view.email.PasswordResetEmail.text(t.token)});
+					Context.comn.enqueue(email);
+				} catch (e:Dynamic) {
+					Context.db.rollback();
+					neko.Lib.rethrow(e);
+				}
+				Context.db.commit();
 			}
 		}
 		Web.redirect("/");

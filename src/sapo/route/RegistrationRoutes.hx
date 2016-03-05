@@ -43,18 +43,29 @@ class RegistrationRoutes extends AccessControl {
 	public function postAdd(?args:{ ?name:String, ?email:String, ?group:Group, ?supervisor:User })
 	{
 		if (args == null) args = { };
-		var u = new User(args.group, new EmailAddress(args.email), args.name, (args.supervisor != null? args.supervisor:null));
-		u.insert();
+		Context.db.startTransaction();
+		try {
+			var u = new User(args.group, new EmailAddress(args.email), args.name, (args.supervisor != null? args.supervisor:null));
+			u.insert();
 
-		var t = new Token(u);
-		t.invalidateOthers();
-		t.insert();
-		Manager.cnx.commit();
+			Token.invalidate(u);
+			var t = new Token(u);
+			t.insert();
 
-		//var enq = new LocalEnqueuer();
-		//enq.enqueue(new comn.message.Email( { from:"sapo@sapoide.com.br", to:u.email, subject:"[SAPO] Confirme sua conta", text: "Acesse o link: " + "www.sapo.com.br/registration/token?token=" +  t.token + " para validar sua conta!" } );
+			var email = new comn.message.Email({
+				from : "sapo@sapo.robrt.io",
+				to : [u.email],
+				subject : sapo.view.email.PasswordResetEmail.subject(),
+				text : sapo.view.email.PasswordResetEmail.text(t.token)});
+			Context.comn.enqueue(email);
+		} catch (e:Dynamic) {
+			Context.db.rollback();
+			neko.Lib.rethrow(e);
+		}
+		Context.db.commit();
 		Web.redirect("/registration");
 	}
+
 	@authorize(PSuperUser)
 	public function postDeactivate(?args:{ ?user:User })
 	{

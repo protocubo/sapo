@@ -102,23 +102,15 @@ class Token extends Object {
 		this.isExpired = true;
 	}
 	
-	public function invalidateOthers()
+	public static function invalidate(user)
 	{
-		if (this.user == null)
+		if (user == null)
 			return;
-		Manager.cnx.startTransaction();
-		
-		var tokens = Token.manager.search($user == this.user, null, true);
-		for (t in tokens)
-		{
-			if (t != this)
-			{
-				t.isExpired = true;
-				t.update();
-			}
+		var tokens = Token.manager.search($user == user, null, true);
+		for (t in tokens) {
+			t.isExpired = true;
+			t.update();
 		}
-		
-		Manager.cnx.commit();
 	}
 }
 
