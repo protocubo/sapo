@@ -61,7 +61,9 @@
 					<td><b class="(:user.group.privilege:)">(:user.name:)</b></td>
 					<td><b class="(:user.group.privilege:)">(:user.group.name:)</b></td>
 					<td>(:user.email:)</td>
+					
 					<td>(:if user.supervisor != null:)<b class="(:user.supervisor.group.privilege:)">(:user.supervisor.name:)</b>(:end:)</td>
+					(: if user.deactivated_at == null :)
 					<td>
 						<button type="button" class="btn btn-warning btn-xs" aria-label="Editar" style="width:auto;" data-toggle="modal" data-target="#cadastro(:user.id:)_editar">
 							<span class="glyphicon glyphicon glyphicon-pencil" aria-hidden="true"></span>
@@ -72,6 +74,7 @@
 							<span class="glyphicon glyphicon glyphicon-remove" aria-hidden="true"></span>
 						</button>
 					</td>
+					(: end :)
 				</tr>
 				<!-- FIM LINHA -->
 				(: end :)
@@ -147,7 +150,7 @@
 		</div>
 	</div>
 
-	(: for user in User.manager.all() :)
+	(: for user in users :)
 	(: Modal.modalcadastroeditar(user) :)
 	(: Modal.modalcadastrodesativar(user) :)
 	(: end :)
