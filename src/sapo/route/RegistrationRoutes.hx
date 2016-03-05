@@ -9,15 +9,21 @@ import sys.db.Manager;
 
 class RegistrationRoutes extends AccessControl {
 	@authorize(PSuperUser)
-	public function doDefault(?args:{ ?activeFilter:String })
+	public function doDefault(?args:{ ?activeFilter:String, ?page:Int })
 	{
 		// TODO paginate
+		var elementsPerPage = 5;
 		if (args == null) args = { };
+		args.page = args.page == null?0:args.page;
+		var paging = [];
+		paging.push(elementsPerPage);
+		paging.push(elementsPerPage*args.page);
+		
 		var users = new List<User>();
 		if(args.activeFilter == "deactivated")
 			users = User.manager.search($deactivated_at != null);
 		else
-			users = User.manager.search($deactivated_at == null);
+			users = User.manager.search($deactivated_at == null, { orderBy : name, limit : paging } );
 		Sys.println(sapo.view.Registration.page(users));
 	}
 
