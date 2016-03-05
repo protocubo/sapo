@@ -17,17 +17,17 @@ unavailable
 			<div class="col-md-7 panel-title">
 				<!-- DE/PARA (class: super, telefonista, supervisor e pesquisador) -->
 				<span class="glyphicon glyphicon glyphicon-user (: ticket.author.group.group_name :)" aria-hidden="true"></span>
-				<span class="glyphicon glyphicon-arrow-right text-muted" aria-hidden="true"></span>
+				<span class="glyphicon glyphicon-arrow-right text-muted" aria-hidden="true" style="color: #999;"></span>
 				<span class="glyphicon glyphicon glyphicon-user (: ticket.recipient.group_name :)" aria-hidden="true"></span>
 				<!-- Nº do Ticket, Data da criação do Ticket, Hora da criação do Ticket -->
 				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyTicket(: ticket.id :)" aria-expanded="true" aria-controls="BodyTicket(: ticket.id :)">
-					Ticket #(: ticket.id :) - (: ticket.opened_at :) - (: ticket.subject :)
+					<b>Ticket #(: ticket.id :)</b> - (: ticket.opened_at :) - (: ticket.subject :)
 				</a>
 			</div>
 			<div class="col-md-5 panel-title">
 				<!-- Número da pesquisa, data da pesquisa, Nome do pesquisador (class: super, telefonista, supervisor e pesquisador) -->
 				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyTicket(: ticket.id :)" aria-expanded="true" aria-controls="BodyTicket(: ticket.id :)">
-					Pesquisa #(:ticket.survey.id:) - <b class="pesquisador">(:ticket.survey.surveyor.name:)</b>
+					<b>Pesquisa #(:ticket.survey.id:)</b> - <span class="pesquisador">(:ticket.survey.surveyor.name:)</span>
 				</a>
 			<span class="tags">
 				(: Util.status( true, true , true) :)
@@ -67,12 +67,12 @@ unavailable
 				</div>
 			</div>
 			<!-- AÇÕES -->
-			<div class="row" style="margin-top: 30px;">
+			<div class="row mt30">
 				<div class="col-md-2"><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_incluir">INCLUIR</button></div>
 				<div class="col-md-2"><button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_responder">RESPONDER</button></div>
 				<div class="col-md-2"><button type="button" class="btn btn-success btn-sm (: hideClose(ticket) :)" data-toggle="modal" data-target="#ticket(: ticket.id :)_fechar">FECHAR</button></div>
-				<div class="col-md-2 col-md-offset-1"><a href="/survey/(: ticket.survey.id :)" type="button" class="btn btn-primary btn-sm" target="_blank">VER PESQUISA</a></div>
-				<div class="col-md-2"><button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_status">MUDAR STATUS</button></div>
+				<div class="col-md-2 col-md-offset-1"><a href="/survey/(:ticket.survey.id:)" type="button" class="btn btn-primary btn-sm" target="_blank">VER PESQUISA</a></div>
+				<div class="col-md-2"><button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_status">STATUS</button></div>
 			</div>
 		</div>
 	</div>
@@ -87,74 +87,60 @@ unavailable
 (: Util.head("SAPO - Tickets", {formCache:true}) :)
 </head>
 <body>
-	(: Util.navbar() :)
 
 	<!-- TICKETS -->
 	<div class="container">
-
+	(: Util.navbar() :)
 		<!-- HEAD -->
-		<h2>TICKETS</h2>
-		<hr />
+		<ol class="breadcrumb">
+			<li class="active">TICKETS</li>
+		</ol>
 
-		<!-- FILTROS -->
-		<form method="get" name="filter" action="/tickets">
-			<div class="row">
-				<div class="col-md-2">
-					<h3 class="filtro">Filtros:</h3>
-				</div>
-				<div class="col-md-2 col-md-offset-4"><h4>DESTINO</h4>
-					<select class="form-control" id="recipientID" name="recipient">
-						<option value="(:PARAM_ALL:)">Todos</option>
-						<option value="(:PARAM_GROUP:)">Grupo</option>
-						<option value="(:PARAM_INDIVIDUAL:)">Individual</option>
+		<div class="row">
+			<!-- FILTROS -->
+			<form method="get" name="filter" action="/tickets">
+				<div class="col-md-2"><h5>DESTINO</h5>
+					<select class="form-control input-sm" id="recipientID" name="recipient">
+						<option value="(:PARAM_ALL:)">Para todos</option>
+						<option value="(:PARAM_GROUP:)">Para o grupo</option>
+						<option value="(:PARAM_INDIVIDUAL:)">Para mim</option>
 					</select>
 				</div>
-				<div class="col-md-2"><h4>ESTADO</h4>
-					<select class="form-control" name="state">
+				<div class="col-md-2"><h5>ESTADO</h5>
+					<select class="form-control input-sm" name="state">
 						<option value="(:PARAM_OPEN:)">Não Fechadas</option>
 						<option value="(:PARAM_CLOSED:)">Fechadas</option>
 					</select>
 				</div>
-				<div class="col-md-2"><h4>&nbsp;</h4>
-					<button type="submit" value="submit" class="btn btn-primary">APLICAR</button>
+				<div class="col-md-1"><h5>&nbsp;</h5>
+					<button type="submit" value="submit" class="btn btn-primary btn-sm">Filtrar</button>
 				</div>
-			</div>
-		</form>
-		<hr />
-
-		<script>
-			//Disable 'group' and 'all' options when inbox 'out' is selected
-
-			function disableRecipients(s) {
-				var shouldDisable = true;
-				if(s == "out")
-					document.getElementById('recipientID').selectedIndex = 2;
-				else
-					shouldDisable = false;
-				for (i = 0; i < 2; i++)
-					document.getElementById("recipientID").options[i].disabled = shouldDisable;
-			}
-		</script>
-
-		<!-- BUSCA -->
-		
-		<form action="/tickets/search" method="get">
-			<div class="row">
-				<div class="col-md-2">
-					<h3 class="filtro">Busca:</h3>
+			</form>
+			<script>
+				//Disable 'group' and 'all' options when inbox 'out' is selected
+				function disableRecipients(s) {
+					var shouldDisable = true;
+					if(s == "out")
+						document.getElementById('recipientID').selectedIndex = 2;
+					else
+						shouldDisable = false;
+					for (i = 0; i < 2; i++)
+						document.getElementById("recipientID").options[i].disabled = shouldDisable;
+				}
+			</script>
+			<!-- BUSCA -->
+			<form action="/tickets/search" method="get">
+				<div class="col-md-2  col-md-offset-2"><h5>TICKET</h5>
+					<input type="text" name="ticket" id="ticketSearch" class="form-control input-sm" oninput="disableSearch(this.name, this.value)" placeholder="Nº do Ticket">
 				</div>
-				<div class="col-md-2 col-md-offset-4"><h4>TICKET</h4>
-					<input type="text" name="ticket" id="ticketSearch" class="form-control" oninput="disableSearch(this.name, this.value)" placeholder="Nº do Ticket">
+				<div class="col-md-2"><h5>PESQUISA</h5>
+					<input type="text" name="survey" id="surveySearch" class="form-control input-sm" oninput="disableSearch(this.name, this.value)" placeholder="Nº da Pesquisa">
 				</div>
-				<div class="col-md-2"><h4>PESQUISA</h4>
-					<input type="text" name="survey" id="surveySearch" class="form-control" oninput="disableSearch(this.name, this.value)" placeholder="Nº da Pesquisa">
+				<div class="col-md-1"><h5>&nbsp;</h5>
+					<button type="submit" value="submit" class="btn btn-primary btn-sm">Buscar</button>
 				</div>
-				<div class="col-md-2"><h4>&nbsp;</h4>
-					<button type="submit" value="submit" class="btn btn-primary">BUSCAR</button>
-				</div>
-			</div>
-		</form>
-		<hr />
+			</form>
+		</div>
 
 		<script>
 			//if ticket field is used survey field is disable and vice versa
@@ -168,9 +154,8 @@ unavailable
 			}
 		</script>
 
-
 		<!-- TICKETS -->
-		<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" style="margin-top: 60px;">
+		<div class="panel-group mt60" id="accordion" role="tablist" aria-multiselectable="true">
 			(: if tickets.length == 1 :)
 				(: ticketSummary(tickets.first(), true) :)
 			(: else :)
@@ -179,7 +164,16 @@ unavailable
 				(: end :)
 			(: end :)
 		</div>
+		
+		<nav>
+			<ul class="pager mt30">
+				<li class="previous"><a href="#"><span aria-hidden="true">&larr;</span> ANTERIOR</a></li>
+				<li class="next"><a href="#">PRÓXIMA <span aria-hidden="true">&rarr;</span></a></li>
+			</ul>
+		</nav>
+		
 	</div>
+	
 	(: for t in tickets :)
 		(: Modal.modalticketfechar(t) :)
 		(: Modal.modalticketresponder(t) :)

@@ -3,8 +3,8 @@
     min-height: 100%;
 }
 body {
-    margin-top: 90px;
-    margin-bottom: 50px;
+    margin-top: 21px;
+    margin-bottom: 100px;
     font-family: 'Roboto Condensed', sans-serif;
 }
 a:focus, a:hover {
@@ -18,12 +18,14 @@ a:focus, a:hover {
     height: 50px;
     background-color: #EEE;
 }
-
+.panel-title {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 14px;
+    color: inherit;
+}
 .btn {
     width: 100%;
-}
-.navbar-nav > li > a {
-    font-size: 15px;
 }
 .barraderolagem {
     overflow: auto;
@@ -65,20 +67,27 @@ a:focus, a:hover {
     float: right;
     color: #999;
 }
+.pin {
+	text-transform: uppercase;
+}
+.mt30{
+	margin-top: 30px;
+}
+.mt60{
+	margin-top: 60px;
+}
+
 /*CORES GRUPOS*/
 
 .super {
     color: #59B7A8;
 }
-
 .telefonista {
     color: #AD54C3;
 }
-
 .supervisor {
     color: #B76A40;
 }
-
 .pesquisador {
     color: #646A31;
 }
@@ -116,4 +125,11 @@ a:focus, a:hover {
     .col-md-12 {
         margin-top: 14px;
     }
+	.col-md-1 {
+		margin-bottom: 40px;
+	}
+	.rodape {
+		font-size: 10px;
+	}
+	
 }
