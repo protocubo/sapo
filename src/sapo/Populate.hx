@@ -36,13 +36,11 @@ class Populate {
 	static function rndPick<T>(a:Array<T>)
 		return a[rnd.int(a.length)];
 
-	static function rndDateDelta(d:Date, ms:Float)
-		return DateTools.delta(d, rnd.float()*ms);
-
+	
 	static function rndDate(?d:Date)
 	{
 		if (d == null) d = Date.fromTime(0);
-		return rndDateDelta(d, rnd.float()*Date.now().getTime());
+		return DateTools.delta(d, rnd.float()*((Context.now : Float)-d.getTime()));
 	}
 
 	static function rndTrue(?p:Null<Float>)

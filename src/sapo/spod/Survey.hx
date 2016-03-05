@@ -60,6 +60,7 @@ class Survey extends Object {
 
 	override public function insert()
 	{
+		
 		date_edited = Date.now();
 		super.insert();
 	}
