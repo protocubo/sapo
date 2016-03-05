@@ -21,8 +21,12 @@ class RegistrationRoutes extends AccessControl {
 	}
 
 	@authorize(PSuperUser)
-	public function doEdit(?args:{ ?user:User, ?name:String, ?group:Group, ?supervisor:User })
+	public function postEdit(?args:{ ?user:User, ?name:String, ?group:Group, ?supervisor:User })
 	{
+		// TODO superuser can't disable or change group of other superusers
+		// TODO supervisors can't have their group changed (or be disabled) if they have active surveyors
+		// TODO disable corresponding UI elements
+		// TODO add "selecione" to UI elements
 		if (args == null) args = { };
 		var u = args.user;
 		
