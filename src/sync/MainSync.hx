@@ -399,7 +399,7 @@ class MainSync
 					case "ref_id":
 						new_point.ref = Referencias.manager.get(p.ref_id);
 					//ctrl+c ctrl+v
-					case "date", "isEdited", "uf_id", "city_id", "regadm_id", "street_id", "complement_id", "complement_two_id", "complement2_str", "ref_str", "tempo_saida", "tempo_chegada":
+					case "date", "isEdited", "uf_id", "city_id", "regadm_id", "street_id", "complement_id", "complement_two_id", "complement2_str", "ref_str", "tempo_saida", "tempo_chegada", "ordem":
 						Reflect.setField(new_point, field, Reflect.field(p, field));
 					case "json":
 						if (checkJson("Ponto", Reflect.field(p, field)))

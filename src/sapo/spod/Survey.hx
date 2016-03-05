@@ -162,9 +162,9 @@ class Ponto extends Object {
 	/*
 	public var anterior_id : SNull<SInt>;
 	public var posterior_id : SNull<SInt>;
-
-	public var ordem : SNull<SInt>;
 	*/
+	public var ordem : SNull<SInt>;
+	
 	@:relation(uf_id) public var uf : UF;
 	public var city_id : SInt;
 	public var regadm_id : SNull<SInt>;
