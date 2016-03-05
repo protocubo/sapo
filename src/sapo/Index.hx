@@ -2,6 +2,7 @@ package sapo;
 
 import common.Web;
 import haxe.PosInfos;
+import sys.io.File;
 
 class Index {
 	static function main()
@@ -14,10 +15,24 @@ class Index {
 
 #if trace_sqlite
 		{
-			var underlying = untyped sys.db._Sqlite.SqliteConnection._request;
-			untyped sys.db._Sqlite.SqliteConnection._request = function (c:Dynamic, sql:Dynamic) {
-				trace('SQLite: ${new String(sql)}');
-				return underlying(c, sql);
+			var sclass = untyped sys.db._Sqlite;
+			var uclass = sclass.SqliteConnection;
+			var ufuncs = {
+				_request : uclass._request,
+				_connect : uclass._connect,
+				_close : uclass._close
+			}
+			uclass._request = function (c:Dynamic, sql:Dynamic) {
+				trace('SQLite.sql: ${new String(sql)}');
+				return ufuncs._request(c, sql);
+			}
+			uclass._connect = function (file:Dynamic) {
+				trace('SQLite.open: $file');
+				return ufuncs._connect(file);
+			}
+			uclass._close = function (c:Dynamic) {
+				trace('SQLite.close');
+				ufuncs._close(c);
 			}
 		}
 #end

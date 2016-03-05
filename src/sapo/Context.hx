@@ -69,7 +69,6 @@ class Context {
 			TicketMessage.manager,
 			TicketRecipient.manager,
 			TicketSubscription.manager,
-			Token.manager,
 			User.manager
 		];
 		for (m in managers)
@@ -142,7 +141,6 @@ class Context {
 					"Time is an illusion, luchtime doubly so.",
 					phoneOperators);
 			TicketModel.addMessage(ticket2, arthur, "Very deep. You should send that in to the Reader's Digest. They've got a page for people like you.");
-			
 			Manager.cnx.request("CREATE VIEW UpdatedSurvey AS SELECT MAX(id) as session_id, old_survey_id, MAX(syncTimestamp) as syncTimestamp FROM Survey GROUP BY old_survey_id");
 			surveyGen();
 			
@@ -169,7 +167,7 @@ class Context {
 			surveyor.password = Password.make("secret");
 			surveyor.insert();
 			
-			userarr.push(surveyor);
+			userarr.push(surveyor.id);
 			
 			i++;
 		}
@@ -182,7 +180,7 @@ class Context {
 		while (i < 1000)
 		{
 			var s = new Survey();
-			s.user_id = userarr[rnd.int(userarr.length)].id;
+			s.user_id = userarr[rnd.int(userarr.length)];
 			s.isRestored = false;
 			s.isValid = false;
 			s.lastPageVisited = "END";
@@ -199,8 +197,9 @@ class Context {
 			s.syncTimestamp = Date.now().getTime();
 			s.tentativa_id = 1;
 			s.checkCT = randomBool(rnd);
-			s.checkSupervisor = randomBool(rnd);
-			s.checkSuper = randomBool(rnd);
+			s.checkSV = randomBool(rnd);
+			s.checkCQ = randomBool(rnd);
+			s.isPhoned = true;
 			s.date_create = DateTools.delta(Date.now(), -1000.0 * 60 * 60 * 24 * rnd.int(5));
 			s.date_started = s.date_create;
 			s.date_finished = DateTools.delta(Date.now(), 1000.0 * 60 * 60 * 24 * rnd.int(5));
@@ -339,15 +338,9 @@ class Context {
 				j++;
 			}
 			
-			if (i % 100 == 0)
-				Manager.cnx.commit();
-				
 			i++;
 			
 		}
-		
-		Manager.cnx.commit();
-		
 	}
 	static function randomBool(rnd : Random) : Null<Bool>
 	{
