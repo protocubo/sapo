@@ -4,22 +4,27 @@
 (:import sapo.spod.Ticket:)
 (:import sapo.spod.User:)
 
-(: static function surveySuperStatus(payments:NewSurvey) :)
+(: static function surveySuperStatus(payment:Survey) :)
 <!-- LINHA: checkbox, nome do pesquisador, número da pesquisa, data da pesquisa, refpagto, datapagto, pagar -->
 <tr>
 	<td>
-		<input type="checkbox" />
+		(: if !payment.paid :)
+			<input type="checkbox" name="SurveyCheckBox" value=(:payment.id:) onchange="getCheckedCheckboxes()" />
+		(: end:)
 	</td>
-	<td>(: payments.surveyor.name :)</td>
-	<td><a href="/survey/(: payments.id :)" target="_blank">#(: payments.id :)</a></td>
+	(:var u = User.manager.select($id == payment.user_id):)
+	<td>(: u.name :)</td>
+	<td>(: payment.id :)</td>
 	<td class"tags">(: Util.status( true, true , true) :)</td>
-	<td>(: payments.closed_at :)</td>
-	<td></td>
-	<td></td>
+	<td>(: payment.date_completed :)</td>
+	<td>(: payment.paid? payment.paymentRef : "" :)</td>
+	<td>(: payment.paid? payment.date_paid : "" :)</td>
 	<td align="right">
-		<button type="button" class="btn btn-success btn-xs" aria-label="Desativar" style="width:auto;" data-toggle="modal" data-target="#pagar(: payments.id :)_um">
+	(: if !payment.paid :)
+		<button type="button" class="btn btn-success btn-xs" aria-label="Desativar" style="width:auto;" data-toggle="modal" data-target="#pagar(: payment.id :)_um">
 			<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
 		</button>
+	(: end:)
 	</td>
 </tr>
 <!-- FIM LINHA -->
@@ -104,45 +109,50 @@
 		<ol class="breadcrumb">
 			<li class="active">PAGAMENTOS</li>
 		</ol>
-
 		<div class="row">
-			<!-- FILTROS -->
-			<div class="col-md-2"><h5>PESQUISADOR:</h5>
-				<select name="surveyor"  class="form-control input-sm" >
-					<option value =0 >Todos</option>
-					(:for u in User.manager.search($group_id== Group.manager.select($privilege==PSurveyor).id) :)
-						<option value=(:u.id:) >(:u.name:)</option>
-					(: end :)
-				</select>
-			</div>
-			<div class="col-md-2"><h5>PAGA</h5>
-				<select class="form-control input-sm">
-					<option value=false>Não</option>
-					<option value=true>Sim</option>
-				</select>
-			</div>
-			<div class="col-md-2"><h5>STATUS</h5>
-				<select class="form-control input-sm">
-					<option>Abertas</option>
-					<option>Completas</option>
-					<option>Verificadas</option>
-					<option>Aceitas</option>
-				</select>
-			</div>
-			<div class="col-md-1"><h5>&nbsp;</h5>
-				<button type="button" class="btn btn-primary btn-sm">Filtrar</button>
-			</div>
-			<!-- BUSCA -->
-			<div class="col-md-2"><h5>REFERÊNCIA PAGTO</h5>
-				<input type="text" class="form-control input-sm" placeholder="Referência Pagto">
-			</div>
-			<div class="col-md-2"><h5>PESQUISA</h5>
-				<input type="text" class="form-control input-sm" placeholder="Nº da Pesquisa">
-			</div>
-			<div class="col-md-1"><h5>&nbsp;</h5>
-				<button type="button" class="btn btn-primary btn-sm">Buscar</button>
-			</div>
+			<form method="get">
+				<!-- FILTROS -->
+				<div class="col-md-2"><h5>PESQUISADOR:</h5>
+					<select name="surveyor"  class="form-control input-sm" >
+						<option value =0 >Todos</option>
+						(:for u in Spod.User.manager.search($group_id== Spod.Group.manager.select($privilege==PSurveyor).id) :)
+							<option value=(:u.id:) >(:u.name:)</option>
+						(: end :)
+					</select>
+				</div>
+				<div class="col-md-2"><h5>PAGA</h5>
+					<select class="form-control input-sm" name="paid" >
+						<option value=false>Não</option>
+						<option value=true>Sim</option>
+					</select>
+				</div>
+				<div class="col-md-2"><h5>STATUS</h5>
+					<select class="form-control input-sm"name="state" >
+						<option>Abertas</option>
+						<option>Completas</option>
+						<option>Verificadas</option>
+						<option>Aceitas</option>
+					</select>
+				</div>
+				<div class="col-md-1"><h5>&nbsp;</h5>
+					<button type="submit" value="submit" class="btn btn-primary btn-sm">FILTRAR</button>
+				</div>
+			</form>
+			
+			<form action="/payments/search" method="get">
+				<!-- BUSCA -->
+				<div class="col-md-2"><h5>REFERÊNCIA PAGTO</h5>
+					<input type="text" class="form-control input-sm" id="referenceField" oninput="disableSearch(this.id, this.value)" name="reference" placeholder="Referência Pagto">
+				</div>
+				<div class="col-md-2"><h5>PESQUISA</h5>
+					<input type="text" class="form-control input-sm" id="surveyField" oninput="disableSearch(this.id, this.value)" name="survey" placeholder="Nº da Pesquisa">
+				</div>
+				<div class="col-md-1"><h5>&nbsp;</h5>
+					<button type="submit" value="submit" class="btn btn-primary btn-sm">BUSCAR</button>
+				</div>
+			</form>
 		</div>
+		
 
 		<!-- TABELA DE USUÁRIOS -->
 		<table class="table mt60">
@@ -150,7 +160,7 @@
 				<tr>
 					<!-- HEAD -->
 					<th width="40px">
-						<input type="checkbox" />
+						<input type="checkbox" onClick="toggleCheckBoxes(this)" />
 					</th>
 					<th>Pesquisador</th>
 					<th>Pesquisa</th>
@@ -163,10 +173,9 @@
 			</thead>
 			<tbody>
 
-				(: for p in NewSurvey.manager.all() :)
+				(: for p in surveys :)
 					(: surveySuperStatus(p) :)
 				(: end :)
-
 			</tbody>
 			<tfoot>
 				<tr>
@@ -177,6 +186,50 @@
 					</td>
 				</tr>
 			</tfoot>
+			
+			<script>
+				function toggleCheckBoxes(source) 
+				{
+					varChkhdsad = "";
+					var checkboxes = document.getElementsByName("SurveyCheckBox");
+					for(i = 0;i < checkboxes.length; i++)
+						checkboxes[i].checked = source.checked;
+					if(source.checked)
+						for(i = 0;i < checkboxes.length; i++)
+							varChkhdsad += "e"+checkboxes[i].value;
+					document.getElementById("checkedSurveys").value = varChkhdsad;
+				}
+			</script>
+			
+			<script>
+				function getCheckedCheckboxes() 
+				{
+					document.getElementById("checkedSurveys").value = "";
+					varChkh = "";
+					var checkboxes = document.querySelectorAll('input[name="' + "SurveyCheckBox" + '"]:checked'), values = [];
+						Array.prototype.forEach.call(checkboxes, function(el) 
+						{
+							varChkh += "e"+el.value;
+							values.push(el.value);
+						});
+					document.getElementById("checkedSurveys").value = varChkh;
+				}
+			</script>
+			<script>
+			function disableSearch(field, value) 
+			{
+				var f1 = "referenceField";
+				var f2 = "surveyField";
+				document.getElementById(f1).disabled = false;
+				document.getElementById(f2).disabled = false;
+				if(field == f1 && value.length>0)
+					document.getElementById(f2).disabled = true;
+				else if(field == f2 && value.length>0)
+					document.getElementById(f1).disabled = true;
+			}
+			</script>
+			
+			
 		</table>
 		
 		<nav>
@@ -190,32 +243,35 @@
 
 	(: Util.footer() :)
 
-	(: for m in NewSurvey.manager.all() :)
-	(: Modal.modalpagamentospagar(m) :)
+	(: for m in surveys :)
+		(: Modal.modalpagamentospagar(m) :)
 	(: end :)
 
 
 <!-- MODAL PAGAR -->
 <div class="modal fade" id="pagar_selecionadas" tabindex="-1" role="dialog" aria-labelledby="pagar_selecionadas_label">
 	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<h4 class="modal-title" id="pagar_selecionadas_label">PAGAR PESQUISAS</h4>
-			</div>
-			<div class="modal-body">
-				<div class="row">
-					<div class="col-md-4"><h4>Ref. Pagamento:</h4></div>
-					<div class="col-md-8"><input type="text" class="form-control" /></div>
+		<form action="/payments/pay" method="get">
+			<input type="hidden" id="checkedSurveys" name="toPay">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="pagar_selecionadas_label">PAGAR PESQUISAS</h4>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-4"><h4>Ref. Pagamento:</h4></div>
+						<div class="col-md-8"><input type="text" name="reference" class="form-control" /></div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div class="row">
+						<div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
+						<div class="col-md-6"><button type="submit" value="submit" class="btn btn-success">PAGAR</button></div>
+					</div>
 				</div>
 			</div>
-			<div class="modal-footer">
-				<div class="row">
-					<div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
-					<div class="col-md-6"><button type="button" class="btn btn-success">PAGAR</button></div>
-				</div>
-			</div>
-		</div>
+		</form>
 	</div>
 </div>
 

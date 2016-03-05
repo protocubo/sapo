@@ -17,7 +17,7 @@ class Survey extends Object {
 	public var isValid : SBool;
 
 	public var paid : SNull<SBool> = false;
-
+	public var paymentRef : SNull<SString<255>>;
 	public var isRestored : SBool;
 
 	public var dataInicioPesquisaPapel : SNull<SDateTime>; //
@@ -27,7 +27,8 @@ class Survey extends Object {
 	public var date_create : SDateTime;
 	public var date_started : SNull<SDateTime>; //
 	public var date_finished : SNull<SDateTime>;
-	public var date_completed : SNull<SDateTime>; //
+	public var date_completed : SNull<SDateTime>;
+	public var date_paid : SNull<SDateTime>;
 	public var estadoPesquisa : SNull<SEnum<EstadoPesquisa>>;
 
 	public var endereco_id : SNull<SInt>;
