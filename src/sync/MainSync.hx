@@ -1,5 +1,6 @@
 package sync;
 import common.spod.EnumSPOD;
+import sapo.Populate;
 import common.spod.statics.EstacaoMetro;
 import common.spod.statics.LinhaOnibus;
 import common.spod.statics.Referencias;
@@ -33,26 +34,26 @@ class MainSync
 {
 
 	static var targetCnx : Connection;
-	
+
 	static var maxtimestamp : SFloat;
-	
+
 	static var sessHash : Map<Int, Survey>;
 	static var famHash : Map<Int, Familia>;
 	static var morHash : Map<Int, Morador>;
 	static var pointhash : Map<Int,Ponto>;
-	
+
 	static var refValue : Map<String,Map<Int,Int>>;
-	
+
 	//User_id , Group, Count
 	static var userGroup : Map<Int, Map<Int,Int>>;
-	
+
 	static var syncex : Map<String,Int>;
-	
+
 	static var ours : Map<String,Int>;
 	static var warning : Int = 0;
-	
+
 	static var enq : LocalEnqueuer;
-	
+
 	public static function main()
 	{
 		Log.trace = function(txt : Dynamic, ?infos : PosInfos)
@@ -60,54 +61,54 @@ class MainSync
 			var v = File.append("Log.txt");
 			v.writeString(txt + '\n');
 			v.close();
-			
+
 			Sys.println(infos.className + " " + infos.lineNumber + ": " + txt);
 		}
 		//TODO:Apagar
 		{
 			//TODO: Linkar lugar correto no DB
-			//Context.resetMainDb();
+			//Populate.reset();
 			InitDB.run();
 			//Context.init();
 			if (!TableCreate.exists(QueuedMessage.manager))
 				TableCreate.create(QueuedMessage.manager);
 			enq = new LocalEnqueuer(QueuedMessage.manager);
-			
+
 		}
 		//END
 		syncex = new Map();
 		ours = new Map();
-		
+
 		//InitDB.run();
-		
-		
+
+
 		if (!FileSystem.exists("./private/cnxstring"))
 		{
 			trace("No cnxstring file!");
 			return;
 		}
-		
+
 		var cnxstring = Json.parse(File.getContent("./private/cnxstring"));
 		targetCnx = Mysql.connect(Reflect.field(cnxstring, "DFTTPODD"));
 		targetCnx.request("START TRANSACTION");
-		
+
 		#if debug
 		var serverTimestamp = Date.now();
 		#else
 		var serverTimestamp = serverTimestamp();
 		#end
-		
+
 		//SQLite - yay versao antiga
 		try{
 		Manager.cnx.request("CREATE VIEW UpdatedSurvey AS SELECT MAX(id) as session_id, old_survey_id, MAX(syncTimestamp) as syncTimestamp FROM Survey GROUP BY old_survey_id");
 		}
 		catch (e : Dynamic)
 		{
-			
+
 		}
 		//MySQL
 		//Manager.cnx.request("CREATE OR REPLACE VIEW UpdatedSurvey AS SELECT MAX(id) as session_id, old_survey_id, MAX(syncTimestamp) as syncTimestamp FROM Survey GROUP BY old_survey_id");
-		
+
 		var resUsers = Manager.cnx.request("SELECT id, user_id, `group` FROM Survey s JOIN UpdatedSurvey us ON s.id = us.session_id ORDER BY user_id, `group`");
 		userGroup = new Map();
 		for (r in resUsers)
@@ -120,20 +121,20 @@ class MainSync
 			}
 			else
 				submap = userGroup.get(r.user_id);
-			
+
 			var v = submap.get(r.group) != null ? submap.get(r.group) : 0;
 			submap.set(r.group, v + 1);
-			
-			userGroup.set(r.user_id, submap);			
+
+			userGroup.set(r.user_id, submap);
 		}
-		
-		
+
+
 		//Todos os valores de enums -> usa as keys "EnumName" e "Old_val" => "New_val" para conversão das entradas originais para as novas
 		//A estrutura é Map<String,Map<Int,Int>>
 		refValue = populateHash();
-		
+
 		// Query -> ../../extras/main.sql
-		//Session_id only 
+		//Session_id only
 		//var updateVars = targetCnx.request("SELECT DISTINCT session_id FROM ((SELECT ep.session_id as session_id FROM SyncMap sm join EnderecoProp ep ON sm.tbl = 'EnderecoProp' AND sm.new_id = ep.id /*AND sm.timestamp > x*/) UNION ALL (SELECT  s.id as session_id FROM SyncMap sm JOIN Session s ON sm.tbl = 'Session' AND sm.new_id = s.id /*AND sm.timestamp > x*/) UNION ALL ( select f.session_id as session_id FROM SyncMap sm JOIN Familia f ON f.id = sm.new_id AND sm.tbl = 'Familia'  /*AND sm.timestamp > x*/) UNION ALL (select  m.session_id as session_id FROM SyncMap sm JOIN Morador m ON m.id = sm.new_id AND sm.tbl = 'Morador'  /*AND sm.timestamp > x*/) UNION ( select  p.session_id as session_id FROM SyncMap sm JOIN Ponto p ON  sm.tbl = 'Ponto' AND p.id = sm.new_id  /*AND sm.timestamp > x*/) UNION ALL (select m.session_id as session_id FROM SyncMap sm JOIN Modo m ON m.id = sm.new_id AND sm.tbl = 'Modo'  /*AND sm.timestamp > x*/)	) ack WHERE session_id IS NOT NULL ORDER BY session_id ASC").results().map(function(v) { return v.session_id; } ).array();
 		var updateVars = targetCnx.request("SELECT id as session_id FROM Session WHERE id < 20").results().map(function(v) { return v.session_id; } ).array();
 		#if debug
@@ -141,19 +142,19 @@ class MainSync
 		#else
 		maxtimestamp = targetCnx.request("SELECT timestamp as tmp FROM SyncMap ORDER BY timestamp DESC LIMIT 1").results().first().tmp;
 		#end
-		
+
 		//Hash old_id -> new instance
 		sessHash = new Map<Int, Survey>();
 		famHash = new Map<Int, Familia>();
 		morHash = new Map<Int, Morador>();
 		pointhash = new Map<Int, Ponto>();
-		
+
 		for (u in updateVars)
 		{
 			var shouldInsert = processSessionID(u, false);
 		}
-		
-		
+
+
 		//TODO: Mandar mensagem
 		for (k in syncex.keys())
 		{
@@ -163,16 +164,16 @@ class MainSync
 			trace(txt);
 			enq.enqueue(new comn.message.Slack({ text : txt , username : "SyncBot" } ));
 		}
-		
+
 		trace("Done with only " + warning + " warnings!");
 		enq.enqueue(new comn.message.Slack( { text : "Done with only " + warning + " warnings!" , username : "SyncBot" } ));
-		
+
 		Manager.cleanup();
 		Manager.cnx.close();
 		targetCnx.close();
-		
+
 	}
-	
+
 	static function processSessionID(u : Int, insertMode : Bool) : Bool
 	{
 		for (p in [processSession, processFamilia, processMorador, processPonto, processModo, processOcorrencias]) {
@@ -181,11 +182,11 @@ class MainSync
 		}
 		return true;
 	}
-	
+
 	static function processSession(sid : Int, insertMode : Bool) : Bool
 	{
 		var dbSession = targetCnx.request("SELECT * FROM Session WHERE id = " + sid).results().first();
-		
+
 		var new_sess = new Survey();
 		for (f in Reflect.fields(dbSession))
 		{
@@ -197,8 +198,8 @@ class MainSync
 				case "isValid", "isRestored":
 					Reflect.setField(new_sess, f, (Reflect.field(dbSession, f) == 1));
 				//Copia simples de campo
-				case "user_id", "tentativa_id", "lastPageVisited", 
-				"dataInicioPesquisaPapel", "dataFimPesquisaPapel", "codigoFormularioPapel", 
+				case "user_id", "tentativa_id", "lastPageVisited",
+				"dataInicioPesquisaPapel", "dataFimPesquisaPapel", "codigoFormularioPapel",
 				"date_create", "date_started", "date_finished", "date_completed",
 				"endereco_id", "pin", "latitude", "longitude",
 				"municipio", "bairro", "logradouro", "numero", "complemento","cep",
@@ -216,7 +217,7 @@ class MainSync
 					Macros.warnTable("Survey", f, null);
 			}
 		}
-		
+
 		new_sess.syncTimestamp = maxtimestamp;
 		if (insertMode)
 		{
@@ -224,20 +225,20 @@ class MainSync
 			var biggest = 1;
 			if (groups == null)
 				groups = new Map();
-				
+
 			for(k in groups.keys())
 			{
 				if (k > biggest)
 					biggest = k;
 			}
-			
+
 			//trace(groups != null);
 			if (groups.get(biggest) == null || groups.get(biggest) < 10)
 			{
 				var curval = groups.get(biggest) != null ? groups.get(biggest) : 0;
 				groups.set(biggest, curval + 1);
 				userGroup.set(new_sess.user_id, groups);
-				
+
 				new_sess.group = biggest;
 			}
 			else
@@ -245,36 +246,36 @@ class MainSync
 				var v = biggest + 1;
 				groups.set(v, 1);
 				userGroup.set(new_sess.user_id, groups);
-				
+
 				new_sess.group = v;
 			}
-		
+
 		}
-		
+
 		//o = old_entry from Macros.validateEntry (old_entry is an old reference to the same survey)
-		var o : Survey = Macros.validateEntry(Survey, ["syncTimestamp", "id","paid","checkSupervisor","checkCT","checkSuper","group","date_edited"], [ { key : "old_survey_id", value : new_sess.old_survey_id } ], new_sess);
+		var o : Survey = Macros.validateEntry(Survey, ["syncTimestamp", "id","paid","checkSV","checkCT","checkCQ","group","date_edited"], [ { key : "old_survey_id", value : new_sess.old_survey_id } ], new_sess);
 		if (insertMode && o != null && o.date_completed != null )
 		{
-			
+
 			new_sess.lock();
-			new_sess.checkSupervisor = o.checkSupervisor;
+			new_sess.checkSV = o.checkSV;
 			new_sess.checkCT = o.checkCT;
-			new_sess.checkSuper = o.checkSuper;
+			new_sess.checkCQ = o.checkCQ;
 			new_sess.date_edited = o.date_edited;
 			new_sess.group = o.group;
 			new_sess.paid = o.paid;
 			new_sess.update();
 		}
-		
+
 		sessHash.set(new_sess.old_survey_id, new_sess);
 		return false;
 	}
-	
+
 	static function processFamilia(old_sid : Int, insertMode : Bool) : Bool
 	{
 		var dbFam = targetCnx.request("SELECT * FROM Familia WHERE session_id = " + old_sid + " ORDER BY id").results();
 		var new_familia = new Familia();
-		
+
 		for (f in dbFam)
 		{
 			for (field in Reflect.fields(f))
@@ -287,11 +288,11 @@ class MainSync
 						new_familia.survey = sessHash.get(f.session_id);
 						new_familia.old_survey_id = f.session_id;
 					case "ocupacaoDomicilio_id", "condicaoMoradia_id", "tipoImovel_id",
-					"aguaEncanada_id", "anoVeiculoMaisRecente_id", "empregadosDomesticos_id", 
+					"aguaEncanada_id", "anoVeiculoMaisRecente_id", "empregadosDomesticos_id",
 					"rendaDomiciliar_id":
 						Macros.setEnumField(field, new_familia, f);
 					//Fields ctrl+c ctrl+v
-					case "date", "isEdited", "numeroResidentes", "banheiros", "quartos", 
+					case "date", "isEdited", "numeroResidentes", "banheiros", "quartos",
 					"veiculos", "bicicletas", "motos",  "nomeContato", "telefoneContato","tentativa_id":
 						Reflect.setField(new_familia, field, Reflect.field(f, field));
 					case "json":
@@ -310,18 +311,18 @@ class MainSync
 					"codigoReagendamento":
 						continue;
 					default:
-						Macros.warnTable("Familia", field, null);					
+						Macros.warnTable("Familia", field, null);
 				}
 			}
 			new_familia.syncTimestamp = maxtimestamp;
-			
-			Macros.validateEntry(Familia, ["syncTimestamp", "id"], [ { key : "old_id" , value : new_familia.old_id }, { key : "old_survey_id", value : new_familia.old_survey_id } ], new_familia); 
-			
+
+			Macros.validateEntry(Familia, ["syncTimestamp", "id"], [ { key : "old_id" , value : new_familia.old_id }, { key : "old_survey_id", value : new_familia.old_survey_id } ], new_familia);
+
 			famHash.set(new_familia.old_id, new_familia);
 		}
 		return false;
 	}
-	
+
 	static function processMorador(old_session : Int, insertMode : Bool) : Bool
 	{
 		var dbMorador = targetCnx.request("SELECT * FROM Morador WHERE session_id = " + old_session + " ORDER BY familia_id").results();
@@ -357,19 +358,19 @@ class MainSync
 					case "gps_id","codigoReagendamento":
 						continue;
 					default:
-						Macros.warnTable("Morador", field, null);	
+						Macros.warnTable("Morador", field, null);
 				}
 			}
-			
+
 			new_morador.syncTimestamp = maxtimestamp;
-			
+
 			Macros.validateEntry(Morador, ["syncTimestamp", "id"], [ { key : "old_id", value : new_morador.old_id }, { key: "old_survey_id" , value : new_morador.old_survey_id } ], new_morador);
-			
+
 			morHash.set(new_morador.old_id , new_morador);
 		}
 		return false;
 	}
-	
+
 	static function processPonto(session_id : Int, insertMode : Bool) : Bool
 	{
 		var dbPoints = targetCnx.request("SELECT * FROM Ponto WHERE session_id = " + session_id + " ORDER BY morador_id, ordem").results();
@@ -410,23 +411,23 @@ class MainSync
 					case "gps_id", "anterior_id", "posterior_id", "ordem", "city_str", "regadm_str", "street_str", "complement_str", "complement_two_str", "isIntermediario":
 						continue;
 					default:
-						Macros.warnTable("Ponto", field, null);						
+						Macros.warnTable("Ponto", field, null);
 				}
 			}
-			
+
 			new_point.syncTimestamp = maxtimestamp;
-			
+
 			Macros.validateEntry(Ponto, [ "id", "syncTimestamp"], [ { key : "old_id", value : new_point.old_id } ], new_point);
 			pointhash.set(new_point.old_id, new_point);
 		}
-		
+
 		return false;
 	}
-	
+
 	static function processModo(session_id : Int, insertMode : Bool)
 	{
 		var dbModos = targetCnx.request("SELECT * FROM Modo WHERE session_id = " + session_id + " ORDER BY morador_id, firstpoint_id, anterior_id").results();
-		
+
 		for (m in dbModos)
 		{
 			var new_modo = new Modo();
@@ -464,7 +465,7 @@ class MainSync
 					case "json":
 						if (checkJson("Modo", Reflect.field(m, f)))
 							Reflect.setField(new_modo, f, Reflect.field(m, f));
-					//Conversoes de um mte de field pra um 
+					//Conversoes de um mte de field pra um
 					case "valorPagoTaxi", "valorViagem", "custoEstacionamento":
 						new_modo.valorViagem = m.valorViagem;
 					case "naoSabeLinhaOnibus", "naoSabeEstacaoEmbarque", "naoSabeEstacaoDesembarque", "naoSabeValorViagem", "naoSabeValorPagoTaxi", "naoSabeCustoEstacionamento":
@@ -477,15 +478,15 @@ class MainSync
 						continue;
 					default:
 						Macros.warnTable("Modo", f, null);
-				}	
+				}
 			}
-			
+
 			new_modo.syncTimestamp = maxtimestamp;
 			Macros.validateEntry(Modo, ["id", "syncTimestamp"], [ { key : "old_id" , value : new_modo.old_id } ], new_modo);
 		}
 		return false;
 	}
-	
+
 	static function processOcorrencias(sid : Int, insertMode : Bool)
 	{
 		var res = targetCnx.request("SELECT * FROM Ocorrencias WHERE session_id = " + sid).results();
@@ -512,15 +513,15 @@ class MainSync
 						Macros.warnTable("Ocorrencias", f, null);
 				}
 			}
-			
+
 			c.syncTimestamp = maxtimestamp;
 			Macros.validateEntry(Ocorrencias, ["id", "syncTimestamp"], [ { key : "old_id", value : c.old_id } ], c);
 		}
-		
+
 		return false;
-		
+
 	}
-	
+
 	static function populateHash() : Map<String,Map<Int,Int>>
 	{
 		var t = new Map<String,Map<Int,Int>>();
@@ -532,15 +533,15 @@ class MainSync
 			{
 				tempmap.set(r[0], r[1]);
 			}
-			
+
 			//Minha nomenclatura de tabelas estáticas é EnumName_Tbl
 			var name = Type.getClassName(c).split("_")[0];
 			t.set(name, tempmap);
 		}
-		
+
 		return t;
 	}
-	
+
 	static function serverTimestamp() : Float
 	{
 		var http = new Http("syncex.comtacti.com");
@@ -557,25 +558,25 @@ class MainSync
 				throw "Error: Time difference is too damn high!";
 			}
 		}
-		
+
 		http.onError = function(e : Dynamic)
 		{
 			//TODO: Log
 			throw e;
 		}
 		http.request();
-		
+
 	}
-	
+
 	static function checkJson(table : String, str : String)
 	{
-		try 
+		try
 		{	if (str != null && str.length > 0)
 			{
 				var json = Json.parse(str);
 				return json != null;
 			}
-			else 
+			else
 				return false;
 		}
 		catch (e : Dynamic)

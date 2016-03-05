@@ -5,7 +5,6 @@ import common.spod.statics.EstacaoMetro;
 import common.spod.statics.LinhaOnibus;
 import common.spod.statics.Referencias;
 import common.spod.statics.UF;
-import sapo.Spod.SurveyStatus;
 import sys.db.Object;
 import sys.db.Types;
 
@@ -16,7 +15,7 @@ class Survey extends Object {
 
 	public var lastPageVisited : SNull<SString<255>>;
 	public var isValid : SBool;
-	
+
 	public var paid : SNull<SBool> = false;
 
 	public var isRestored : SBool;
@@ -26,8 +25,8 @@ class Survey extends Object {
 	public var codigoFormularioPapel : SNull<SString<255>>; //
 
 	public var date_create : SDateTime;
-	public var date_started : SNull<SDateTime>; // 
-	public var date_finished : SNull<SDateTime>; 
+	public var date_started : SNull<SDateTime>; //
+	public var date_finished : SNull<SDateTime>;
 	public var date_completed : SNull<SDateTime>; //
 	public var estadoPesquisa : SNull<SEnum<EstadoPesquisa>>;
 
@@ -46,19 +45,19 @@ class Survey extends Object {
 	public var lote : SNull<SString<255>>;
 	public var estratoSocioEconomico : SNull<SString<255>>;
 	public var json : Null<String>;
-	
+
 	/** CHECKS -> Verificado? - TODO:IGNORAR NO SYNC! **/
-	public var checkSV : SNull<SBool>; 
-	public var checkCT : SNull<SBool>; 
-	public var checkCQ : SNull<SBool>; 
-    public var isPhoned : SBool; 
+	public var checkSV : SNull<SBool>;
+	public var checkCT : SNull<SBool>;
+	public var checkCQ : SNull<SBool>;
+	public var isPhoned : SBool;
 	public var group : Null<Int>;
 	public var date_edited : SNull<SDateTime>;
 	/*********************************/
-	
+
 	public var old_survey_id : SInt;
 	public var syncTimestamp : SFloat;
-	
+
 	override public function insert()
 	{
 		date_edited = Date.now();
@@ -111,7 +110,7 @@ class Familia extends Object {
 	public var telefoneContato : SNull<SString<255>>;
 	public var rendaDomiciliar : SNull<SEnum<RendaDomiciliar>>;
 	public var recebeBolsaFamilia : SNull<SBool>;
-	
+
 	public var json : Null<String>;
 	public var syncTimestamp : SFloat;
 	public var old_id : SInt;
@@ -164,7 +163,7 @@ class Ponto extends Object {
 	public var posterior_id : SNull<SInt>;
 	*/
 	public var ordem : SNull<SInt>;
-	
+
 	@:relation(uf_id) public var uf : UF;
 	public var city_id : SInt;
 	public var regadm_id : SNull<SInt>;
@@ -180,7 +179,7 @@ class Ponto extends Object {
 	public var tempo_saida : SNull<SString<255>>;
 	public var tempo_chegada : SNull<SString<255>>;
 	public var json : Null<String>;
-	
+
 	@:relation(copiedFrom_id) public var copiedFrom : SNull<Ponto>;
 	public var isPontoProx : SNull<SBool>;
 	@:relation(pontoProx_id) public var pontoProx : SNull<Ponto>;
@@ -222,7 +221,7 @@ class Modo extends Object {
 	public var naoRespondeu : SNull<SBool>;
 
 	public var json : Null<String>;
-	
+
 	public var syncTimestamp : SFloat;
 	public var old_survey_id : SInt;
 	public var old_morador_id : SInt;
