@@ -103,14 +103,14 @@
 						</div>
 						<div class="row">
 							<div class="col-md-2"><h4>E-mail:</h4></div>
-							<div class="col-md-10"><input type="text" name="email" class="form-control"></div>
+							<div class="col-md-10"><input type="email" name="email" class="form-control"></div>
 						</div>
 						<div class="row">
 							<div class="col-md-2"><h4>Grupo:</h4></div>
 							<div class="col-md-10">
 								<select class="form-control" id="groupFieldAdd" name="group" onchange="disableSupervisorField('groupFieldAdd','supervisorFieldAdd')">
 									(: for g in Group.manager.all() :)
-										<option value=(:g.id:)>(:g.privilege:)</option>
+										<option value=(:g.id:) x-privilege=(:g.privilege:)>(:g.name:)</option>
 									(:end:)
 								</select>
 							</div>
@@ -118,7 +118,7 @@
 						<div class="row">
 							<div class="col-md-2"><h4>Supervisor:</h4></div>
 							<div class="col-md-10">
-								<select class="form-control" id="supervisorFieldAdd" name="supervisor" disabled>
+								<select class="form-control" id="supervisorFieldAdd" name="supervisor">
 									(: for s in User.manager.search($group_id== Group.manager.select($privilege==PSupervisor).id ) :)
 										<option value=(:s.id:)>(:s.name:)</option>
 									(:end:)
@@ -147,7 +147,7 @@
 		{
 			var eGrp = document.getElementById(idg);
 			var eSup = document.getElementById(ids);
-			if(eGrp.options[eGrp.selectedIndex].text=="pesquisador")
+			if(eGrp.options[eGrp.selectedIndex].getAttribute("x-privilege") == "PSurveyor")
 				eSup.disabled = false;
 			else
 				eSup.disabled = true;

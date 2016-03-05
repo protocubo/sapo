@@ -72,8 +72,7 @@ class RegistrationRoutes extends AccessControl {
 		var t = Token.manager.get(args.token);
 		if (t != null && !t.isExpired && t.expirationTime > Context.now)
 			Sys.println(sapo.view.Password.render(args.token));
-			Web.redirect("/");
-	
+		Web.redirect("/");
 	}
 	
 	@authorize(all)
@@ -96,7 +95,6 @@ class RegistrationRoutes extends AccessControl {
 		
 		Web.redirect("/");
 	}
-	
 	
 	@authorize(all)
 	public function postForgotPassword(args : {email : String})

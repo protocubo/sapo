@@ -61,6 +61,7 @@ class Context {
 			TicketMessage.manager,
 			TicketRecipient.manager,
 			TicketSubscription.manager,
+			Token.manager,
 			User.manager
 		];
 		function viewExists(name) {
