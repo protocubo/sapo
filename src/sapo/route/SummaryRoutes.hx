@@ -59,7 +59,7 @@ class SummaryRoutes extends AccessControl
 		//var resultsQuery = Manager.cnx.request("SELECT s.user_id as user, s.`group` as grupo,STRFTIME('%Y-%m-%d', s.date_finished) as date_end , COUNT(*) as pesqGrupo,  SUM( CASE WHEN checkSupervisor IS NULL THEN 1 ELSE 0 END) as nullSupervisor, SUM( CASE WHEN checkCT IS NULL THEN 1 ELSE 0 END) as nullCT, SUM(CASE WHEN checkSuper IS NULL THEN 1 ELSE 0 END) AS nullSuper FROM Survey s JOIN UpdatedSurvey us ON s.old_survey_id = us.old_survey_id AND s.syncTimestamp = us.syncTimestamp WHERE s.syncTimestamp > "+DateTools.delta(Date.now(), -1000.0*60*60*24*28).getTime()+" GROUP BY s.user_id, s.`group`, date_end ORDER BY s.user_id, s.`group`, date_end").results();
 		//TODO: Comment this line
 		//Query path: docs/queries/user_summary.sql
-		var resultsQuery = Manager.cnx.request("SELECT s.user_id as user, s.`group` as grupo,STRFTIME('%Y-%m-%d', s.date_finished) as date_end , COUNT(*) as pesqGrupo,  SUM( CASE WHEN checkSV IS NULL THEN 1 ELSE 0 END) as nullSupervisor, SUM( CASE WHEN checkCT IS NULL THEN 1 ELSE 0 END) as nullCT, SUM(CASE WHEN checkCQ IS NULL THEN 1 ELSE 0 END) AS nullSuper FROM Survey s JOIN UpdatedSurvey us ON s.old_survey_id = us.old_survey_id AND s.syncTimestamp = us.syncTimestamp WHERE s.syncTimestamp > 1000 "+ wherestr+" GROUP BY s.user_id, s.`group`, date_end ORDER BY s.user_id, s.`group`, date_end").results();
+		var resultsQuery = Manager.cnx.request("SELECT s.user_id as user, s.`group` as grupo,STRFTIME('%Y-%m-%d', s.date_completed) as date_end , COUNT(*) as pesqGrupo,  SUM( CASE WHEN checkSV IS NULL THEN 1 ELSE 0 END) as nullSupervisor, SUM( CASE WHEN checkCT IS NULL THEN 1 ELSE 0 END) as nullCT, SUM(CASE WHEN checkCQ IS NULL THEN 1 ELSE 0 END) AS nullSuper FROM Survey s JOIN UpdatedSurvey us ON s.old_survey_id = us.old_survey_id AND s.syncTimestamp = us.syncTimestamp WHERE s.date_completed > '"+DateTools.delta(Context.now, -1000.0*60*60*24*30) + "' " + wherestr+" GROUP BY s.user_id, s.`group`, date_end ORDER BY s.user_id, s.`group`, date_end").results();
 		
 		var header = [DATE_KEY, SUP_KEY, CT_KEY, SUPER_KEY, COMPLETA_KEY, RECUSADAS_KEY, ACEITA_KEY];
 		for (r in resultsQuery)
@@ -80,7 +80,7 @@ class SummaryRoutes extends AccessControl
 				//Obrigatoriamente todos responderam...n sobe barra, sobem os controles
 				case PesqStatus.Aceita:
 					var curval = curDateHash.get(ACEITA_KEY);
-					curDateHash.set(ACEITA_KEY, curval + r.pesqGrupo);
+					curDateHash.set(ACEITA_KEY, curval.getVal() + r.pesqGrupo);
 				case PesqStatus.Recusada:
 					var curval = curDateHash.get(RECUSADAS_KEY);
 					curDateHash.set(RECUSADAS_KEY, curval.getVal() + r.pesqGrupo);
@@ -130,7 +130,7 @@ class SummaryRoutes extends AccessControl
 		var dateVal : Map<String,Map<String,Int>> = new Map();
 		var headers = [DATE_KEY, SUP_KEY, CT_KEY, SUPER_KEY, COMPLETA_KEY, ACEITA_KEY, RECUSADAS_KEY];
 		//docs/queries/User_historic_friday.sql
-		var queryDay = Manager.cnx.request("SELECT s.user_id as user, s.`group` as grupo,	DATE(s.date_finished, 'weekday "+HistoricDay+"') as date_end , COUNT(*) as pesqGrupo,  SUM( CASE WHEN checkSV IS NULL THEN 1 ELSE 0 END) as nullSupervisor, SUM( CASE WHEN checkCT IS NULL THEN 1 ELSE 0 END) as nullCT, SUM(CASE WHEN checkCQ IS NULL THEN 1 ELSE 0 END) AS nullSuper FROM Survey s JOIN UpdatedSurvey us 	ON s.old_survey_id = us.old_survey_id AND s.syncTimestamp = us.syncTimestamp AND STRFTIME('%w',s.date_finished) = '"+ HistoricDay+ "'  "+((wherestr != "") ? wherestr : "")+" GROUP BY s.user_id, s.`group`, date_end ORDER BY s.user_id, s.`group`, date_end ").results();
+		var queryDay = Manager.cnx.request("SELECT s.user_id as user, s.`group` as grupo,	DATE(s.date_completed, 'weekday "+HistoricDay+"') as date_end , COUNT(*) as pesqGrupo,  SUM( CASE WHEN checkSV IS NULL THEN 1 ELSE 0 END) as nullSupervisor, SUM( CASE WHEN checkCT IS NULL THEN 1 ELSE 0 END) as nullCT, SUM(CASE WHEN checkCQ IS NULL THEN 1 ELSE 0 END) AS nullSuper FROM Survey s JOIN UpdatedSurvey us 	ON s.old_survey_id = us.old_survey_id AND s.syncTimestamp = us.syncTimestamp AND STRFTIME('%w',s.date_completed) = '"+ HistoricDay+ "'  "+((wherestr != "") ? wherestr : "")+" GROUP BY s.user_id, s.`group`, date_end ORDER BY s.user_id, s.`group`, date_end ").results();
 		for (q in queryDay)
 		{
 			if (q.date_end == null)
@@ -162,7 +162,7 @@ class SummaryRoutes extends AccessControl
 		
 		//SQLITE
 		// docs/queries/User_historic.sql
-		var queryHistoric = Manager.cnx.request("SELECT s.user_id as user, s.`group` as grupo, DATE(s.date_finished, 'weekday "+HistoricDay+"') as date_end, COUNT(*) as pesqGrupo,  SUM( CASE WHEN checkSV IS NULL THEN 1 ELSE 0 END) as nullSupervisor, SUM( CASE WHEN checkCT IS NULL THEN 1 ELSE 0 END) as nullCT, SUM(CASE WHEN checkCQ IS NULL THEN 1 ELSE 0 END) AS nullSuper FROM Survey s JOIN UpdatedSurvey us ON s.old_survey_id = us.old_survey_id AND s.syncTimestamp = us.syncTimestamp "+((wherestr != "") ? wherestr : "")+" GROUP BY s.user_id, s.`group`, date_end ORDER BY s.user_id, s.`group`, date_end").results();
+		var queryHistoric = Manager.cnx.request("SELECT s.user_id as user, s.`group` as grupo, DATE(s.date_completed, 'weekday "+HistoricDay+"') as date_end, COUNT(*) as pesqGrupo,  SUM( CASE WHEN checkSV IS NULL THEN 1 ELSE 0 END) as nullSupervisor, SUM( CASE WHEN checkCT IS NULL THEN 1 ELSE 0 END) as nullCT, SUM(CASE WHEN checkCQ IS NULL THEN 1 ELSE 0 END) AS nullSuper FROM Survey s JOIN UpdatedSurvey us ON s.old_survey_id = us.old_survey_id AND s.syncTimestamp = us.syncTimestamp "+((wherestr != "") ? wherestr : "")+" GROUP BY s.user_id, s.`group`, date_end ORDER BY s.user_id, s.`group`, date_end").results();
 		for (q in queryHistoric)
 		{
 			if (q.date_end == null)
