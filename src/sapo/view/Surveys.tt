@@ -60,7 +60,7 @@
 </div>
 (: end :)
 
-(: static function page(?surveys:List<Survey>, ?params:{ ?user:Int, ?status:String, ?order:String, ?page:Int }, ?showPrev:Bool = false, ?showNext:Bool = false) :)
+(: static function page(?surveys:List<Survey>, ?params:{ ?user:User, ?status:SurveyStatus, ?order:String, ?page:Int }, ?showPrev:Bool = false, ?showNext:Bool = false) :)
 <!DOCTYPE html>
 <html>
 <head>
@@ -80,7 +80,7 @@
 			<form method="get">
 				<div class="col-md-2"><h5>USUÁRIO</h5>
 					<select class="form-control input-sm" name="user" id="userID">
-						<option value=0>Todos</option>
+						<option value="">Todos</option>
 						(: var g = Group.manager.select($privilege == PSupervisor) :)
 						<optgroup label=(:g.name:)>
 							(: for u in User.manager.search($group_id == g.id ) :)
@@ -96,11 +96,11 @@
 				</div>
 				<div class="col-md-2"><h5>STATUS</h5>
 					<select class="form-control input-sm" name="status">
-						<option value="" >Todas</option>
-						<option value="Aceita" >Abertas</option>
-						<option value="Pendente" >Fechadas</option>
-						<option value="Recusada" >Verificadas</option>
-						<option value="Completa" >CT</option>
+						<option value= "(:SSAll:)" >Todas</option>
+						<option value= "(:SSAccepted:)" >Aceitas</option>
+						<option value= "(:SSPending:)" >Pendente</option>
+						<option value= "(:SSRefused:)" >Recusada</option>
+						<option value= "(:SSCompleted:)" >Completas</option>
 					</select>
 				</div>
 				<div class="col-md-2"><h5>ORDEM</h5>
@@ -135,10 +135,10 @@
 		<nav>
 			<ul class="pager mt30">
 			(:if showPrev:)
-				<li class="previous"><a href="surveys?user=(:params.user:)&page=(:params.page-1:)"><span aria-hidden="true">&larr;</span> ANTERIOR</a></li>
+				<li class="previous"><a href="surveys?user=(: params.user == null? "" : params.user :)&page=(:params.page-1:)"><span aria-hidden="true">&larr;</span> ANTERIOR</a></li>
 			(:end:)
 			(:if showNext:)
-				<li class="next"><a href="surveys?user=(:params.user:)&page=(:params.page+1:)">PRÓXIMA <span aria-hidden="true">&rarr;</span></a></li>
+				<li class="next"><a href="surveys?user=(: params.user == null? "" : params.user :)&page=(:params.page+1:)">PRÓXIMA <span aria-hidden="true">&rarr;</span></a></li>
 			(:end:)
 			</ul>
 		</nav>

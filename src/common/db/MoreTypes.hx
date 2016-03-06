@@ -36,6 +36,7 @@ enum SurveyStatus {
 	SSCompleted;
 	SSRefused;
 	SSAccepted;
+	SSAll;
 }
 
 abstract EmailAddress(String) to String {
