@@ -1,5 +1,6 @@
 package sapo.spod;
 
+import common.db.MoreTypes;
 import common.spod.EnumSPOD;
 import common.spod.statics.EstacaoMetro;
 import common.spod.statics.LinhaOnibus;
@@ -20,15 +21,15 @@ class Survey extends Object {
 	public var paymentRef : SNull<SString<255>>;
 	public var isRestored : SBool;
 
-	public var dataInicioPesquisaPapel : SNull<SDateTime>; //
-	public var dataFimPesquisaPapel : SNull<SDateTime>; //
+	public var dataInicioPesquisaPapel : SNull<HaxeTimestamp>; //
+	public var dataFimPesquisaPapel : SNull<HaxeTimestamp>; //
 	public var codigoFormularioPapel : SNull<SString<255>>; //
 
-	public var date_create : SDateTime;
-	public var date_started : SNull<SDateTime>; //
-	public var date_finished : SNull<SDateTime>;
-	public var date_completed : SNull<SDateTime>;
-	public var date_paid : SNull<SDateTime>;
+	public var date_create : HaxeTimestamp;
+	public var date_started : SNull<HaxeTimestamp>; //
+	public var date_finished : SNull<HaxeTimestamp>;
+	public var date_completed : SNull<HaxeTimestamp>;
+	public var date_paid : SNull<HaxeTimestamp>;
 	public var estadoPesquisa : SNull<SEnum<EstadoPesquisa>>;
 
 	public var endereco_id : SNull<SInt>;
@@ -53,7 +54,7 @@ class Survey extends Object {
 	public var checkCQ : Null<Bool>;
 	public var isPhoned : Null<Bool>;
 	public var group : Null<Int>;
-	public var date_edited : Null<SDateTime>;
+	public var date_edited : Null<HaxeTimestamp>;
 	/*********************************/
 
 	public var old_survey_id : SInt;
@@ -72,7 +73,7 @@ class Ocorrencias extends Object {
 	//?
 	public var desc : SNull<SString<4096>>; //
 	@:relation(survey_id) public var survey : Survey;
-	public var datetime : SDateTime;
+	public var datetime : HaxeTimestamp;
 	public var json : Null<String>;
 	public var syncTimestamp : SFloat;
 	public var old_id : SInt;
@@ -83,7 +84,7 @@ class Familia extends Object {
 	public var id : SId;
 	@:relation(survey_id) public var survey : Survey;
 
-	public var date : SDateTime;
+	public var date : HaxeTimestamp;
 	public var tentativa_id : SInt;
 	public var isDeleted : SBool;
 	public var isEdited : SInt;
@@ -124,7 +125,7 @@ class Morador extends Object {
 
 	@:relation(survey_id) public var survey : Survey;
 	@:relation(familia_id) public var familia : Familia;
-	public var date : SDateTime;
+	public var date : HaxeTimestamp;
 	public var isDeleted : SBool;
 	public var isEdited : SInt;
 
@@ -156,7 +157,7 @@ class Ponto extends Object {
 	@:relation(survey_id) public var survey : Survey;
 	@:relation(morador_id) public var morador : Morador;
 
-	public var date : SDateTime;
+	public var date : HaxeTimestamp;
 
 	public var isEdited : SInt;
 	public var isDeleted : SBool;
@@ -200,7 +201,7 @@ class Modo extends Object {
 	@:relation(firstpoint_id) public var firstpoint : Ponto;
 	@:relation(secondpoint_id) public var secondpoint : Ponto;
 
-	public var date : SDateTime;
+	public var date : HaxeTimestamp;
 
 	public var isEdited : SInt;
 	public var isDeleted : SBool;
