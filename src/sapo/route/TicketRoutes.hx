@@ -4,6 +4,7 @@ import common.Dispatch;
 import common.Web;
 import common.db.MoreTypes;
 import sapo.spod.Other;
+import sapo.spod.Survey;
 import sapo.spod.Ticket;
 import sapo.spod.User;
 
@@ -50,7 +51,7 @@ class TicketRoutes extends AccessControl {
 	}
 
 	@authorize(PSupervisor, PPhoneOperator, PSuperUser)
-	public function doSearch(?args:{ ?ofUser:User, ?ticket:Ticket, ?survey:NewSurvey })
+	public function doSearch(?args:{ ?ofUser:User, ?ticket:Ticket, ?survey:Survey })
 	{
 		if (args == null) args = { };
 		var tickets : List<Ticket> = new List();
