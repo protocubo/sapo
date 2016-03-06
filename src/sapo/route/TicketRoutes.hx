@@ -43,7 +43,7 @@ class TicketRoutes extends AccessControl {
 		case other:
 			throw 'Unexpected recipient value: $other';
 		}
-		
+
 		if (survey_id != null)
 			sql += " t.survey_id = " + survey_id;
 		else
@@ -86,7 +86,7 @@ class TicketRoutes extends AccessControl {
 			// ok;
 		case _: throw "Assertion failed";
 		}
-		
+
 		var u = Context.loop.user;
 		try {
 			Context.db.startTransaction();
@@ -98,7 +98,7 @@ class TicketRoutes extends AccessControl {
 				var msg = new TicketMessage(t,u, "TICKET REOPENED", Context.now);
 				msg.insert();
 			}
-			
+
 			var msg = new TicketMessage(t, u, args.text);
 			msg.insert();
 			var sub = TicketSubscription.manager.select($user == u);
@@ -129,13 +129,13 @@ class TicketRoutes extends AccessControl {
 
 		t.closed_at = Context.now;
 		t.update();
-		
+
 		var msg = new TicketMessage(t, Context.loop.user, "TICKET FECHADO.");
 		msg.insert();
-		
+
 		Web.redirect('/tickets/search?ticket=${t.id}');
 	}
-	
+
 	public function new() {}
 }
 

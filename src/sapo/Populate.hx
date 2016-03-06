@@ -31,20 +31,15 @@ private typedef FakeSurveys = Array<Survey>;
 private typedef Tickets = Array<Ticket>;
 
 class Populate {
-	static inline var HOUR = 3.6*1e6;
-	static inline var DAY = 24*HOUR;
-	static inline var MONTH = 30.5*DAY;
-	static inline var YEAR = 12*MONTH;
 	static var rnd = new neko.Random();
 	static var id = 0;
 
 	static function rndPick<T>(a:Array<T>)
 		return a[rnd.int(a.length)];
 
-	
 	static function rndDate(?from:HaxeTimestamp, ?maxDelta:Float)
 	{
-		if (from == null) from = (Context.now:Float) - 2*MONTH;
+		if (from == null) from = Context.now.delta(-2*$week);
 		var limitDelta = (Context.now:Float)-(from:Float);
 		if (maxDelta == null || maxDelta > limitDelta) maxDelta = limitDelta;
 		return (from + rnd.float()*maxDelta:HaxeTimestamp);
@@ -130,9 +125,9 @@ class Populate {
 		s.checkCQ = rndNullTrue();
 		s.isPhoned = rndNullTrue(.1);
 		s.date_started = s.date_create;
-		s.date_finished = rndDate(s.date_create, 5*DAY);
+		s.date_finished = rndDate(s.date_create, HaxeTimestamp.resolveTime(5*$day));
 		s.date_completed = s.date_finished;
-		s.syncTimestamp = rndDate(s.date_completed, 1*DAY);
+		s.syncTimestamp = rndDate(s.date_completed, HaxeTimestamp.resolveTime($day));
 
 		s.group = (1 + it%10)*(users.surveyors.length)*10 + it % s.user_id;
 

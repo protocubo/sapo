@@ -81,7 +81,7 @@ unavailable
 			<div class="row mt30">
 				(: do var u = Context.loop.user :)
 				(: do var disabled = false :)
-				
+
 				(: if ticket.author != u && ticket.recipient.user != u && ticket.recipient.group != u.group && u.group.privilege != PSuperUser :)
 					(: do disabled = true :)
 				(: end :)
@@ -89,7 +89,7 @@ unavailable
 				(: if ticket.author != u && u.group.privilege != PSuperUser :)
 					(: do closedDisabled = true :)
 				(: end :)
-				
+
 				(: if ticket.closed_at == null :)
 				<div class="col-md-2"><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_incluir" (:if disabled :) disabled (: end :)>INCLUIR</button></div>
 				<div class="col-md-2"><button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_responder" (:if disabled :) disabled (: end :)>RESPONDER</button></div>
@@ -192,8 +192,8 @@ unavailable
 				</div>
 				<div class="col-md-2"><h5>ESTADO</h5>
 					<select class="form-control input-sm" name="state">
-						<option value="(:PARAM_OPEN:)">Não Fechadas</option>
-						<option value="(:PARAM_CLOSED:)">Fechadas</option>
+						<option value="(:PARAM_OPEN:)">Abertos</option>
+						<option value="(:PARAM_CLOSED:)">Fechados</option>
 					</select>
 				</div>
 				<div class="col-md-2"><h5>PESQUISA</h5>
@@ -220,7 +220,7 @@ unavailable
 				<div class="col-md-2  col-md-offset-2"><h5>TICKET</h5>
 					<input type="text" name="ticket" id="ticketSearch" class="form-control input-sm" oninput="disableSearch(this.name, this.value)" placeholder="Nº do Ticket">
 				</div>
-				
+
 				<div class="col-md-1"><h5>&nbsp;</h5>
 					<button type="submit" value="submit" class="btn btn-primary btn-sm">Buscar</button>
 				</div>
@@ -249,7 +249,7 @@ unavailable
 				(: end :)
 			(: end :)
 		</div>
-		
+
 		<nav>
 			<ul class="pager mt30">
 				(: if page > 1 :)
@@ -265,9 +265,9 @@ unavailable
 				(: end :)
 			</ul>
 		</nav>
-		
+
 	</div>
-	
+
 	(: for t in tickets :)
 		(: Modal.modalticketresponder(t, t.closed_at != null) :)
 		(: if t.closed_at == null :)
