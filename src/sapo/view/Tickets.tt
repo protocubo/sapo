@@ -81,18 +81,24 @@ unavailable
 			<div class="row mt30">
 				(: do var u = Context.loop.user :)
 				(: do var disabled = false :)
+				
 				(: if ticket.author != u && ticket.recipient.user != u && ticket.recipient.group != u.group && u.group.privilege != PSuperUser :)
-				(: do disabled = true :)
+					(: do disabled = true :)
 				(: end :)
 				(: do var closedDisabled = false :)
 				(: if ticket.author != u && u.group.privilege != PSuperUser :)
-				(: do closedDisabled = true :)
+					(: do closedDisabled = true :)
 				(: end :)
+				
+				(: if ticket.closed_at == null :)
 				<div class="col-md-2"><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_incluir" (:if disabled :) disabled (: end :)>INCLUIR</button></div>
 				<div class="col-md-2"><button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_responder" (:if disabled :) disabled (: end :)>RESPONDER</button></div>
-				<div class="col-md-2"><button type="button" class="btn btn-success btn-sm (: hideClose(ticket) :)" data-toggle="modal" data-target="#ticket(: ticket.id :)_fechar">FECHAR</button></div>
-				<div class="col-md-2 col-md-offset-1"><a href="/survey/(:ticket.survey.id:)" type="button" class="btn btn-primary btn-sm" target="_blank" (: if closedDisabled :) disabled (: end :)>VER PESQUISA</a></div>
+				<div class="col-md-2"><button type="button" class="btn btn-success btn-sm (: hideClose(ticket) :)" data-toggle="modal" data-target="#ticket(: ticket.id :)_fechar" (: if closedDisabled :) disabled (: end :)>FECHAR</button></div>
+				<div class="col-md-2 col-md-offset-1"><a href="/survey/(:ticket.survey.id:)" type="button" class="btn btn-primary btn-sm" target="_blank" (: if disabled :) disabled (: end :)>VER PESQUISA</a></div>
 				<div class="col-md-2"><button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_status">STATUS</button></div>
+				(: else :)
+				<div class="col-md-2"><button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_responder" (:if disabled :) disabled (: end :)>REABRIR</button></div>
+				(: end :)
 			</div>
 		</div>
 	</div>
@@ -195,10 +201,12 @@ unavailable
 	</div>
 	
 	(: for t in tickets :)
-		(: Modal.modalticketfechar(t) :)
-		(: Modal.modalticketresponder(t) :)
-		(: Modal.modalticketincluir(t) :)
-		(: Modal.modalticketstatus(t) :)
+		(: Modal.modalticketresponder(t, t.closed_at != null) :)
+		(: if t.closed_at == null :)
+			(: Modal.modalticketresponder(t) :)
+			(: Modal.modalticketincluir(t) :)
+			(: Modal.modalticketstatus(t) :)
+		(: end :)
 	(: end :)
 
 (: Util.footer() :)

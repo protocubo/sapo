@@ -74,7 +74,15 @@ class TicketRoutes extends AccessControl {
 			// ok;
 		case _: throw "Assertion failed";
 		}
-
+		if (t.closed_at != null)
+		{
+			t.lock();
+			t.closed_at = null;
+			t.update();
+			var msg = new TicketMessage(t, Context.loop.user, "TICKET REOPENED", Context.now);
+			msg.insert();
+		}
+		
 		var u = Context.loop.user;
 		try {
 			Context.db.startTransaction();
@@ -115,26 +123,6 @@ class TicketRoutes extends AccessControl {
 		Web.redirect('/tickets/search?ticket=${t.id}');
 	}
 	
-	@authorize(PSupervisor, PSuperUser)
-	public function postReopen(t : Lock<Ticket>)
-	{
-		switch(Context.loop.privilege)
-		{
-			case PSupervisor:
-			if (Context.loop.user != t.author)
-				throw "Can\'t reopen ticket authored by someone else";
-			case PSuperUser:
-			case _: throw "Assertion failed";
-		}
-		
-		t.closed_at = null;
-		t.update();
-		var msg = new TicketMessage(t, Context.loop.user, "TICKET REABERTO");
-		msg.insert();
-		
-		Web.redirect('/tickets/search?ticket=${t.id}');
-	}
-
 	public function new() {}
 }
 
