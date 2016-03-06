@@ -24,7 +24,7 @@
 				(: survey.logradouro:) , (:survey.numero:)
 				</a>
 				<span class="tags">
-					(: Util.status( survey.checkSV, survey.checkCT , survey.checkCQ ) :)
+					(: Util.status(survey.isPhoned, survey.paid, survey.checkSV, survey.checkCT , survey.checkCQ ) :)
 				</span>
 			</div>
 		</div>

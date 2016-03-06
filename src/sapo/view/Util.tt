@@ -111,12 +111,17 @@
       } :)
 (:end:)
 
-(: static function status( checkSV:Bool, checkCT:Bool, checkCQ:Bool ) :)
+(: static function status(isPhoned : Bool, isPaid : Bool, checkSV:Bool, checkCT:Bool, checkCQ:Bool ) :)
 
 	<!-- se paga -->
+	(: if isPaid == true :)
 	<span class="glyphicon glyphicon-usd" aria-hidden="true" title="PAGA"></span>
+	(: end :)
+	
 	<!-- se telefonada -->
-	<span class="glyphicon glyphicon-earphone" aria-hidden="true" title="TELEFONADA"></span>
+	(: if isPhoned == true :)
+	<span class="glyphicon glyphicon-earphone " aria-hidden="true" title="TELEFONADA"></span>
+	(: end :)
 	
 	<!-- status SUPERVISOR -->
 	(:if checkSV == true :)
