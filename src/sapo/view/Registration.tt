@@ -46,10 +46,10 @@
 				<tr>
 					<!-- HEAD -->
 					(:* <th>Usuário</th> *:)
-					<th>Nome</th>
-					<th>Grupo</th>
+					<th width="20%">Nome</th>
+					<th width="20%">Grupo</th>
 					<th>E-mail</th>
-					<th>Supervisor</th>
+					<th width="20%">Supervisor</th>
 					<th width="40px"></th>
 					<th width="40px"></th>
 				</tr>
@@ -91,10 +91,10 @@
 		<nav>
 			<ul class="pager mt30">
 			(:if showPrev:)
-				<li class="previous"><a href="registration?activeFilter=(:params.activeFilter:)&page=(:params.page-1:)"><span aria-hidden="true">&larr;</span> ANTERIOR</a></li>
+				<li class="previous"><a href="registration?activeFilter=(:params.activeFilter:)&page=(:params.page-1:)">ANTERIOR</a></li>
 			(:end:)
 			(:if showNext:)
-				<li class="next"><a href="registration?activeFilter=(:params.activeFilter:)&page=(:params.page+1:)">PRÓXIMA <span aria-hidden="true">&rarr;</span></a></li>
+				<li class="next"><a href="registration?activeFilter=(:params.activeFilter:)&page=(:params.page+1:)">PRÓXIMA</a></li>
 			(:end:)
 			</ul>
 		</nav>

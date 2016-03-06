@@ -213,7 +213,7 @@
 					<div class="modal-footer">
 						<div class="row">
 							<div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
-							<div class="col-md-6"><button type="submit" value="submit" class="btn btn-success">EDITAR</button></div>
+							<div class="col-md-6"><button type="submit" value="submit" class="btn btn-success">SALVAR</button></div>
 						</div>
 					</div>
 				</form>
