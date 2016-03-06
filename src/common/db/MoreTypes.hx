@@ -31,6 +31,13 @@ enum Privilege {
 	PSuperUser;
 }
 
+enum SurveyStatus {
+	SSPending;
+	SSCompleted;
+	SSRefused;
+	SSAccepted;
+}
+
 abstract EmailAddress(String) to String {
 	public inline function new(email)
 		this = email;
