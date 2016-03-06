@@ -115,7 +115,7 @@
 				<div class="col-md-2"><h5>PESQUISADOR:</h5>
 					<select name="surveyor"  class="form-control input-sm" >
 						<option value =0 >Todos</option>
-						(:for u in Spod.User.manager.search($group_id== Spod.Group.manager.select($privilege==PSurveyor).id) :)
+						(:for u in User.manager.search($group_id== Group.manager.select($privilege==PSurveyor).id) :)
 							<option value=(:u.id:) >(:u.name:)</option>
 						(: end :)
 					</select>
