@@ -44,7 +44,7 @@
 						(: var dash = false :)
 							<p> (: m.nomeMorador :) ( (: Util.enumText(m.idade) :) ) :
 							(: for p in sapo.spod.Ponto.manager.search($morador_id == m.id)  :)
-								(: if dash :) - (: end :)(: p.motivo :) (: do dash = true :)
+								(: if dash :) - (: end :)(: Util.enumText(p.motivo) :) (: do dash = true :)
 							(: end :)
 							</p>
 					(: end :)
