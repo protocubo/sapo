@@ -138,6 +138,9 @@ unavailable
 						<option value="(:PARAM_CLOSED:)">Fechadas</option>
 					</select>
 				</div>
+				<div class="col-md-2"><h5>PESQUISA</h5>
+					<input type="text" name="survey" id="surveySearch" class="form-control input-sm" placeholder="Nº da Pesquisa">
+				</div>
 				<div class="col-md-1"><h5>&nbsp;</h5>
 					<button type="submit" value="submit" class="btn btn-primary btn-sm">Filtrar</button>
 				</div>
@@ -159,9 +162,7 @@ unavailable
 				<div class="col-md-2  col-md-offset-2"><h5>TICKET</h5>
 					<input type="text" name="ticket" id="ticketSearch" class="form-control input-sm" oninput="disableSearch(this.name, this.value)" placeholder="Nº do Ticket">
 				</div>
-				<div class="col-md-2"><h5>PESQUISA</h5>
-					<input type="text" name="survey" id="surveySearch" class="form-control input-sm" oninput="disableSearch(this.name, this.value)" placeholder="Nº da Pesquisa">
-				</div>
+				
 				<div class="col-md-1"><h5>&nbsp;</h5>
 					<button type="submit" value="submit" class="btn btn-primary btn-sm">Buscar</button>
 				</div>
