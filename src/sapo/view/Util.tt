@@ -67,7 +67,7 @@
 				</ul>
 				<p class="navbar-text navbar-right">
 					(:if Context.loop.session != null:)
-					<b class="(:Context.loop.user.group.privilege:)">(:Context.loop.user.name:)@(:Context.loop.user.group.privilege:)</b> | <a href="/bye">Sair</a>
+					<span class="(:Context.loop.user.group.privilege:)">(:Context.loop.user.name:)@(:Context.loop.user.group.name:)</span> | <a href="/bye">Sair</a>
 					(:end:)
 				</p>
 			</div>
@@ -79,12 +79,13 @@
 <!-- FOOTER -->
 	<footer class="footer apagar">
 		<div class="container">
-			<h3 class="rodape">
-				<b>SAPO</b> OD DF 2016 |
+			<h4 class="rodape">
+				<b>SAPO</b> OD DF 2016<br>
 				<a href="/about">SOBRE</a> |
 				<a href="/licenses">LICENÇAS</a> |
-				(:Context.version.commit.substr(0,7):)
-			</h3>
+				<a href="https://github.com/jonasmalacofilho/sapood/">CÓDIGO FONTE</a> |
+				COMMIT (:Context.version.commit.substr(0,7):)
+			</h4>
 			<img src="/resources/sapo_logo.png" class="rodape_logo">
 		</div>
 	</footer>
