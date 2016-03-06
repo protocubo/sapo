@@ -8,7 +8,7 @@ import sys.db.Types;
 
 class Ticket extends Object {
 	public var id:SId;
-	@:relation(survey_id) public var survey:NewSurvey;
+	@:relation(survey_id) public var survey:Survey;
 	@:relation(author_id) public var author:User;
 	public var subject:String;
 	public var opened_at:HaxeTimestamp;

@@ -29,10 +29,10 @@ unavailable
 			<div class="col-md-5 panel-title">
 				<!-- Número da pesquisa, data da pesquisa, Nome do pesquisador (class: super, telefonista, supervisor e pesquisador) -->
 				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyTicket(: ticket.id :)" aria-expanded="true" aria-controls="BodyTicket(: ticket.id :)">
-					<b>Pesquisa #(:ticket.survey.id:)</b> - <span class="PSurveyor">(:ticket.survey.surveyor.name:)</span>
+					<b>Pesquisa #(:ticket.survey.id:)</b> - <span class="PSurveyor">(: User.manager.get(ticket.survey.user_id).name :)</span>
 				</a>
 			<span class="tags">
-				(: Util.status( true,true,true,true,true) :)
+				(: Util.status( ticket.survey.isPhoned,ticket.survey.paid,ticket.survey.checkSV,ticket.survey.checkCT,ticket.survey.checkCQ) :)
 			</span>
 			</div>
 		</div>
@@ -57,13 +57,20 @@ unavailable
 				</div>
 				<div class="col-md-5 barraderolagem">
 					<!-- DADOS DA PESQUISA -->
-					<div class="bloco"><b>Data da Pesquisa:</b> (:ticket.survey.closed_at:) </div>
-					<div class="bloco"><b>Endereço:</b> (:ticket.survey.address :) </div>
-					<div class="bloco"><b>Contato:</b> Marcelo - (11) 888888888 </div>
-					<div class="bloco"><b>Senha:</b> (:ticket.survey.code :) </div>
+					<div class="bloco"><b>Data da Pesquisa:</b> (:ticket.survey.date_completed :) </div>
+					<div class="bloco"><b>Endereço:</b> (: ticket.survey.municipio :) - (: ticket.survey.logradouro :),(: ticket.survey.numero :), (: ticket.survey.complemento :) </div>
+					(: do var fam = Familia.manager.select($survey == ticket.survey) :)
+					<div class="bloco"><b>Contato:</b> (: fam.nomeContato :) - (: fam.telefoneContato :) </div>
+					<div class="bloco"><b>Senha:</b> (: ticket.survey.pin :) </div>
 					<hr>
-					<p><b>Moradores:</b></p>
-					<p>Maria (25): Residência - Trabalho - Residência</p>
+					(: for m in sapo.spod.Survey.Morador.manager.search($survey_id == ticket.survey.id)  :)
+						(: var dash = false :)
+							<p> (: m.nomeMorador :) ( (: Util.enumText(m.idade) :) ) :
+							(: for p in sapo.spod.Ponto.manager.search($morador_id == m.id)  :)
+								(: if dash :) - (: end :)(: p.motivo :) (: do dash = true :)
+							(: end :)
+							</p>
+					(: end :)
 					<hr>
 					<div class="bloco"><b>Conferência:</b> 3 carros</div>
 				</div>

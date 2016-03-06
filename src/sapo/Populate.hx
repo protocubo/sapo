@@ -26,7 +26,7 @@ private typedef Users = {
 	superUsers : Array<User>
 }
 
-private typedef FakeSurveys = Array<NewSurvey>;
+private typedef FakeSurveys = Array<Survey>;
 
 private typedef Tickets = Array<Ticket>;
 
@@ -88,15 +88,15 @@ class Populate {
 				phoneOperators : [judite], superUsers : [arthur, ford] };
 	}
 
-	static function makeFakeSurveys(u:Users)
+	/*static function makeFakeSurveys(g : Groups, u:Users)
 	{
-		var survey1 = new NewSurvey(u.surveyors[0], "Arthur's house", 945634);
+		var survey1 = makeSurvey(g,u,  //new NewSurvey(u.surveyors[0], "Arthur's house", 945634);
 		var survey2 = new NewSurvey(u.surveyors[1], "Betelgeuse, or somewhere near that planet", 6352344);
 		survey1.insert();
 		survey2.insert();
 		var surveyCol = [survey1, survey2];
 		return surveyCol;
-	}
+	}*/
 
 	static function makeSurvey(groups:Groups, users:Users, magic:Int, it:Int)
 	{
@@ -345,9 +345,9 @@ class Populate {
 		try {
 			var groups = makeGroups();
 			var users = makeUsers(groups);
-			var fakeSurveys = makeFakeSurveys(users);
-			var tickets = makeTickets(groups, users, fakeSurveys);
+
 			var surveys = makeData(groups, users);
+			var tickets = makeTickets(groups,users, surveys);
 		} catch (e:Dynamic) {
 			Context.rollback();
 			neko.Lib.rethrow(e);
