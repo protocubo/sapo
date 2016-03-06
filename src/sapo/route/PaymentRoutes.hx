@@ -22,7 +22,7 @@ class PaymentRoutes extends AccessControl
 		trace("LENGHT: " + surveys.length);
 		Sys.println(sapo.view.Payments.superPage(surveys));
 	}
-	
+
 	@authorize(PSuperUser)
 	public function doSearch(?args:{ ?survey:Survey, ?reference:String })
 	{
@@ -32,12 +32,12 @@ class PaymentRoutes extends AccessControl
 			surveys.add(args.survey);
 		if (args.reference !=  null)
 			surveys = Survey.manager.search($paymentRef == args.reference);
-			
+
 		Sys.println(sapo.view.Payments.superPage(surveys));
 	}
-	
+
 	@authorize(PSuperUser)
-	public function doPay(?args:{ ?toPay:String, ?reference:String })
+	public function doPay(?args:{ ?toPay:String, ?reference:String })  // TODO only POST
 	{
 		if (args == null) args = { };
 		if (args.toPay.length > 1)
@@ -58,11 +58,11 @@ class PaymentRoutes extends AccessControl
 				}
 			}
 		}
-		
+
 		var surveys = new List<Survey>();
 		Web.redirect("/payments");
 	}
-	
+
 	public function new() {}
-	
+
 }

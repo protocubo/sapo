@@ -34,7 +34,7 @@ class NewSurvey extends sys.db.Object {
 		this.surveyor = surveyor;
 		this.address = address;
 		this.code = code;
-		closed_at = Date.now();
+		closed_at = Context.now;
 		status = TicketStatus.TOpen.getName();
 		super();
 	}

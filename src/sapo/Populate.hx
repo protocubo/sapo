@@ -31,6 +31,10 @@ private typedef FakeSurveys = Array<Survey>;
 private typedef Tickets = Array<Ticket>;
 
 class Populate {
+	static inline var HOUR = 3.6*1e6;
+	static inline var DAY = 24*HOUR;
+	static inline var MONTH = 30.5*DAY;
+	static inline var YEAR = 12*MONTH;
 	static var rnd = new neko.Random();
 	static var id = 0;
 
@@ -38,10 +42,12 @@ class Populate {
 		return a[rnd.int(a.length)];
 
 	
-	static function rndDate(?d:Date)
+	static function rndDate(?from:HaxeTimestamp, ?maxDelta:Float)
 	{
-		if (d == null) d = Date.fromTime((Context.now:Float) - 3.6*24*31*2*1e6);  // 2 months ago
-		return DateTools.delta(d, rnd.float()*((Context.now:Float)-d.getTime()));
+		if (from == null) from = (Context.now:Float) - 2*MONTH;
+		var limitDelta = (Context.now:Float)-(from:Float);
+		if (maxDelta == null || maxDelta > limitDelta) maxDelta = limitDelta;
+		return (from + rnd.float()*maxDelta:HaxeTimestamp);
 	}
 
 	static function rndTrue(?p:Null<Float>)
@@ -118,15 +124,15 @@ class Populate {
 		s.municipio = "Brasília";
 		s.old_survey_id = it;
 		s.pin = "ASD-Qer3-qwee";
-		s.syncTimestamp = Date.now().getTime();
 		s.tentativa_id = 1;
 		s.checkCT = rndNullTrue();
 		s.checkSV = rndNullTrue();
 		s.checkCQ = rndNullTrue();
 		s.isPhoned = rndNullTrue(.1);
 		s.date_started = s.date_create;
-		s.date_finished = DateTools.delta(Date.now(), 1000.0 * 60 * 60 * 24 * rnd.int(5));
+		s.date_finished = rndDate(s.date_create, 5*DAY);
 		s.date_completed = s.date_finished;
+		s.syncTimestamp = rndDate(s.date_completed, 1*DAY);
 
 		s.group = (1 + it%10)*(users.surveyors.length)*10 + it % s.user_id;
 
