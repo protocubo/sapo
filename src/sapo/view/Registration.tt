@@ -62,7 +62,7 @@
 					<td><b class="(:user.group.privilege:)">(:user.name:)</b></td>
 					<td><b class="(:user.group.privilege:)">(:user.group.name:)</b></td>
 					<td>(:user.email:)</td>
-					
+
 					<td>(:if user.supervisor != null:)<b class="(:user.supervisor.group.privilege:)">(:user.supervisor.name:)</b>(:end:)</td>
 					(: if user.deactivated_at == null :)
 					<td>

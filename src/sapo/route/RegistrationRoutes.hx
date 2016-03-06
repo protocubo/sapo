@@ -16,12 +16,12 @@ class RegistrationRoutes extends AccessControl {
 	{
 		var elementsPerPage = 5;
 		if (args == null) args = { };
-		args.page = args.page == null?0:args.page;	
+		args.page = args.page == null?0:args.page;
 		args.activeFilter = args.activeFilter == null?PARAM_ACTIVE: args.activeFilter;
 		var users = new List<User>();
 		users = User.manager.search(
 			(args.activeFilter == PARAM_DEACTIVATED ? $deactivated_at != null : $deactivated_at == null),
-			{ orderBy : name, limit : [elementsPerPage * args.page, elementsPerPage+1 ] } 
+			{ orderBy : name, limit : [elementsPerPage * args.page, elementsPerPage+1 ] }
 		);
 		var showPrev = args.page == 0?false:true;
 		var showNext = false;
