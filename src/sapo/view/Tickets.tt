@@ -32,7 +32,7 @@ unavailable
 					<b>Pesquisa #(:ticket.survey.id:)</b> - <span class="PSurveyor">(:ticket.survey.surveyor.name:)</span>
 				</a>
 			<span class="tags">
-				(: Util.status( true, true , true) :)
+				(: Util.status( true,true,true,true,true) :)
 			</span>
 			</div>
 		</div>
