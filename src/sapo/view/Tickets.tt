@@ -18,7 +18,7 @@ unavailable
 		<div class="row">
 			<div class="col-md-7 panel-title">
 				<!-- DE/PARA (class: super, telefonista, supervisor e pesquisador) -->
-				<span class="glyphicon glyphicon glyphicon-user (: ticket.author.group.name :)" aria-hidden="true"></span>
+				<span class="glyphicon glyphicon glyphicon-user (: ticket.author.group.privilege :)" aria-hidden="true"></span>
 				<span class="glyphicon glyphicon-arrow-right text-muted" aria-hidden="true" style="color: #999;"></span>
 				<span class="glyphicon glyphicon glyphicon-user (: ticket.recipient.privilege :)" aria-hidden="true"></span>
 				<!-- Nº do Ticket, Data da criação do Ticket, Hora da criação do Ticket -->
@@ -49,7 +49,7 @@ unavailable
 							<!-- DATETIME + DE + PARA (class: super, telefonista, supervisor e pesquisador) -->
 							(:* Para facilitar a vida *:)
 							(: do var recipient = ticket.recipient :)
-							(: message.posted_at :) - <span class="(: message.author.group.name:)">(: message.author.name :)@(: message.author.group.name:)</span>(: if first :) - (: if recipient.user != null :) <span class="(: recipient.user.group.name:)">(: recipient.user.name :)@(: recipient.user.group.name:)</span> (: else :) <span class="(: recipient.group.name:)"> @(: recipient.group.name:)</span> (: end :) (: end :) :
+							(: message.posted_at :) - <span class="(: message.author.group.privilege:)">(: message.author.name :)@(: message.author.group.name:)</span>(: if first :) - (: if recipient.user != null :) <span class="(: recipient.user.group.privilege:)">(: recipient.user.name :)@(: recipient.user.group.name:)</span> (: else :) <span class="(: recipient.group.privilege:)"> @(: recipient.group.name:)</span> (: end :) (: end :) :
 						</strong>
 					<!-- MENSAGEM -->
 						(: message.text :)
