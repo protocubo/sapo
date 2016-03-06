@@ -8,16 +8,19 @@ import sapo.spod.User;
 import sys.db.Manager;
 
 class RegistrationRoutes extends AccessControl {
+	public static inline var PARAM_ACTIVE = "active";
+	public static inline var PARAM_DEACTIVATED = "deactivated";
+
 	@authorize(PSuperUser)
 	public function doDefault(?args:{ ?activeFilter:String, ?page:Int })
 	{
 		var elementsPerPage = 5;
 		if (args == null) args = { };
 		args.page = args.page == null?0:args.page;	
-		args.activeFilter = args.activeFilter == null?"active": args.activeFilter; "deactivated";
+		args.activeFilter = args.activeFilter == null?PARAM_ACTIVE: args.activeFilter;
 		var users = new List<User>();
 		users = User.manager.search(
-			(args.activeFilter == "deactivated" ? $deactivated_at != null : $deactivated_at == null),
+			(args.activeFilter == PARAM_DEACTIVATED ? $deactivated_at != null : $deactivated_at == null),
 			{ orderBy : name, limit : [elementsPerPage * args.page, elementsPerPage+1 ] } 
 		);
 		var showPrev = args.page == 0?false:true;
