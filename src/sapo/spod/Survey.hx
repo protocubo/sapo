@@ -62,7 +62,7 @@ class Survey extends Object {
 	override public function insert()
 	{
 		
-		date_edited = Date.now();
+		date_edited = Context.now;  // TODO this doesn't apply to sync, so shouldn't be here
 		super.insert();
 	}
 }
