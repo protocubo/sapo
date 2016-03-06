@@ -121,7 +121,7 @@ class TicketRoutes extends AccessControl {
 		switch(Context.loop.privilege)
 		{
 			case PSupervisor:
-			if (Context.loop.user != t.author):
+			if (Context.loop.user != t.author)
 				throw "Can\'t reopen ticket authored by someone else";
 			case PSuperUser:
 			case _: throw "Assertion failed";
