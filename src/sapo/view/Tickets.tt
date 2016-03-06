@@ -203,7 +203,7 @@ unavailable
 	(: for t in tickets :)
 		(: Modal.modalticketresponder(t, t.closed_at != null) :)
 		(: if t.closed_at == null :)
-			(: Modal.modalticketresponder(t) :)
+			(: Modal.modalticketfechar(t) :)
 			(: Modal.modalticketincluir(t) :)
 			(: Modal.modalticketstatus(t) :)
 		(: end :)
