@@ -69,11 +69,13 @@
 							<span class="glyphicon glyphicon glyphicon-pencil" aria-hidden="true"></span>
 						</button>
 					</td>
-					<td>
-						<button type="button" class="btn btn-danger btn-xs" aria-label="Desativar" style="width:auto;" data-toggle="modal" data-target="#cadastro(:user.id:)_desativar">
-							<span class="glyphicon glyphicon glyphicon-remove" aria-hidden="true"></span>
-						</button>
-					</td>
+						(: if user.group.privilege != PSuperUser :)
+						<td>
+							<button type="button" class="btn btn-danger btn-xs" aria-label="Desativar" style="width:auto;" data-toggle="modal" data-target="#cadastro(:user.id:)_desativar">
+								<span class="glyphicon glyphicon glyphicon-remove" aria-hidden="true"></span>
+							</button>
+						</td>
+						(: end :)
 					(: end :)
 				</tr>
 				<!-- FIM LINHA -->
@@ -118,26 +120,28 @@
 							<div class="col-md-2"><h4>E-mail:</h4></div>
 							<div class="col-md-10"><input type="email" name="email" class="form-control"></div>
 						</div>
-						<div class="row">
-							<div class="col-md-2"><h4>Grupo:</h4></div>
-							<div class="col-md-10">
-								<select class="form-control" id="groupFieldAdd" name="group" onchange="disableSupervisorField('groupFieldAdd','supervisorFieldAdd')">
-									(: for g in Group.manager.all() :)
-										<option value=(:g.id:) x-privilege=(:g.privilege:)>(:g.name:)</option>
-									(:end:)
-								</select>
+							<div class="row">
+								<div class="col-md-2"><h4>Grupo:</h4></div>
+								<div class="col-md-10">
+									<select class="form-control" id="groupFieldAdd" name="group" onchange="disableSupervisorField('groupFieldAdd','supervisorFieldAdd')">
+										(: for g in Group.manager.all() :)
+											(:if g.privilege != PSuperUser :)
+												<option value=(:g.id:) x-privilege=(:g.privilege:)>(:g.name:)</option>
+											(: end :)
+										(:end:)
+									</select>
+								</div>
 							</div>
-						</div>
-						<div class="row">
-							<div class="col-md-2"><h4>Supervisor:</h4></div>
-							<div class="col-md-10">
-								<select class="form-control" id="supervisorFieldAdd" name="supervisor">
-									(: for s in User.manager.search($group_id== Group.manager.select($privilege==PSupervisor).id ) :)
-										<option value=(:s.id:)>(:s.name:)</option>
-									(:end:)
-								</select>
+							<div class="row" id="supervisorFieldAdd">
+								<div class="col-md-2"><h4>Supervisor:</h4></div>
+								<div class="col-md-10">
+									<select class="form-control"  name="supervisor">
+										(: for s in User.manager.search($group_id== Group.manager.select($privilege==PSupervisor).id ) :)
+											<option value=(:s.id:)>(:s.name:)</option>
+										(:end:)
+									</select>
+								</div>
 							</div>
-						</div>
 					</div>
 					<div class="modal-footer">
 						<div class="row">
@@ -161,9 +165,9 @@
 			var eGrp = document.getElementById(idg);
 			var eSup = document.getElementById(ids);
 			if(eGrp.options[eGrp.selectedIndex].getAttribute("x-privilege") == "PSurveyor")
-				eSup.disabled = false;
+				eSup.style.visibility = "visible";
 			else
-				eSup.disabled = true;
+				eSup.style.visibility = "hidden";
 		}
 	</script>
 

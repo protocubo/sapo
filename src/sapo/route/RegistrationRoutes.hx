@@ -12,7 +12,7 @@ class RegistrationRoutes extends AccessControl {
 	public function doDefault(?args:{ ?activeFilter:String, ?page:Int })
 	{
 		// TODO paginate
-		var elementsPerPage = 5;
+		var elementsPerPage = 20;
 		if (args == null) args = { };
 		args.page = args.page == null?0:args.page;	
 		args.activeFilter = args.activeFilter == null?"active": args.activeFilter; "deactivated";
@@ -38,16 +38,36 @@ class RegistrationRoutes extends AccessControl {
 	{
 		// TODO superuser can't disable or change group of other superusers
 		// TODO supervisors can't have their group changed (or be disabled) if they have active surveyors
-		// TODO disable corresponding UI elements
 		// TODO add "selecione" to UI elements
 		if (args == null) args = { };
 		var u = args.user;
-
 		u.lock();
 		u.name = args.name;
-		u.group = args.group;
-		u.supervisor = (args.supervisor != null? args.supervisor:null);
-		u.update();
+		//cant change if is Super
+		if (u.group.privilege != PSuperUser)
+		{	
+			//check if supervisor has subordinates
+			if (u.group.privilege == PSupervisor)
+			{
+				
+				var sub = User.manager.search($supervisor == u);
+				if (sub.length == 0)
+				{
+					u.group = args.group;
+					u.supervisor = (args.supervisor != null? args.supervisor:null);
+				}				
+			}
+			else 
+			{
+				u.group = args.group;
+				u.supervisor = (args.supervisor != null? args.supervisor:null);
+			}
+		}
+		//supervisor=null if changed from surveyor
+		if (u.group.privilege != PSurveyor)
+			u.supervisor = null;
+		
+		u.update();	
 		Web.redirect("/registration");
 	}
 

@@ -183,26 +183,30 @@
 							<div class="col-md-2"><h4>Nome:</h4></div>
 							<div class="col-md-10"><input type="text" name="name" class="form-control" value="(:cadastro.name:)"></div>
 						</div>
-						<div class="row">
-							<div class="col-md-2"><h4>Grupo:</h4></div>
-							<div class="col-md-10">
-								<select class="form-control" id="groupFieldEdit(:cadastro.id:)" name="group" onchange="disableSupervisorField('groupFieldEdit(:cadastro.id:)','supervisorFieldEdit(:cadastro.id:)')">
-									(: for g in Group.manager.all() :)
-										<option value=(:g.id:) (: g.id == cadastro.group.id? "selected":"" :) x-privilege=(:g.privilege:)>(:g.name:)</option>
-									(:end:)
-								</select>
+						(: if cadastro.group.privilege != PSuperUser && User.manager.count($supervisor == cadastro) == 0 :)
+							<div class="row">
+								<div class="col-md-2"><h4>Grupo:</h4></div>
+								<div class="col-md-10">
+									<select class="form-control" id="groupFieldEdit(:cadastro.id:)" name="group" onchange="disableSupervisorField('groupFieldEdit(:cadastro.id:)','supervisorFieldEdit(:cadastro.id:)')">
+										(: for g in Group.manager.all() :)
+											(:if g.privilege != PSuperUser :)
+												<option value=(:g.id:) (: g.id == cadastro.group.id? "selected":"" :) x-privilege=(:g.privilege:)>(:g.name:)</option>
+											(: end :)
+										(:end:)
+									</select>
+								</div>
 							</div>
-						</div>
-						<div class="row">
-							<div class="col-md-2"><h4>Supervisor:</h4></div>
-							<div class="col-md-10">
-								<select class="form-control" name="supervisor" id="supervisorFieldEdit(:cadastro.id:)" (:cadastro.group.privilege == PSurveyor ? "":"disabled":)>
-									(: for s in User.manager.search($group_id == Group.manager.select($privilege==PSupervisor).id ) :)
-										<option value=(:s.id:)(:if cadastro.supervisor != null && s.id == cadastro.supervisor.id:) selected(:end:)>(:s.name:)</option>
-									(:end:)
-								</select>
+							<div class="row" id="supervisorFieldEdit(:cadastro.id:)" style="visibility:(: cadastro.group.privilege == PSurveyor? "visible":"hidden" :)">
+								<div class="col-md-2"><h4>Supervisor:</h4></div>
+								<div class="col-md-10">
+									<select class="form-control" name="supervisor">
+										(: for s in User.manager.search($group_id == Group.manager.select($privilege==PSupervisor).id ) :)
+											<option value=(:s.id:)(:if cadastro.supervisor != null && s.id == cadastro.supervisor.id:) selected(:end:)>(:s.name:)</option>
+										(:end:)
+									</select>
+								</div>
 							</div>
-						</div>
+						(: end :)
 					</div>
 					<div class="modal-footer">
 						<div class="row">
