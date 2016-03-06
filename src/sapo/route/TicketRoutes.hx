@@ -67,7 +67,9 @@ class TicketRoutes extends AccessControl {
 	{
 		switch Context.loop.privilege {
 		case PSupervisor, PPhoneOperator:
-			trace("TODO check if supervisor/phone operator in list of recipients");
+			if(t.author != Context.loop.user && t.recipient.user != Context.loop.user && t.recipient.group != Context.loop.user.group)
+			Web.redirect("/tickets");
+			return;
 		case PSuperUser:
 			// ok;
 		case _: throw "Assertion failed";
@@ -106,6 +108,10 @@ class TicketRoutes extends AccessControl {
 
 		t.closed_at = Context.now;
 		t.update();
+		
+		var msg = new TicketMessage(t, Context.loop.user, "TICKET FECHADO.");
+		msg.insert();
+		
 		Web.redirect('/tickets/search?ticket=${t.id}');
 	}
 

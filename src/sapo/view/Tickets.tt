@@ -79,10 +79,19 @@ unavailable
 			</div>
 			<!-- AÇÕES -->
 			<div class="row mt30">
-				<div class="col-md-2"><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_incluir">INCLUIR</button></div>
-				<div class="col-md-2"><button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_responder">RESPONDER</button></div>
+				(: do var u = Context.loop.user :)
+				(: do var disabled = false :)
+				(: if ticket.author != u && ticket.recipient.user != u && ticket.recipient.group != u.group && u.group.privilege != PSuperUser :)
+				(: do disabled = true :)
+				(: end :)
+				(: do var closedDisabled = false :)
+				(: if ticket.author != u && u.group.privilege != PSuperUser :)
+				(: do closedDisabled = true :)
+				(: end :)
+				<div class="col-md-2"><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_incluir" (:if disabled :) disabled (: end :)>INCLUIR</button></div>
+				<div class="col-md-2"><button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_responder" (:if disabled :) disabled (: end :)>RESPONDER</button></div>
 				<div class="col-md-2"><button type="button" class="btn btn-success btn-sm (: hideClose(ticket) :)" data-toggle="modal" data-target="#ticket(: ticket.id :)_fechar">FECHAR</button></div>
-				<div class="col-md-2 col-md-offset-1"><a href="/survey/(:ticket.survey.id:)" type="button" class="btn btn-primary btn-sm" target="_blank">VER PESQUISA</a></div>
+				<div class="col-md-2 col-md-offset-1"><a href="/survey/(:ticket.survey.id:)" type="button" class="btn btn-primary btn-sm" target="_blank" (: if closedDisabled :) disabled (: end :)>VER PESQUISA</a></div>
 				<div class="col-md-2"><button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_status">STATUS</button></div>
 			</div>
 		</div>
