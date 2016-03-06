@@ -20,7 +20,7 @@ abstract HaxeTimestamp(Float) from Float to Float {
 
 #if tink_template
 	@:to public function toHtml():tink.template.Html
-		return DateTools.format(toDate(), "%d-%m-%Y %H:%M");
+		return DateTools.format(toDate(), "%d/%m/%Y %H:%M");
 #end
 }
 
