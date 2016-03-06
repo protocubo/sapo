@@ -4,6 +4,8 @@ import common.Dispatch;
 import common.Web;
 import common.crypto.Password;
 import common.db.MoreTypes;
+import comn.LocalEnqueuer;
+import comn.Spod;
 import neko.Random;
 import sapo.model.TicketModel;
 import sapo.route.AccessControl;
@@ -20,6 +22,7 @@ class Context {
 	public static var now(default,null):HaxeTimestamp;
 	public static var db(default,null):common.db.AutocommitConnection;
 	public static var loop(default,null):Context;
+	public static var comn(default,null):LocalEnqueuer;
 
 	var dispatch:Dispatch;
 
@@ -56,6 +59,7 @@ class Context {
 		var managers:Array<Manager<Dynamic>> = [
 			Group.manager,
 			NewSurvey.manager,
+			QueuedMessage.manager,
 			Session.manager,
 			Ticket.manager,
 			TicketMessage.manager,
@@ -84,6 +88,7 @@ class Context {
 						MAX(syncTimestamp) as syncTimestamp
 					FROM Survey GROUP BY old_survey_id");
 		}
+		comn = new LocalEnqueuer(QueuedMessage.manager);
 	}
 
 	public static function init(?now)

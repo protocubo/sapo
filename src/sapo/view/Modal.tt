@@ -32,14 +32,18 @@
 	</div>
 (: end :)
 
-(: static function modalticketresponder(ticket:Ticket) :)
+(: static function modalticketresponder(ticket:Ticket, ?reopen : Bool) :)
 	<div class="modal fade" id="ticket(: ticket.id :)_responder" tabindex="-1" role="dialog" aria-labelledby="ticket(: ticket.id :)_responder_label">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<form method="POST" action="/tickets/reply/(: ticket.id :)">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						(: if reopen :)
+						<h4 class="modal-title" id="ticket(: ticket.id :)_responder_label">REABRIR TICKET #(: ticket.id :)</h4>
+						(: else :)
 						<h4 class="modal-title" id="ticket(: ticket.id :)_responder_label">RESPONDER TICKET #(: ticket.id :)</h4>
+						(: end :)
 					</div>
 					<div class="modal-body">
 						<div class="row">
@@ -72,18 +76,20 @@
 						<div class="col-md-10">
 							<select class="form-control">
 								<option disabled selected>Selecione</option>
-								<option>Supervisor</option>
-								<option>Telefonista</option>
-							</select>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-md-2"><h4>Usuário:</h4></div>
-						<div class="col-md-10">
-							<select class="form-control">
-								<option disabled selected>Selecione</option>
-								(:* foreach *:)
-								<option>Assunção Alex</option>
+								(: do var groups = Group.manager.search($privilege != Privilege.PSurveyor, {orderBy : -privilege}, false) :)
+								<optgroup label="Grupo">
+								(: for g in groups :)
+								<option value="(:g.name:)">(:g.name:)</option>
+								(: end :)
+								</optgroup>
+								(: for g in groups :)
+								<optgroup label="(:g.name:)">
+									(: do var users = User.manager.search($group == g, {orderBy : name}, false) :)
+									(: for u in users :)
+								<option value="(:u.id:)">(: u.name :)</option>
+									(: end :)
+								</optgroup>
+								(: end :)	
 							</select>
 						</div>
 					</div>
@@ -211,7 +217,7 @@
 					<div class="modal-footer">
 						<div class="row">
 							<div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
-							<div class="col-md-6"><button type="submit" value="submit" class="btn btn-success">EDITAR</button></div>
+							<div class="col-md-6"><button type="submit" value="submit" class="btn btn-success">SALVAR</button></div>
 						</div>
 					</div>
 				</form>

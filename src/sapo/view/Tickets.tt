@@ -29,10 +29,10 @@ unavailable
 			<div class="col-md-5 panel-title">
 				<!-- Número da pesquisa, data da pesquisa, Nome do pesquisador (class: super, telefonista, supervisor e pesquisador) -->
 				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyTicket(: ticket.id :)" aria-expanded="true" aria-controls="BodyTicket(: ticket.id :)">
-					<b>Pesquisa #(:ticket.survey.id:)</b> - <span class="PSurveyor">(:ticket.survey.surveyor.name:)</span>
+					<b>Pesquisa #(:ticket.survey.id:)</b> - <span class="PSurveyor">(: User.manager.get(ticket.survey.user_id).name :)</span>
 				</a>
 			<span class="tags">
-				(: Util.status( true, true , true) :)
+				(: Util.status( ticket.survey.isPhoned,ticket.survey.paid,ticket.survey.checkSV,ticket.survey.checkCT,ticket.survey.checkCQ) :)
 			</span>
 			</div>
 		</div>
@@ -47,7 +47,9 @@ unavailable
 					<p>
 						<strong>
 							<!-- DATETIME + DE + PARA (class: super, telefonista, supervisor e pesquisador) -->
-							(: message.posted_at :) - <span class="(: message.author.group.privilege:)">(: message.author.name :)@(: message.author.group.privilege:)</span>(: if first :) - <span class="(: ticket.recipient.privilege:)">(: ticket.recipient.name :)@(: ticket.recipient.privilege:)</span>(: end :) :
+							(:* Para facilitar a vida *:)
+							(: do var recipient = ticket.recipient :)
+							(: message.posted_at :) - <span class="(: message.author.group.privilege:)">(: message.author.name :)@(: message.author.group.name:)</span>(: if first :) - (: if recipient.user != null :) <span class="(: recipient.user.group.privilege:)">(: recipient.user.name :)@(: recipient.user.group.name:)</span> (: else :) <span class="(: recipient.group.privilege:)"> @(: recipient.group.name:)</span> (: end :) (: end :) :
 						</strong>
 					<!-- MENSAGEM -->
 						(: message.text :)
@@ -57,24 +59,46 @@ unavailable
 				</div>
 				<div class="col-md-5 barraderolagem">
 					<!-- DADOS DA PESQUISA -->
-					<div class="bloco"><b>Data da Pesquisa:</b> (:ticket.survey.closed_at:) </div>
-					<div class="bloco"><b>Endereço:</b> (:ticket.survey.address :) </div>
-					<div class="bloco"><b>Contato:</b> Marcelo - (11) 888888888 </div>
-					<div class="bloco"><b>Senha:</b> (:ticket.survey.code :) </div>
+					<div class="bloco"><b>Data da Pesquisa:</b> (:ticket.survey.date_completed :) </div>
+					<div class="bloco"><b>Endereço:</b> (: ticket.survey.municipio :) - (: ticket.survey.logradouro :),(: ticket.survey.numero :), (: ticket.survey.complemento :) </div>
+					(: do var fam = Familia.manager.select($survey == ticket.survey) :)
+					<div class="bloco"><b>Contato:</b> (: fam.nomeContato :) - (: fam.telefoneContato :) </div>
+					<div class="bloco"><b>Senha:</b> (: ticket.survey.pin :) </div>
 					<hr>
-					<p><b>Moradores:</b></p>
-					<p>Maria (25): Residência - Trabalho - Residência</p>
+					(: for m in sapo.spod.Survey.Morador.manager.search($survey_id == ticket.survey.id)  :)
+						(: var dash = false :)
+							<p> (: m.nomeMorador :) ( (: Util.enumText(m.idade) :) ) :
+							(: for p in sapo.spod.Ponto.manager.search($morador_id == m.id)  :)
+								(: if dash :) - (: end :)(: p.motivo :) (: do dash = true :)
+							(: end :)
+							</p>
+					(: end :)
 					<hr>
 					<div class="bloco"><b>Conferência:</b> 3 carros</div>
 				</div>
 			</div>
 			<!-- AÇÕES -->
 			<div class="row mt30">
-				<div class="col-md-2"><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_incluir">INCLUIR</button></div>
-				<div class="col-md-2"><button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_responder">RESPONDER</button></div>
-				<div class="col-md-2"><button type="button" class="btn btn-success btn-sm (: hideClose(ticket) :)" data-toggle="modal" data-target="#ticket(: ticket.id :)_fechar">FECHAR</button></div>
-				<div class="col-md-2 col-md-offset-1"><a href="/survey/(:ticket.survey.id:)" type="button" class="btn btn-primary btn-sm" target="_blank">VER PESQUISA</a></div>
+				(: do var u = Context.loop.user :)
+				(: do var disabled = false :)
+
+				(: if ticket.author != u && ticket.recipient.user != u && ticket.recipient.group != u.group && u.group.privilege != PSuperUser :)
+					(: do disabled = true :)
+				(: end :)
+				(: do var closedDisabled = false :)
+				(: if ticket.author != u && u.group.privilege != PSuperUser :)
+					(: do closedDisabled = true :)
+				(: end :)
+
+				(: if ticket.closed_at == null :)
+				<div class="col-md-2"><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_incluir" (:if disabled :) disabled (: end :)>INCLUIR</button></div>
+				<div class="col-md-2"><button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_responder" (:if disabled :) disabled (: end :)>RESPONDER</button></div>
+				<div class="col-md-2"><button type="button" class="btn btn-success btn-sm (: hideClose(ticket) :)" data-toggle="modal" data-target="#ticket(: ticket.id :)_fechar" (: if closedDisabled :) disabled (: end :)>FECHAR</button></div>
+				<div class="col-md-2 col-md-offset-1"><a href="/survey/(:ticket.survey.id:)" type="button" class="btn btn-primary btn-sm" target="_blank" (: if disabled :) disabled (: end :)>VER PESQUISA</a></div>
 				<div class="col-md-2"><button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_status">STATUS</button></div>
+				(: else :)
+				<div class="col-md-2"><button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_responder" (:if disabled :) disabled (: end :)>REABRIR</button></div>
+				(: end :)
 			</div>
 		</div>
 	</div>
@@ -110,9 +134,12 @@ unavailable
 				</div>
 				<div class="col-md-2"><h5>ESTADO</h5>
 					<select class="form-control input-sm" name="state">
-						<option value="(:PARAM_OPEN:)">Não Fechadas</option>
-						<option value="(:PARAM_CLOSED:)">Fechadas</option>
+						<option value="(:PARAM_OPEN:)">Abertos</option>
+						<option value="(:PARAM_CLOSED:)">Fechados</option>
 					</select>
+				</div>
+				<div class="col-md-2"><h5>PESQUISA</h5>
+					<input type="text" name="survey" id="surveySearch" class="form-control input-sm" placeholder="Nº da Pesquisa">
 				</div>
 				<div class="col-md-1"><h5>&nbsp;</h5>
 					<button type="submit" value="submit" class="btn btn-primary btn-sm">Filtrar</button>
@@ -135,9 +162,7 @@ unavailable
 				<div class="col-md-2  col-md-offset-2"><h5>TICKET</h5>
 					<input type="text" name="ticket" id="ticketSearch" class="form-control input-sm" oninput="disableSearch(this.name, this.value)" placeholder="Nº do Ticket">
 				</div>
-				<div class="col-md-2"><h5>PESQUISA</h5>
-					<input type="text" name="survey" id="surveySearch" class="form-control input-sm" oninput="disableSearch(this.name, this.value)" placeholder="Nº da Pesquisa">
-				</div>
+
 				<div class="col-md-1"><h5>&nbsp;</h5>
 					<button type="submit" value="submit" class="btn btn-primary btn-sm">Buscar</button>
 				</div>
@@ -166,21 +191,23 @@ unavailable
 				(: end :)
 			(: end :)
 		</div>
-		
+
 		<nav>
 			<ul class="pager mt30">
 				<li class="previous"><a href="#"><span aria-hidden="true">&larr;</span> ANTERIOR</a></li>
 				<li class="next"><a href="#">PRÓXIMA <span aria-hidden="true">&rarr;</span></a></li>
 			</ul>
 		</nav>
-		
+
 	</div>
-	
+
 	(: for t in tickets :)
-		(: Modal.modalticketfechar(t) :)
-		(: Modal.modalticketresponder(t) :)
-		(: Modal.modalticketincluir(t) :)
-		(: Modal.modalticketstatus(t) :)
+		(: Modal.modalticketresponder(t, t.closed_at != null) :)
+		(: if t.closed_at == null :)
+			(: Modal.modalticketfechar(t) :)
+			(: Modal.modalticketincluir(t) :)
+			(: Modal.modalticketstatus(t) :)
+		(: end :)
 	(: end :)
 
 (: Util.footer() :)

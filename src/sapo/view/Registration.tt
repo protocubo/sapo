@@ -1,3 +1,4 @@
+(:import sapo.route.RegistrationRoutes.* :)
 (:import common.db.MoreTypes:)
 (:import sapo.spod.Survey:)
 (:import sapo.spod.Ticket:)
@@ -7,7 +8,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-(: Util.head("SAPO - Cadastro") :)
+(: Util.head("SAPO - Cadastro", { formCache:true }) :)
 </head>
 <body>
 
@@ -21,12 +22,12 @@
 		</ol>
 
 		<div class="row">
-			<form action="" method="get">
+			<form action="" method="get" name="filter">
 				<div class="col-md-2"><h5>SITUAÇÃO:</h5>
 				<!-- FILTRO -->
 					<select class="form-control input-sm" name="activeFilter">
-						<option value="active">Ativos</option>
-						<option value="deactivated">Desativados</option>
+						<option value="(:PARAM_ACTIVE:)">Ativos</option>
+						<option value="(:PARAM_DEACTIVATED:)">Desativados</option>
 					</select>
 				</div>
 				<div class="col-md-1"><h5>&nbsp;</h5>
@@ -45,10 +46,10 @@
 				<tr>
 					<!-- HEAD -->
 					(:* <th>Usuário</th> *:)
-					<th>Nome</th>
-					<th>Grupo</th>
+					<th width="20%">Nome</th>
+					<th width="20%">Grupo</th>
 					<th>E-mail</th>
-					<th>Supervisor</th>
+					<th width="20%">Supervisor</th>
 					<th width="40px"></th>
 					<th width="40px"></th>
 				</tr>
@@ -59,9 +60,9 @@
 				<tr>
 					(:* <td><b class="PSurveyor">(:user.name:)@</b></td> *:)
 					<td><b class="(:user.group.privilege:)">(:user.name:)</b></td>
-					<td><b class="(:user.group.privilege:)">(:user.group.privilege:)</b></td>
+					<td><b class="(:user.group.privilege:)">(:user.group.name:)</b></td>
 					<td>(:user.email:)</td>
-					
+
 					<td>(:if user.supervisor != null:)<b class="(:user.supervisor.group.privilege:)">(:user.supervisor.name:)</b>(:end:)</td>
 					(: if user.deactivated_at == null :)
 					<td>
@@ -90,10 +91,10 @@
 		<nav>
 			<ul class="pager mt30">
 			(:if showPrev:)
-				<li class="previous"><a href="registration?activeFilter=(:params.activeFilter:)&page=(:params.page-1:)"><span aria-hidden="true">&larr;</span> ANTERIOR</a></li>
+				<li class="previous"><a href="registration?activeFilter=(:params.activeFilter:)&page=(:params.page-1:)">ANTERIOR</a></li>
 			(:end:)
 			(:if showNext:)
-				<li class="next"><a href="registration?activeFilter=(:params.activeFilter:)&page=(:params.page+1:)">PRÓXIMA <span aria-hidden="true">&rarr;</span></a></li>
+				<li class="next"><a href="registration?activeFilter=(:params.activeFilter:)&page=(:params.page+1:)">PRÓXIMA</a></li>
 			(:end:)
 			</ul>
 		</nav>
@@ -154,10 +155,12 @@
 		</div>
 	</div>
 
+	(:if params.activeFilter != PARAM_DEACTIVATED:)
 	(: for user in users :)
-	(: Modal.modalcadastroeditar(user) :)
-	(: Modal.modalcadastrodesativar(user) :)
+		(: Modal.modalcadastroeditar(user) :)
+		(: Modal.modalcadastrodesativar(user) :)
 	(: end :)
+	(:end:)
 
 	<script>
 		function disableSupervisorField(idg,ids)

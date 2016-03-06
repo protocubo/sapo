@@ -26,7 +26,7 @@ private typedef Users = {
 	superUsers : Array<User>
 }
 
-private typedef FakeSurveys = Array<NewSurvey>;
+private typedef FakeSurveys = Array<Survey>;
 
 private typedef Tickets = Array<Ticket>;
 
@@ -37,11 +37,12 @@ class Populate {
 	static function rndPick<T>(a:Array<T>)
 		return a[rnd.int(a.length)];
 
-	
-	static function rndDate(?d:Date)
+	static function rndDate(?from:HaxeTimestamp, ?maxDelta:Float)
 	{
-		if (d == null) d = Date.fromTime(0);
-		return DateTools.delta(d, rnd.float()*((Context.now : Float)-d.getTime()));
+		if (from == null) from = Context.now.delta(-2*$week);
+		var limitDelta = (Context.now:Float)-(from:Float);
+		if (maxDelta == null || maxDelta > limitDelta) maxDelta = limitDelta;
+		return (from + rnd.float()*maxDelta:HaxeTimestamp);
 	}
 
 	static function rndTrue(?p:Null<Float>)
@@ -88,15 +89,15 @@ class Populate {
 				phoneOperators : [judite], superUsers : [arthur, ford] };
 	}
 
-	static function makeFakeSurveys(u:Users)
+	/*static function makeFakeSurveys(g : Groups, u:Users)
 	{
-		var survey1 = new NewSurvey(u.surveyors[0], "Arthur's house", 945634);
+		var survey1 = makeSurvey(g,u,  //new NewSurvey(u.surveyors[0], "Arthur's house", 945634);
 		var survey2 = new NewSurvey(u.surveyors[1], "Betelgeuse, or somewhere near that planet", 6352344);
 		survey1.insert();
 		survey2.insert();
 		var surveyCol = [survey1, survey2];
 		return surveyCol;
-	}
+	}*/
 
 	static function makeSurvey(groups:Groups, users:Users, magic:Int, it:Int)
 	{
@@ -118,15 +119,15 @@ class Populate {
 		s.municipio = "Brasília";
 		s.old_survey_id = it;
 		s.pin = "ASD-Qer3-qwee";
-		s.syncTimestamp = Date.now().getTime();
 		s.tentativa_id = 1;
 		s.checkCT = rndNullTrue();
 		s.checkSV = rndNullTrue();
 		s.checkCQ = rndNullTrue();
 		s.isPhoned = rndNullTrue(.1);
 		s.date_started = s.date_create;
-		s.date_finished = DateTools.delta(Date.now(), 1000.0 * 60 * 60 * 24 * rnd.int(5));
+		s.date_finished = rndDate(s.date_create, HaxeTimestamp.resolveTime(5*$day));
 		s.date_completed = s.date_finished;
+		s.syncTimestamp = rndDate(s.date_completed, HaxeTimestamp.resolveTime($day));
 
 		s.group = (1 + it%10)*(users.surveyors.length)*10 + it % s.user_id;
 
@@ -345,9 +346,9 @@ class Populate {
 		try {
 			var groups = makeGroups();
 			var users = makeUsers(groups);
-			var fakeSurveys = makeFakeSurveys(users);
-			var tickets = makeTickets(groups, users, fakeSurveys);
+
 			var surveys = makeData(groups, users);
+			var tickets = makeTickets(groups,users, surveys);
 		} catch (e:Dynamic) {
 			Context.rollback();
 			neko.Lib.rethrow(e);
