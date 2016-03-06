@@ -79,12 +79,13 @@
 <!-- FOOTER -->
 	<footer class="footer apagar">
 		<div class="container">
-			<h3 class="rodape">
-				<b>SAPO</b> OD DF 2016 |
+			<h4 class="rodape">
+				<b>SAPO</b> OD DF 2016<br>
 				<a href="/about">SOBRE</a> |
 				<a href="/licenses">LICENÇAS</a> |
-				(:Context.version.commit.substr(0,7):)
-			</h3>
+				<a href="https://github.com/jonasmalacofilho/sapood/">CÓDIGO FONTE</a> |
+				COMMIT (:Context.version.commit.substr(0,7):)
+			</h4>
 			<img src="/resources/sapo_logo.png" class="rodape_logo">
 		</div>
 	</footer>
