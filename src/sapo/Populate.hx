@@ -40,8 +40,8 @@ class Populate {
 	
 	static function rndDate(?d:Date)
 	{
-		if (d == null) d = Date.fromTime(0);
-		return DateTools.delta(d, rnd.float()*((Context.now : Float)-d.getTime()));
+		if (d == null) d = Date.fromTime((Context.now:Float) - 3.6*24*31*2*1e6);  // 2 months ago
+		return DateTools.delta(d, rnd.float()*((Context.now:Float)-d.getTime()));
 	}
 
 	static function rndTrue(?p:Null<Float>)
