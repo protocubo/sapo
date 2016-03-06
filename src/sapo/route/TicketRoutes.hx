@@ -74,18 +74,19 @@ class TicketRoutes extends AccessControl {
 			// ok;
 		case _: throw "Assertion failed";
 		}
-		if (t.closed_at != null)
-		{
-			t.lock();
-			t.closed_at = null;
-			t.update();
-			var msg = new TicketMessage(t, Context.loop.user, "TICKET REOPENED", Context.now);
-			msg.insert();
-		}
 		
 		var u = Context.loop.user;
 		try {
 			Context.db.startTransaction();
+			if (t.closed_at != null)
+			{
+				t.lock();
+				t.closed_at = null;
+				t.update();
+				var msg = new TicketMessage(t,u, "TICKET REOPENED", Context.now);
+				msg.insert();
+			}
+			
 			var msg = new TicketMessage(t, u, args.text);
 			msg.insert();
 			var sub = TicketSubscription.manager.select($user == u);
