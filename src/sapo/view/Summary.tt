@@ -26,26 +26,26 @@
 		// Create the data table.
 		var data = new google.visualization.DataTable();
 		(: for h in header :)
-			(: if h == DATE_KEY :) data.addColumn('string', '(:DATE_KEY:)'); 
+			(: if h == DATE_KEY :) data.addColumn('string', '(:DATE_KEY:)');
 			(: else :) data.addColumn("number", '(: h :)'); (: end :)
 		(: end :)
-		
+
 		data.addRows([
 			(: for data in sortedDateKeys :)
-				
+
 			(: do var line = ["'" + DateTools.format(Date.fromString(data),"%d/%m/%Y") + "'"] :)
-				
+
 			(: for categories in 1...header.length :)
 				(: do var v = plotData.get(data).get(header[categories]) == null ? 0 : plotData.get(data).get(header[categories]) :)
 				(: do line.push(v +'') :)
 			(: end :)
-				
+
 			(: line :),
-			
+
 			(: end :)
-		
+
 		]);
-		
+
 		var data2 = new google.visualization.DataTable();
 		data2.addColumn('string', 'Data');
 		data2.addColumn('number', 'Pesquisas');
@@ -149,7 +149,7 @@
 					</div>
 				</form>
 			</div>
-		
+
 		<div class="row mt60">
 			<div class="col-md-12">
 				<h4>
@@ -186,11 +186,11 @@
 					<tbody>
 					(: for h in 1...header.length :)
 						(: do var val = 0 :)
-						
+
 						(: for data in plotData.keys() :)
 							(: do val += plotData.get(data).get(header[h]) != null ? plotData.get(data).get(header[h]) : 0 :)
 						(: end :)
-						
+
 						<tr>
 							<td>(: header[h] :):</td>
 							<td>(: val :)</td>
