@@ -67,7 +67,7 @@
 				</ul>
 				<p class="navbar-text navbar-right">
 					(:if Context.loop.session != null:)
-					<b class="(:Context.loop.user.group.privilege:)">(:Context.loop.user.name:)@(:Context.loop.user.group.privilege:)</b> | <a href="/bye">Sair</a>
+					<span class="(:Context.loop.user.group.privilege:)">(:Context.loop.user.name:)@(:Context.loop.user.group.privilege:)</span> | <a href="/bye">Sair</a>
 					(:end:)
 				</p>
 			</div>
