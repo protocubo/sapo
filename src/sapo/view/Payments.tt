@@ -110,7 +110,7 @@
 			<li class="active">PAGAMENTOS</li>
 		</ol>
 		<div class="row">
-			<form method="get">
+			<form method="get" action="">
 				<!-- FILTROS -->
 				<div class="col-md-2"><h5>PESQUISADOR:</h5>
 					<select name="surveyor"  class="form-control input-sm" >

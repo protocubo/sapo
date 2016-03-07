@@ -14,6 +14,7 @@ class PaymentRoutes extends AccessControl
 	{
 		if (args == null) args = { };
 		if (args.surveyor == null) { args.surveyor = 0; }
+		
 		var surveys = Survey.manager.search(
 			(args.surveyor == 0? 1 == 1 : $user_id == args.surveyor) &&
 			$paid == args.paid
