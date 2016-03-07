@@ -17,7 +17,7 @@ class TicketRoutes extends AccessControl {
 	public static inline var PARAM_CLOSED = "closed";
 
 	@authorize(PSupervisor, PPhoneOperator, PSuperUser)
-	public function doDefault(?args:{?recipient:String, ?state:String, ?survey : Survey })
+	public function doDefault(?args:{?recipient:String, ?state:String, ?survey : Survey, ?page : Int })
 	{
 		if (args == null) args = {};
 		var open = args.state == null || args.state == PARAM_OPEN;
@@ -48,11 +48,20 @@ class TicketRoutes extends AccessControl {
 			sql += " t.survey_id = " + survey_id;
 		else
 			sql += ' t.closed_at ${open ? "IS" : "NOT"} NULL';
-
-		sql += ' ORDER BY t.opened_at LIMIT $PAGE_SIZE';
+		
+		sql += ' ORDER BY t.opened_at LIMIT ${PAGE_SIZE + 1}';
+		if (args.page > 1)
+		{
+			var p = args.page -1;
+			sql += ' OFFSET ' + PAGE_SIZE * p;
+		}
 
 		var tickets = Ticket.manager.unsafeObjects(sql, false);
-		Sys.println(sapo.view.Tickets.page(tickets));
+		var total = tickets.length;
+		//Pego 11 somente para comparação se devo colocar o btn Proximo
+		if (total > PAGE_SIZE)		
+			tickets.pop();
+		Sys.println(sapo.view.Tickets.page(tickets,args.page,total));
 	}
 
 	@authorize(PSupervisor, PPhoneOperator, PSuperUser)
@@ -62,8 +71,8 @@ class TicketRoutes extends AccessControl {
 		var tickets : List<Ticket> = new List();
 		if (args.ticket != null)
 			tickets.push(args.ticket);
-
-		Sys.println(sapo.view.Tickets.page(tickets));
+		
+		Sys.println(sapo.view.Tickets.page(tickets,1,tickets.length));
 	}
 
 	@authorize(PSupervisor, PPhoneOperator, PSuperUser)
