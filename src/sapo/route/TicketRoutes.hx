@@ -55,11 +55,12 @@ class TicketRoutes extends AccessControl {
 			var p = args.page -1;
 			sql += ' OFFSET ' + PAGE_SIZE * p;
 		}
-		
+
 		var tickets = Ticket.manager.unsafeObjects(sql, false);
 		var total = tickets.length;
 		//Pego 11 somente para comparação se devo colocar o btn Proximo
-		tickets.pop();
+		if (total > PAGE_SIZE)		
+			tickets.pop();
 		Sys.println(sapo.view.Tickets.page(tickets,args.page,total));
 	}
 
