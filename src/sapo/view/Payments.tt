@@ -114,7 +114,7 @@
 				<!-- FILTROS -->
 				<div class="col-md-2"><h5>PESQUISADOR:</h5>
 					<select name="surveyor"  class="form-control input-sm" >
-						<option value =0 >Todos</option>
+						<option value ="" >Todos</option>
 						(:for u in User.manager.search($group_id== Group.manager.select($privilege==PSurveyor).id) :)
 							<option value=(:u.id:) >(:u.name:)</option>
 						(: end :)
@@ -128,10 +128,11 @@
 				</div>
 				<div class="col-md-2"><h5>STATUS</h5>
 					<select class="form-control input-sm"name="state" >
-						<option>Abertas</option>
-						<option>Completas</option>
-						<option>Verificadas</option>
-						<option>Aceitas</option>
+						<option value= "(:SSAll:)" >Todas</option>
+						<option value= "(:SSAccepted:)" >Aceitas</option>
+						<option value= "(:SSPending:)" >Pendente</option>
+						<option value= "(:SSRefused:)" >Recusada</option>
+						<option value= "(:SSCompleted:)" >Completas</option>
 					</select>
 				</div>
 				<div class="col-md-1"><h5>&nbsp;</h5>

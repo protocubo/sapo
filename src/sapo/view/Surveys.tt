@@ -77,7 +77,7 @@
 		
 		<div class="row">
 			<!-- FILTROS -->
-			<form method="get">
+			<form method="get" action="/surveys">
 				<div class="col-md-2"><h5>USUÁRIO</h5>
 					<select class="form-control input-sm" name="user" id="userID">
 						<option value="">Todos</option>
@@ -135,10 +135,10 @@
 		<nav>
 			<ul class="pager mt30">
 			(:if showPrev:)
-				<li class="previous"><a href="surveys?user=(: params.user == null? "" : params.user :)&page=(:params.page-1:)"><span aria-hidden="true">&larr;</span> ANTERIOR</a></li>
+				<li class="previous"><a href="surveys?user=(: params.user == null? "" : params.user :)&page=(:params.page-1:)&status=(:params.status == null? "" : params.status:)"><span aria-hidden="true">&larr;</span> ANTERIOR</a></li>
 			(:end:)
 			(:if showNext:)
-				<li class="next"><a href="surveys?user=(: params.user == null? "" : params.user :)&page=(:params.page+1:)">PRÓXIMA <span aria-hidden="true">&rarr;</span></a></li>
+				<li class="next"><a href="surveys?user=(: params.user == null? "" : params.user :)&page=(:params.page+1:)&status=(:params.status == null? "" : params.status:)">PRÓXIMA <span aria-hidden="true">&rarr;</span></a></li>
 			(:end:)
 			</ul>
 		</nav>

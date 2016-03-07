@@ -2,6 +2,7 @@ package sapo.route;
 import neko.Web;
 import sapo.spod.Survey;
 import sapo.spod.User;
+import common.db.MoreTypes;
 
 /**
  * ...
@@ -10,13 +11,14 @@ import sapo.spod.User;
 class PaymentRoutes extends AccessControl
 {
 	@authorize(PSuperUser)
-	public function doDefault(?args:{ ?surveyor:Int, ?paid:Bool, ?state:String })
+	public function doDefault(?args:{ ?surveyor:User, ?paid:Bool, ?state:SurveyStatus })
 	{
 		if (args == null) args = { };
-		if (args.surveyor == null) { args.surveyor = 0; }
+		args.state == args.state == null? SSAll : args.state;
+		args.paid == args.paid == null? false : args.paid;
 		
 		var surveys = Survey.manager.search(
-			(args.surveyor == 0? 1 == 1 : $user_id == args.surveyor) &&
+			(args.surveyor == null? 1 == 1 : $user_id == args.surveyor.id) &&
 			$paid == args.paid
 			// to do survey state
 		);
