@@ -106,11 +106,69 @@ unavailable
 <!-- FIM TICKET -->
 (: end :)
 
-(: static function page(?tickets:List<Ticket> ) :)
+(: static function page(?tickets:List<Ticket>, page : Int, totalItems : Int ) :)
 <!DOCTYPE html>
 <html>
 <head>
 (: Util.head("SAPO - Tickets", {formCache:true}) :)
+<script>
+	$('document').ready(function()
+	{
+		$('.previous').bind('click', function()
+		{
+			locationgen(false);
+		});
+		
+		$('.next').bind('click',function()
+		{
+			locationgen(true);
+		});
+	});
+	
+	//Gera o window.location.href de um modo overkill
+	function locationgen(nextPage)
+	{
+		var searchparams = window.location.search;
+		var index = searchparams.indexOf("page");
+		if(index != -1)
+		{
+			//Remove "?" char
+			var params = searchparams.substring(1,searchparams.length).split("&");
+			var str = "?";
+			for(i = 0;i < params.length; i++)
+			{
+				if(params[i].indexOf("page") != -1)
+				{
+					var fields = params[i].split("=");
+					console.log(fields);
+					var curPage = parseInt(fields[1]);
+					if(nextPage)
+						curPage++;
+					else
+						curPage--;
+					str += fields[0]+"="+ curPage;			
+				}
+				else
+					str += params[i];
+					
+				if((i+1) != params.length)
+					str += "&"
+			}
+			searchparams = str;
+		}
+		else
+		{
+			if(searchparams.length > 0)
+				searchparams += "&page=2";
+			else
+				searchparams = "?page=2";
+		
+		}
+		var p = window.location.protocol;
+		var port = window.location.port;
+		window.location.href = ((p.length > 0) ? p + '//' : "") + window.location.hostname + ((port != '80' && port != '0' && port != "") ? ":" + port : "") +  window.location.pathname + searchparams;
+	}
+</script>
 </head>
 <body>
 
@@ -194,8 +252,17 @@ unavailable
 
 		<nav>
 			<ul class="pager mt30">
+				(: if page > 1 :)
 				<li class="previous"><a href="#"><span aria-hidden="true">&larr;</span> ANTERIOR</a></li>
+				(: else :)
+				<li class="previous">&nbsp</li>
+				(: end :)
+				
+				(: if totalItems >= PAGE_SIZE :)
 				<li class="next"><a href="#">PRÓXIMA <span aria-hidden="true">&rarr;</span></a></li>
+				(: else :)
+				<li class="next">&nbsp;</li>
+				(: end :)
 			</ul>
 		</nav>
 
