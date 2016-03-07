@@ -36,6 +36,7 @@ class FormCache {
 				return;
 			}
 			var i = 0;
+			var updatedkeys = [];
 			while (i < local.length) {
 				var key = local.key(i);
 				
@@ -48,9 +49,19 @@ class FormCache {
 				}
 				var fieldname = arrKey[3] != "" ? '[name=\'' + arrKey[3] + '\']' : "";
 				var typename = arrKey[2] != "" ? '[type=\'' + arrKey[2] + '\']' : "";
-				new JQuery(arrKey[1] + fieldname+typename).val(local.getItem(key));
-				//new JQuery("select[name='" + key + "']").val(local.getItem(key));
-				local.removeItem(key);
+				
+				var c = new JQuery(arrKey[1] + fieldname+typename);
+				if (c.length > 0)
+				{
+					c.val(local.getItem(key));
+					updatedkeys.push(key);
+				}
+				i++;
+			}
+			
+			for (u in updatedkeys)
+			{
+				local.removeItem(u);
 			}
 			new JQuery("form[name='filter']").submit(onSubmit);
 		});
