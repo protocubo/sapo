@@ -46,7 +46,9 @@ class FormCache {
 					i++;
 					continue;
 				}
-				new JQuery(arrKey[1] + '[name=\'' + arrKey[3] + '\'][type=\'' + arrKey[2] + '\']').val(local.getItem(key));
+				var fieldname = arrKey[3] != "" ? '[name=\'' + arrKey[3] + '\']' : "";
+				var typename = arrKey[2] != "" ? '[type=\'' + arrKey[2] + '\']' : "";
+				new JQuery(arrKey[1] + fieldname+typename).val(local.getItem(key));
 				//new JQuery("select[name='" + key + "']").val(local.getItem(key));
 				local.removeItem(key);
 			}
