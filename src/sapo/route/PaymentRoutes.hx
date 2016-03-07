@@ -20,22 +20,22 @@ class PaymentRoutes extends AccessControl
 		args.paid = args.paid == null?false:args.paid;
 		args.status = args.status == null? SSAll : args.status;
 		var users = [];
-		if (surveyor == null)
+		if (args.surveyor == null)
 		{			
 			var group = Group.manager.select($privilege == PSurveyor);
 			users = Lambda.array(User.manager.search($group == group)).map(function (i) return i.id);
 		}
 		else
-			users = [args.user.id];
+			users = [args.surveyor.id];
 		
-		var surveys = Survey.manager.search(
+		/*var surveys = Survey.manager.search(
 			(args.surveyor == null? 1 == 1 : $user_id == args.surveyor.id) &&
 			$paid == args.paid
-		);
+		);*/
 		
+		var surveys = filterStates(users, args.page, elementsPerPage, args.status, "cres", args.paid);		
 		var pagination = setPagination(surveys, args.page, elementsPerPage);
-		trace("LENGHT: " + surveys.length);
-		Sys.println(sapo.view.Payments.superPage(surveys, pagination.showPrev, pagination.showNext ));
+		Sys.println(sapo.view.Payments.superPage(surveys,args, pagination.showPrev, pagination.showNext ));
 	}
 	
 	function setPagination(surveys:List<Survey>, page:Int, elementsPerPage:Int)
@@ -63,6 +63,7 @@ class PaymentRoutes extends AccessControl
 				case SSAccepted:
 				{
 					surveys = Survey.manager.search(
+						(paid == null? 1==1 : $paid==paid) &&
 						($user_id in users) && 
 						($checkSV && $checkCT && $checkCQ)
 						,{ orderBy : date_completed, limit : [elementsPerPage * page, elementsPerPage+1 ] } );
@@ -71,6 +72,7 @@ class PaymentRoutes extends AccessControl
 				case SSRefused:
 				{
 					surveys = Survey.manager.search(
+						(paid == null? 1==1 : $paid==paid) &&
 						($user_id in users) && 
 						($checkSV == false && $checkCT == false && $checkCQ == false)
 						,{ orderBy : date_completed, limit : [elementsPerPage * page, elementsPerPage+1 ] } );
@@ -79,6 +81,7 @@ class PaymentRoutes extends AccessControl
 				case SSPending:
 				{
 					surveys = Survey.manager.search(
+						(paid == null? 1==1 : $paid==paid) &&
 						($user_id in users) && 
 						($checkSV==false || $checkCT==false || $checkCQ==false) &&
 						($checkSV==false && $checkCT==false && $checkCQ==false) == false
@@ -88,6 +91,7 @@ class PaymentRoutes extends AccessControl
 				case SSCompleted:
 				{
 					surveys = Survey.manager.search(
+						(paid == null? 1==1 : $paid==paid) &&
 						($user_id in users) && 
 						($checkSV != false || $checkSV == null) &&
 						($checkCT != false || $checkCT == null) &&
@@ -98,6 +102,7 @@ class PaymentRoutes extends AccessControl
 				case SSAll:
 				{
 					surveys = Survey.manager.search(
+						(paid == null? 1==1 : $paid==paid) &&
 						($user_id in users)
 						,{ orderBy : date_completed, limit : [elementsPerPage * page, elementsPerPage+1 ] } );
 				};
@@ -111,6 +116,7 @@ class PaymentRoutes extends AccessControl
 				case SSAccepted:
 				{
 					surveys = Survey.manager.search(
+						(paid == null? 1==1 : $paid==paid) &&
 						($user_id in users) && 
 						($checkSV && $checkCT && $checkCQ)
 						,{ orderBy : -date_completed, limit : [elementsPerPage * page, elementsPerPage+1 ] } );
@@ -119,6 +125,7 @@ class PaymentRoutes extends AccessControl
 				case SSRefused:
 				{
 					surveys = Survey.manager.search(
+						(paid == null? 1==1 : $paid==paid) &&
 						($user_id in users) && 
 						($checkSV == false && $checkCT == false && $checkCQ == false)
 						,{ orderBy : -date_completed, limit : [elementsPerPage * page, elementsPerPage+1 ] } );
@@ -127,6 +134,7 @@ class PaymentRoutes extends AccessControl
 				case SSPending:
 				{
 					surveys = Survey.manager.search(
+						(paid == null? 1==1 : $paid==paid) &&
 						($user_id in users) && 
 						($checkSV==false || $checkCT==false || $checkCQ==false) &&
 						($checkSV==false && $checkCT==false && $checkCQ==false) == false
@@ -136,6 +144,7 @@ class PaymentRoutes extends AccessControl
 				case SSCompleted:
 				{
 					surveys = Survey.manager.search(
+						(paid == null? 1==1 : $paid==paid) &&
 						($user_id in users) && 
 						($checkSV != false || $checkSV == null) &&
 						($checkCT != false || $checkCT == null) &&
@@ -146,6 +155,7 @@ class PaymentRoutes extends AccessControl
 				case SSAll:
 				{
 					surveys = Survey.manager.search(
+						(paid == null? 1==1 : $paid==paid) &&
 						($user_id in users)
 						,{ orderBy : -date_completed, limit : [elementsPerPage * page, elementsPerPage+1 ] } );
 				};

@@ -94,7 +94,7 @@
 </html>
 (: end :)
 
-(: static function superPage(?surveys:List<Survey>, ?showPrev:Bool = false, ?showNext:Bool = false) :)
+(: static function superPage(?surveys:List<Survey>,?params:{ ?surveyor:User,?status:SurveyStatus, ?paid:Bool, ?page:Int }, ?showPrev:Bool = false, ?showNext:Bool = false) :)
 <!DOCTYPE html>
 <html>
 <head>
@@ -110,7 +110,7 @@
 			<li class="active">PAGAMENTOS</li>
 		</ol>
 		<div class="row">
-			<form method="get" action="">
+			<form method="get" action="/payments">
 				<!-- FILTROS -->
 				<div class="col-md-2"><h5>PESQUISADOR:</h5>
 					<select name="surveyor"  class="form-control input-sm" >
@@ -127,7 +127,7 @@
 					</select>
 				</div>
 				<div class="col-md-2"><h5>STATUS</h5>
-					<select class="form-control input-sm"name="state" >
+					<select class="form-control input-sm"name="status" >
 						<option value= "(:SSAll:)" >Todas</option>
 						<option value= "(:SSAccepted:)" >Aceitas</option>
 						<option value= "(:SSPending:)" >Pendente</option>
@@ -235,8 +235,12 @@
 		
 		<nav>
 			<ul class="pager mt30">
-				<li class="previous"><a href="#">ANTERIOR</a></li>
-				<li class="next"><a href="#">PRÓXIMA</a></li>
+			(:if showPrev:)
+				<li class="previous"><a href="payments?user=(: params.surveyor == null? "" : params.surveyor :)&page=(:params.page-1:)&paid=(:params.paid == null? "" : params.paid:)&status=(:params.status == null? "" : params.status:)"><span aria-hidden="true">&larr;</span> ANTERIOR</a></li>
+			(:end:)
+			(:if showNext:)
+				<li class="next"><a href="payments?user=(: params.surveyor == null? "" : params.surveyor :)&page=(:params.page+1:)&paid=(:params.paid == null? "" : params.paid:)&status=(:params.status == null? "" : params.status:)">PRÓXIMA <span aria-hidden="true">&rarr;</span></a></li>
+			(:end:)
 			</ul>
 		</nav>
 		
