@@ -94,7 +94,7 @@
 </html>
 (: end :)
 
-(: static function superPage(?surveys:List<Survey>) :)
+(: static function superPage(?surveys:List<Survey>, ?showPrev:Bool = false, ?showNext:Bool = false) :)
 <!DOCTYPE html>
 <html>
 <head>
