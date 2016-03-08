@@ -16,6 +16,7 @@ class Survey extends Object {
 
 	public var lastPageVisited : SNull<SString<255>>;
 	public var isValid : SBool;
+	
 	/***********  SAPO FIELDS **********/
 	public var paid : SNull<SBool> = false;
 	public var paymentRef : SNull<SString<255>>;
@@ -52,7 +53,7 @@ class Survey extends Object {
 	public var estrato : SNull<SString<255>>;
 	public var json : Null<String>;
 
-	/** CHECKS -> Verificado? -TODO:IGNORAR NO SYNC! **/
+	/**   CHECKS -> Verificado?     **/
 	public var checkSV : Null<Bool>;
 	public var checkCT : Null<Bool>;
 	public var checkCQ : Null<Bool>;
