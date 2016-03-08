@@ -45,12 +45,10 @@ unavailable
 				(: var first = true :)
 				(: for message in TicketMessage.manager.search($ticket == ticket) :)
 					<p>
-						<strong>
-							<!-- DATETIME + DE + PARA (class: super, telefonista, supervisor e pesquisador) -->
-							(:* Para facilitar a vida *:)
-							(: do var recipient = ticket.recipient :)
-							(: message.posted_at :) - <span class="(: message.author.group.privilege:)">(: message.author.name :)@(: message.author.group.name:)</span>(: if first :) - (: if recipient.user != null :) <span class="(: recipient.user.group.privilege:)">(: recipient.user.name :)@(: recipient.user.group.name:)</span> (: else :) <span class="(: recipient.group.privilege:)"> @(: recipient.group.name:)</span> (: end :) (: end :) :
-						</strong>
+						<!-- DATETIME + DE + PARA (class: super, telefonista, supervisor e pesquisador) -->
+						(:* Para facilitar a vida *:)
+						(: do var recipient = ticket.recipient :)
+						<b>(: message.posted_at :)</b> - <span class="(: message.author.group.privilege:)">(: message.author.name :)@(: message.author.group.name:)</span>(: if first :) - (: if recipient.user != null :) <span class="(: recipient.user.group.privilege:)">(: recipient.user.name :)@(: recipient.user.group.name:)</span> (: else :) <span class="(: recipient.group.privilege:)"> @(: recipient.group.name:)</span> (: end :) (: end :) :
 					<!-- MENSAGEM -->
 						(: message.text :)
 					</p>
