@@ -105,8 +105,8 @@
 				</div>
 				<div class="col-md-2"><h5>ORDEM</h5>
 					<select class="form-control input-sm" name="order">
-						<option value="cres" >Data Crescente</option>
 						<option value="desc" >Data Decrescente</option>
+						<option value="cres" >Data Crescente</option>					
 					</select>
 				</div>
 				<div class="col-md-1"><h5>&nbsp;</h5>

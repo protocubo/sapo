@@ -30,23 +30,24 @@
 <!-- FIM LINHA -->
 (: end :)
 
-(: static function surveySimpleStatus(payment:NewSurvey) :)
+(: static function surveySimpleStatus(payment:Survey) :)
 <!-- LINHA: número da pesquisa, data da pesquisa, endereço, refpagto, datapagto, status -->
 <tr>
 	<td>(: payment.id:)</td>
-	<td>(: payment.closed_at :)</td>
-	<td>(: payment.address :)</td>
-	<td>813518</td>
-	<td>02/02/2016</td>
+	<td>(: payment.date_completed :)</td>
+	<td></td>
+	<td>(: payment.paid? payment.paymentRef : "" :)</td>
+	<td>(: payment.paid? payment.date_paid : "" :)</td>
 	<td class="text-right">
-		<!-- class: completa, pendente, recusada, aceita -->
+	(:if payment.paid == true:)
 		<b class="aceita">Aceita</b>
+	(: end :)
 	</td>
 </tr>
 <!-- FIM LINHA -->
 (: end :)
 
-(: static function surveyorPage() :)
+(: static function surveyorPage(survey:List<Survey>, ?page:Int, ?showPrev:Bool = false, ?showNext:Bool = false) :)
 <!DOCTYPE html>
 <html>
 <head>
@@ -76,7 +77,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				(: for p in NewSurvey.manager.all() :)
+				(: for p in Survey.manager.all() :)
 					(: surveySimpleStatus(p) :)
 				(: end :)
 			</tbody>
@@ -86,6 +87,17 @@
 				</tr>
 			</tfoot>
 		</table>
+		
+		<nav>
+			<ul class="pager mt30">
+			(:if showPrev:)
+				<li class="previous"><a href="surveys?page=page-1"><span aria-hidden="true">&larr;</span> ANTERIOR</a></li>
+			(:end:)
+			(:if showNext:)
+				<li class="next"><a href="surveys?page=page-1">PRÓXIMA <span aria-hidden="true">&rarr;</span></a></li>
+			(:end:)
+			</ul>
+		</nav>
 
 	</div>
 
@@ -129,7 +141,7 @@
 				<div class="col-md-2"><h5>STATUS</h5>
 					<select class="form-control input-sm"name="status" >
 						<option value= "(:SSAll:)" >Todas</option>
-						<option value= "(:SSAccepted:)" >Aceitas</option>
+						<option value= "(:SSAccepted:)" selected >Aceitas</option>
 						<option value= "(:SSPending:)" >Pendente</option>
 						<option value= "(:SSRefused:)" >Recusada</option>
 						<option value= "(:SSCompleted:)" >Completas</option>
@@ -178,6 +190,7 @@
 					(: surveySuperStatus(p) :)
 				(: end :)
 			</tbody>
+			(: if params.paid != true :)
 			<tfoot>
 				<tr>
 					<td colspan="8" align="right">
@@ -187,6 +200,7 @@
 					</td>
 				</tr>
 			</tfoot>
+			(: end :)
 			
 			<script>
 				function toggleCheckBoxes(source) 
