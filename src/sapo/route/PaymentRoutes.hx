@@ -39,8 +39,10 @@ class PaymentRoutes extends AccessControl
 		else if (Context.loop.user.group.privilege.match(PSurveyor)) 
 		{
 			var u = Context.loop.user;
-			var surveys = Survey.manager.search($user_id == u.id);
-			Sys.println(sapo.view.Payments.surveyorPage(surveys, 0, true, true));
+			var surveys = Survey.manager.search($user_id == u.id, { orderBy : date_completed, limit : [elementsPerPage * args.page, elementsPerPage+1 ] });
+			//var surveys = Survey.manager.search(1 == 1, { orderBy : date_completed, limit : [elementsPerPage * args.page, elementsPerPage+1 ] } );
+			var pagination = setPagination(surveys, args.page, elementsPerPage);
+			Sys.println(sapo.view.Payments.surveyorPage(surveys, args.page, pagination.showPrev, pagination.showNext));
 			
 		}
 		
