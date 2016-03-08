@@ -15,7 +15,6 @@ class SurveyRoutes extends AccessControl {
 		args.page = args.page == null?0:args.page;
 		args.order = args.order == null?"cres":args.order;
 		args.status = args.status == null? SSAll : args.status;
-		trace("AAAAAAAAAAAA-" + args.page+" " + args.order + " " + args.status);
 		
 		var surveys = new List<Survey>(); 
 		var users;

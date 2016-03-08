@@ -193,7 +193,7 @@ class PaymentRoutes extends AccessControl
 				{
 					s.lock();
 					s.paymentRef = args.reference;
-					s.date_paid = Context.now;
+					s.date_paid = Context.now; 	
 					s.paid = true;
 					s.update();
 				}
