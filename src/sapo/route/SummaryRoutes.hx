@@ -19,8 +19,8 @@ class SummaryRoutes extends AccessControl
 
 	public static inline var DATE_KEY = "Date";
 	public static inline var SUP_KEY = "Supervisores";
-	public static inline var CT_KEY = "CT";
-	public static inline var SUPER_KEY = "Super";
+	public static inline var CT_KEY = "Central Telefônica";
+	public static inline var SUPER_KEY = "Controle de Qualidade";
 	public static inline var COMPLETA_KEY =  "Completas";
 	public static inline var RECUSADAS_KEY = "Recusadas";
 	public static inline var ACEITA_KEY = "Aceitas";
@@ -245,14 +245,17 @@ class SummaryRoutes extends AccessControl
 
 
 		var ret = [];
-		switch(user.group.privilege)
+		if (user != null)
 		{
-			case PSurveyor:
-				ret.push(user.id);
-			case PSupervisor:
-				ret = User.manager.search($supervisor == user, null, false).map(function (v) { return v.id; } ).array();
-			default:
-				ret = [];
+			switch(user.group.privilege)
+			{
+				case PSurveyor:
+					ret.push(user.id);
+				case PSupervisor:
+					ret = User.manager.search($supervisor == user, null, false).map(function (v) { return v.id; } ).array();
+				default:
+					ret = [];
+			}
 		}
 
 		var referer = Web.getClientHeader("Referer");

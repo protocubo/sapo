@@ -21,9 +21,9 @@ import sys.db.Types.SString;
  
  //Classes de Relação com id/desc apenas
  @dbNullVal(0) @tt("Recebe Água Encanada?") enum AguaEncanada {
-	@dbVal(1) @tt("Sim, pelo menos em um cômodo.") Sim;
-	@dbVal(2) @tt("Sim, na propriedade.")  SimPropriedade;
-	@dbVal(3) @tt("Não")  Nao;
+	@dbVal(1) @tt("possui água encanada em pelo menos em um cômodo") Sim;
+	@dbVal(2) @tt("possui água encanada em na propriedade")  SimPropriedade;
+	@dbVal(3) @tt("não possui água encanada")  Nao;
  }
  class AguaEncanada_Tbl extends EnumTable { }
 
