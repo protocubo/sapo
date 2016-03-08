@@ -1,4 +1,5 @@
 package sync;
+import common.db.MoreTypes.HaxeTimestamp;
 import common.spod.EnumSPOD;
 import sapo.Populate;
 import common.spod.statics.EstacaoMetro;
@@ -68,8 +69,8 @@ class MainSync
 		{
 			//TODO: Linkar lugar correto no DB
 			//Populate.reset();
-			InitDB.run();
-			//Context.init();
+			//InitDB.run();
+			Context.init();
 			if (!TableCreate.exists(QueuedMessage.manager))
 				TableCreate.create(QueuedMessage.manager);
 			enq = new LocalEnqueuer(QueuedMessage.manager);
@@ -198,13 +199,16 @@ class MainSync
 				case "isValid", "isRestored":
 					Reflect.setField(new_sess, f, (Reflect.field(dbSession, f) == 1));
 				//Copia simples de campo
-				case "user_id", "tentativa_id", "lastPageVisited",
-				"dataInicioPesquisaPapel", "dataFimPesquisaPapel", "codigoFormularioPapel",
-				"date_create", "date_started", "date_finished", "date_completed",
+				case "user_id", "tentativa_id", "lastPageVisited", "codigoFormularioPapel",
 				"endereco_id", "pin", "latitude", "longitude",
-				"municipio", "bairro", "logradouro", "numero", "complemento","cep",
-				"zona","macrozona","lote","estratoSocioEconomico":
+				 "bairro", "logradouro", "numero", "complemento","lote","estrato":
 					Reflect.setField(new_sess, f, Reflect.field(dbSession, f));
+				//Datas:
+				case "dataInicioPesquisaPapel", "dataFimPesquisaPapel",
+				"date_create", "date_started", "date_finished", "date_completed":
+					var rawfield = Reflect.field(dbSession, f);
+					var x : HaxeTimestamp = rawfield == null ? null : HaxeTimestamp.fromDate(Date.fromString(rawfield));
+					Reflect.setField(new_sess, f, x);
 				case "json":
 						if (checkJson("Survey", Reflect.field(dbSession, f)))
 							Reflect.setField(new_sess, f, Reflect.field(dbSession, f));
@@ -253,17 +257,21 @@ class MainSync
 		}
 
 		//o = old_entry from Macros.validateEntry (old_entry is an old reference to the same survey)
-		var o : Survey = Macros.validateEntry(Survey, ["syncTimestamp", "id","paid","checkSV","checkCT","checkCQ","group","date_edited"], [ { key : "old_survey_id", value : new_sess.old_survey_id } ], new_sess);
+		var o : Survey = Macros.validateEntry(Survey, ["syncTimestamp", "id","paid","date_paid","paymentRef","checkSV","checkCT","checkCQ","group","date_edited"], [ { key : "old_survey_id", value : new_sess.old_survey_id } ], new_sess);
+		
+		//Update fields from 
 		if (insertMode && o != null && o.date_completed != null )
 		{
-
 			new_sess.lock();
+			new_sess.paid = o.paid;
+			new_sess.paymentRef = o.paymentRef;
+			new_sess.date_paid = o.date_paid;
 			new_sess.checkSV = o.checkSV;
 			new_sess.checkCT = o.checkCT;
 			new_sess.checkCQ = o.checkCQ;
+			new_sess.isPhoned = o.isPhoned;
 			new_sess.date_edited = o.date_edited;
 			new_sess.group = o.group;
-			new_sess.paid = o.paid;
 			new_sess.update();
 		}
 
@@ -291,15 +299,20 @@ class MainSync
 					"aguaEncanada_id", "anoVeiculoMaisRecente_id", "empregadosDomesticos_id",
 					"rendaDomiciliar_id":
 						Macros.setEnumField(field, new_familia, f);
+					
 					//Fields ctrl+c ctrl+v
-					case "date", "isEdited", "numeroResidentes", "banheiros", "quartos",
+					case "isEdited", "numeroResidentes", "banheiros", "quartos",
 					"veiculos", "bicicletas", "motos",  "nomeContato", "telefoneContato","tentativa_id":
 						Reflect.setField(new_familia, field, Reflect.field(f, field));
+					case "date":
+							var rawfield = Reflect.field(f, field);
+							var x : HaxeTimestamp = (rawfield == null) ? null : HaxeTimestamp.fromDate(Date.fromString(rawfield));
+							Reflect.setField(new_familia, field, x);
 					case "json":
 						if (checkJson("Familia", Reflect.field(f, field)))
 							Reflect.setField(new_familia, field, Reflect.field(f, field));
 					//Bool simples
-					case "isDeleted","ruaPavimentada_id", "recebeBolsaFamilia_id":
+					case "isDeleted","recebeBolsaFamilia_id":
 						Reflect.setProperty(new_familia, field, Reflect.field(f, field) == 1);
 					//Conversao enum -> bool
 					case "tvCabo_id","vagaPropriaEstacionamento_id, ruaPavimentada_id":
@@ -350,8 +363,12 @@ class MainSync
 						var f = (Reflect.field(m, field) == null) ? null : (Reflect.field(m, field) == 1);
 						Reflect.setField(new_morador, field, f);
 					//ctrl+c ctrl+v
-					case "date", "isEdited", "nomeMorador", "genero_id":
+					case "isEdited", "nomeMorador", "genero_id":
 						Reflect.setField(new_morador, field, Reflect.field(m, field));
+					case "date":
+							var rawfield = Reflect.field(m, field);
+							var x : HaxeTimestamp = rawfield == null ? null : HaxeTimestamp.fromDate(Date.fromString(rawfield));
+							Reflect.setField(new_morador, field, x);
 					case "json":
 						if (checkJson("Morador", Reflect.field(m, field)))
 							Reflect.setField(new_morador, field, Reflect.field(m, field));
@@ -400,8 +417,12 @@ class MainSync
 					case "ref_id":
 						new_point.ref = Referencias.manager.get(p.ref_id);
 					//ctrl+c ctrl+v
-					case "date", "isEdited", "uf_id", "city_id", "regadm_id", "street_id", "complement_id", "complement_two_id", "complement2_str", "ref_str", "tempo_saida", "tempo_chegada", "ordem":
+					case "isEdited", "city_id", "regadm_id", "street_id", "complement_id", "complement_two_id", "complement2_str", "ref_str", "tempo_saida", "tempo_chegada", "ordem":
 						Reflect.setField(new_point, field, Reflect.field(p, field));
+					case "date":
+							var rawfield = Reflect.field(p, field);
+							var x : HaxeTimestamp = rawfield == null ? null : HaxeTimestamp.fromDate(Date.fromString(rawfield));
+							Reflect.setField(new_point, field, x);
 					case "json":
 						if (checkJson("Ponto", Reflect.field(p, field)))
 							Reflect.setField(new_point, field, Reflect.field(p, field));
@@ -460,8 +481,12 @@ class MainSync
 					case "isDeleted":
 						new_modo.isDeleted = (m.isDeleted == 1);
 					//Ctrl+c ctrl+v
-					case "date", "isEdited":
+					case "isEdited", "ordem", "linhaOnibus_str":
 						Reflect.setField(new_modo, f, Reflect.field(m, f));
+					case "date":
+							var rawfield = Reflect.field(m, f);
+							var x : HaxeTimestamp = rawfield == null ? null : HaxeTimestamp.fromDate(Date.fromString(rawfield));
+							Reflect.setField(new_modo, f, x);
 					case "json":
 						if (checkJson("Modo", Reflect.field(m, f)))
 							Reflect.setField(new_modo, f, Reflect.field(m, f));
@@ -474,7 +499,7 @@ class MainSync
 						new_modo.naoRespondeu = (new_modo.naoRespondeu) ? true : (Reflect.field(m, f) != 0);
 					//fim conversao
 					//Ignore
-					case "anterior_id", "posterior_id","ordem", "gps_id", "linhaOnibus_str","estacaoEmbarque_str", "estacaoDesembarque_str":
+					case "anterior_id", "posterior_id","ordem", "gps_id", "estacaoEmbarque_str", "estacaoDesembarque_str":
 						continue;
 					default:
 						Macros.warnTable("Modo", f, null);
@@ -502,8 +527,12 @@ class MainSync
 					case "session_id":
 						c.survey = sessHash.get(r.session_id);
 						c.old_survey_id = r.session_id;
-					case "desc", "datetime":
+					case "desc":
 						Reflect.setField(c, f, Reflect.field(r, f));
+					case "datetime":
+							var rawfield = Reflect.field(r, f);
+							var x : HaxeTimestamp = rawfield == null ? null : HaxeTimestamp.fromDate(Date.fromString(rawfield));
+							Reflect.setField(c, f, x);
 					case "json":
 						if (checkJson("Ocorrencias", Reflect.field(r, f)))
 							Reflect.setField(c, f, Reflect.field(r, f));

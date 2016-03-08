@@ -11,41 +11,45 @@ import sys.db.Types;
 
 class Survey extends Object {
 	public var id : SId;
-	public var user_id : SInt;
+	public var user_id : SInt; 
 	public var tentativa_id : SNull<Int>;
 
 	public var lastPageVisited : SNull<SString<255>>;
 	public var isValid : SBool;
-
+	/***********  SAPO FIELDS **********/
 	public var paid : SNull<SBool> = false;
 	public var paymentRef : SNull<SString<255>>;
+	public var date_paid : SNull<HaxeTimestamp>;
+	/***********************************/
+	
 	public var isRestored : SBool;
-
 	public var dataInicioPesquisaPapel : SNull<HaxeTimestamp>; //
 	public var dataFimPesquisaPapel : SNull<HaxeTimestamp>; //
 	public var codigoFormularioPapel : SNull<SString<255>>; //
-
+	
 	public var date_create : HaxeTimestamp;
 	public var date_started : SNull<HaxeTimestamp>; //
 	public var date_finished : SNull<HaxeTimestamp>;
-	public var date_completed : SNull<HaxeTimestamp>;
-	public var date_paid : SNull<HaxeTimestamp>;
+	public var date_completed : SNull<HaxeTimestamp>;	
+	
 	public var estadoPesquisa : SNull<SEnum<EstadoPesquisa>>;
-
+	
+	public var numReopenings : Null<SInt>;
 	public var endereco_id : SNull<SInt>;
 	public var pin : SNull<SString<255>>; //
 	public var latitude : SNull<SFloat>;
 	public var longitude : SNull<SFloat>;
-	public var municipio : SNull<SString<255>>;
+	@:deprecated("Deprecated Municipio") public var municipio : SNull<SString<255>>;
 	public var bairro : SNull<SString<255>>;
 	public var logradouro : SNull<SString<255>>;
 	public var numero : SNull<SString<255>>;
 	public var complemento : SNull<SString<255>>;
-	public var cep : SNull<SString<255>>;
-	public var zona : SNull<SString<255>>;
-	public var macrozona : SNull<SString<255>>;
+	@:deprecated("Deprecated CEP")public var cep : SNull<SString<255>>;
+	@:deprecated("Deprecated Zona")public var zona : SNull<SString<255>>;
+	@:deprecated("Deprecated Macrozona")public var macrozona : SNull<SString<255>>;
 	public var lote : SNull<SString<255>>;
-	public var estratoSocioEconomico : SNull<SString<255>>;
+	@:deprecated("Deprecated estratoSocioEconomico - Use field estrato") public var estratoSocioEconomico : SNull<SString<255>>;
+	public var estrato : SNull<SString<255>>;
 	public var json : Null<String>;
 
 	/** CHECKS -> Verificado? -TODO:IGNORAR NO SYNC! **/
@@ -140,7 +144,7 @@ class Morador extends Object {
 	public var atividadeMorador : SNull<SEnum<AtividadeMorador>>;
 	public var possuiHabilitacao_id : SNull<SBool>;
 	public var portadorNecessidadesEspeciais : SNull<SEnum<PortadorNecessidadesEspeciais>>;
-	// TODO
+	
 	public var setorAtividadeEmpresaPrivada : SNull<SEnum<SetorAtividadeEmpresaPrivada>>;
 	public var setorAtividadeEmpresaPublica : SNull<SEnum<SetorAtividadeEmpresaPublica>>;
 
@@ -161,10 +165,7 @@ class Ponto extends Object {
 
 	public var isEdited : SInt;
 	public var isDeleted : SBool;
-	/*
-	public var anterior_id : SNull<SInt>;
-	public var posterior_id : SNull<SInt>;
-	*/
+	
 	public var ordem : SNull<SInt>;
 
 	@:relation(uf_id) public var uf : UF;
@@ -200,7 +201,7 @@ class Modo extends Object {
 
 	@:relation(firstpoint_id) public var firstpoint : Ponto;
 	@:relation(secondpoint_id) public var secondpoint : Ponto;
-
+	public var ordem : Int;
 	public var date : HaxeTimestamp;
 
 	public var isEdited : SInt;
@@ -209,7 +210,7 @@ class Modo extends Object {
 	public var meiotransporte : SEnum<MeioTransporte>;
 
 	@:relation(linhaOnibus_id) public var linhaOnibus : SNull<LinhaOnibus>;
-
+	public var linhaOnibus_str : SNull<SString<255>>;
 	@:relation(estacaoEmbarque_id) public var estacaoEmbarque : SNull<EstacaoMetro>;
 
 	@:relation(estacaoDesembarque_id) public var estacaoDesembarque : SNull<EstacaoMetro>;
