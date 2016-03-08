@@ -115,7 +115,33 @@ class TicketRoutes extends AccessControl {
 		}
 		Web.redirect('/tickets/search?ticket=${t.id}');
 	}
-
+	@authorize(PSupervisor, PSuperUser)
+	public function postInclude(t : Ticket, args : { value : String } )	
+	{
+		if (args == null)
+		{
+			Web.redirect("/tickets/");
+			return;
+		}
+		var intval = Std.parseInt(args.value);
+		var user : User = null;
+		var group : Group = null;
+		
+		if (intval != null)
+			user = User.manager.get(intval);
+		else
+			group = Group.manager.select($name == args.value, null, false);
+		
+		var ref = TicketSubscription.manager.select($ticket == t && $group == group && $user == user, null, false);
+		if (ref == null)
+		{
+			var sub = new TicketSubscription(t, group, user);
+			sub.insert();
+		}
+		
+		Web.redirect("/tickets/search?ticket="+t.id);
+			
+	}
 	@authorize(PSupervisor, PSuperUser)
 	public function postClose(t:Lock<Ticket>)
 	{
