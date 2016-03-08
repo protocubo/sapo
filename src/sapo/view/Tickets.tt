@@ -59,7 +59,7 @@ unavailable
 				</div>
 				<div class="col-md-5 barraderolagem">
 					<!-- DADOS DA PESQUISA -->
-					<div class="bloco"><b>Endereço:</b> (: ticket.survey.municipio :) - (: ticket.survey.logradouro :),(: ticket.survey.numero :), (: ticket.survey.complemento :) </div>
+					<div class="bloco"><b>Endereço:</b>  (: ticket.survey.logradouro :) , (: ticket.survey.numero :) (: ticket.survey.complemento :), (: ticket.survey.bairro :) - (: ticket.survey.municipio :) - (: ticket.survey.cep :) </div>
 					<div class="bloco"><b>Data da Pesquisa:</b> (:ticket.survey.date_completed :) </div>
 					<hr>
 					(: do var fam = Familia.manager.select($survey == ticket.survey) :)
@@ -74,8 +74,6 @@ unavailable
 							(: end :)
 							</p>
 					(: end :)
-					<hr>
-					<div class="bloco"><b>Conferência:</b> 3 carros</div>
 				</div>
 			</div>
 			<!-- AÇÕES -->
@@ -93,12 +91,13 @@ unavailable
 
 				(: if ticket.closed_at == null :)
 				<div class="col-md-2"><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_incluir" (:if disabled :) disabled (: end :)>Incluir</button></div>
-				<div class="col-md-2"><button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_responder" (:if disabled :) disabled (: end :)>Responder</button></div>
+				<div class="col-md-2"><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_responder" (:if disabled :) disabled (: end :)>Responder</button></div>
 				<div class="col-md-2"><button type="button" class="btn btn-success btn-sm (: hideClose(ticket) :)" data-toggle="modal" data-target="#ticket(: ticket.id :)_fechar" (: if closedDisabled :) disabled (: end :)>Fechar</button></div>
 				<div class="col-md-2 col-md-offset-1"><a href="/survey/(:ticket.survey.id:)" type="button" class="btn btn-primary btn-sm">Ver Pesquisa</a></div>
 				<div class="col-md-2"><button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_status">Conferência</button></div>
 				(: else :)
-				<div class="col-md-2"><button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_responder" (:if disabled :) disabled (: end :)>Reabrir</button></div>
+				<div class="col-md-2"><button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_responder" (:if disabled :) disabled (: end :)>Reabrir</button></div>
+				<div class="col-md-2 col-md-offset-5"><a href="/survey/(:ticket.survey.id:)" type="button" class="btn btn-primary btn-sm">Ver Pesquisa</a></div>
 				(: end :)
 			</div>
 		</div>
