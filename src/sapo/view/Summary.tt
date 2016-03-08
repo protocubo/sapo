@@ -1,5 +1,4 @@
 (: import common.db.MoreTypes :)
-(: import sapo.Spod :)
 (: import sapo.route.SummaryRoutes.* :)
 (: import sapo.spod.User :)
 
