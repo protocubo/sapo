@@ -167,7 +167,7 @@ class Ponto extends Object {
 	public var isEdited : SInt;
 	public var isDeleted : SBool;
 	
-	public var ordem : SNull<SInt>;
+	public var ordem : SInt;
 
 	@:relation(uf_id) public var uf : UF;
 	public var city_id : SInt;
@@ -222,7 +222,8 @@ class Modo extends Object {
 	// Coisas resumidas:
 
 	public var valorViagem : SNull<SFloat>;
-
+	@:deprecated("Field naoSabe doesnt exist!") public var naoSabe : SNull<SBool>;
+	@:deprecated("Field naoRespondeu doesnt exist!") public var naoRespondeu : SNull<SBool>;
 
 	public var json : Null<String>;
 
