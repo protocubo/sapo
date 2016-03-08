@@ -130,12 +130,14 @@ class SummaryRoutes extends AccessControl
 			while(i < users.length)
 			{
 				if (i == 0)
-					wherestr = " WHERE user_id = " + users[0];
+					wherestr = " AND ( user_id = " + users[i];
 				else
-					wherestr = wherestr + " AND user_id = " + users[i];
+					wherestr = wherestr + " OR user_id = " + users[i];
 
 				i++;
 			}
+			
+			wherestr += ")";
 
 
 		}
@@ -158,10 +160,11 @@ class SummaryRoutes extends AccessControl
 				JOIN UpdatedSurvey us
 					ON s.old_survey_id = us.old_survey_id
 					AND s.syncTimestamp = us.syncTimestamp
-					AND STRFTIME(\'%w\', s.date_completed/1e3) = \'$HistoricDay\'
+				WHERE STRFTIME(\'%w\', s.date_completed/1e3) = \'$HistoricDay\'
 					$wherestr
 				GROUP BY s.user_id, s.`group`, date_end
 				ORDER BY s.user_id, s.`group`, date_end');
+		
 		for (q in queryDay)
 		{
 			if (q.date_end == null)
