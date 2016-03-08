@@ -12,8 +12,7 @@ typedef Ticket = sapo.spod.Ticket;
 @:deprecated("sapo.Spod.TicketMessage moved into sapo.spod.Ticket")
 typedef TicketMessage = sapo.spod.Ticket.TicketMessage;
 
-@:deprecated("sapo.Spod.SurveyStatus moved into sapo.spod.Other")
-typedef SurveyStatus = sapo.spod.Other.SurveyStatus;
+
 @:deprecated("sapo.Spod.TicketStatus moved into sapo.spod.Other")
 typedef TicketStatus = sapo.spod.Other.TicketStatus;
 @:deprecated("sapo.Spod.NewSurvey moved into sapo.spod.Other")

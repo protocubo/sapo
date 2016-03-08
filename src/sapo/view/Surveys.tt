@@ -2,7 +2,7 @@
 (: import sapo.spod.User :)
 (:import common.db.MoreTypes:)
 
-(: static function surveySummary(survey:sapo.spod.Survey) :)
+(: static function surveySummary(survey:sapo.spod.Survey, ?open=false) :)
 (:    var dom = Familia.manager.select($survey == survey, { orderBy:-syncTimestamp, limit : 1 }) :) (:*FIXME syncTimestampi*:) 
 (:    var fam = dom :) 
 (:    var user = User.manager.select($id == survey.user_id) :) (:*FIXME syncTimestamp*:) 
@@ -31,7 +31,7 @@
 		</div>
 	</div>
 	<!-- BODY PESQUISA -->
-	<div id="BodyPesquisa(: survey.id :)" class="panel-collapse collapse" role="tabpanel" aria-labelledby="HeadPesquisa(: survey.id :)">
+	<div id="BodyPesquisa(: survey.id :)" class="panel-collapse collapse (: if open :)in(: end :)" role="tabpanel" aria-labelledby="HeadPesquisa(: survey.id :)">
 		<div class="panel-body">
 			<div class="row">
 				<div class="col-md-12 barraderolagem">
@@ -77,7 +77,7 @@
 		
 		<div class="row">
 			<!-- FILTROS -->
-			<form method="get">
+			<form method="get" action="/surveys">
 				<div class="col-md-2"><h5>USUÁRIO</h5>
 					<select class="form-control input-sm" name="user" id="userID">
 						<option value="">Todos</option>
@@ -111,8 +111,7 @@
 				</div>
 				<div class="col-md-1"><h5>&nbsp;</h5>
 					<button type="submit" value="submit" class="btn btn-primary btn-sm">Filtrar</button>
-				</div>
-			
+				</div>			
 			</form>
 			<!-- BUSCA -->
 			<form action="/surveys/search" method="get">
@@ -128,17 +127,17 @@
 		<!-- PESQUISAS -->
 		<div class="panel-group mt60" id="accordion" role="tablist" aria-multiselectable="true" style="margin-top: 60px;">
 			(: for s in surveys :)
-				(: surveySummary(s) :)
+				(: surveySummary(s, (surveys.length == 1? true:false)) :)
 			(: end :)
 		</div>
 	
 		<nav>
 			<ul class="pager mt30">
 			(:if showPrev:)
-				<li class="previous"><a href="surveys?user=(: params.user == null? "" : params.user :)&page=(:params.page-1:)"><span aria-hidden="true">&larr;</span> ANTERIOR</a></li>
+				<li class="previous"><a href="surveys?user=(: params.user == null? "" : params.user :)&page=(:params.page-1:)&status=(:params.status == null? "" : params.status:)"><span aria-hidden="true">&larr;</span> ANTERIOR</a></li>
 			(:end:)
 			(:if showNext:)
-				<li class="next"><a href="surveys?user=(: params.user == null? "" : params.user :)&page=(:params.page+1:)">PRÓXIMA <span aria-hidden="true">&rarr;</span></a></li>
+				<li class="next"><a href="surveys?user=(: params.user == null? "" : params.user :)&page=(:params.page+1:)&status=(:params.status == null? "" : params.status:)">PRÓXIMA <span aria-hidden="true">&rarr;</span></a></li>
 			(:end:)
 			</ul>
 		</nav>
