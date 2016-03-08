@@ -51,7 +51,7 @@ class PaymentRoutes extends AccessControl
 	}
 	
 	
-	function filterStates(users:Array<Int>, page:Int, elementsPerPage:Int, status:SurveyStatus, ?order:String="cres", ?paid:Bool = null)
+	function filterStates(users:Array<Int>, page:Int, elementsPerPage:Int, status:SurveyStatus, ?order:String="des", ?paid:Bool = null)
 	{
 		
 		var surveys = new List<Survey>(); 
@@ -83,8 +83,12 @@ class PaymentRoutes extends AccessControl
 					surveys = Survey.manager.search(
 						(paid == null? 1==1 : $paid==paid) &&
 						($user_id in users) && 
-						($checkSV==false || $checkCT==false || $checkCQ==false) &&
-						($checkSV==false && $checkCT==false && $checkCQ==false) == false
+						($checkSV == false || $checkCT == false || $checkCQ == false) &&
+						(
+							($checkSV != false || $checkSV == null) ||
+							($checkCT != false || $checkCT == null) ||
+							($checkCQ != false || $checkCQ == null)
+						)
 						,{ orderBy : date_completed, limit : [elementsPerPage * page, elementsPerPage+1 ] } );
 				};
 				//any check not false && all checks not true
