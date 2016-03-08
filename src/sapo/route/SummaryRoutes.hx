@@ -22,6 +22,7 @@ class SummaryRoutes extends AccessControl
 	public static inline var CT_KEY = "Central Telefônica";
 	public static inline var SUPER_KEY = "Controle de Qualidade";
 	public static inline var COMPLETA_KEY =  "Completas";
+	public static inline var PENDENTE_KEY = "Pendentes";
 	public static inline var RECUSADAS_KEY = "Recusadas";
 	public static inline var ACEITA_KEY = "Aceitas";
 
@@ -76,7 +77,7 @@ class SummaryRoutes extends AccessControl
 				ORDER BY s.user_id, s.`group`, date_end
 		');
 
-		var header = [DATE_KEY, SUP_KEY, CT_KEY, SUPER_KEY, COMPLETA_KEY, RECUSADAS_KEY, ACEITA_KEY];
+		var header = [DATE_KEY, SUP_KEY, CT_KEY, SUPER_KEY, COMPLETA_KEY,PENDENTE_KEY, RECUSADAS_KEY, ACEITA_KEY];
 		for (r in resultsQuery)
 		{
 			if (r.date_end == null)
@@ -104,6 +105,7 @@ class SummaryRoutes extends AccessControl
 						curDateHash.set(CT_KEY, curDateHash.get(CT_KEY).getVal() + r.pesqGrupo);
 					curDateHash.set(SUP_KEY,curDateHash.get(SUP_KEY).getVal() +  r.pesqGrupo);
 					curDateHash.set(SUPER_KEY, curDateHash.get(SUPER_KEY).getVal() + r.pesqGrupo);
+					curDateHash.set(PENDENTE_KEY, curDateHash.get(PENDENTE_KEY).getVal() + r.pesqGrupo);
 				case PesqStatus.Completa:
 					curDateHash.set(COMPLETA_KEY, curDateHash.get(COMPLETA_KEY).getVal() + r.pesqGrupo);
 					if (r.nullCT == r.pesqGrupo)
@@ -145,7 +147,7 @@ class SummaryRoutes extends AccessControl
 		var userCheck = statusGen();
 
 		var dateVal : Map<String,Map<String,Int>> = new Map();
-		var headers = [DATE_KEY, SUP_KEY, CT_KEY, SUPER_KEY, COMPLETA_KEY, ACEITA_KEY, RECUSADAS_KEY];
+		var headers = [DATE_KEY, SUP_KEY, CT_KEY, SUPER_KEY, COMPLETA_KEY,PENDENTE_KEY, ACEITA_KEY, RECUSADAS_KEY];
 		// TODO make compatible with mysql
 		var queryDay = Context.db.request('
 				SELECT
@@ -183,7 +185,6 @@ class SummaryRoutes extends AccessControl
 					dateMap.set(SUP_KEY, dateMap.get(SUP_KEY).getVal() + q.pesqGrupo);
 					dateMap.set(SUPER_KEY, dateMap.get(SUPER_KEY).getVal() + q.pesqGrupo);
 				case PesqStatus.Completa:
-					dateMap.set(COMPLETA_KEY, dateMap.get(COMPLETA_KEY).getVal() + q.pesqGrupo);
 					dateMap.set(SUP_KEY, dateMap.get(SUP_KEY).getVal() + q.pesqGrupo);
 					dateMap.set(CT_KEY, dateMap.get(CT_KEY).getVal() + q.pesqGrupo);
 					dateMap.set(SUPER_KEY, dateMap.get(SUPER_KEY).getVal() + q.pesqGrupo);
@@ -192,7 +193,7 @@ class SummaryRoutes extends AccessControl
 			}
 
 			dateVal.set(q.date_end, dateMap);
-		}
+		}		
 
 		// TODO make compatible with mysql
 		var queryHistoric = Context.db.request("
@@ -210,6 +211,7 @@ class SummaryRoutes extends AccessControl
 					AND s.syncTimestamp = us.syncTimestamp "+((wherestr != "") ? wherestr : "")+"
 				GROUP BY s.user_id, s.`group`, date_end
 				ORDER BY s.user_id, s.`group`, date_end");
+		//trace(queryHistoric);
 		for (q in queryHistoric)
 		{
 			if (q.date_end == null)
@@ -226,8 +228,10 @@ class SummaryRoutes extends AccessControl
 					dateMap.set(ACEITA_KEY, dateMap.get(ACEITA_KEY).getVal() + q.pesqGrupo);
 				case PesqStatus.Recusada:
 					dateMap.set(RECUSADAS_KEY, dateMap.get(RECUSADAS_KEY).getVal() + q.pesqGrupo);
-				case PesqStatus.Pendente, PesqStatus.Completa:
-					continue;
+				case PesqStatus.Pendente:
+					dateMap.set(PENDENTE_KEY, dateMap.get(PENDENTE_KEY).getVal() + q.pesqGrupo);
+				case PesqStatus.Completa:
+					dateMap.set(COMPLETA_KEY, dateMap.get(COMPLETA_KEY).getVal() + q.pesqGrupo);
 			}
 
 			dateVal.set(q.date_end, dateMap);
