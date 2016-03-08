@@ -9,7 +9,7 @@ import sapo.spod.Ticket;
 import sapo.spod.User;
 
 class TicketRoutes extends AccessControl {
-	public static inline var PAGE_SIZE = 10;
+	public static inline var PAGE_SIZE = 20;
 	public static inline var PARAM_ALL = "all";
 	public static inline var PARAM_GROUP = "group";
 	public static inline var PARAM_INDIVIDUAL = "individual";
