@@ -40,6 +40,13 @@ function imprimir() {
 }
 </style>
 
+<!-- MODO -->
+<style type="text/css">
+.modo {
+	margin-left: 49px;
+}
+</style>
+
 </head>
 <body>
 
@@ -57,17 +64,17 @@ function imprimir() {
 			<div class="col-md-2"><h5>IMPRESSÃO</h5>
 				<a class="btn btn-default btn-sm" onclick="imprimir()">Imprimir</a>
 			</div>
-			<div class="col-md-2 col-md-offset-1"><h5>TICKET</h5>
+			<div class="col-md-2 col-md-offset-2"><h5>TICKET</h5>
 				<a class="btn btn-default btn-sm" data-toggle="modal" data-target="#pesquisa_ticket">Abrir</a>
 			</div>
 			<div class="col-md-2"><h5>&nbsp;</h5>
 				<a href="/tickets?survey=(:survey.id:)" class="btn btn-default btn-sm">Ver</a>
 			</div>
-			<div class="col-md-2 col-md-offset-1"><h5>CORREÇÃO</h5>
+			<!--div class="col-md-2 col-md-offset-1"><h5>CORREÇÃO</h5>
 				<a type="button" class="btn btn-danger btn-sm" id="corrigir">Corrigir</a>
-			</div>
-			<div class="col-md-2"><h5>STATUS</h5>
-				<a type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#pesquisa_status">Mudar Status</a>
+			</div-->
+			<div class="col-md-2 col-md-offset-2"><h5>CONFERÊNCIA</h5>
+				<a type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#pesquisa_status">Conferir</a>
 			</div>
 		</div>
 	</div>
@@ -77,98 +84,118 @@ function imprimir() {
 		<div class="row">
 			<div class="col-md-12">
 				<h3><span class="glyphicon glyphicon-file" aria-hidden="true"></span> INFORMAÇÕES DA PESQUISA</h3>
-				<div class="bloco"><b>Grupo amostral:</b> (: survey.macrozona :), (: survey.zona :), (: survey.estratoSocioEconomico :) </div>
-				<div class="bloco"><b>1ºVisita:</b> (: survey.date_started :)</div>
-				<div class="bloco"><b>Completada:</b> (: survey.date_completed :)</div>
-				<div class="bloco"><b>Senha: </b> <span class="pin">(: survey.pin :) </span></div>
-				<div class="bloco"><b class="PSurveyor">Pesquisador:</b> (: user.name :)</div>
+				<div class="bloco"><b>Lote:</b> (: survey.lote :) </div>
+				<div class="bloco"><b class="PSurveyor">Pesquisador:</b> (: user.name :) </div>
 				<div class="bloco"><b class="PSupervisor">Supervisor:</b> (: user.supervisor.name :)</div>
-				<div class="bloco"><b>Lote:</b>  (: survey.lote :) </div>
+				<div class="bloco"><b>1º Visita:</b> (: survey.date_started :)</div>
+				<div class="bloco"><b>Completada:</b> (: survey.date_completed :)</div>
 				<div class="bloco"><b>Contato:</b> (: dom.nomeContato :) ((: dom.telefoneContato :))</div>
+				<div class="bloco"><b>Senha: </b> <span class="pin">(: survey.pin :) </span></div>
+				
 				(: if  survey.codigoFormularioPapel != null :)
-				<div class="bloco"><b>Preenchida em papel:</b> Iniciada em:(: survey.dataInicioPesquisaPapel :) , terminada em:(: survey.dataFimPesquisaPapel :) Formulário No.:(: survey.codigoFormularioPapel :)</div>
+				<div class="bloco"><b>Pesquisa feita em papel:</b> (: survey.codigoFormularioPapel :) ((: survey.dataInicioPesquisaPapel :) / (: survey.dataFimPesquisaPapel :))</div>
 				(: end :)
 			</div>
 		</div>
 		<hr />
 
 		<!-- BODY - OCORRÊNCIAS  ONLY IF THERE ARE ANY -->
-	(: var ocur = Ocorrencias.manager.select($survey == survey) :) (:*FIXME syncTimestamp*:) 
-	(: if ocur != null :)
-		<div class="row">
-			<div class="col-md-12">
-				<h3><span class="glyphicon glyphicon-file" aria-hidden="true"></span> OCORRÊNCIAS </h3>
-				<div class="bloco"> (: ocur.desc :) </div>
+		(: var ocur = Ocorrencias.manager.select($survey == survey) :) (:*FIXME syncTimestamp*:) 
+		(: if ocur != null :)
+			<div class="row">
+				<div class="col-md-12">
+					<h3><span class="glyphicon glyphicon-alert" aria-hidden="true"></span> OCORRÊNCIAS </h3>
+					<div class="bloco"> (: ocur.desc :) </div>
+				</div>
 			</div>
-		</div>
-		<hr /> 
-	(: end :)
+			<hr />
+		(: end :)
 
 		<!-- BODY - DOMICÍLIO -->
 		<div class="row">
 			<div class="col-md-12">
-				<h3><span class="glyphicon glyphicon-home" aria-hidden="true"></span> DOMICÍLIO / FAMÍLIA ( (: dom.numeroResidentes :) moradores )</h3>
-				<div class="bloco"><b>Endereço:</b> (: survey.logradouro :) , (: survey.numero :) (: survey.complemento :), (: survey.bairro :) - (: survey.municipio :) - (: survey.cep :)</div>
-				<div class="bloco"><b>Domicílio:</b> (:  Util.enumText(dom.ocupacaoDomicilio) :) ( (: Util.enumText(dom.condicaoMoradia) :) ), (: if dom.ruaPavimentada_id :) rua pavimentada (: else if dom.ruaPavimentada_id == false :) (: else :) (: end :)</div>
-				<div class="bloco"><b>Imóvel:</b> (: Util.enumText(dom.tipoImovel) :) com (: dom.quartos :) quartos, (: dom.banheiros :) banheiros, (: Util.enumText(dom.aguaEncanada) :)</div>
-				<div class="bloco"><b>Mobilidade:</b> (: dom.veiculos :) veículos ((: Util.enumText(dom.anoVeiculoMaisRecente) :)), (: dom.motos :) motos, (: dom.bicicletas :) bicicletas.</div>
-				<div class="bloco"><b>Vaga Própria Estacacionamento :</b> (: if dom.vagaPropriaEstacionamento_id :) Sim (: else if dom.vagaPropriaEstacionamento_id == false :) Não (: else :) Não Respondeu (: end :)</div>
-				<div class="bloco"><b>Renda:</b> (: Util.enumText(dom.rendaDomiciliar) :), (: Util.enumText(dom.empregadosDomesticos) :) empregado(s) domestíco(s) (: if dom.recebeBolsaFamilia :), recebe bolsa família(: else if dom.recebeBolsaFamilia == false :).(: else :), não Respondeu se recebe bolsa família(: end :)(: if dom.tvCabo_id :), possui TV a cabo (: else if dom.tvCabo_id == false :).(: else :), não respondeu se possui TV a cabo(: end :)</div>
-				<!-- FIM DO BLOCK -->
+				<h3><span class="glyphicon glyphicon-home" aria-hidden="true"></span> DOMICÍLIO: (: dom.numeroResidentes :) morador(es)</h3>
+				<div class="bloco"><b>Estrato:</b> (:* survey.estrato *:) </div>
+				<div class="bloco"><b>Endereço:</b> (: survey.logradouro :) , (: survey.numero :) (: survey.complemento :), (: survey.bairro :)</div>
+				<div class="bloco"><b>Domicílio:</b> (: Util.enumText(dom.ocupacaoDomicilio) :) ((: Util.enumText(dom.condicaoMoradia) :))(: if dom.aguaEncanada != null :), (: Util.enumText(dom.aguaEncanada) :)(: end :) (: if dom.ruaPavimentada_id :), rua pavimentada (: end :)</div>
+				<div class="bloco">
+					<b>Imóvel:</b>
+					(: Util.enumText(dom.tipoImovel) :) com (: dom.quartos :) quarto(s), (: dom.banheiros :) banheiro(s)
+					(: if dom.tvCabo_id :), possui TV a cabo (: else if dom.tvCabo_id == null :), não respondeu se possui TV a cabo(: end :)
+					(: if dom.empregadosDomesticos == null :), (: Util.enumText(dom.empregadosDomesticos) :) empregado(s) domestíco(s)(:end:)
+				</div>
+				<div class="bloco"><b>Mobilidade:</b> (: dom.veiculos :) veículo(s)(: if dom.anoVeiculoMaisRecente != null :) ((: Util.enumText(dom.anoVeiculoMaisRecente) :))(: end :), (: dom.motos :) moto(s), (: dom.bicicletas :) bicicleta(s)
+				(: if dom.vagaPropriaEstacionamento_id :) possui vaga própria para estacionamento (: else if dom.vagaPropriaEstacionamento_id == false :), não possui vaga própria para estacionamento (: else :) (: end :)</div>
+				<div class="bloco"><b>Renda:</b> (: Util.enumText(dom.rendaDomiciliar) :)(: if dom.recebeBolsaFamilia :), recebe bolsa família(: else if dom.recebeBolsaFamilia == null :), não respondeu se recebe bolsa família(: end :)</div>
 			</div>
 		</div>
 		<hr />
-
 		(: for m in sapo.spod.Survey.Morador.manager.search($survey_id == survey.id && $familia == dom )  :)
 		<!-- BODY - MORADOR : UM BLOCO DESSES POR MORADOR -->
 		<div class="row">
 			<div class="col-md-12">
-				<h3><span class="glyphicon glyphicon-user" aria-hidden="true"></span> MORADOR / (:m.nomeMorador :) ((: Util.enumText(m.idade) :) anos) - (: if m.genero_id == 1 :) Feminino (: else :) Masculino (: end :) (: if m.proprioMorador_id :) (: else :) [Respondida por terceiro] (: end :) (: if m.quemResponde != null :) (: m.quemResponde.nomeMorador :) (: else :) - (: end :)</h3>
-				<div class="bloco"><b>Situação Familiar:</b> (: Util.enumText(m.situacaoFamiliar) :)</div>
-				<div class="bloco"><b>Atividade:</b> (: Util.enumText(m.atividadeMorador) :) ( (: Util.enumText(m.setorAtividadeEmpresaPrivada) :) (: Util.enumText(m.setorAtividadeEmpresaPublica) :))</div>
-				<div class="bloco"><b>Grau de instrução:</b> (:  Util.enumText(m.grauInstrucao) :) </div>
-				<div class="bloco"><b>Necessidades Especiais:</b> (:  Util.enumText(m.portadorNecessidadesEspeciais) :) </div>
-				<div class="bloco"><b>Possui Habilitação?</b> (: if m.possuiHabilitacao_id :) Sim (: else if m.possuiHabilitacao_id == false :) Não (: else :) Não Respondeu (: end :)</div>
-				
-				<!-- FIM DO BLOCK -->
-
-				<hr />
-				(: for p in sapo.spod.Survey.Ponto.manager.search($survey == survey && $morador == m) :)
-				<!-- VIAGEM -->
-				<div class="viagem">
-					<p><b>Sem viagem (motivo):</b> (: Util.enumText(m.motivoSemViagem) :)</p>
-					<!-- PONTO -->
-					<p>
-						<a href="#" class="corrigir escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
-						<b><span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Ponto (: p.ordem :) ((: Util.enumText(p.motivo) :), (: Util.enumText(p.motivoOutraPessoa) :) [(: if p.isPontoProx :) Sim (: else if p.isPontoProx == false :) Não (: else :) - (: end :) **)]):</b> 
-						( (: p.uf.desc :) - (: p.city_id :) - (: p.regadm_id :) ) (: p.street_id :) (: p.complement_id :) (: p.complement_two_id :) (: p.complement2_str :) - (: if p.ref != null :) (: p.ref.desc :) (: else :) - (: end :) - (: p.ref_str :)
-					</p>
-					<!-- SAÍDA -->
-					<p>
-						<a href="#" class="corrigir escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
-						<b><span class="glyphicon glyphicon-time" aria-hidden="true"></span> Saída:</b> (: p.tempo_saida :)
-					</p>
-					<!-- MODO-->
-					(: for modo in sapo.spod.Modo.manager.search($firstpoint == p && $morador == m && $survey == survey) :)
-					<p>
-						<a href="#" class="corrigir escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
-						<b><span class="glyphicon glyphicon-transfer" aria-hidden="true"></span> Modo ( (: Util.enumText(modo.meiotransporte) :) ):</b>
-						<!-- if ônibus -->
-						<!--Linha de Ônibus --> (: if modo.linhaOnibus != null :) (: modo.linhaOnibus.desc :) (: else :) - (: end :)
-						<!--Estação de Embarque --> (: if modo.estacaoEmbarque != null :) (: modo.estacaoEmbarque.desc :) (: else :) - (: end :)
-						<!--Estação de Desembarque --> (: if modo.estacaoDesembarque != null :) (: modo.estacaoDesembarque.desc :) (: else :) - (: end :)
-						<!--Forma de Pagamento --> (: Util.enumText(modo.formaPagamento) :)
-						<!--Tipo Estacionamento --> (: Util.enumText(modo.tipoEstacionamento) :)
-						<!--Valor da Viagem --> (: modo.valorViagem :)
-						<!--Não Sabe --> (: if modo.naoSabe :) Sim (: else :) Não (: end :)
-						<!--Não Respondeu --> (: if modo.naoRespondeu :) Sim (: else :) Não (: end :)
-					</p>
-					(: end :)
-					<!-- CHEGADA -->
-					<p>
-						<b><span class="glyphicon glyphicon-time" aria-hidden="true"></span> Chegada:</b> (: p.tempo_chegada :)
-					</p>
+				<h3><span class="glyphicon glyphicon-user" aria-hidden="true"></span> MORADOR: (: Util.enumText(m.situacaoFamiliar) :) - (: m.nomeMorador :) ((: Util.enumText(m.idade) :) anos) - (: if m.genero_id == 1 :) Feminino (: else :) Masculino (: end :) (: if m.proprioMorador_id :) (: else :) [Respondida por terceiro ((: end :) (: if m.quemResponde != null :)(: m.quemResponde.nomeMorador :))(: else :) (: end :)</h3>
+				<div class="bloco">
+					<b>Atividade:</b>
+					(: Util.enumText(m.atividadeMorador) :)
+					(: if m.setorAtividadeEmpresaPrivada != null :)((: Util.enumText(m.setorAtividadeEmpresaPrivada) :))(: end :)
+					(: if m.setorAtividadeEmpresaPublica != null :)((: Util.enumText(m.setorAtividadeEmpresaPublica) :))(: end :)
 				</div>
+				<div class="bloco"><b>Grau de instrução:</b> (:  Util.enumText(m.grauInstrucao) :)</div>
+				<div class="bloco"><b>Necessidades Especiais:</b> (:  Util.enumText(m.portadorNecessidadesEspeciais) :)</div>
+				<div class="bloco"><b>Habilitação?</b> (: if m.possuiHabilitacao_id :) Possui (: else if m.possuiHabilitacao_id == false :) Não Possui (: else :) Não Respondeu (: end :)</div>
+				<hr />
+				(: do var pontos =  sapo.spod.Survey.Ponto.manager.search($survey == survey && $morador == m) :)
+				(: if pontos.length == 0 :)
+					<div class="viagem">
+						<p><b>Sem viagem (motivo):</b> (: Util.enumText(m.motivoSemViagem) :)</p>
+					</div>
+				(: else :)
+					(: for p in pontos :)
+					<!-- VIAGEM -->
+					<div class="viagem">
+						<!-- PONTO -->
+						<p>
+							<a href="#" class="corrigir escondido"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+							<b><span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Ponto (: p.ordem :) ((: Util.enumText(p.motivo) :)(: if p.isPontoProx :), [Ponto Próximo](: end :)):</b> 
+							(: if p.motivoOutraPessoa != null :)(Motivo da outra pessoa: (: Util.enumText(p.motivoOutraPessoa) :))(: end :)
+							((: p.uf.desc :)
+							(: if p.city_id != null :) - (: p.city_id :)(: end :)
+							(: if p.regadm_id != null :) - (: p.regadm_id :)(: end :))
+							(: if p.street_id != null :) - (: p.street_id :)(: end :)
+							(: if p.complement_id != null :) - (: p.complement_id :)(: end :)
+							(: if p.complement_two_id != null :) - (: p.complement_two_id :)(: end :)
+							(: if p.complement2_str != null :) - (: p.complement2_str :)(: end :)
+							(: if p.ref != null :) - (: p.ref.desc :)(: end :)
+							(: if p.ref_str != null :) - (: p.ref_str :)(: end :)
+						</p>
+						<!-- SAÍDA -->
+						<p><b><span class="glyphicon glyphicon-time" aria-hidden="true"></span> Saída:</b> (: p.tempo_saida :)</p>
+						<!-- MODO-->
+						(: for modo in sapo.spod.Modo.manager.search($firstpoint == p && $morador == m && $survey == survey) :)
+						<p class="modo">
+							<b><span class="glyphicon glyphicon-transfer" aria-hidden="true"></span> Modo ((: Util.enumText(modo.meiotransporte):)):</b>
+							<!--Linha de Ônibus --> 
+							(: if modo.linhaOnibus != null :) (: modo.linhaOnibus.desc :) (: end :)
+							<!--Estação de Embarque --> 
+							(: if modo.estacaoEmbarque != null :) (: modo.estacaoEmbarque.desc :) (: end :)
+							<!--Estação de Desembarque --> 
+							(: if modo.estacaoDesembarque != null :) - (: modo.estacaoDesembarque.desc :) (: end :)
+							<!--Forma de Pagamento --> 
+							(: if modo.formaPagamento != null :) - (: Util.enumText(modo.formaPagamento) :) (: end :)
+							<!--Valor da Viagem --> 
+							(: if modo.valorViagem != null :) R$ (: modo.valorViagem :) (: end :)
+							<!--Tipo Estacionamento --> 
+							(: if modo.tipoEstacionamento != null :) - (: Util.enumText(modo.tipoEstacionamento) :) (: end :)
+						</p>
+						(: end :)
+						<!-- CHEGADA -->
+						<p>
+							
+							<b><span class="glyphicon glyphicon-time" aria-hidden="true"></span> Chegada:</b> (: p.tempo_chegada :)
+						</p>
+					</div>
+					(: end :)
 				(: end :)
 				<!-- FIM VIAGEM -->
 
