@@ -15,7 +15,7 @@
 	(:var u = User.manager.select($id == payment.user_id):)
 	<td>(: u.name :)</td>
 	<td><a href="/survey/(: payment.id :)">(: payment.id :)</a></td>
-	<td class"tags">(: Util.status(payment.isPhoned, payment.paid, payment.checkSV, payment.checkCT,payment.checkCQ) :)</td>
+	<td class"tags" style="text-align: right;">(: Util.status(payment.isPhoned, payment.paid, payment.checkSV, payment.checkCT,payment.checkCQ) :)</td>
 	<td>(: payment.date_completed :)</td>
 	<td>(: payment.paid? payment.paymentRef : "" :)</td>
 	<td>(: payment.paid? payment.date_paid : "" :)</td>
@@ -94,7 +94,7 @@
 </html>
 (: end :)
 
-(: static function superPage(?surveys:List<Survey>) :)
+(: static function superPage(?surveys:List<Survey>,?params:{ ?surveyor:User,?status:SurveyStatus, ?paid:Bool, ?page:Int }, ?showPrev:Bool = false, ?showNext:Bool = false) :)
 <!DOCTYPE html>
 <html>
 <head>
@@ -110,11 +110,11 @@
 			<li class="active">PAGAMENTOS</li>
 		</ol>
 		<div class="row">
-			<form method="get">
+			<form method="get" action="/payments">
 				<!-- FILTROS -->
 				<div class="col-md-2"><h5>PESQUISADOR:</h5>
 					<select name="surveyor"  class="form-control input-sm" >
-						<option value =0 >Todos</option>
+						<option value ="" >Todos</option>
 						(:for u in User.manager.search($group_id== Group.manager.select($privilege==PSurveyor).id) :)
 							<option value=(:u.id:) >(:u.name:)</option>
 						(: end :)
@@ -127,11 +127,12 @@
 					</select>
 				</div>
 				<div class="col-md-2"><h5>STATUS</h5>
-					<select class="form-control input-sm"name="state" >
-						<option>Abertas</option>
-						<option>Completas</option>
-						<option>Verificadas</option>
-						<option>Aceitas</option>
+					<select class="form-control input-sm"name="status" >
+						<option value= "(:SSAll:)" >Todas</option>
+						<option value= "(:SSAccepted:)" >Aceitas</option>
+						<option value= "(:SSPending:)" >Pendente</option>
+						<option value= "(:SSRefused:)" >Recusada</option>
+						<option value= "(:SSCompleted:)" >Completas</option>
 					</select>
 				</div>
 				<div class="col-md-1"><h5>&nbsp;</h5>
@@ -234,8 +235,12 @@
 		
 		<nav>
 			<ul class="pager mt30">
-				<li class="previous"><a href="#">ANTERIOR</a></li>
-				<li class="next"><a href="#">PRÓXIMA</a></li>
+			(:if showPrev:)
+				<li class="previous"><a href="payments?user=(: params.surveyor == null? "" : params.surveyor :)&page=(:params.page-1:)&paid=(:params.paid == null? "" : params.paid:)&status=(:params.status == null? "" : params.status:)"><span aria-hidden="true">&larr;</span> ANTERIOR</a></li>
+			(:end:)
+			(:if showNext:)
+				<li class="next"><a href="payments?user=(: params.surveyor == null? "" : params.surveyor :)&page=(:params.page+1:)&paid=(:params.paid == null? "" : params.paid:)&status=(:params.status == null? "" : params.status:)">PRÓXIMA <span aria-hidden="true">&rarr;</span></a></li>
+			(:end:)
 			</ul>
 		</nav>
 		

@@ -14,6 +14,8 @@ class SurveyRoutes extends AccessControl {
 		//default values
 		args.page = args.page == null?0:args.page;
 		args.order = args.order == null?"cres":args.order;
+		args.status = args.status == null? SSAll : args.status;
+		
 		var surveys = new List<Survey>(); 
 		var users;
 		
@@ -33,8 +35,10 @@ class SurveyRoutes extends AccessControl {
 			users = Lambda.array(User.manager.search($group == group)).map(function (i) return i.id);
 		}
 		
-		/*//switch survey status
-		switch args.status 
+		//switch survey status
+		if (args.order == "cres")
+		{
+			switch args.status 
 			{
 				//all checks true
 				case SSAccepted:
@@ -57,8 +61,8 @@ class SurveyRoutes extends AccessControl {
 				{
 					surveys = Survey.manager.search(
 						($user_id in users) && 
-						(!$checkSV || !$checkCT || !$checkCQ) &&
-						!(!$checkSV && !$checkCT && !$checkCQ)
+						($checkSV==false || $checkCT==false || $checkCQ==false) &&
+						($checkSV==false && $checkCT==false && $checkCQ==false) == false
 						,{ orderBy : date_completed, limit : [elementsPerPage * args.page, elementsPerPage+1 ] } );
 				};
 				//any check not false && all checks not true
@@ -66,8 +70,9 @@ class SurveyRoutes extends AccessControl {
 				{
 					surveys = Survey.manager.search(
 						($user_id in users) && 
-						!(!$checkSV || !$checkCT || !$checkCQ) &&
-						!($checkSV && $checkCT && $checkCQ)
+						($checkSV != false || $checkSV == null) &&
+						($checkCT != false || $checkCT == null) &&
+						($checkCQ != false || $checkCQ == null)
 						,{ orderBy : date_completed, limit : [elementsPerPage * args.page, elementsPerPage+1 ] } );
 				};
 				//all
@@ -77,16 +82,66 @@ class SurveyRoutes extends AccessControl {
 						($user_id in users)
 						,{ orderBy : date_completed, limit : [elementsPerPage * args.page, elementsPerPage+1 ] } );
 				};
-			}*/
+			}
+		}
+		else
+		{
+			switch args.status 
+			{
+				//all checks true
+				case SSAccepted:
+				{
+					surveys = Survey.manager.search(
+						($user_id in users) && 
+						($checkSV && $checkCT && $checkCQ)
+						,{ orderBy : -date_completed, limit : [elementsPerPage * args.page, elementsPerPage+1 ] } );
+				};
+				//all checks false
+				case SSRefused:
+				{
+					surveys = Survey.manager.search(
+						($user_id in users) && 
+						($checkSV == false && $checkCT == false && $checkCQ == false)
+						,{ orderBy : -date_completed, limit : [elementsPerPage * args.page, elementsPerPage+1 ] } );
+				};
+				//any check false && all checks not false
+				case SSPending:
+				{
+					surveys = Survey.manager.search(
+						($user_id in users) && 
+						($checkSV==false || $checkCT==false || $checkCQ==false) &&
+						($checkSV==false && $checkCT==false && $checkCQ==false) == false
+						,{ orderBy : -date_completed, limit : [elementsPerPage * args.page, elementsPerPage+1 ] } );
+				};
+				//any check not false && all checks not true
+				case SSCompleted:
+				{
+					surveys = Survey.manager.search(
+						($user_id in users) && 
+						($checkSV != false || $checkSV == null) &&
+						($checkCT != false || $checkCT == null) &&
+						($checkCQ != false || $checkCQ == null)
+						,{ orderBy : -date_completed, limit : [elementsPerPage * args.page, elementsPerPage+1 ] } );
+				};
+				//all
+				case SSAll:
+				{
+					surveys = Survey.manager.search(
+						($user_id in users)
+						,{ orderBy : -date_completed, limit : [elementsPerPage * args.page, elementsPerPage+1 ] } );
+				};
+			}
+		}
+		
 		//all
-		if(args.order == "cres")
+		/*if(args.order == "cres")
 			surveys = Survey.manager.search(
 				($user_id in users)
 				,{ orderBy : date_completed, limit : [elementsPerPage * args.page, elementsPerPage+1 ] } );
 		else
 			surveys = Survey.manager.search(
 				($user_id in users)
-				,{ orderBy : -date_completed, limit : [elementsPerPage * args.page, elementsPerPage+1 ] } );
+				,{ orderBy : -date_completed, limit : [elementsPerPage * args.page, elementsPerPage+1 ] } );*/
 		//pagination		
 		var showPrev = args.page == 0?false:true;
 		var showNext = false;

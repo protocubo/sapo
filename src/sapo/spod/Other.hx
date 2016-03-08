@@ -4,16 +4,6 @@ import common.db.MoreTypes;
 import sapo.spod.User;
 import sys.db.Types;
 
-enum SurveyStatus {
-	SOpen;
-	sClosed;
-	Sverified;
-	SCT;
-	SAccepted;
-	SRejected;
-	SSubJudice;
-}
-
 enum TicketStatus {
 	TOpen;
 	TClosed;

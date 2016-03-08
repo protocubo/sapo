@@ -47,9 +47,8 @@
 					<!-- HEAD -->
 					(:* <th>Usuário</th> *:)
 					<th width="20%">Nome</th>
-					<th width="20%">Grupo</th>
+					<th width="25%">Grupo</th>
 					<th>E-mail</th>
-					<th width="20%">Supervisor</th>
 					<th width="40px"></th>
 					<th width="40px"></th>
 				</tr>
@@ -59,11 +58,10 @@
 				(: for user in users :)
 				<tr>
 					(:* <td><b class="PSurveyor">(:user.name:)@</b></td> *:)
-					<td><b class="(:user.group.privilege:)">(:user.name:)</b></td>
-					<td><b class="(:user.group.privilege:)">(:user.group.name:)</b></td>
+					<td><span class="(:user.group.privilege:)">(:user.name:)</span></td>
+					<td><span class="(:user.group.privilege:)">(:user.group.name:) (:if user.supervisor != null:)<span class="(:user.supervisor.group.privilege:)">((:user.supervisor.name:))</span>(:end:)</span></td>
 					<td>(:user.email:)</td>
 
-					<td>(:if user.supervisor != null:)<b class="(:user.supervisor.group.privilege:)">(:user.supervisor.name:)</b>(:end:)</td>
 					(: if user.deactivated_at == null :)
 					<td>
 						<button type="button" class="btn btn-warning btn-xs" aria-label="Editar" style="width:auto;" data-toggle="modal" data-target="#cadastro(:user.id:)_editar">
@@ -114,16 +112,16 @@
 				<form action="/registration/add" method="post">
 					<div class="modal-body">
 						<div class="row">
-							<div class="col-md-2"><h4>Nome:</h4></div>
-							<div class="col-md-10"><input type="text" name="name" class="form-control"></div>
+							<div class="col-md-2 col-md-offset-2"><h4>Nome:</h4></div>
+							<div class="col-md-6"><input type="text" name="name" class="form-control"></div>
 						</div>
 						<div class="row">
-							<div class="col-md-2"><h4>E-mail:</h4></div>
-							<div class="col-md-10"><input type="email" name="email" class="form-control"></div>
+							<div class="col-md-2 col-md-offset-2"><h4>E-mail:</h4></div>
+							<div class="col-md-6"><input type="email" name="email" class="form-control"></div>
 						</div>
 							<div class="row">
-								<div class="col-md-2"><h4>Grupo:</h4></div>
-								<div class="col-md-10">
+								<div class="col-md-2 col-md-offset-2"><h4>Grupo:</h4></div>
+								<div class="col-md-6">
 									<select class="form-control" id="groupFieldAdd" name="group" onchange="disableSupervisorField('groupFieldAdd','supervisorFieldAdd')">
 										(: for g in Group.manager.all() :)
 											(:if g.privilege != PSuperUser :)
@@ -134,8 +132,8 @@
 								</div>
 							</div>
 							<div class="row" id="supervisorFieldAdd">
-								<div class="col-md-2"><h4>Supervisor:</h4></div>
-								<div class="col-md-10">
+								<div class="col-md-2 col-md-offset-2"><h4>Supervisor:</h4></div>
+								<div class="col-md-6">
 									<select class="form-control"  name="supervisor">
 										(: for s in User.manager.search($group_id== Group.manager.select($privilege==PSupervisor).id ) :)
 											<option value=(:s.id:)>(:s.name:)</option>
@@ -146,8 +144,8 @@
 					</div>
 					<div class="modal-footer">
 						<div class="row">
-							<div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
-							<div class="col-md-6"><button type="submit" value="submit" class="btn btn-success">ADICIONAR</button></div>
+							<div class="col-md-4"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
+							<div class="col-md-4 col-md-offset-4"><button type="submit" value="submit" class="btn btn-success">ADICIONAR</button></div>
 						</div>
 					</div>
 				</form>
