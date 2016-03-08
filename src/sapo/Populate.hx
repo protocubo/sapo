@@ -89,16 +89,6 @@ class Populate {
 				phoneOperators : [judite], superUsers : [arthur, ford] };
 	}
 
-	/*static function makeFakeSurveys(g : Groups, u:Users)
-	{
-		var survey1 = makeSurvey(g,u,  //new NewSurvey(u.surveyors[0], "Arthur's house", 945634);
-		var survey2 = new NewSurvey(u.surveyors[1], "Betelgeuse, or somewhere near that planet", 6352344);
-		survey1.insert();
-		survey2.insert();
-		var surveyCol = [survey1, survey2];
-		return surveyCol;
-	}*/
-
 	static function makeSurvey(groups:Groups, users:Users, magic:Int, it:Int)
 	{
 		var s = new Survey();
