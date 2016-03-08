@@ -115,7 +115,7 @@ function imprimir() {
 		<div class="row">
 			<div class="col-md-12">
 				<h3><span class="glyphicon glyphicon-home" aria-hidden="true"></span> DOMICÍLIO: (: dom.numeroResidentes :) morador(es)</h3>
-				<div class="bloco"><b>Estrato:</b> (:* survey.estrato *:) </div>
+				<div class="bloco"><b>Estrato:</b> (: survey.estrato :) </div>
 				<div class="bloco"><b>Endereço:</b> (: survey.logradouro :) , (: survey.numero :) (: survey.complemento :), (: survey.bairro :)</div>
 				<div class="bloco"><b>Domicílio:</b> (: Util.enumText(dom.ocupacaoDomicilio) :) ((: Util.enumText(dom.condicaoMoradia) :))(: if dom.aguaEncanada != null :), (: Util.enumText(dom.aguaEncanada) :)(: end :) (: if dom.ruaPavimentada_id :), rua pavimentada (: end :)</div>
 				<div class="bloco">
@@ -145,7 +145,7 @@ function imprimir() {
 				<div class="bloco"><b>Necessidades Especiais:</b> (:  Util.enumText(m.portadorNecessidadesEspeciais) :)</div>
 				<div class="bloco"><b>Habilitação?</b> (: if m.possuiHabilitacao_id :) Possui (: else if m.possuiHabilitacao_id == false :) Não Possui (: else :) Não Respondeu (: end :)</div>
 				<hr />
-				(: do var pontos =  sapo.spod.Survey.Ponto.manager.search($survey == survey && $morador == m) :)
+				(: do var pontos =  sapo.spod.Survey.Ponto.manager.search($survey == survey && $morador == m, {orderBy : ordem}) :)
 				(: if pontos.length == 0 :)
 					<div class="viagem">
 						<p><b>Sem viagem (motivo):</b> (: Util.enumText(m.motivoSemViagem) :)</p>
@@ -172,11 +172,11 @@ function imprimir() {
 						<!-- SAÍDA -->
 						<p><b><span class="glyphicon glyphicon-time" aria-hidden="true"></span> Saída:</b> (: p.tempo_saida :)</p>
 						<!-- MODO-->
-						(: for modo in sapo.spod.Modo.manager.search($firstpoint == p && $morador == m && $survey == survey) :)
+						(: for modo in sapo.spod.Modo.manager.search($firstpoint == p && $morador == m && $survey == survey, {orderBy : ordem}) :)
 						<p class="modo">
 							<b><span class="glyphicon glyphicon-transfer" aria-hidden="true"></span> Modo ((: Util.enumText(modo.meiotransporte):)):</b>
 							<!--Linha de Ônibus --> 
-							(: if modo.linhaOnibus != null :) (: modo.linhaOnibus.desc :) (: end :)
+							(: if modo.linhaOnibus != null :) (: modo.linhaOnibus.desc :) (: else if modo.linhaOnibus_str != null :) (: modo.linhaOnibus_str :) (: end :)
 							<!--Estação de Embarque --> 
 							(: if modo.estacaoEmbarque != null :) (: modo.estacaoEmbarque.desc :) (: end :)
 							<!--Estação de Desembarque --> 

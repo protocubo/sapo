@@ -105,8 +105,7 @@ class Populate {
 		s.logradouro = "Rua GWD";
 		s.numero = "5000";
 		s.lote = "Lote 123";
-		s.macrozona = "Macro 5000";
-		s.municipio = "Brasília";
+		s.estrato = " Estrato Logit " + it;
 		s.old_survey_id = it;
 		s.pin = "ASD-Qer3-qwee";
 		s.tentativa_id = 1;
@@ -229,6 +228,7 @@ class Populate {
 		p.old_id = id++;
 		p.old_survey_id = s.old_survey_id;
 		p.pontoProx = null;
+		p.ordem = it;
 		p.ref = null;
 		p.ref_str = "Random place ";
 		p.regadm_id = rnd.int(9999);
@@ -258,10 +258,10 @@ class Populate {
 		mo.isDeleted = false;
 		mo.isEdited = 0;
 		mo.linhaOnibus = LinhaOnibus.manager.get(rnd.int(50));
+		mo.linhaOnibus_str = "Linha XXX" + it;
 		mo.meiotransporte = Type.createEnumIndex(MeioTransporte, rnd.int(16));
 		mo.morador = m;
-		mo.naoRespondeu = rndTrue();
-		mo.naoSabe = rndTrue();
+		mo.ordem = it;
 		mo.old_id = id++;
 		mo.old_morador_id = m.old_id;
 		mo.old_survey_id = s.old_survey_id;
