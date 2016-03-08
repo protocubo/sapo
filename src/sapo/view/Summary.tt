@@ -1,5 +1,4 @@
 (: import common.db.MoreTypes :)
-(: import sapo.Spod :)
 (: import sapo.route.SummaryRoutes.* :)
 (: import sapo.spod.User :)
 
@@ -128,7 +127,7 @@
 				<form method="POST" action="/summary/user">
 					<div class="col-md-2"><h5>USUÁRIO</h5>
 						<select class="form-control input-sm" name="user">
-							(:* <option value="0">Todos</option> *:)
+							<option value="">Geral</option>
 							<optgroup label="Supervisores">
 							(: do var group = Group.manager.select($privilege == Privilege.PSupervisor, null, false) :)
 							(: for u in User.manager.search($group == group, null, false) :)
@@ -153,11 +152,11 @@
 		<div class="row mt60">
 			<div class="col-md-12">
 				<h4>
-					<span class="PSupervisor"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> SUPERVISOR</span> |
-					<span class="PPhoneOperator"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> TELEFONISTA</span> |
-					<span class="PSuperUser"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> QUALIDADE</span>	|
-					<span class="completa"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> COMPLETA</span> |
-					<span class="pendente"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> PENDENTE</span>
+					<span class="PSupervisor"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> SUPERVISORES</span> |
+					<span class="PPhoneOperator"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> CENTRAL TELEFÔNICA</span> |
+					<span class="PSuperUser"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> CONTROLE DE QUALIDADE</span>	|
+					<span class="completa"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> COMPLETAS</span> |
+					<span class="pendente"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> PENDENTES</span>	
 				</h4>
 				<div id="chart_div"></div>
 			</div>

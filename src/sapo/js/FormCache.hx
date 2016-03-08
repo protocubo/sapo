@@ -11,7 +11,7 @@ class FormCache {
 	static function onSubmit(_)
 	{
 		var local = Browser.getLocalStorage();
-		new JQuery("select, input").each(function(i, elem)
+		new JQuery("form[name='filter'] select,input").each(function(i, elem)
 		{			
 			var cur = new JQuery(elem);
 			var isSelect = cur.is("select");

@@ -15,15 +15,15 @@
 					</div>
 					<div class="modal-body">
 						<div class="row">
-							<div class="col-md-12">
+							<div class="col-md-12 text-center">
 								<p>Deseja realmente fechar o <b>Ticket #(: ticket.id :)</b>?</p>
 							</div>
 						</div>
 					</div>
 					<div class="modal-footer">
 						<div class="row">
-							<div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">NÃO</button></div>
-							<div class="col-md-6"><button type="submit" class="btn btn-success">SIM</button></div>
+							<div class="col-md-4"><button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button></div>
+							<div class="col-md-4 col-md-offset-4"><button type="submit" class="btn btn-success">Fechar</button></div>
 						</div>
 					</div>
 				</form>
@@ -52,8 +52,8 @@
 					</div>
 					<div class="modal-footer">
 						<div class="row">
-							<div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
-							<div class="col-md-6"><button type="submit" class="btn btn-success">RESPONDER</button></div>
+							<div class="col-md-4"><button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button></div>
+							<div class="col-md-4 col-md-offset-4"><button type="submit" class="btn btn-success">Responder</button></div>
 						</div>
 					</div>
 				</form>
@@ -72,8 +72,7 @@
 				</div>
 				<div class="modal-body">
 					<div class="row">
-						<div class="col-md-2"><h4>Grupo:</h4></div>
-						<div class="col-md-10">
+						<div class="col-md-12">
 							<select class="form-control">
 								<option disabled selected>Selecione</option>
 								(: do var groups = Group.manager.search($privilege != Privilege.PSurveyor, {orderBy : -privilege}, false) :)
@@ -96,8 +95,8 @@
 				</div>
 				<div class="modal-footer">
 					<div class="row">
-						<div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
-						<div class="col-md-6"><button type="button" class="btn btn-success">INCLUIR</button></div>
+						<div class="col-md-4"><button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button></div>
+						<div class="col-md-4 col-md-offset-4"><button type="button" class="btn btn-success">Incluir</button></div>
 					</div>
 				</div>
 			</div>
@@ -111,12 +110,12 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title" id="ticket(: ticket.id :)_status_label">MUDAR STATUS DA PESQUISA #(: ticket.survey.id :)</h4>
+					<h4 class="modal-title" id="ticket(: ticket.id :)_status_label">CONFERÊNCIA DA PESQUISA #(: ticket.survey.id :)</h4>
 				</div>
 				<div class="modal-body">
 					<div class="row">
-						<div class="col-md-4 col-md-offset-2"><h4>Supervisor:</h4></div>
-						<div class="col-md-4">
+						<div class="col-md-6 text-right"><h4>Supervisores:</h4></div>
+						<div class="col-md-6">
 							<div class="btn-group" data-toggle="buttons">
 								<label class="btn btn-default active" style="width:auto;">
 									<input type="radio" name="options" id="option1" autocomplete="off" checked> <span class="glyphicon glyphicon-minus PSupervisor" aria-hidden="true"></span>
@@ -131,8 +130,8 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-md-4 col-md-offset-2"><h4>Telefonista:</h4></div>
-						<div class="col-md-4">
+						<div class="col-md-6 text-right"><h4>Central Telefônica:</h4></div>
+						<div class="col-md-6">
 							<div class="btn-group" data-toggle="buttons">
 								<label class="btn btn-default active" style="width:auto;">
 									<input type="radio" name="options" id="option1" autocomplete="off" checked> <span class="glyphicon glyphicon-minus PPhoneOperator" aria-hidden="true"></span>
@@ -147,8 +146,8 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-md-4 col-md-offset-2"><h4>Superusuário:</h4></div>
-						<div class="col-md-4">
+						<div class="col-md-6 text-right"><h4>Controle de Qualidade:</h4></div>
+						<div class="col-md-6">
 							<div class="btn-group" data-toggle="buttons">
 								<label class="btn btn-default active" style="width:auto;">
 									<input type="radio" name="options" id="option1" autocomplete="off" checked> <span class="glyphicon glyphicon-minus PSuperUser" aria-hidden="true"></span>
@@ -165,8 +164,8 @@
 				</div>
 				<div class="modal-footer">
 					<div class="row">
-						<div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
-						<div class="col-md-6"><button type="button" class="btn btn-success">MUDAR</button></div>
+						<div class="col-md-4"><button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button></div>
+						<div class="col-md-4 col-md-offset-4"><button type="button" class="btn btn-success">Aceitar</button></div>
 					</div>
 				</div>
 			</div>
