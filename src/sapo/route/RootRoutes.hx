@@ -91,29 +91,30 @@ class RootRoutes extends AccessControl {
 	@authorize(all, guest)
 	public function postForgotPassword(args : {email : String})
 	{
-		if (args != null && args.email != null) {
-			var u = User.manager.select($email == new EmailAddress(args.email));
-			if (u != null) {
-				Context.db.startTransaction();
-				try {
-					Token.invalidate(u);
-					var t = new Token(u);
-					t.insert();
-
-					var email = new comn.message.Email({
-						from : "sapo@sapo.robrt.io",
-						to : [u.email],
-						subject : sapo.view.email.PasswordResetEmail.subject(),
-						text : sapo.view.email.PasswordResetEmail.text(t.token)});
-					Context.comn.enqueue(email);
-				} catch (e:Dynamic) {
-					Context.db.rollback();
-					neko.Lib.rethrow(e);
-				}
-				Context.db.commit();
-			}
+		var u = User.manager.select($email == new EmailAddress(args.email));
+		if (u == null) {
+			trace('WARNING: email ${args.email} not found');
+			return;
 		}
-		Web.redirect("/");
+
+		Context.db.startTransaction();
+		try {
+			Token.invalidate(u);
+			var t = new Token(u);
+			t.insert();
+
+			var email = new comn.message.Email({
+				from : "sapo@sapo.robrt.io",
+				to : [u.email],
+				subject : sapo.view.email.PasswordResetEmail.subject(),
+				text : sapo.view.email.PasswordResetEmail.text(t.token)});
+			Context.comn.enqueue(email);
+		} catch (e:Dynamic) {
+			Context.db.rollback();
+			neko.Lib.rethrow(e);
+		}
+		Context.db.commit();
+		Web.redirect("/login");
 	}
 
 	@authorize(all)
