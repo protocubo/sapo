@@ -222,8 +222,7 @@ class Modo extends Object {
 	// Coisas resumidas:
 
 	public var valorViagem : SNull<SFloat>;
-	public var naoSabe : SNull<SBool>;
-	public var naoRespondeu : SNull<SBool>;
+
 
 	public var json : Null<String>;
 

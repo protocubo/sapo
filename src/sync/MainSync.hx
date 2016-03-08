@@ -117,7 +117,7 @@ class MainSync
 			var submap : Map<Int, Int>;
 			if (userGroup.get(r.user_id) == null)
 			{
-				trace("woot");
+				//trace("woot");
 				submap = new Map();
 			}
 			else
@@ -447,7 +447,7 @@ class MainSync
 
 	static function processModo(session_id : Int, insertMode : Bool)
 	{
-		var dbModos = targetCnx.request("SELECT * FROM Modo WHERE session_id = " + session_id + " ORDER BY morador_id, firstpoint_id, anterior_id").results();
+		var dbModos = targetCnx.request("SELECT * FROM Modo WHERE session_id = " + session_id + " ORDER BY morador_id, ordem").results();
 
 		for (m in dbModos)
 		{
@@ -493,13 +493,9 @@ class MainSync
 					//Conversoes de um mte de field pra um
 					case "valorPagoTaxi", "valorViagem", "custoEstacionamento":
 						new_modo.valorViagem = m.valorViagem;
-					case "naoSabeLinhaOnibus", "naoSabeEstacaoEmbarque", "naoSabeEstacaoDesembarque", "naoSabeValorViagem", "naoSabeValorPagoTaxi", "naoSabeCustoEstacionamento":
-						new_modo.naoSabe = (new_modo.naoSabe) ? true : (Reflect.field(m, f) != 0);
-					case "naoRespondeuLinhaOnibus", "naoRespondeuEstacaoEmbarque", "naoRespondeuEstacaoDesembarque", "naoRespondeuValorViagem", "naoRespondeuValorPagoTaxi","naoRespondeuCustoEstacionamento":
-						new_modo.naoRespondeu = (new_modo.naoRespondeu) ? true : (Reflect.field(m, f) != 0);
 					//fim conversao
 					//Ignore
-					case "anterior_id", "posterior_id","ordem", "gps_id", "estacaoEmbarque_str", "estacaoDesembarque_str":
+					case "anterior_id", "posterior_id","ordem", "gps_id", "estacaoEmbarque_str", "estacaoDesembarque_str","naoSabeLinhaOnibus", "naoSabeEstacaoEmbarque", "naoSabeEstacaoDesembarque", "naoSabeValorViagem", "naoSabeValorPagoTaxi", "naoSabeCustoEstacionamento","naoRespondeuLinhaOnibus", "naoRespondeuEstacaoEmbarque", "naoRespondeuEstacaoDesembarque", "naoRespondeuValorViagem", "naoRespondeuValorPagoTaxi","naoRespondeuCustoEstacionamento":
 						continue;
 					default:
 						Macros.warnTable("Modo", f, null);
