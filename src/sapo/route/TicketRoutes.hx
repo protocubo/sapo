@@ -96,7 +96,7 @@ class TicketRoutes extends AccessControl {
 				t.lock();
 				t.closed_at = null;
 				t.update();
-				var msg = new TicketMessage(t,u, "TICKET REOPENED", Context.now);
+				var msg = new TicketMessage(t,u, "~ TICKET REABERTO ~", Context.now);
 				msg.insert();
 			}
 
@@ -131,7 +131,7 @@ class TicketRoutes extends AccessControl {
 		t.closed_at = Context.now;
 		t.update();
 
-		var msg = new TicketMessage(t, Context.loop.user, "TICKET FECHADO.");
+		var msg = new TicketMessage(t, Context.loop.user, "~ TICKET FECHADO ~");
 		msg.insert();
 
 		Web.redirect('/tickets/search?ticket=${t.id}');
