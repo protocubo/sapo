@@ -18,7 +18,7 @@ unavailable
 		<div class="row">
 			<div class="col-md-7 panel-title">
 				<!-- DE/PARA (class: super, telefonista, supervisor e pesquisador) -->
-				<span class="glyphicon glyphicon glyphicon-user (: ticket.author.group.name :)" aria-hidden="true"></span>
+				<span class="glyphicon glyphicon glyphicon-user (: ticket.author.group.privilege :)" aria-hidden="true"></span>
 				<span class="glyphicon glyphicon-arrow-right text-muted" aria-hidden="true" style="color: #999;"></span>
 				<span class="glyphicon glyphicon glyphicon-user (: ticket.recipient.privilege :)" aria-hidden="true"></span>
 				<!-- Nº do Ticket, Data da criação do Ticket, Hora da criação do Ticket -->
@@ -49,7 +49,7 @@ unavailable
 							<!-- DATETIME + DE + PARA (class: super, telefonista, supervisor e pesquisador) -->
 							(:* Para facilitar a vida *:)
 							(: do var recipient = ticket.recipient :)
-							(: message.posted_at :) - <span class="(: message.author.group.name:)">(: message.author.name :)@(: message.author.group.name:)</span>(: if first :) - (: if recipient.user != null :) <span class="(: recipient.user.group.name:)">(: recipient.user.name :)@(: recipient.user.group.name:)</span> (: else :) <span class="(: recipient.group.name:)"> @(: recipient.group.name:)</span> (: end :) (: end :) :
+							(: message.posted_at :) - <span class="(: message.author.group.privilege:)">(: message.author.name :)@(: message.author.group.name:)</span>(: if first :) - (: if recipient.user != null :) <span class="(: recipient.user.group.privilege:)">(: recipient.user.name :)@(: recipient.user.group.name:)</span> (: else :) <span class="(: recipient.group.privilege:)"> @(: recipient.group.name:)</span> (: end :) (: end :) :
 						</strong>
 					<!-- MENSAGEM -->
 						(: message.text :)
@@ -79,11 +79,26 @@ unavailable
 			</div>
 			<!-- AÇÕES -->
 			<div class="row mt30">
-				<div class="col-md-2"><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_incluir">INCLUIR</button></div>
-				<div class="col-md-2"><button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_responder">RESPONDER</button></div>
-				<div class="col-md-2"><button type="button" class="btn btn-success btn-sm (: hideClose(ticket) :)" data-toggle="modal" data-target="#ticket(: ticket.id :)_fechar">FECHAR</button></div>
-				<div class="col-md-2 col-md-offset-1"><a href="/survey/(:ticket.survey.id:)" type="button" class="btn btn-primary btn-sm" target="_blank">VER PESQUISA</a></div>
+				(: do var u = Context.loop.user :)
+				(: do var disabled = false :)
+
+				(: if ticket.author != u && ticket.recipient.user != u && ticket.recipient.group != u.group && u.group.privilege != PSuperUser :)
+					(: do disabled = true :)
+				(: end :)
+				(: do var closedDisabled = false :)
+				(: if ticket.author != u && u.group.privilege != PSuperUser :)
+					(: do closedDisabled = true :)
+				(: end :)
+
+				(: if ticket.closed_at == null :)
+				<div class="col-md-2"><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_incluir" (:if disabled :) disabled (: end :)>INCLUIR</button></div>
+				<div class="col-md-2"><button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_responder" (:if disabled :) disabled (: end :)>RESPONDER</button></div>
+				<div class="col-md-2"><button type="button" class="btn btn-success btn-sm (: hideClose(ticket) :)" data-toggle="modal" data-target="#ticket(: ticket.id :)_fechar" (: if closedDisabled :) disabled (: end :)>FECHAR</button></div>
+				<div class="col-md-2 col-md-offset-1"><a href="/survey/(:ticket.survey.id:)" type="button" class="btn btn-primary btn-sm" target="_blank" (: if disabled :) disabled (: end :)>VER PESQUISA</a></div>
 				<div class="col-md-2"><button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_status">STATUS</button></div>
+				(: else :)
+				<div class="col-md-2"><button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_responder" (:if disabled :) disabled (: end :)>REABRIR</button></div>
+				(: end :)
 			</div>
 		</div>
 	</div>
@@ -91,11 +106,69 @@ unavailable
 <!-- FIM TICKET -->
 (: end :)
 
-(: static function page(?tickets:List<Ticket> ) :)
+(: static function page(?tickets:List<Ticket>, page : Int, totalItems : Int ) :)
 <!DOCTYPE html>
 <html>
 <head>
 (: Util.head("SAPO - Tickets", {formCache:true}) :)
+<script>
+	$('document').ready(function()
+	{
+		$('.previous').bind('click', function()
+		{
+			locationgen(false);
+		});
+		
+		$('.next').bind('click',function()
+		{
+			locationgen(true);
+		});
+	});
+	
+	//Gera o window.location.href de um modo overkill
+	function locationgen(nextPage)
+	{
+		var searchparams = window.location.search;
+		var index = searchparams.indexOf("page");
+		if(index != -1)
+		{
+			//Remove "?" char
+			var params = searchparams.substring(1,searchparams.length).split("&");
+			var str = "?";
+			for(i = 0;i < params.length; i++)
+			{
+				if(params[i].indexOf("page") != -1)
+				{
+					var fields = params[i].split("=");
+					console.log(fields);
+					var curPage = parseInt(fields[1]);
+					if(nextPage)
+						curPage++;
+					else
+						curPage--;
+					str += fields[0]+"="+ curPage;			
+				}
+				else
+					str += params[i];
+					
+				if((i+1) != params.length)
+					str += "&"
+			}
+			searchparams = str;
+		}
+		else
+		{
+			if(searchparams.length > 0)
+				searchparams += "&page=2";
+			else
+				searchparams = "?page=2";
+		
+		}
+		var p = window.location.protocol;
+		var port = window.location.port;
+		window.location.href = ((p.length > 0) ? p + '//' : "") + window.location.hostname + ((port != '80' && port != '0' && port != "") ? ":" + port : "") +  window.location.pathname + searchparams;
+	}
+</script>
 </head>
 <body>
 
@@ -119,9 +192,12 @@ unavailable
 				</div>
 				<div class="col-md-2"><h5>ESTADO</h5>
 					<select class="form-control input-sm" name="state">
-						<option value="(:PARAM_OPEN:)">Não Fechadas</option>
-						<option value="(:PARAM_CLOSED:)">Fechadas</option>
+						<option value="(:PARAM_OPEN:)">Abertos</option>
+						<option value="(:PARAM_CLOSED:)">Fechados</option>
 					</select>
+				</div>
+				<div class="col-md-2"><h5>PESQUISA</h5>
+					<input type="text" name="survey" id="surveySearch" class="form-control input-sm" placeholder="Nº da Pesquisa">
 				</div>
 				<div class="col-md-1"><h5>&nbsp;</h5>
 					<button type="submit" value="submit" class="btn btn-primary btn-sm">Filtrar</button>
@@ -144,9 +220,7 @@ unavailable
 				<div class="col-md-2  col-md-offset-2"><h5>TICKET</h5>
 					<input type="text" name="ticket" id="ticketSearch" class="form-control input-sm" oninput="disableSearch(this.name, this.value)" placeholder="Nº do Ticket">
 				</div>
-				<div class="col-md-2"><h5>PESQUISA</h5>
-					<input type="text" name="survey" id="surveySearch" class="form-control input-sm" oninput="disableSearch(this.name, this.value)" placeholder="Nº da Pesquisa">
-				</div>
+
 				<div class="col-md-1"><h5>&nbsp;</h5>
 					<button type="submit" value="submit" class="btn btn-primary btn-sm">Buscar</button>
 				</div>
@@ -175,21 +249,32 @@ unavailable
 				(: end :)
 			(: end :)
 		</div>
-		
+
 		<nav>
 			<ul class="pager mt30">
+				(: if page > 1 :)
 				<li class="previous"><a href="#"><span aria-hidden="true">&larr;</span> ANTERIOR</a></li>
+				(: else :)
+				<li class="previous">&nbsp</li>
+				(: end :)
+				
+				(: if totalItems >= PAGE_SIZE :)
 				<li class="next"><a href="#">PRÓXIMA <span aria-hidden="true">&rarr;</span></a></li>
+				(: else :)
+				<li class="next">&nbsp;</li>
+				(: end :)
 			</ul>
 		</nav>
-		
+
 	</div>
-	
+
 	(: for t in tickets :)
-		(: Modal.modalticketfechar(t) :)
-		(: Modal.modalticketresponder(t) :)
-		(: Modal.modalticketincluir(t) :)
-		(: Modal.modalticketstatus(t) :)
+		(: Modal.modalticketresponder(t, t.closed_at != null) :)
+		(: if t.closed_at == null :)
+			(: Modal.modalticketfechar(t) :)
+			(: Modal.modalticketincluir(t) :)
+			(: Modal.modalticketstatus(t) :)
+		(: end :)
 	(: end :)
 
 (: Util.footer() :)

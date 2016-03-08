@@ -1,4 +1,5 @@
 -cp src
+-cp override
 -lib hxssl
 # (with haxelib git hxssl https://github.com/tong/hxssl)
 

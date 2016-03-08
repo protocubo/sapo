@@ -32,14 +32,18 @@
 	</div>
 (: end :)
 
-(: static function modalticketresponder(ticket:Ticket) :)
+(: static function modalticketresponder(ticket:Ticket, ?reopen : Bool) :)
 	<div class="modal fade" id="ticket(: ticket.id :)_responder" tabindex="-1" role="dialog" aria-labelledby="ticket(: ticket.id :)_responder_label">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<form method="POST" action="/tickets/reply/(: ticket.id :)">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						(: if reopen :)
+						<h4 class="modal-title" id="ticket(: ticket.id :)_responder_label">REABRIR TICKET #(: ticket.id :)</h4>
+						(: else :)
 						<h4 class="modal-title" id="ticket(: ticket.id :)_responder_label">RESPONDER TICKET #(: ticket.id :)</h4>
+						(: end :)
 					</div>
 					<div class="modal-body">
 						<div class="row">

@@ -1,5 +1,6 @@
 (: import sapo.spod.Survey :)
 (: import sapo.spod.User :)
+(:import common.db.MoreTypes:)
 
 (: static function surveySummary(survey:sapo.spod.Survey) :)
 (:    var dom = Familia.manager.select($survey == survey, { orderBy:-syncTimestamp, limit : 1 }) :) (:*FIXME syncTimestampi*:) 
@@ -59,7 +60,7 @@
 </div>
 (: end :)
 
-(: static function page(?surveys:List<Survey>) :)
+(: static function page(?surveys:List<Survey>, ?params:{ ?user:User, ?status:SurveyStatus, ?order:String, ?page:Int }, ?showPrev:Bool = false, ?showNext:Bool = false) :)
 <!DOCTYPE html>
 <html>
 <head>
@@ -79,26 +80,27 @@
 			<form method="get">
 				<div class="col-md-2"><h5>USUÁRIO</h5>
 					<select class="form-control input-sm" name="user" id="userID">
-						<option value=0>Todos</option>
-						(: for g in Group.manager.all() :)
-						<optgroup label=(:g.privilege:)>
+						<option value="">Todos</option>
+						(: var g = Group.manager.select($privilege == PSupervisor) :)
+						<optgroup label=(:g.name:)>
+							(: for u in User.manager.search($group_id == g.id ) :)
+								<option value=(:u.id:)>(:u.name:)</option>
+							(: end :)
+						(: var g = Group.manager.select($privilege == PSurveyor) :)
+						<optgroup label=(:g.name:)>
 							(: for u in User.manager.search($group_id == g.id ) :)
 								<option value=(:u.id:)>(:u.name:)</option>
 							(: end :)
 						</optgroup>
-						(: end :)
 					</select>
 				</div>
 				<div class="col-md-2"><h5>STATUS</h5>
 					<select class="form-control input-sm" name="status">
-						<option value="" >Todas</option>
-						<option value="SOpen" >Abertas</option>
-						<option value="sClosed" >Fechadas</option>
-						<option value="Sverified" >Verificadas</option>
-						<option value="SCT" >CT</option>
-						<option value="SAccepted" >Aceitas</option>
-						<option value="SRejected" >Rejeitadas</option>
-						<option value="SSubJudice" >Sob Judice</option>
+						<option value= "(:SSAll:)" >Todas</option>
+						<option value= "(:SSAccepted:)" >Aceitas</option>
+						<option value= "(:SSPending:)" >Pendente</option>
+						<option value= "(:SSRefused:)" >Recusada</option>
+						<option value= "(:SSCompleted:)" >Completas</option>
 					</select>
 				</div>
 				<div class="col-md-2"><h5>ORDEM</h5>
@@ -132,10 +134,15 @@
 	
 		<nav>
 			<ul class="pager mt30">
-				<li class="previous"><a href="#"><span aria-hidden="true">&larr;</span> ANTERIOR</a></li>
-				<li class="next"><a href="#">PRÓXIMA <span aria-hidden="true">&rarr;</span></a></li>
+			(:if showPrev:)
+				<li class="previous"><a href="surveys?user=(: params.user == null? "" : params.user :)&page=(:params.page-1:)"><span aria-hidden="true">&larr;</span> ANTERIOR</a></li>
+			(:end:)
+			(:if showNext:)
+				<li class="next"><a href="surveys?user=(: params.user == null? "" : params.user :)&page=(:params.page+1:)">PRÓXIMA <span aria-hidden="true">&rarr;</span></a></li>
+			(:end:)
 			</ul>
 		</nav>
+
 	</div>
 
 	(: Util.footer() :)

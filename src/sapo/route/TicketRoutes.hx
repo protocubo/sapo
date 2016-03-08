@@ -17,12 +17,12 @@ class TicketRoutes extends AccessControl {
 	public static inline var PARAM_CLOSED = "closed";
 
 	@authorize(PSupervisor, PPhoneOperator, PSuperUser)
-	public function doDefault(?args:{?recipient:String, ?state:String })
+	public function doDefault(?args:{?recipient:String, ?state:String, ?survey : Survey, ?page : Int })
 	{
 		if (args == null) args = {};
 		var open = args.state == null || args.state == PARAM_OPEN;
 		if (!open && args.state != PARAM_CLOSED) throw 'Unexpected state value: ${args.state}';
-
+		var survey_id = (args.survey != null) ? args.survey.id : null;
 		var u = Context.loop.user;
 		var g = Context.loop.group;
 		var p = Context.loop.privilege;
@@ -43,23 +43,36 @@ class TicketRoutes extends AccessControl {
 		case other:
 			throw 'Unexpected recipient value: $other';
 		}
-		sql += ' t.closed_at ${open ? "IS" : "NOT"} NULL';
-		sql += ' ORDER BY t.opened_at LIMIT $PAGE_SIZE';
+
+		if (survey_id != null)
+			sql += " t.survey_id = " + survey_id;
+		else
+			sql += ' t.closed_at ${open ? "IS" : "NOT"} NULL';
+		
+		sql += ' ORDER BY t.opened_at LIMIT ${PAGE_SIZE + 1}';
+		if (args.page > 1)
+		{
+			var p = args.page -1;
+			sql += ' OFFSET ' + PAGE_SIZE * p;
+		}
 
 		var tickets = Ticket.manager.unsafeObjects(sql, false);
-		Sys.println(sapo.view.Tickets.page(tickets));
+		var total = tickets.length;
+		//Pego 11 somente para comparação se devo colocar o btn Proximo
+		if (total > PAGE_SIZE)		
+			tickets.pop();
+		Sys.println(sapo.view.Tickets.page(tickets,args.page,total));
 	}
 
 	@authorize(PSupervisor, PPhoneOperator, PSuperUser)
-	public function doSearch(?args:{ ?ofUser:User, ?ticket:Ticket, ?survey:Survey })
+	public function doSearch(?args:{ ?ofUser:User, ?ticket:Ticket })
 	{
 		if (args == null) args = { };
 		var tickets : List<Ticket> = new List();
 		if (args.ticket != null)
 			tickets.push(args.ticket);
-		else if (args.survey != null)
-			tickets = Ticket.manager.search($survey == args.survey);
-		Sys.println(sapo.view.Tickets.page(tickets));
+		
+		Sys.println(sapo.view.Tickets.page(tickets,1,tickets.length));
 	}
 
 	@authorize(PSupervisor, PPhoneOperator, PSuperUser)
@@ -67,7 +80,9 @@ class TicketRoutes extends AccessControl {
 	{
 		switch Context.loop.privilege {
 		case PSupervisor, PPhoneOperator:
-			trace("TODO check if supervisor/phone operator in list of recipients");
+			if(t.author != Context.loop.user && t.recipient.user != Context.loop.user && t.recipient.group != Context.loop.user.group)
+			Web.redirect("/tickets");
+			return;
 		case PSuperUser:
 			// ok;
 		case _: throw "Assertion failed";
@@ -76,6 +91,15 @@ class TicketRoutes extends AccessControl {
 		var u = Context.loop.user;
 		try {
 			Context.db.startTransaction();
+			if (t.closed_at != null)
+			{
+				t.lock();
+				t.closed_at = null;
+				t.update();
+				var msg = new TicketMessage(t,u, "TICKET REOPENED", Context.now);
+				msg.insert();
+			}
+
 			var msg = new TicketMessage(t, u, args.text);
 			msg.insert();
 			var sub = TicketSubscription.manager.select($user == u);
@@ -106,6 +130,10 @@ class TicketRoutes extends AccessControl {
 
 		t.closed_at = Context.now;
 		t.update();
+
+		var msg = new TicketMessage(t, Context.loop.user, "TICKET FECHADO.");
+		msg.insert();
+
 		Web.redirect('/tickets/search?ticket=${t.id}');
 	}
 

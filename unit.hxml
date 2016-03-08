@@ -1,6 +1,6 @@
 -cp src
+-cp override
 -lib utest
--lib hxBitcoin
 -lib compiletime
 -lib version
 -lib tink_template
@@ -10,5 +10,4 @@
 -neko bin/unit-tests.n
 -main unit.Main
 -cmd neko bin/unit-tests.n
--dce full
 
