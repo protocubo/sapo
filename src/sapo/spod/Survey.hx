@@ -40,16 +40,11 @@ class Survey extends Object {
 	public var pin : SNull<SString<255>>; //
 	public var latitude : SNull<SFloat>;
 	public var longitude : SNull<SFloat>;
-	@:deprecated("Deprecated Municipio") public var municipio : SNull<SString<255>>;
 	public var bairro : SNull<SString<255>>;
 	public var logradouro : SNull<SString<255>>;
 	public var numero : SNull<SString<255>>;
 	public var complemento : SNull<SString<255>>;
-	@:deprecated("Deprecated CEP")public var cep : SNull<SString<255>>;
-	@:deprecated("Deprecated Zona")public var zona : SNull<SString<255>>;
-	@:deprecated("Deprecated Macrozona")public var macrozona : SNull<SString<255>>;
 	public var lote : SNull<SString<255>>;
-	@:deprecated("Deprecated estratoSocioEconomico - Use field estrato") public var estratoSocioEconomico : SNull<SString<255>>;
 	public var estrato : SNull<SString<255>>;
 	public var json : Null<String>;
 
@@ -222,9 +217,7 @@ class Modo extends Object {
 	// Coisas resumidas:
 
 	public var valorViagem : SNull<SFloat>;
-	@:deprecated("Field naoSabe doesnt exist!") public var naoSabe : SNull<SBool>;
-	@:deprecated("Field naoRespondeu doesnt exist!") public var naoRespondeu : SNull<SBool>;
-
+	
 	public var json : Null<String>;
 
 	public var syncTimestamp : SFloat;
