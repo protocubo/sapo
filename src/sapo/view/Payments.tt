@@ -110,7 +110,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-(: Util.head("SAPO - Pagamento") :)
+(: Util.head("SAPO - Pagamento", {formCache:true}) :)
 </head>
 <body>
 
@@ -122,7 +122,7 @@
 			<li class="active">PAGAMENTOS</li>
 		</ol>
 		<div class="row">
-			<form method="get" action="/payments">
+			<form method="get" name="filter" action="/payments">
 				<!-- FILTROS -->
 				<div class="col-md-2"><h5>PESQUISADOR:</h5>
 					<select name="surveyor"  class="form-control input-sm" >
