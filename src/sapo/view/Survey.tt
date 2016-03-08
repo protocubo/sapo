@@ -134,7 +134,7 @@ function imprimir() {
 		<!-- BODY - MORADOR : UM BLOCO DESSES POR MORADOR -->
 		<div class="row">
 			<div class="col-md-12">
-				<h3><span class="glyphicon glyphicon-user" aria-hidden="true"></span> MORADOR: (: Util.enumText(m.situacaoFamiliar) :) / (: m.nomeMorador :) ((: Util.enumText(m.idade) :) anos) - (: if m.genero_id == 1 :) Feminino (: else :) Masculino (: end :) (: if m.proprioMorador_id :) (: else :) [Respondida por terceiro ((: end :) (: if m.quemResponde != null :)(: m.quemResponde.nomeMorador :))(: else :) (: end :)</h3>
+				<h3><span class="glyphicon glyphicon-user" aria-hidden="true"></span> MORADOR: (: Util.enumText(m.situacaoFamiliar) :) - (: m.nomeMorador :) ((: Util.enumText(m.idade) :) anos) - (: if m.genero_id == 1 :) Feminino (: else :) Masculino (: end :) (: if m.proprioMorador_id :) (: else :) [Respondida por terceiro ((: end :) (: if m.quemResponde != null :)(: m.quemResponde.nomeMorador :))(: else :) (: end :)</h3>
 				<div class="bloco">
 					<b>Atividade:</b>
 					(: Util.enumText(m.atividadeMorador) :)
@@ -175,8 +175,6 @@ function imprimir() {
 						(: for modo in sapo.spod.Modo.manager.search($firstpoint == p && $morador == m && $survey == survey) :)
 						<p class="modo">
 							<b><span class="glyphicon glyphicon-transfer" aria-hidden="true"></span> Modo ((: Util.enumText(modo.meiotransporte):)):</b>
-							<!-- if ônibus -->
-							
 							<!--Linha de Ônibus --> 
 							(: if modo.linhaOnibus != null :) (: modo.linhaOnibus.desc :) (: end :)
 							<!--Estação de Embarque --> 
