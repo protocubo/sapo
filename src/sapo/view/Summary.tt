@@ -155,7 +155,7 @@
 				<h4>
 					<span class="PSupervisor"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> SUPERVISORES</span> |
 					<span class="PPhoneOperator"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> CENTRAL TELEFÔNICA</span> |
-					<span class="PSuperUser"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> CONTROLE DE QUALIDADE QUALIDADE</span>	|
+					<span class="PSuperUser"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> CONTROLE DE QUALIDADE</span>	|
 					<span class="completa"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> COMPLETAS</span> |
 					<span class="pendente"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> PENDENTES</span>	
 				</h4>

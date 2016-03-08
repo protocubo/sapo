@@ -108,7 +108,7 @@ function imprimir() {
 		<div class="row">
 			<div class="col-md-12">
 				<h3><span class="glyphicon glyphicon-home" aria-hidden="true"></span> DOMICÍLIO / FAMÍLIA ( (: dom.numeroResidentes :) moradores )</h3>
-				<div class="bloco"><b>Endereço:</b>  (: survey.logradouro :) , (: survey.numero :)	(: survey.complemento :), (: survey.bairro :) - (: survey.cep :)</div>
+				<div class="bloco"><b>Endereço:</b> (: survey.logradouro :) , (: survey.numero :) (: survey.complemento :), (: survey.bairro :) - (: survey.municipio :) - (: survey.cep :)</div>
 				<div class="bloco"><b>Domicílio:</b> (:  Util.enumText(dom.ocupacaoDomicilio) :) ( (: Util.enumText(dom.condicaoMoradia) :) ), (: if dom.ruaPavimentada_id :) rua pavimentada (: else if dom.ruaPavimentada_id == false :) (: else :) (: end :)</div>
 				<div class="bloco"><b>Imóvel:</b> (: Util.enumText(dom.tipoImovel) :) com (: dom.quartos :) quartos, (: dom.banheiros :) banheiros, (: Util.enumText(dom.aguaEncanada) :)</div>
 				<div class="bloco"><b>Mobilidade:</b> (: dom.veiculos :) veículos ((: Util.enumText(dom.anoVeiculoMaisRecente) :)), (: dom.motos :) motos, (: dom.bicicletas :) bicicletas.</div>
