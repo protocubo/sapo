@@ -1,6 +1,7 @@
 package sapo;
 
 import common.Dispatch;
+import common.EnvVars;
 import common.Web;
 import common.crypto.Password;
 import common.db.MoreTypes;
@@ -16,7 +17,8 @@ import sapo.spod.User;
 import sys.db.*;
 
 class Context {
-	static var DBPATH = Sys.getEnv("SAPO_DB");
+	static var DBPATH = Sys.getEnv(SAPO_DB);
+	static var STATICPATH = Sys.getEnv(STATIC_FILES);
 
 	public static var version(default,null) = { commit : Version.getGitCommitHash() }
 	public static var now(default,null):HaxeTimestamp;
@@ -58,8 +60,8 @@ class Context {
 	{
 		var managers:Array<Manager<Dynamic>> = [
 			Group.manager,
-			NewSurvey.manager,
 			QueuedMessage.manager,
+			SapoVersion.manager,
 			Session.manager,
 			Ticket.manager,
 			TicketMessage.manager,
@@ -88,15 +90,94 @@ class Context {
 						MAX(syncTimestamp) as syncTimestamp
 					FROM Survey GROUP BY old_survey_id");
 		}
+
 		comn = new LocalEnqueuer(QueuedMessage.manager);
+	}
+
+	static function updateStatics()
+	{
+		var sep = ";";
+		var staticsPackage = "common.spod.statics.";
+		var bpath = STATICPATH;
+		if (bpath == null) {
+			trace('WARNING using deprecated fix path to statics');
+			bpath = "./private/csvs";
+		}
+
+		if (!sys.FileSystem.exists(bpath)) {
+			trace('WARNING path to static files does not exist: $bpath');
+			return;
+		}
+
+		var dir = sys.FileSystem.readDirectory(bpath);
+		if (dir.length == 0) {
+			trace('WARNING no static files to load in path: $bpath');
+			return;
+		}
+
+		for (p in dir) {
+			if (!StringTools.endsWith(p,".csv")) {
+				trace('Ignoring $p: not CSV');
+				continue;
+			}
+
+			var clName = p.split(".")[0];
+			var cl = Type.resolveClass(staticsPackage + clName);
+			if (cl == null) {
+				trace('Ignoring $p: no table for it');
+				continue;
+			}
+			var p = haxe.io.Path.normalize(haxe.io.Path.join([bpath, p]));
+			var mtime = sys.FileSystem.stat(p).mtime;
+
+			startTransaction();
+			var v = SapoVersion.manager.get(p, true);
+			if (v != null && v.updated_at > mtime) {
+				commit();
+				continue;
+			}
+
+			var bytes = sys.io.File.getBytes(p);
+			var hash = haxe.crypto.Sha1.make(bytes).toHex();
+			trace('Loading $p');
+			trace("... deleting everything");
+			db.request('DELETE FROM `$clName`');
+			trace("... inserting new values");
+			var file = new haxe.io.BytesInput(bytes);
+			try {
+				var fields = file.readLine().split(sep);
+				while (true) {
+					var params = file.readLine().split(sep);
+					var instance = Type.createEmptyInstance(cl);
+					for (i in 0...fields.length)
+						Reflect.setField(instance, fields[i], params[i]);
+					instance.insert();
+				}
+			} catch (e:haxe.io.Eof) {
+				if (v != null) {
+					v.version = hash;
+					v.update();
+				} else {
+					v = new SapoVersion(p, hash);
+					v.insert();
+				}
+				commit();
+				trace('Updated $p');
+				file.close();
+			} catch (e:Dynamic) {
+				rollback();
+				neko.Lib.rethrow(e);
+			}
+		}
 	}
 
 	public static function init(?now)
 	{
+		updateClock();
 		common.spod.InitDB.run();
 		db = Manager.cnx;
 		dbInit();
-		updateClock();
+		updateStatics();
 	}
 
 	public static function updateClock()

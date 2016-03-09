@@ -10,7 +10,7 @@ import common.db.MoreTypes;
  */
 class PaymentRoutes extends AccessControl
 {
-	@authorize(PSuperUser)
+	@authorize(PSuperUser, PSurveyor)
 	public function doDefault(?args:{ ?surveyor:User, ?paid:Bool, ?status:SurveyStatus, ?page:Int })
 	{
 		var elementsPerPage = 20;		
@@ -18,27 +18,37 @@ class PaymentRoutes extends AccessControl
 		//default values
 		args.page = args.page == null?0:args.page;
 		args.paid = args.paid == null?false:args.paid;
-		args.status = args.status == null? SSAll : args.status;
-		var users = [];
-		if (args.surveyor == null)
-		{			
-			var group = Group.manager.select($privilege == PSurveyor);
-			users = Lambda.array(User.manager.search($group == group)).map(function (i) return i.id);
+		args.status = args.status == null? SSAccepted : args.status;
+		trace("PRIVILEGE--" + Context.loop.user.group.privilege);
+		
+		if (Context.loop.user.group.privilege.match(PSuperUser)) 
+		{
+			var users = [];
+			if (args.surveyor == null)
+			{			
+				var group = Group.manager.select($privilege == PSurveyor);
+				users = Lambda.array(User.manager.search($group == group)).map(function (i) return i.id);
+			}
+			else
+				users = [args.surveyor.id];
+				
+			var surveys = filterStates(users, args.page, elementsPerPage, args.status, "desc", args.paid);		
+			var pagination = setPagination(surveys, args.page, elementsPerPage);
+			Sys.println(sapo.view.Payments.superPage(surveys,args, pagination.showPrev, pagination.showNext ));
 		}
-		else
-			users = [args.surveyor.id];
+		else if (Context.loop.user.group.privilege.match(PSurveyor)) 
+		{
+			var u = Context.loop.user;
+			var surveys = Survey.manager.search($user_id == u.id, { orderBy : date_completed, limit : [elementsPerPage * args.page, elementsPerPage+1 ] });
+			//var surveys = Survey.manager.search(1 == 1, { orderBy : date_completed, limit : [elementsPerPage * args.page, elementsPerPage+1 ] } );
+			var pagination = setPagination(surveys, args.page, elementsPerPage);
+			Sys.println(sapo.view.Payments.surveyorPage(surveys, args.page, pagination.showPrev, pagination.showNext));
+			
+		}
 		
-		/*var surveys = Survey.manager.search(
-			(args.surveyor == null? 1 == 1 : $user_id == args.surveyor.id) &&
-			$paid == args.paid
-		);*/
-		
-		var surveys = filterStates(users, args.page, elementsPerPage, args.status, "cres", args.paid);		
-		var pagination = setPagination(surveys, args.page, elementsPerPage);
-		Sys.println(sapo.view.Payments.superPage(surveys,args, pagination.showPrev, pagination.showNext ));
 	}
 	
-	function setPagination(surveys:List<Survey>, page:Int, elementsPerPage:Int)
+	public static function setPagination(surveys:List<Survey>, page:Int, elementsPerPage:Int)
 	{
 		var showPrev = page == 0?false:true;
 		var showNext = false;
@@ -51,9 +61,8 @@ class PaymentRoutes extends AccessControl
 	}
 	
 	
-	function filterStates(users:Array<Int>, page:Int, elementsPerPage:Int, status:SurveyStatus, ?order:String="cres", ?paid:Bool = null)
+	public static function filterStates(users:Array<Int>, page:Int, elementsPerPage:Int, status:SurveyStatus, ?order:String="desc", ?paid:Bool = null)
 	{
-		
 		var surveys = new List<Survey>(); 
 		if (order == "cres")
 		{
@@ -83,8 +92,12 @@ class PaymentRoutes extends AccessControl
 					surveys = Survey.manager.search(
 						(paid == null? 1==1 : $paid==paid) &&
 						($user_id in users) && 
-						($checkSV==false || $checkCT==false || $checkCQ==false) &&
-						($checkSV==false && $checkCT==false && $checkCQ==false) == false
+						($checkSV == false || $checkCT == false || $checkCQ == false) &&
+						(
+							($checkSV != false || $checkSV == null) ||
+							($checkCT != false || $checkCT == null) ||
+							($checkCQ != false || $checkCQ == null)
+						)
 						,{ orderBy : date_completed, limit : [elementsPerPage * page, elementsPerPage+1 ] } );
 				};
 				//any check not false && all checks not true
@@ -136,8 +149,12 @@ class PaymentRoutes extends AccessControl
 					surveys = Survey.manager.search(
 						(paid == null? 1==1 : $paid==paid) &&
 						($user_id in users) && 
-						($checkSV==false || $checkCT==false || $checkCQ==false) &&
-						($checkSV==false && $checkCT==false && $checkCQ==false) == false
+						($checkSV == false || $checkCT == false || $checkCQ == false) &&
+						(
+							($checkSV != false || $checkSV == null) ||
+							($checkCT != false || $checkCT == null) ||
+							($checkCQ != false || $checkCQ == null)
+						)
 						,{ orderBy : -date_completed, limit : [elementsPerPage * page, elementsPerPage+1 ] } );
 				};
 				//any check not false && all checks not true

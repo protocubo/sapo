@@ -95,29 +95,30 @@ class RootRoutes extends AccessControl {
 	@authorize(all, guest)
 	public function postForgotPassword(args : {email : String})
 	{
-		if (args != null && args.email != null) {
-			var u = User.manager.select($email == new EmailAddress(args.email));
-			if (u != null) {
-				Context.db.startTransaction();
-				try {
-					Token.invalidate(u);
-					var t = new Token(u);
-					t.insert();
-
-					var email = new comn.message.Email({
-						from : "sapo@sapo.robrt.io",
-						to : [u.email],
-						subject : sapo.view.email.PasswordResetEmail.subject(),
-						text : sapo.view.email.PasswordResetEmail.text(t.token)});
-					Context.comn.enqueue(email);
-				} catch (e:Dynamic) {
-					Context.db.rollback();
-					neko.Lib.rethrow(e);
-				}
-				Context.db.commit();
-			}
+		var u = User.manager.select($email == new EmailAddress(args.email));
+		if (u == null) {
+			trace('WARNING: email ${args.email} not found');
+			return;
 		}
-		Web.redirect("/");
+
+		Context.db.startTransaction();
+		try {
+			Token.invalidate(u);
+			var t = new Token(u);
+			t.insert();
+
+			var email = new comn.message.Email({
+				from : "sapo@sapo.robrt.io",
+				to : [u.email],
+				subject : sapo.view.email.PasswordResetEmail.subject(),
+				text : sapo.view.email.PasswordResetEmail.text(t.token)});
+			Context.comn.enqueue(email);
+		} catch (e:Dynamic) {
+			Context.db.rollback();
+			neko.Lib.rethrow(e);
+		}
+		Context.db.commit();
+		Web.redirect("/login");
 	}
 
 	@authorize(all)
@@ -147,11 +148,12 @@ class RootRoutes extends AccessControl {
 	@authorize(PSurveyor, PSuperUser)
 	public function doPayments(d:Dispatch)
 	{
-		switch Context.loop.privilege {
-		case PSurveyor: Sys.println(sapo.view.Payments.surveyorPage());
-		case PSuperUser: d.dispatch(new PaymentRoutes());
-		case other: throw 'access control model failure: got $other';
-		}
+		d.dispatch(new PaymentRoutes());
+		//switch Context.loop.privilege {
+		//case PSurveyor: Sys.println(sapo.view.Payments.surveyorPage());
+		//case PSuperUser: d.dispatch(new PaymentRoutes());
+		//case other: throw 'access control model failure: got $other';
+		//}
 	}
 
 	@authorize(PSuperUser)

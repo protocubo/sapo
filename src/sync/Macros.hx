@@ -91,7 +91,17 @@ class Macros {
 			{
 				try
 				{
-					$curEntry.insert();
+					//Qualquer tabela que não a session
+					if (Reflect.hasField(old_entry,"isDeleted"))
+					{
+						if(Reflect.field(old_entry, "isDeleted") == false)
+							$curEntry.insert();
+						else
+							$curEntry = old_entry;
+					}
+					else
+						$curEntry.insert();
+					
 					var v = ours.get(tblname) != null ? ours.get(tblname) : 0;
 					ours.set(tblname, v+1);
 				}

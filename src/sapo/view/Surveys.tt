@@ -36,7 +36,7 @@
 			<div class="row">
 				<div class="col-md-12 barraderolagem">
 					<!-- DADOS DA PESQUISA -->
-					<div class="bloco"><b>Endereço:</b> (: survey.logradouro :) , (: survey.numero :) (: survey.complemento :), (: survey.bairro :) - (: survey.municipio :) - (: survey.cep :)</div>
+					<div class="bloco"><b>Endereço:</b> (: survey.logradouro :) , (: survey.numero :) (: survey.complemento :), (: survey.bairro :) - Brasília</div>
 					<div class="bloco"><b>Data da Pesquisa:</b> (:survey.date_completed :) </div>
 					<hr>
 					<div class="bloco"><b>Contato:</b> (: dom.nomeContato :) ((: dom.telefoneContato :)) </div>
@@ -65,7 +65,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-(: Util.head("SAPO - Pesquisas") :)
+(: Util.head("SAPO - Pesquisas", {formCache:true}) :)
 </head>
 <body>
 	<!-- PESQUISAS -->
@@ -78,7 +78,7 @@
 		
 		<div class="row">
 			<!-- FILTROS -->
-			<form method="get" action="/surveys">
+			<form method="get" action="/surveys" name="filter">
 				<div class="col-md-2"><h5>USUÁRIO</h5>
 					<select class="form-control input-sm" name="user" id="userID">
 						<option value="">Todos</option>
@@ -99,15 +99,15 @@
 					<select class="form-control input-sm" name="status">
 						<option value= "(:SSAll:)" >Todas</option>
 						<option value= "(:SSAccepted:)" >Aceitas</option>
-						<option value= "(:SSPending:)" >Pendente</option>
-						<option value= "(:SSRefused:)" >Recusada</option>
+						<option value= "(:SSPending:)" >Verificar</option>
+						<option value= "(:SSRefused:)" >Recuperar</option>
 						<option value= "(:SSCompleted:)" >Completas</option>
 					</select>
 				</div>
 				<div class="col-md-2"><h5>ORDEM</h5>
 					<select class="form-control input-sm" name="order">
-						<option value="cres" >Data Crescente</option>
 						<option value="desc" >Data Decrescente</option>
+						<option value="cres" >Data Crescente</option>					
 					</select>
 				</div>
 				<div class="col-md-1"><h5>&nbsp;</h5>

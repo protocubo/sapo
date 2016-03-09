@@ -63,7 +63,7 @@
 		data3.addRows([
 			(: for data in sortedDateKeys :)
 				(: do var line = ["'"+DateTools.format(Date.fromString(data),"%d/%m/%Y")+"'"] :)
-				(: do var v = plotData.get(data).get("Recusadas") == null ? 0 : plotData.get(data).get("Recusadas") :)
+				(: do var v = plotData.get(data).get("Recuperar") == null ? 0 : plotData.get(data).get("Recuperar") :)
 				(: do line.push(v+'') :)
 				(: line :),
 			(: end :)
@@ -156,7 +156,7 @@
 					<span class="PPhoneOperator"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> CENTRAL TELEFÔNICA</span> |
 					<span class="PSuperUser"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> CONTROLE DE QUALIDADE</span>	|
 					<span class="completa"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> COMPLETAS</span> |
-					<span class="pendente"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> PENDENTES</span>	
+					<span class="pendente"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> VERIFICAR</span>
 				</h4>
 				<div id="chart_div"></div>
 			</div>
@@ -167,7 +167,7 @@
 				<div id="chart_div2"></div>
 			</div>
 			<div class="col-md-6">
-				<h4 class="recusada"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> RECUSADAS</h4>
+				<h4 class="recusada"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> RECUPERAR</h4>
 				<div id="chart_div3"></div>
 			</div>
 			(:*
