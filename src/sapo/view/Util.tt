@@ -1,4 +1,4 @@
-(: static function head(title:String, ?use:{ formCache:Bool }) :)
+(: static function head(title:String, ?use:{ ?formCache:Bool, ?uncollapseHash:Bool }) :)
 <!-- TITLE -->
 <meta charset="utf-8">
 <title>(: title :)</title>
@@ -15,7 +15,10 @@
 
 <!-- SAPO -->
 <link href="/css/sapo.css" rel="stylesheet" type="text/css" />
-(: if use != null && use.formCache :)<script src="/js/formcache.js"></script>(: end :)
+(:if use != null:)
+	(:if use.formCache:)<script src="/js/formcache.js"></script>(:end:)
+	(:if use.uncollapseHash:)<script>if (location.hash) $().ready(function () { document.getElementById(location.hash.substr(1)).className += " in" })</script>(:end:)
+(:end:)
 (: end :)
 
 (: static function navbar() :)

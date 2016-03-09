@@ -75,6 +75,19 @@ class TicketRoutes extends AccessControl {
 		Sys.println(sapo.view.Tickets.page(tickets,1,tickets.length));
 	}
 
+	function resetOrRedirect(?tid:Null<Int>)
+	{
+		var uri = Web.getLocalReferer();
+		if (uri == null) {
+			if (tid != null)
+				uri = '/tickets/search?ticket=$tid';
+			else
+				uri = "/tickets";
+		} else if (tid != null)
+			uri += "#BodyTicket" + tid;
+		Web.redirect(uri);
+	}
+
 	@authorize(PSupervisor, PPhoneOperator, PSuperUser)
 	public function postReply(t:Ticket, args:{ text:String })
 	{
@@ -113,7 +126,7 @@ class TicketRoutes extends AccessControl {
 			Web.setReturnCode(500);
 			return;
 		}
-		Web.redirect('/tickets/search?ticket=${t.id}');
+		resetOrRedirect(t.id);
 	}
 
 	@authorize(PSupervisor, PSuperUser)
@@ -140,8 +153,7 @@ class TicketRoutes extends AccessControl {
 			sub.insert();
 		}
 
-		Web.redirect("/tickets/search?ticket="+t.id);
-
+		resetOrRedirect(t.id);
 	}
 
 	@authorize(PSupervisor, PSuperUser)
@@ -162,7 +174,7 @@ class TicketRoutes extends AccessControl {
 		var msg = new TicketMessage(t, Context.loop.user, "~ TICKET FECHADO ~");
 		msg.insert();
 
-		Web.redirect('/tickets/search?ticket=${t.id}');
+		resetOrRedirect();
 	}
 
 	public function new() {}

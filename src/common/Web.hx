@@ -26,9 +26,11 @@
  */
 package common;
 
+import neko.Web in W;
+
 @:forwardStatics
 @:access(neko.Web)
-abstract Web(neko.Web) from neko.Web {
+abstract Web(W) from W {
 #if neko
 	static var date_get_tz = neko.Lib.load("std","date_get_tz", 0);
 	static function getTimezoneDelta():Float return 1e3*date_get_tz();
@@ -38,7 +40,7 @@ abstract Web(neko.Web) from neko.Web {
 	**/
 	public static function getAllParams()
 	{
-		var p = neko.Web._get_params();
+		var p = W._get_params();
 		var h = new Map<String, Array<String>>();
 		var k = "";
 		while( p != null ) {
@@ -56,7 +58,7 @@ abstract Web(neko.Web) from neko.Web {
 		Modifying the hashtable will not modify the cookie, use setCookie or addCookie instead.
 	**/
 	public static function getAllCookies() {
-		var p = neko.Web._get_cookies();
+		var p = W._get_cookies();
 		var h = new Map<String, Array<String>>();
 		var k = "";
 		while( p != null ) {
@@ -77,13 +79,27 @@ abstract Web(neko.Web) from neko.Web {
 		var buf = new StringBuf();
 		buf.add(value);
 		expire = DateTools.delta(expire, -getTimezoneDelta());
-		if( expire != null ) neko.Web.addPair(buf, "expires=", DateTools.format(expire, "%a, %d-%b-%Y %H:%M:%S GMT"));
-		neko.Web.addPair(buf, "domain=", domain);
-		neko.Web.addPair(buf, "path=", path);
-		if( secure ) neko.Web.addPair(buf, "secure", "");
-		if( httpOnly ) neko.Web.addPair(buf, "HttpOnly", "");
+		if( expire != null ) W.addPair(buf, "expires=", DateTools.format(expire, "%a, %d-%b-%Y %H:%M:%S GMT"));
+		W.addPair(buf, "domain=", domain);
+		W.addPair(buf, "path=", path);
+		if( secure ) W.addPair(buf, "secure", "");
+		if( httpOnly ) W.addPair(buf, "HttpOnly", "");
 		var v = buf.toString();
-		neko.Web._set_cookie(untyped key.__s, untyped v.__s);
+		W._set_cookie(untyped key.__s, untyped v.__s);
+	}
+
+	public static function getLocalReferer():Null<String>
+	{
+		var r = W.getClientHeader("Referer");
+		if (r == null) return null;
+		if (r.indexOf("#") >= 0) r = r.substr(0, r.indexOf("#"));  // shouldn't fragments anyways
+		var h = W.getClientHeader("Host");
+		var p = r.indexOf(h);
+		if (p == -1) {
+			if (r == "about:blank") return null;
+			return r;
+		}
+		return r.substr(p + h.length);
 	}
 }
 

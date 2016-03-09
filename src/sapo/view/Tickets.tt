@@ -108,7 +108,7 @@ unavailable
 <!DOCTYPE html>
 <html>
 <head>
-(: Util.head("SAPO - Tickets", {formCache:true}) :)
+(: Util.head("SAPO - Tickets", {formCache:true, uncollapseHash:true}) :)
 <script>
 	$('document').ready(function()
 	{
