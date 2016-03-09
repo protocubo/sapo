@@ -226,3 +226,70 @@ class Modo extends Object {
 	public var old_id : SInt;
 }
 
+@:id(user_id, group)
+class SurveyGroupStatus extends Object
+{
+	public var user_id : SInt;
+	//Group number
+	public var group : SInt;
+	//Surveys in this group
+	public var pesqGrupo : SInt;
+	
+	//Checks por grupo ( MIN(survey.checkFOO) )
+	public var checkSV : SNull<SBool>;
+	public var checkCT : SNull<SBool>;
+	public var checkCQ : SNull<SBool>;
+	
+	//Status de grupo (Summary)
+	public var Completa : SNull<SBool>;
+	public var allFalse : SInt;
+	public var hasFalse : SInt;
+	public var isTrue : SInt;
+	
+	public override function insert()
+	{
+		throw ("NO INSERT QUERIES ALLOWED! THIS IS A VIEW!");
+	}
+	
+	public override function update()
+	{
+		throw ("NO UPDATE QUERIES ALLOWED! THIS IS A VIEW!");
+	}
+	
+	public override function lock()
+	{
+		throw("You can't lock a view!");
+	}
+}
+
+@:id(id)
+class SurveyCheckStatus extends Object
+{
+	//id -> Survey.id
+	public var id : SInt;
+	public var group : SInt;
+	public var isPhoned : SBool;
+	
+	//Checks per group if Survey.checkFOO is null
+	public var checkSV : SNull<SBool>;
+	public var checkCT : SNull<SBool>;
+	public var checkCQ : SNull<SBool>;
+	
+	public override function insert()
+	{
+		throw ("NO INSERT QUERIES ALLOWED! THIS IS A VIEW!");
+	}
+	
+	public override function update()
+	{
+		throw ("NO UPDATE QUERIES ALLOWED! THIS IS A VIEW!");
+	}
+	
+	public override function lock()
+	{
+		throw("You can't lock a view!");
+	}
+	
+	
+}
+
