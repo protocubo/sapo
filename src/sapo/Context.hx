@@ -128,16 +128,18 @@ class Context {
 				trace('Ignoring $p: no table for it');
 				continue;
 			}
-
 			var p = haxe.io.Path.normalize(haxe.io.Path.join([bpath, p]));
-			var bytes = sys.io.File.getBytes(p);
-			var hash = haxe.crypto.Sha1.make(bytes).toHex();
+			var mtime = sys.FileSystem.stat(p).mtime;
+
 			startTransaction();
 			var v = SapoVersion.manager.get(p, true);
-			if (v != null && v.version == hash) {
+			if (v != null && v.updated_at > mtime) {
 				commit();
 				continue;
 			}
+
+			var bytes = sys.io.File.getBytes(p);
+			var hash = haxe.crypto.Sha1.make(bytes).toHex();
 			trace('Loading $p');
 			trace("... deleting everything");
 			db.request('DELETE FROM `$clName`');
