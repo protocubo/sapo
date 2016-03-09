@@ -7,7 +7,7 @@ class Macros {
 	{
 		return macro {
 			var norm_field = $field.split("_")[0];
-			//trace(StringTools.capitalize(norm_field));
+			
 			var e = Type.resolveEnum("common.spod." + StringTools.capitalize(norm_field));
 			if (Macros.checkEnumValue(e, Reflect.field($old_entry, $field)))
 			{
