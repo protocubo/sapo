@@ -60,7 +60,6 @@ class Context {
 	{
 		var managers:Array<Manager<Dynamic>> = [
 			Group.manager,
-			NewSurvey.manager,
 			QueuedMessage.manager,
 			SapoVersion.manager,
 			Session.manager,
