@@ -7,6 +7,9 @@ package common;
 	// Location of the local Sqlite db for the communication system
 	var COMN_DB = "COMN_DB";
 
+	// Location of necessary static files
+	var STATIC_FILES = "STATIC_FILES";
+
 	// Url to deliver Slack messages to
 	var COMN_SLACK_URL = "COMN_SLACK_URL";
 	// SendGrid API key

@@ -30,3 +30,16 @@ class NewSurvey extends sys.db.Object {
 	}
 }
 
+@:id(key)
+class SapoVersion extends sys.db.Object {
+	public var key:String;
+	public var version:String;
+
+	public function new(key, version)
+	{
+		this.key = key;
+		this.version = version;
+		super();
+	}
+}
+
