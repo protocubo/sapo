@@ -1,3 +1,4 @@
+(: import sapo.spod.Survey :)
 (: static function head(title:String, ?use:{ formCache:Bool }) :)
 <!-- TITLE -->
 <meta charset="utf-8">
@@ -112,48 +113,50 @@
       } :)
 (:end:)
 
-(: static function status(isPhoned : Bool, isPaid : Bool, checkSV:Bool, checkCT:Bool, checkCQ:Bool ) :)
+(: static function status( survey : Survey ) :)
 
+	(: do var surveyCheck = SurveyCheckStatus.manager.get(survey.id) :)
+	
 	<!-- se paga -->
-	(: if isPaid == true :)
+	(: if survey.paid == true :)
 	<span class="glyphicon glyphicon-usd" aria-hidden="true" title="PAGA"></span>
 	(: end :)
 	
 	<!-- se telefonada -->
-	(: if isPhoned == true :)
+	(: if surveyCheck.isPhoned == true :)
 	<span class="glyphicon glyphicon-earphone " aria-hidden="true" title="TELEFONADA"></span>
 	(: end :)
 	
 	<!-- status SUPERVISOR -->
-	(:if checkSV == true :)
+	(:if surveyCheck.checkSV == true :)
 	<span class="glyphicon glyphicon-ok PSupervisor" aria-hidden="true" title="SUPERVISOR"></span>
 	(: end :)
-	(:if checkSV == false :)
+	(:if surveyCheck.checkSV == false :)
 	<span class="glyphicon glyphicon-remove PSupervisor" aria-hidden="true" title="SUPERVISOR"></span>
 	(: end :)
-	(:if checkSV == null :)
+	(:if surveyCheck.checkSV == null :)
 	<span class="glyphicon glyphicon-minus PSupervisor" aria-hidden="true" title="SUPERVISOR"></span>
 	(: end :)
 	
 	<!-- status TELEFONISTA -->
-	(:if checkCT == true :)
+	(:if surveyCheck.checkCT == true :)
 	<span class="glyphicon glyphicon-ok PPhoneOperator" aria-hidden="true" title="TELEFONISTA"></span>
 	(: end :)
-	(:if checkCT == false :)
+	(:if surveyCheck.checkCT == false :)
 	<span class="glyphicon glyphicon-remove PPhoneOperator" aria-hidden="true" title="TELEFONISTA"></span>
 	(: end :)
-	(:if checkCT == null :)
+	(:if surveyCheck.checkCT == null :)
 	<span class="glyphicon glyphicon-minus PPhoneOperator" aria-hidden="true" title="TELEFONISTA"></span>
 	(: end :)
 
 	<!-- status SUPERUSUÁRIO -->
-	(:if checkCQ == true :)
+	(:if surveyCheck.checkCQ == true :)
 	<span class="glyphicon glyphicon-ok PSuperUser" aria-hidden="true" title="SUPERUSUÁRIO"></span>
 	(: end :)
-	(:if checkCQ == false :)
+	(:if surveyCheck.checkCQ == false :)
 	<span class="glyphicon glyphicon-remove PSuperUser" aria-hidden="true" title="SUPERUSUÁRIO"></span>
 	(: end :)
-	(:if checkCQ == null :)
+	(:if surveyCheck.checkCQ == null :)
 	<span class="glyphicon glyphicon-minus PSuperUser" aria-hidden="true" title="SUPERUSUÁRIO"></span>
 	(: end :)
 	

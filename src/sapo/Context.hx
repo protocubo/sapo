@@ -123,7 +123,7 @@ class Context {
 						ORDER BY s.user_id, s.`group`");
 		}
 		
-		if (!viewExists("SurveyStatus"))
+		if (!viewExists("SurveyCheckStatus"))
 		{
 			db.request("CREATE VIEW SurveyCheckStatus AS 
 						SELECT 
