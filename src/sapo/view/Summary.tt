@@ -156,7 +156,7 @@
 					<span class="PPhoneOperator"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> CENTRAL TELEFÔNICA</span> |
 					<span class="PSuperUser"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> CONTROLE DE QUALIDADE</span>	|
 					<span class="completa"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> COMPLETAS</span> |
-					<span class="pendente"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> VERIFICAR</span>	
+					<span class="pendente"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> VERIFICAR</span>
 				</h4>
 				<div id="chart_div"></div>
 			</div>

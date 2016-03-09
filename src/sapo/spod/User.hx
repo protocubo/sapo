@@ -47,7 +47,7 @@ class User extends Object {
 @:id(id)
 class Session extends Object {
 	public static inline var COOKIE_KEY = "session_id";
-	public static inline var DEFAULT_SESSION_DURATION = 24*3.6*1e6;  // unit: ms
+	public static inline var DEFAULT_SESSION_DURATION = 16*3.6*1e6;  // unit: ms
 
 	public var id:String;
 	@:relation(user_id) public var user:User;
@@ -85,23 +85,23 @@ class Token extends Object {
 	@:relation(user_id) public var user : User;
 	public var expirationTime(default,null) : HaxeTimestamp;
 	public var isExpired(default,null) : SBool = false;
-	
+
 	public function new(user)
 	{
 		super();
 		this.user = user;
-		
+
 		//Porco..corrigir depois
 		this.token = Random.global.readHex(64);
 		this.expirationTime = DateTools.delta(Context.now.toDate(), 1000.0 * 60 * 60 * 24 * 7).getTime();
-		
+
 	}
-	
+
 	public function setExpired()
 	{
 		this.isExpired = true;
 	}
-	
+
 	public static function invalidate(user)
 	{
 		if (user == null)
