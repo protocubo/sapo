@@ -9,7 +9,7 @@ import sapo.spod.Ticket;
 import sapo.spod.User;
 
 class TicketRoutes extends AccessControl {
-	public static inline var PAGE_SIZE = 10;
+	public static inline var PAGE_SIZE = 20;
 	public static inline var PARAM_ALL = "all";
 	public static inline var PARAM_GROUP = "group";
 	public static inline var PARAM_INDIVIDUAL = "individual";
@@ -48,7 +48,7 @@ class TicketRoutes extends AccessControl {
 			sql += " t.survey_id = " + survey_id;
 		else
 			sql += ' t.closed_at ${open ? "IS" : "NOT"} NULL';
-		
+
 		sql += ' ORDER BY t.opened_at LIMIT ${PAGE_SIZE + 1}';
 		if (args.page > 1)
 		{
@@ -59,7 +59,7 @@ class TicketRoutes extends AccessControl {
 		var tickets = Ticket.manager.unsafeObjects(sql, false);
 		var total = tickets.length;
 		//Pego 11 somente para comparação se devo colocar o btn Proximo
-		if (total > PAGE_SIZE)		
+		if (total > PAGE_SIZE)
 			tickets.pop();
 		Sys.println(sapo.view.Tickets.page(tickets,args.page,total));
 	}
@@ -71,7 +71,7 @@ class TicketRoutes extends AccessControl {
 		var tickets : List<Ticket> = new List();
 		if (args.ticket != null)
 			tickets.push(args.ticket);
-		
+
 		Sys.println(sapo.view.Tickets.page(tickets,1,tickets.length));
 	}
 
@@ -114,6 +114,33 @@ class TicketRoutes extends AccessControl {
 			return;
 		}
 		Web.redirect('/tickets/search?ticket=${t.id}');
+	}
+	@authorize(PSupervisor, PSuperUser)
+	public function postInclude(t : Ticket, args : { value : String } )
+	{
+		if (args == null)
+		{
+			Web.redirect("/tickets/");
+			return;
+		}
+		var intval = Std.parseInt(args.value);
+		var user : User = null;
+		var group : Group = null;
+
+		if (intval != null)
+			user = User.manager.get(intval);
+		else
+			group = Group.manager.select($name == args.value, null, false);
+
+		var ref = TicketSubscription.manager.select($ticket == t && $group == group && $user == user, null, false);
+		if (ref == null)
+		{
+			var sub = new TicketSubscription(t, group, user);
+			sub.insert();
+		}
+
+		Web.redirect("/tickets/search?ticket="+t.id);
+
 	}
 
 	@authorize(PSupervisor, PSuperUser)

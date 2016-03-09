@@ -140,11 +140,11 @@
 				</div>
 				<div class="col-md-2"><h5>STATUS</h5>
 					<select class="form-control input-sm"name="status" >
-						<option value= "(:SSAll:)" >Todas</option>
-						<option value= "(:SSAccepted:)" selected >Aceitas</option>
-						<option value= "(:SSPending:)" >Pendente</option>
-						<option value= "(:SSRefused:)" >Recusada</option>
+						<option value= "(:SSAccepted:)" >Aceitas</option>
+						<option value= "(:SSPending:)" >Verificar</option>
+						<option value= "(:SSRefused:)" >Recuperar</option>
 						<option value= "(:SSCompleted:)" >Completas</option>
+						<option value= "(:SSAll:)" >Todas</option>
 					</select>
 				</div>
 				<div class="col-md-1"><h5>&nbsp;</h5>

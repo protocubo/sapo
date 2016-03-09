@@ -28,7 +28,7 @@ $("document").ready(function()
 				</div>
 				<div class="col-md-2 col-md-offset-4">
 					<h5>E-MAIL:</h5>
-					<input type="email" name="email" class="form-control input-sm" required placeholder="E-mail" tabindex="1">
+					<input type="email" name="email" class="form-control input-sm" required placeholder="E-mail" tabindex="1" autofocus>
 				</div>
 				<div class="col-md-2">
 					<h5>SENHA:</h5>
@@ -36,19 +36,18 @@ $("document").ready(function()
 				</div>
 				<div class="col-md-1">
 					<h5>&nbsp;</h5>
-					<button type="button" class="btn btn-success btn-sm" tabindex="3">Entrar</button>
+					<button type="submit" class="btn btn-success btn-sm" tabindex="3">Entrar</button>
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-md-3 col-md-offset-9"><a href="#" data-toggle="modal" data-target="#login_esqueceusenha"><span style="font-size: 12px; margin-left: 10px;color: #777;">Esqueceu a senha?</span></a></div>
+		</form>
+		<div class="row">
+			<div class="col-md-3 col-md-offset-9"><a href="#" data-toggle="modal" data-target="#login_esqueceusenha"><span style="font-size: 12px; margin-left: 10px;color: #777;">Esqueceu a senha?</span></a></div>
+		</div>
+		<div class="row mt60">
+			<div class="col-md-12">
+				<img src="/resources/sapo_foto.jpg" class="img-responsive">
 			</div>
-			<div class="row mt60">
-				<div class="col-md-12">
-					<img src="/resources/sapo_foto.jpg" class="img-responsive">
-				</div>
-			</div>
-
-			</form>
+		</div>
 	</div>
 
 	(: Util.footer() :)
@@ -57,6 +56,7 @@ $("document").ready(function()
 	<div class="modal fade" id="login_esqueceusenha" tabindex="-1" role="dialog" aria-labelledby="login_esqueceusenha_label">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
+				<form method="POST" action="/forgotPassword">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 					<h4 class="modal-title" id="login_esqueceusenha_label">RECUPERAR SENHA</h4>
@@ -68,15 +68,16 @@ $("document").ready(function()
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-md-12"><input type="email" class="form-control"></div>
+						<div class="col-md-12"><input type="email" name="email" class="form-control" required></div>
 					</div>
 				</div>
 				<div class="modal-footer">
 					<div class="row">
 						<div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
-						<div class="col-md-6"><button type="button" class="btn btn-success">ENVIAR</button></div>
+						<div class="col-md-6"><button type="submit" class="btn btn-success">ENVIAR</button></div>
 					</div>
 				</div>
+				</form>
 			</div>
 		</div>
 	</div>	

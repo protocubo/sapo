@@ -57,7 +57,7 @@ unavailable
 				</div>
 				<div class="col-md-5 barraderolagem">
 					<!-- DADOS DA PESQUISA -->
-					<div class="bloco"><b>Endereço:</b>  (: ticket.survey.logradouro :) , (: ticket.survey.numero :) (: ticket.survey.complemento :), (: ticket.survey.bairro :) - (: ticket.survey.municipio :) - (: ticket.survey.cep :) </div>
+					<div class="bloco"><b>Endereço:</b>  (: ticket.survey.logradouro :) , (: ticket.survey.numero :) (: ticket.survey.complemento :), (: ticket.survey.bairro :) - Brasília </div>
 					<div class="bloco"><b>Data da Pesquisa:</b> (:ticket.survey.date_completed :) </div>
 					<hr>
 					(: do var fam = Familia.manager.select($survey == ticket.survey) :)
@@ -138,7 +138,6 @@ unavailable
 				if(params[i].indexOf("page") != -1)
 				{
 					var fields = params[i].split("=");
-					console.log(fields);
 					var curPage = parseInt(fields[1]);
 					if(nextPage)
 						curPage++;
@@ -256,7 +255,7 @@ unavailable
 				<li class="previous">&nbsp</li>
 				(: end :)
 				
-				(: if totalItems >= PAGE_SIZE :)
+				(: if totalItems > PAGE_SIZE :)
 				<li class="next"><a href="#">PRÓXIMA</a></li>
 				(: else :)
 				<li class="next">&nbsp;</li>

@@ -49,7 +49,6 @@ class InitDB
 				TableCreate.create(UF.manager);
 				TableCreate.create(LinhaOnibus.manager);
 				TableCreate.create(EstacaoMetro.manager);
-				populateStatics();
 				//Enums (many of them)
 				var classes = CompileTime.getAllClasses("common.spod", true, EnumTable);
 				for (c in classes)
@@ -73,7 +72,7 @@ class InitDB
 		{
 			throw "No classes found!";
 		}
-		
+
 		for (c in classes)
 		{
 			trace(Type.getClassName(c));
@@ -96,51 +95,5 @@ class InitDB
 				instance.insert();
 			}
 		}
-
-
-	}
-	
-	static function populateStatics()
-	{
-		var path = "./private/csvs/";
-		if (!FileSystem.exists(path))
-		{
-			trace("No CSVs detected @./private/csvs/");
-			return;
-		}
-		
-		//Manager.cnx.startTransaction();
-		var files = FileSystem.readDirectory(path);
-		for (f in files)
-		{
-			if (StringTools.endsWith(f,".csv"))
-			{
-				var file = File.read(path + f, false);
-				try
-				{
-					var fields = file.readLine().split(";");
-					while (true)
-					{
-						var params = file.readLine().split(";");
-						var cl = Type.resolveClass("common.spod.statics." + f.split(".")[0]);
-						var instance = Type.createEmptyInstance(cl);
-						var i = 0;
-						while (i < fields.length)
-						{
-							Reflect.setField(instance, fields[i], params[i]);
-							i++;
-						}
-						instance.insert();
-					}
-				}
-				catch (e : Eof)
-				{
-					trace("File " + f +" added!");
-					Manager.cnx.commit();
-				}
-			}
-		}
-		
-		
 	}
 }
