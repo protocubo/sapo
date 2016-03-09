@@ -29,6 +29,10 @@ class RootRoutes extends AccessControl {
 		Sys.println(sapo.view.Licenses.render());
 
 	@authorize(all, guest)
+	public function doError()
+		Sys.println(sapo.view.Error.render());
+
+	@authorize(all, guest)
 	public function doLogin(args:{ ?redirect:String })
 	{
 		var url = args.redirect == null || args.redirect == "/" ? null : args.redirect;
