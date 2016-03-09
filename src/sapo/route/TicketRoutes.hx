@@ -45,7 +45,7 @@ class TicketRoutes extends AccessControl {
 		}
 
 		if (survey_id != null)
-			sql += " t.survey_id = " + survey_id + "AND ";
+			sql += " t.survey_id = " + survey_id + " AND ";
 		
 		sql += ' t.closed_at ${open ? "IS" : "NOT"} NULL';
 
