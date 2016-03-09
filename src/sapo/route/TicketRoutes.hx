@@ -39,15 +39,15 @@ class TicketRoutes extends AccessControl {
 					WHERE (ts.group_id = ${g.id}) AND';
 		case PARAM_INDIVIDUAL:
 			' JOIN TicketSubscription ts ON t.id = ts.ticket_id
-					WHERE (ts.user_id = ${u.id}) AND';
+					WHERE (ts.user_id = ${u.id} ) AND';
 		case other:
 			throw 'Unexpected recipient value: $other';
 		}
 
 		if (survey_id != null)
-			sql += " t.survey_id = " + survey_id;
-		else
-			sql += ' t.closed_at ${open ? "IS" : "NOT"} NULL';
+			sql += " t.survey_id = " + survey_id + "AND ";
+		
+		sql += ' t.closed_at ${open ? "IS" : "NOT"} NULL';
 
 		sql += ' ORDER BY t.opened_at LIMIT ${PAGE_SIZE + 1}';
 		if (args.page > 1)
@@ -102,7 +102,7 @@ class TicketRoutes extends AccessControl {
 
 			var msg = new TicketMessage(t, u, args.text);
 			msg.insert();
-			var sub = TicketSubscription.manager.select($user == u);
+			var sub = TicketSubscription.manager.select($user == u || $group == u.group);
 			if (sub == null) {
 				sub = new TicketSubscription(t, u);
 				sub.insert();
@@ -132,7 +132,7 @@ class TicketRoutes extends AccessControl {
 		else
 			group = Group.manager.select($name == args.value, null, false);
 
-		var ref = TicketSubscription.manager.select($ticket == t && $group == group && $user == user, null, false);
+		var ref = TicketSubscription.manager.select($ticket == t && ($group == group || $user == user), null, false);
 		if (ref == null)
 		{
 			var sub = new TicketSubscription(t, group, user);
