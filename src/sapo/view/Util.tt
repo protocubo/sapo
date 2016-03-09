@@ -1,3 +1,4 @@
+(: import sapo.spod.Survey :)
 (: static function head(title:String, ?use:{ ?formCache:Bool, ?uncollapseHash:Bool }) :)
 
 <!-- TITLE -->
