@@ -69,11 +69,11 @@
 								<p>Nullam mi nisi, accumsan ac dapibus at, suscipit in dolor. Integer laoreet ex ex, at maximus quam maximus sed. Aenean dignissim, magna vitae pellentesque mattis, ante lacus malesuada arcu, quis sollicitudin massa enim sed mauris. Nunc commodo augue finibus urna laoreet, vitae luctus quam sagittis. Nulla facilisi. Donec viverra quis ex ac cursus. Vestibulum feugiat finibus felis eu dignissim.</p>
 							</div>
 							<div class="col-md-3">
-								<h4 class="pendente"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> PENDENTE</h4>
+								<h4 class="pendente"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span> VERIFICAR</h4>
 								<p>Nullam mi nisi, accumsan ac dapibus at, suscipit in dolor. Integer laoreet ex ex, at maximus quam maximus sed. Aenean dignissim, magna vitae pellentesque mattis, ante lacus malesuada arcu, quis sollicitudin massa enim sed mauris. Nunc commodo augue finibus urna laoreet, vitae luctus quam sagittis. Nulla facilisi. Donec viverra quis ex ac cursus. Vestibulum feugiat finibus felis eu dignissim.</p>
 							</div>
 							<div class="col-md-3">
-								<h4 class="recusada"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> RECUSADA</h4>
+								<h4 class="recusada"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> RECUPERAR</h4>
 								<p>Nullam mi nisi, accumsan ac dapibus at, suscipit in dolor. Integer laoreet ex ex, at maximus quam maximus sed. Aenean dignissim, magna vitae pellentesque mattis, ante lacus malesuada arcu, quis sollicitudin massa enim sed mauris. Nunc commodo augue finibus urna laoreet, vitae luctus quam sagittis. Nulla facilisi. Donec viverra quis ex ac cursus. Vestibulum feugiat finibus felis eu dignissim.</p>
 							</div>
 							<div class="col-md-3">

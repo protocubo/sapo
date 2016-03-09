@@ -28,7 +28,7 @@ $("document").ready(function()
 				</div>
 				<div class="col-md-2 col-md-offset-4">
 					<h5>E-MAIL:</h5>
-					<input type="email" name="email" class="form-control input-sm" required placeholder="E-mail" tabindex="1">
+					<input type="email" name="email" class="form-control input-sm" required placeholder="E-mail" tabindex="1" autofocus>
 				</div>
 				<div class="col-md-2">
 					<h5>SENHA:</h5>

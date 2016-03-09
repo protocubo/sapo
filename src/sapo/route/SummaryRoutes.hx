@@ -22,8 +22,8 @@ class SummaryRoutes extends AccessControl
 	public static inline var CT_KEY = "Central Telefônica";
 	public static inline var SUPER_KEY = "Controle de Qualidade";
 	public static inline var COMPLETA_KEY =  "Completas";
-	public static inline var PENDENTE_KEY = "Pendentes";
-	public static inline var RECUSADAS_KEY = "Recusadas";
+	public static inline var PENDENTE_KEY = "Verificar";
+	public static inline var RECUSADAS_KEY = "Recuperar";
 	public static inline var ACEITA_KEY = "Aceitas";
 
 	//static inline var

@@ -99,8 +99,8 @@
 					<select class="form-control input-sm" name="status">
 						<option value= "(:SSAll:)" >Todas</option>
 						<option value= "(:SSAccepted:)" >Aceitas</option>
-						<option value= "(:SSPending:)" >Pendente</option>
-						<option value= "(:SSRefused:)" >Recusada</option>
+						<option value= "(:SSPending:)" >Verificar</option>
+						<option value= "(:SSRefused:)" >Recuperar</option>
 						<option value= "(:SSCompleted:)" >Completas</option>
 					</select>
 				</div>
