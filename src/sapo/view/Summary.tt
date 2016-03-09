@@ -6,7 +6,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-(: Util.head("SAPO – Sumário") :)
+(: Util.head("SAPO – Sumário", {formCache:true, uncollapseHash: false}) :)
 
 <!-- GOOGLE CHARTS -->
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>

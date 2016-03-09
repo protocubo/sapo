@@ -65,7 +65,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-(: Util.head("SAPO - Pesquisas", {formCache:true}) :)
+(: Util.head("SAPO - Pesquisas", {formCache:true, uncollapseHash : true}) :)
 </head>
 <body>
 	<!-- PESQUISAS -->

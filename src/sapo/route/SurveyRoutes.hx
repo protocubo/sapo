@@ -1,5 +1,6 @@
 package sapo.route;
 
+import common.Web;
 import sapo.spod.Survey;
 import sapo.spod.User;
 import common.db.MoreTypes;
@@ -47,6 +48,7 @@ class SurveyRoutes extends AccessControl {
 		var surveys : List<Survey> = new List();
 		if (args.survey != null)
 			surveys.add(args.survey);
+
 		Sys.println(sapo.view.Surveys.page( surveys ));
 	}
 

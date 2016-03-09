@@ -3,7 +3,7 @@ package sapo.route;
 import common.db.MoreTypes;
 import haxe.Serializer;
 import haxe.Unserializer;
-import neko.Web;
+import common.Web;
 import sapo.Context;
 import sapo.spod.Survey;
 import sapo.spod.User;
@@ -265,16 +265,22 @@ class SummaryRoutes extends AccessControl
 			}
 		}
 
-		var referer = Web.getClientHeader("Referer");
-		referer = referer.split("?")[0];
 		var serializer = new Serializer();
 		if(ret.length > 0)
 			serializer.serialize(ret);
-		trace(referer);
-		if(ret.length > 0)
-			Web.redirect(referer + "?data=" + serializer.toString());
-		else
-			Web.redirect(referer);
+
+		redirect(serializer.toString(), user);
+	}
+	
+	function redirect(?data : Null<String>, user : User)
+	{
+		if (data != null && data.length > 0)
+			data = "?data=" + data;
+		//Remove all params
+		var uri = Web.getLocalReferer().split('?')[0];
+		uri += data + "&user=" + user.id;
+		Web.redirect(uri);
+		
 	}
 
 	//Pega todos os status por grupo e um Map de user_id, grupo, e enum de estado
@@ -282,6 +288,7 @@ class SummaryRoutes extends AccessControl
 	{
 		// TODO make compatible with mysql
 		// TODO when syncing, change WHERE s.date_completed to s.sync_timestamp
+		//TODO: Delete query and use UserGroup or x instead
 		var controlResults = Context.db.request("
 				SELECT
 					s.user_id as user,

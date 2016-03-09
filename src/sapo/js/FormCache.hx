@@ -6,9 +6,9 @@ import js.jquery.*;
 import js.Lib;
 
 class FormCache {
-	static var viewname = Browser.window.location.pathname;
+	//static var viewname = Browser.window.location.pathname;
 	
-	static function onSubmit(_)
+	/*static function onSubmit(_)
 	{
 		var local = Browser.getLocalStorage();
 		new JQuery("form[name='filter'] select,input").each(function(i, elem)
@@ -24,13 +24,24 @@ class FormCache {
 			
 			
 		});
-	}
+	}*/
 
 	static function main()
 	{
 		new JQuery().ready(function() {
 			
-			var local = Browser.getLocalStorage();
+			var search = Browser.location.search;
+			search = search.substr(1);
+			var params = search.split("&");
+			for (p in params)
+			{
+				var v = p.split("=");
+				var elem = new JQuery('input[name=\'' + v[0] + '\']');
+				if (elem == null || elem.length == 0)
+					elem = new JQuery('select[name=\'' + v[0] + '\']');
+				elem.val(v[1]);
+			}
+			/*var local = Browser.getLocalStorage();
 			if (local == null) {
 				trace("No local storage");
 				return;
@@ -64,6 +75,7 @@ class FormCache {
 				local.removeItem(u);
 			}
 			new JQuery("form[name='filter']").submit(onSubmit);
+			*/
 		});
 
 	}
