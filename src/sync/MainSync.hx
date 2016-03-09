@@ -36,13 +36,11 @@ class MainSync
 
 	static var targetCnx : Connection;
 
-	static var maxtimestamp : SFloat;
-
 	static var sessHash : Map<Int, Survey>;
 	static var famHash : Map<Int, Familia>;
 	static var morHash : Map<Int, Morador>;
 	static var pointhash : Map<Int,Ponto>;
-
+	static var curTimestamp : Float;
 	static var refValue : Map<String,Map<Int,Int>>;
 
 	//User_id , Group, Count
@@ -80,9 +78,6 @@ class MainSync
 		syncex = new Map();
 		ours = new Map();
 
-		//InitDB.run();
-
-
 		if (!FileSystem.exists("./private/cnxstring"))
 		{
 			trace("No cnxstring file!");
@@ -92,23 +87,9 @@ class MainSync
 		var cnxstring = Json.parse(File.getContent("./private/cnxstring"));
 		targetCnx = Mysql.connect(Reflect.field(cnxstring, "DFTTPODD"));
 		targetCnx.request("START TRANSACTION");
-
-		#if debug
-		var serverTimestamp = Date.now();
-		#else
-		var serverTimestamp = serverTimestamp();
-		#end
-
-		//SQLite - yay versao antiga
-		try{
-		Manager.cnx.request("CREATE VIEW UpdatedSurvey AS SELECT MAX(id) as session_id, old_survey_id, MAX(syncTimestamp) as syncTimestamp FROM Survey GROUP BY old_survey_id");
-		}
-		catch (e : Dynamic)
-		{
-
-		}
-		//MySQL
-		//Manager.cnx.request("CREATE OR REPLACE VIEW UpdatedSurvey AS SELECT MAX(id) as session_id, old_survey_id, MAX(syncTimestamp) as syncTimestamp FROM Survey GROUP BY old_survey_id");
+		
+		curTimestamp = serverTimestamp();
+		
 
 		var resUsers = Manager.cnx.request("SELECT id, user_id, `group` FROM Survey s JOIN UpdatedSurvey us ON s.id = us.session_id ORDER BY user_id, `group`");
 		userGroup = new Map();
@@ -116,10 +97,8 @@ class MainSync
 		{
 			var submap : Map<Int, Int>;
 			if (userGroup.get(r.user_id) == null)
-			{
-				//trace("woot");
 				submap = new Map();
-			}
+			
 			else
 				submap = userGroup.get(r.user_id);
 
@@ -128,7 +107,8 @@ class MainSync
 
 			userGroup.set(r.user_id, submap);
 		}
-
+		
+		var latestsync = Manager.cnx.request("SELECT MAX(syncTimestamp) as timestamp FROM Survey").results().first().timestamp();
 
 		//Todos os valores de enums -> usa as keys "EnumName" e "Old_val" => "New_val" para conversão das entradas originais para as novas
 		//A estrutura é Map<String,Map<Int,Int>>
@@ -136,13 +116,9 @@ class MainSync
 
 		// Query -> ../../extras/main.sql
 		//Session_id only
-		//var updateVars = targetCnx.request("SELECT DISTINCT session_id FROM ((SELECT ep.session_id as session_id FROM SyncMap sm join EnderecoProp ep ON sm.tbl = 'EnderecoProp' AND sm.new_id = ep.id /*AND sm.timestamp > x*/) UNION ALL (SELECT  s.id as session_id FROM SyncMap sm JOIN Session s ON sm.tbl = 'Session' AND sm.new_id = s.id /*AND sm.timestamp > x*/) UNION ALL ( select f.session_id as session_id FROM SyncMap sm JOIN Familia f ON f.id = sm.new_id AND sm.tbl = 'Familia'  /*AND sm.timestamp > x*/) UNION ALL (select  m.session_id as session_id FROM SyncMap sm JOIN Morador m ON m.id = sm.new_id AND sm.tbl = 'Morador'  /*AND sm.timestamp > x*/) UNION ( select  p.session_id as session_id FROM SyncMap sm JOIN Ponto p ON  sm.tbl = 'Ponto' AND p.id = sm.new_id  /*AND sm.timestamp > x*/) UNION ALL (select m.session_id as session_id FROM SyncMap sm JOIN Modo m ON m.id = sm.new_id AND sm.tbl = 'Modo'  /*AND sm.timestamp > x*/)	) ack WHERE session_id IS NOT NULL ORDER BY session_id ASC").results().map(function(v) { return v.session_id; } ).array();
-		var updateVars = targetCnx.request("SELECT id as session_id FROM Session WHERE id < 20").results().map(function(v) { return v.session_id; } ).array();
-		#if debug
-		maxtimestamp = Date.now().getTime();
-		#else
-		maxtimestamp = targetCnx.request("SELECT timestamp as tmp FROM SyncMap ORDER BY timestamp DESC LIMIT 1").results().first().tmp;
-		#end
+		var updateVars = targetCnx.request("SELECT DISTINCT session_id FROM ((SELECT ep.session_id as session_id FROM SyncMap sm join EnderecoProp ep ON sm.tbl = 'EnderecoProp' AND sm.new_id = ep.id /*AND sm.timestamp > x*/) UNION ALL (SELECT  s.id as session_id FROM SyncMap sm JOIN Session s ON sm.tbl = 'Session' AND sm.new_id = s.id /*AND sm.timestamp > x*/) UNION ALL ( select f.session_id as session_id FROM SyncMap sm JOIN Familia f ON f.id = sm.new_id AND sm.tbl = 'Familia'  /*AND sm.timestamp > x*/) UNION ALL (select  m.session_id as session_id FROM SyncMap sm JOIN Morador m ON m.id = sm.new_id AND sm.tbl = 'Morador'  /*AND sm.timestamp > x*/) UNION ( select  p.session_id as session_id FROM SyncMap sm JOIN Ponto p ON  sm.tbl = 'Ponto' AND p.id = sm.new_id  /*AND sm.timestamp > x*/) UNION ALL (select m.session_id as session_id FROM SyncMap sm JOIN Modo m ON m.id = sm.new_id AND sm.tbl = 'Modo'  AND sm.timestamp >"+latestsync+")) ack WHERE session_id IS NOT NULL ORDER BY session_id ASC").results().map(function(v) { return v.session_id; } ).array();
+		
+		
 
 		//Hash old_id -> new instance
 		sessHash = new Map<Int, Survey>();
@@ -156,13 +132,11 @@ class MainSync
 		}
 
 
-		//TODO: Mandar mensagem
 		for (k in syncex.keys())
 		{
 			var v = ours.get(k);
 			v = (v != null) ? v : 0;
 			var txt = "Table " + k + ": Syncex detected " + syncex.get(k) + " entries. Updated : " + v;
-			trace(txt);
 			enq.enqueue(new comn.message.Slack({ text : txt , username : "SyncBot" } ));
 		}
 
@@ -222,7 +196,7 @@ class MainSync
 			}
 		}
 
-		new_sess.syncTimestamp = maxtimestamp;
+		new_sess.syncTimestamp = curTimestamp;
 		if (insertMode)
 		{
 			var groups = userGroup.get(new_sess.user_id);
@@ -236,7 +210,6 @@ class MainSync
 					biggest = k;
 			}
 
-			//trace(groups != null);
 			if (groups.get(biggest) == null || groups.get(biggest) < 10)
 			{
 				var curval = groups.get(biggest) != null ? groups.get(biggest) : 0;
@@ -327,7 +300,7 @@ class MainSync
 						Macros.warnTable("Familia", field, null);
 				}
 			}
-			new_familia.syncTimestamp = maxtimestamp;
+			new_familia.syncTimestamp = curTimestamp;
 
 			Macros.validateEntry(Familia, ["syncTimestamp", "id"], [ { key : "old_id" , value : new_familia.old_id }, { key : "old_survey_id", value : new_familia.old_survey_id } ], new_familia);
 
@@ -379,7 +352,7 @@ class MainSync
 				}
 			}
 
-			new_morador.syncTimestamp = maxtimestamp;
+			new_morador.syncTimestamp = curTimestamp;
 
 			Macros.validateEntry(Morador, ["syncTimestamp", "id"], [ { key : "old_id", value : new_morador.old_id }, { key: "old_survey_id" , value : new_morador.old_survey_id } ], new_morador);
 
@@ -436,7 +409,7 @@ class MainSync
 				}
 			}
 
-			new_point.syncTimestamp = maxtimestamp;
+			new_point.syncTimestamp = curTimestamp;
 
 			Macros.validateEntry(Ponto, [ "id", "syncTimestamp"], [ { key : "old_id", value : new_point.old_id } ], new_point);
 			pointhash.set(new_point.old_id, new_point);
@@ -454,7 +427,6 @@ class MainSync
 			var new_modo = new Modo();
 			for(f in Reflect.fields(m))
 			{
-				//TODO: Syncar Tabela do Anderson de LINHA
 				switch(f)
 				{
 					case "id":
@@ -502,7 +474,7 @@ class MainSync
 				}
 			}
 
-			new_modo.syncTimestamp = maxtimestamp;
+			new_modo.syncTimestamp = curTimestamp;
 			Macros.validateEntry(Modo, ["id", "syncTimestamp"], [ { key : "old_id" , value : new_modo.old_id } ], new_modo);
 		}
 		return false;
@@ -539,7 +511,7 @@ class MainSync
 				}
 			}
 
-			c.syncTimestamp = maxtimestamp;
+			c.syncTimestamp = curTimestamp;
 			Macros.validateEntry(Ocorrencias, ["id", "syncTimestamp"], [ { key : "old_id", value : c.old_id } ], c);
 		}
 
@@ -579,14 +551,12 @@ class MainSync
 			var dif = 60*1000;
 			if ((now - dif) < f && f < (now + dif))
 			{
-				//TODO: Log error
 				throw "Error: Time difference is too damn high!";
 			}
 		}
 
 		http.onError = function(e : Dynamic)
 		{
-			//TODO: Log
 			throw e;
 		}
 		http.request();

@@ -26,7 +26,7 @@ class RootRoutes extends AccessControl {
 
 	@authorize(all, guest)
 	public function doLicenses()
-		Sys.println(sapo.view.Licenses.render());
+		Sys.println(sapo.view.Licenses.render());		
 
 	@authorize(all, guest)
 	public function doLogin(args:{ ?redirect:String })
@@ -41,7 +41,8 @@ class RootRoutes extends AccessControl {
 		var user = User.manager.select($email == new EmailAddress(args.email));
 		if (user == null || !user.password.matches(args.password)) {
 			trace('User "${args.email}" ' + (user == null ? "unknown" : "known, but password did not match"));
-			Web.redirect('default?error=${StringTools.urlEncode("Usuário ou senha inválidos")}');
+			//Web.redirect('default?error=${StringTools.urlEncode("Usuário ou senha inválidos")}');
+			Web.redirect('/error?title="Usuário ou senha inválidos"&message="Usuário ou senha inválidos"');
 			return;
 		}
 
@@ -49,6 +50,13 @@ class RootRoutes extends AccessControl {
 		session.insert();
 		Web.setCookie(Session.COOKIE_KEY, session.id, session.expires_at, null, "/", Web.isTora, true);
 		Web.redirect(args.redirect != null ? args.redirect : initialLocation(user));
+	}
+	
+	@authorize(all, guest)
+	public function doError( ?args:{ ?title:String, ?message:String } )
+	{
+		if (args == null) args = { };
+		Sys.println(sapo.view.Error.render(args.title, args.message));
 	}
 
 	@authorize(all, guest)
