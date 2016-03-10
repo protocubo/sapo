@@ -33,13 +33,23 @@ class CTicket
 				var r = new Random();
 				r.setSeed(42);
 				
-				var v = 2 / (10 - grouplength);
+				var v : Float;
+				if (grouplength == 1)
+					v = 2 / 10;
+				else
+					v = grouplength / 9;
+					
 				if (v > r.float())
 					createTicket = true;
 			}
+			else 
+				createTicket = true;
 			
 			if (createTicket)
 			{
+				var tsort = new TicketSort(user, group, survey);
+				tsort.insert();
+				
 				var t = new Ticket(survey, sysAuthor, TICKET_SUBJECT);
 				t.insert();
 				var msg = new TicketMessage(t, sysAuthor, TICKET_MESSAGE);
