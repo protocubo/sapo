@@ -113,7 +113,9 @@
 (: Util.head("SAPO - Pagamento", {formCache:true}) :)
 </head>
 <body>
-
+	(: if params == null :)
+	(: do params = { } :)
+	(: end :)
 	<!-- PAGAMENTOS / PESQUISADOR -->
 	<div class="container">
 	(: Util.navbar() :)
