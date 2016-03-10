@@ -39,16 +39,16 @@ class TicketRoutes extends AccessControl {
 					WHERE (ts.group_id = ${g.id}) AND';
 		case PARAM_INDIVIDUAL:
 			' JOIN TicketSubscription ts ON t.id = ts.ticket_id
-					WHERE (ts.user_id = ${u.id}) AND';
+					WHERE (ts.user_id = ${u.id} ) AND';
 		case other:
 			throw 'Unexpected recipient value: $other';
 		}
 
 		if (survey_id != null)
-			sql += " t.survey_id = " + survey_id;
-		else
-			sql += ' t.closed_at ${open ? "IS" : "NOT"} NULL';
+			sql += " t.survey_id = " + survey_id + " AND ";
 		
+		sql += ' t.closed_at ${open ? "IS" : "NOT"} NULL';
+
 		sql += ' ORDER BY t.opened_at LIMIT ${PAGE_SIZE + 1}';
 		if (args.page > 1)
 		{
@@ -59,7 +59,7 @@ class TicketRoutes extends AccessControl {
 		var tickets = Ticket.manager.unsafeObjects(sql, false);
 		var total = tickets.length;
 		//Pego 11 somente para comparação se devo colocar o btn Proximo
-		if (total > PAGE_SIZE)		
+		if (total > PAGE_SIZE)
 			tickets.pop();
 		Sys.println(sapo.view.Tickets.page(tickets,args.page,total));
 	}
@@ -71,8 +71,21 @@ class TicketRoutes extends AccessControl {
 		var tickets : List<Ticket> = new List();
 		if (args.ticket != null)
 			tickets.push(args.ticket);
-		
+
 		Sys.println(sapo.view.Tickets.page(tickets,1,tickets.length));
+	}
+
+	function resetOrRedirect(?tid:Null<Int>)
+	{
+		var uri = Web.getLocalReferer();
+		if (uri == null) {
+			if (tid != null)
+				uri = '/tickets/search?ticket=$tid';
+			else
+				uri = "/tickets";
+		} else if (tid != null)
+			uri += "#BodyTicket" + tid;
+		Web.redirect(uri);
 	}
 
 	@authorize(PSupervisor, PPhoneOperator, PSuperUser)
@@ -102,7 +115,7 @@ class TicketRoutes extends AccessControl {
 
 			var msg = new TicketMessage(t, u, args.text);
 			msg.insert();
-			var sub = TicketSubscription.manager.select($user == u);
+			var sub = TicketSubscription.manager.select($user == u || $group == u.group);
 			if (sub == null) {
 				sub = new TicketSubscription(t, u);
 				sub.insert();
@@ -113,10 +126,11 @@ class TicketRoutes extends AccessControl {
 			Web.setReturnCode(500);
 			return;
 		}
-		Web.redirect('/tickets/search?ticket=${t.id}');
+		resetOrRedirect(t.id);
 	}
+
 	@authorize(PSupervisor, PSuperUser)
-	public function postInclude(t : Ticket, args : { value : String } )	
+	public function postInclude(t : Ticket, args : { value : String } )
 	{
 		if (args == null)
 		{
@@ -126,22 +140,22 @@ class TicketRoutes extends AccessControl {
 		var intval = Std.parseInt(args.value);
 		var user : User = null;
 		var group : Group = null;
-		
+
 		if (intval != null)
 			user = User.manager.get(intval);
 		else
 			group = Group.manager.select($name == args.value, null, false);
-		
-		var ref = TicketSubscription.manager.select($ticket == t && $group == group && $user == user, null, false);
+
+		var ref = TicketSubscription.manager.select($ticket == t && ($group == group || $user == user), null, false);
 		if (ref == null)
 		{
 			var sub = new TicketSubscription(t, group, user);
 			sub.insert();
 		}
-		
-		Web.redirect("/tickets/search?ticket="+t.id);
-			
+
+		resetOrRedirect(t.id);
 	}
+
 	@authorize(PSupervisor, PSuperUser)
 	public function postClose(t:Lock<Ticket>)
 	{
@@ -160,7 +174,7 @@ class TicketRoutes extends AccessControl {
 		var msg = new TicketMessage(t, Context.loop.user, "~ TICKET FECHADO ~");
 		msg.insert();
 
-		Web.redirect('/tickets/search?ticket=${t.id}');
+		resetOrRedirect();
 	}
 
 	public function new() {}

@@ -32,7 +32,7 @@ unavailable
 					<b>Pesquisa #(:ticket.survey.id:)</b> - <span class="PSurveyor">(: User.manager.get(ticket.survey.user_id).name :)</span>
 				</a>
 			<span class="tags">
-				(: Util.status( ticket.survey.isPhoned,ticket.survey.paid,ticket.survey.checkSV,ticket.survey.checkCT,ticket.survey.checkCQ) :)
+				(: Util.status( ticket.survey) :)
 			</span>
 			</div>
 		</div>
@@ -65,10 +65,10 @@ unavailable
 					<div class="bloco"><b>Senha:</b> <span class="pin">(: ticket.survey.pin :)</span> </div>
 					<hr>
 					(: for m in sapo.spod.Survey.Morador.manager.search($survey_id == ticket.survey.id)  :)
-						(: var dash = false :)
+						(: var dash = false :)							
 							<p><b>(: m.nomeMorador :) ((: Util.enumText(m.idade) :)):</b>
 							(: for p in sapo.spod.Ponto.manager.search($morador_id == m.id)  :)
-								(: if dash :) - (: end :)(: p.motivo :) (: do dash = true :)
+								(: if dash :) - (: end :)(: Util.enumText(p.motivo) :) (: do dash = true :)
 							(: end :)
 							</p>
 					(: end :)
@@ -108,7 +108,7 @@ unavailable
 <!DOCTYPE html>
 <html>
 <head>
-(: Util.head("SAPO - Tickets", {formCache:true}) :)
+(: Util.head("SAPO - Tickets", {formCache:true, uncollapseHash:true}) :)
 <script>
 	$('document').ready(function()
 	{
@@ -184,7 +184,7 @@ unavailable
 					<select class="form-control input-sm" id="recipientID" name="recipient">
 						<option value="(:PARAM_ALL:)">Para todos</option>
 						<option value="(:PARAM_GROUP:)">Para o grupo</option>
-						<option value="(:PARAM_INDIVIDUAL:)">Para mim</option>
+						<option value="(:PARAM_INDIVIDUAL:)">De/Para mim</option>
 					</select>
 				</div>
 				<div class="col-md-2"><h5>ESTADO</h5>
