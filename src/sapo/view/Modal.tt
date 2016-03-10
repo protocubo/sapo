@@ -117,7 +117,7 @@
 				</div>
 				<div class="modal-body">
 					<div class="row">
-						<div class="col-md-6 text-right"><h4>Supervisores:</h4></div>
+						<div class="col-md-6 text-right"><h4>Supervisor:</h4></div>
 						<div class="col-md-6">
 							<div class="btn-group" data-toggle="buttons">
 								<label class="btn btn-default active" style="width:auto;">
