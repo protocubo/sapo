@@ -52,6 +52,27 @@ class SurveyRoutes extends AccessControl {
 		Sys.println(sapo.view.Surveys.page( surveys ));
 	}
 
+	@authorize(PSuperUser, PSupervisor, PPhoneOperator)
+	public function doChangecheck(args:{ surveyid:Int, checkSV:Null<Bool>, checkCT:Null<Bool>, checkCQ:Null<Bool> })  // TODO only POST
+	{
+        var s = Survey.manager.select($id == args.surveyid);
+        var priv = Context.loop.privilege;
+        var changecheckSV = false;
+        var changecheckCT = false;
+        var changecheckCQ = false;
+		if (s.checkSV != args.checkSV && (priv == PSupervisor || priv == PSuperUser)) changecheckSV = true;
+		if (s.checkCT != args.checkCT && (priv == PPhoneOperator || priv == PSuperUser)) changecheckCT = true;
+		if (s.checkCQ != args.checkCQ && priv == PSuperUser) changecheckCQ = true;
+        if (changecheckSV || changecheckCT || changecheckCQ) {
+            s.lock();
+            if (changecheckSV)  s.checkSV = args.checkSV;
+            if (changecheckCT)  s.checkCT = args.checkCT;
+            if (changecheckCQ)  s.checkCQ = args.checkCQ;
+            s.update();
+        }
+		Web.redirect("/survey/" + s.id);
+	}
+
 	public function new() {}
 }
 

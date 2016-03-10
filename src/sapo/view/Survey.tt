@@ -285,68 +285,72 @@ function onSubmitTicket()
 	<!-- MODAL STATUS -->
 	<div class="modal fade" id="pesquisa_status" tabindex="-1" role="dialog" aria-labelledby="pesquisa_status_label">
 		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title" id="pesquisa_status_label">CONFERÊNCIA</h4>
-				</div>
-				<div class="modal-body">
-					<div class="row">
-						<div class="col-md-4 col-md-offset-2 PSupervisor"><h4>Supervisor:</h4></div>
-						<div class="col-md-4">
-							<div class="btn-group" data-toggle="buttons">
-								<label class="btn btn-default active" style="width:auto;">
-									<input type="radio" name="options" id="option1" autocomplete="off" checked> <span class="glyphicon glyphicon-minus PSupervisor" aria-hidden="true"></span>
-								</label>
-								<label class="btn btn-default" style="width:auto;">
-									<input type="radio" name="options" id="option2" autocomplete="off"> <span class="glyphicon glyphicon-ok PSupervisor" aria-hidden="true"></span>
-								</label>
-								<label class="btn btn-default" style="width:auto;">
-									<input type="radio" name="options" id="option3" autocomplete="off"> <span class="glyphicon glyphicon-remove PSupervisor" aria-hidden="true"></span>
-								</label>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-md-4 col-md-offset-2 PPhoneOperator"><h4>Central Telefônica:</h4></div>
-						<div class="col-md-4">
-							<div class="btn-group" data-toggle="buttons">
-								<label class="btn btn-default active" style="width:auto;">
-									<input type="radio" name="options" id="option1" autocomplete="off" checked> <span class="glyphicon glyphicon-minus PPhoneOperator" aria-hidden="true"></span>
-								</label>
-								<label class="btn btn-default" style="width:auto;">
-									<input type="radio" name="options" id="option2" autocomplete="off"> <span class="glyphicon glyphicon-ok PPhoneOperator" aria-hidden="true"></span>
-								</label>
-								<label class="btn btn-default" style="width:auto;">
-									<input type="radio" name="options" id="option3" autocomplete="off"> <span class="glyphicon glyphicon-remove PPhoneOperator" aria-hidden="true"></span>
-								</label>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-md-4 col-md-offset-2 PSuperUser"><h4>Controle de Qualidade:</h4></div>
-						<div class="col-md-4">
-							<div class="btn-group" data-toggle="buttons">
-								<label class="btn btn-default active" style="width:auto;">
-									<input type="radio" name="options" id="option1" autocomplete="off" checked> <span class="glyphicon glyphicon-minus PSuperUser" aria-hidden="true"></span>
-								</label>
-								<label class="btn btn-default" style="width:auto;">
-									<input type="radio" name="options" id="option2" autocomplete="off"> <span class="glyphicon glyphicon-ok PSuperUser" aria-hidden="true"></span>
-								</label>
-								<label class="btn btn-default" style="width:auto;">
-									<input type="radio" name="options" id="option3" autocomplete="off"> <span class="glyphicon glyphicon-remove PSuperUser" aria-hidden="true"></span>
-								</label>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="modal-footer">
-					<div class="row">
-						<div class="col-md-4"><button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button></div>
-						<div class="col-md-4 col-md-offset-4"><button type="button" class="btn btn-success">Conferir</button></div>
-					</div>
-				</div>
-			</div>
+<<<<<<< HEAD
+		    <form action="/surveys/changecheck" method="get">
+                <input type="hidden" id="checkedSurvey" name="surveyid" value="(: survey.id :)">
+                <div class="modal-content">
+                        <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="pesquisa_status_label">CONFERÊNCIA</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-4 col-md-offset-2 PSupervisor"><h4>Supervisor:</h4></div>
+                            <div class="col-md-4">
+                                <div class="btn-group" data-toggle="buttons">
+                                    <label class="btn btn-default (: if survey.checkSV == null :) active (: end :)" style="width:auto;">
+                                        <input type="radio" name="checkSV" value="" id="op1null" autocomplete="off" > <span class="glyphicon glyphicon-minus PSupervisor" aria-hidden="true"></span>
+                                    </label>
+                                    <label class="btn btn-default (: if survey.checkSV == true :) active (: end :)" style="width:auto;">
+                                        <input type="radio" name="checkSV" value="true" id="op2true" autocomplete="off"> <span class="glyphicon glyphicon-ok PSupervisor" aria-hidden="true"></span>
+                                    </label>
+                                    <label class="btn btn-default(: if survey.checkSV == false :) active (: end :) " style="width:auto;">
+                                        <input type="radio" name="checkSV" value="false" id="op3false" autocomplete="off"> <span class="glyphicon glyphicon-remove PSupervisor" aria-hidden="true"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 col-md-offset-2 PPhoneOperator"><h4>Central Telefônica:</h4></div>
+                            <div class="col-md-4">
+                                <div class="btn-group" data-toggle="buttons">
+                                    <label class="btn btn-default (: if survey.checkCT == null :) active (: end :)" style="width:auto;">
+                                        <input type="radio" name="checkCT" value="" id="op1null" autocomplete="off" > <span class="glyphicon glyphicon-minus PPhoneOperator" aria-hidden="true"></span>
+                                    </label>
+                                    <label class="btn btn-default (: if survey.checkCT == true :) active (: end :)" style="width:auto;">
+                                        <input type="radio" name="checkCT" value="true" id="op2true" autocomplete="off" > <span class="glyphicon glyphicon-ok PPhoneOperator" aria-hidden="true"></span>
+                                    </label>
+                                    <label class="btn btn-default (: if survey.checkCT == false :) active (: end :)" style="width:auto;">
+                                        <input type="radio" name="checkCT" value="false" id="op3false" autocomplete="off" > <span class="glyphicon glyphicon-remove PPhoneOperator" aria-hidden="true"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 col-md-offset-2 PSuperUser"><h4>Superusuário:</h4></div>
+                            <div class="col-md-4">
+                                <div class="btn-group" data-toggle="buttons">
+                                    <label class="btn btn-default (: if survey.checkCQ == null :) active (: end :)" style="width:auto;">
+                                        <input type="radio" name="checkCQ" value="" id="op1null" autocomplete="off"> <span class="glyphicon glyphicon-minus PSuperUser" aria-hidden="true"></span>
+                                    </label>
+                                    <label class="btn btn-default (: if survey.checkCQ == true :) active (: end :)" style="width:auto;">
+                                        <input type="radio" name="checkCQ" value="true" id="op2true" autocomplete="off" > <span class="glyphicon glyphicon-ok PSuperUser" aria-hidden="true"></span>
+                                    </label>
+                                    <label class="btn btn-default (: if survey.checkCQ == false :) active (: end :)" style="width:auto;">
+                                        <input type="radio" name="checkCQ" value="false" id="op3false" autocomplete="off"> <span class="glyphicon glyphicon-remove PSuperUser" aria-hidden="true"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="row">
+                            <div class="col-md-4"><button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button></div>
+                            <div class="col-md-4 col-md-offset-4"><button type="submit" class="btn btn-success">Conferir</button></div>
+                        </div>
+                    </div>
+                </div>
+            </form>
 		</div>
 	</div>
 
