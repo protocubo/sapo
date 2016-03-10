@@ -16,6 +16,20 @@ class TicketRoutes extends AccessControl {
 	public static inline var PARAM_OPEN = "open";
 	public static inline var PARAM_CLOSED = "closed";
 
+	public static function canClose(t:Ticket)
+	{
+		return switch Context.loop.privilege {
+		case PSuperUser:
+			true;
+		case PPhoneOperator if (t.recipient.group == Context.loop.group):
+			true;
+		case PSupervisor if (t.author == Context.loop.user):
+			true;
+		case _:
+			false;
+		}
+	}
+
 	@authorize(PSupervisor, PPhoneOperator, PSuperUser)
 	public function doDefault(?args:{?recipient:String, ?state:String, ?survey : Survey, ?page : Int })
 	{
@@ -129,7 +143,7 @@ class TicketRoutes extends AccessControl {
 		resetOrRedirect(t.id);
 	}
 
-	@authorize(PSupervisor, PSuperUser)
+	@authorize(PSupervisor, PPhoneOperator, PSuperUser)
 	public function postInclude(t : Ticket, args : { value : String } )
 	{
 		if (args == null)
@@ -159,21 +173,7 @@ class TicketRoutes extends AccessControl {
 		resetOrRedirect(t.id);
 	}
 
-	public static function canClose(t:Ticket)
-	{
-		return switch Context.loop.privilege {
-		case PSuperUser:
-			true;
-		case PPhoneOperator if (t.recipient.group == Context.loop.group):
-			true;
-		case PSupervisor if (t.author == Context.loop.user):
-			true;
-		case _:
-			false;
-		}
-	}
-
-	@authorize(PSupervisor, PSuperUser, PPhoneOperator)
+	@authorize(PSupervisor, PPhoneOperator, PSuperUser)
 	public function postClose(t:Lock<Ticket>)
 	{
 		if (!canClose(t)) {
