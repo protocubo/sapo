@@ -10,6 +10,7 @@ import sapo.spod.Other;
 import sapo.spod.Survey;
 import sapo.spod.Ticket;
 import sapo.spod.User;
+import StringTools.*;
 
 private typedef Groups = {
 	surveyors : Group,
@@ -235,8 +236,8 @@ class Populate {
 		p.street_id = rnd.int(9999);
 		p.survey = s;
 		p.syncTimestamp = m.syncTimestamp;
-		p.tempo_chegada = rnd.int(24)  + ":" + rnd.int(60);
-		p.tempo_saida = rnd.int(24) + ":" + rnd.int(60);
+		p.tempo_chegada = lpad(Std.string(rnd.int(24)), "0", 2) + ":" + lpad(Std.string(rnd.int(60)), "0", 2);
+		p.tempo_saida = lpad(Std.string(rnd.int(24)), "0", 2) + ":" + lpad(Std.string(rnd.int(60)), "0", 2);
 		p.uf = UF.manager.get(1);
 		p.insert();
 		return p;
