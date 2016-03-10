@@ -22,7 +22,7 @@
 	<td align="right">
 	(: if !payment.paid :)
 		<button type="button" class="btn btn-success btn-xs" aria-label="Desativar" style="width:auto;" data-toggle="modal" data-target="#pagar(: payment.id :)_um">
-			<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+			<span class="glyphicon glyphicon-usd" aria-hidden="true"></span>
 		</button>
 	(: end:)
 	</td>
@@ -190,18 +190,15 @@
 					(: surveySuperStatus(p) :)
 				(: end :)
 			</tbody>
-			(: if params.paid != true :)
+			
 			<tfoot>
 				<tr>
-					<td colspan="8" align="right">
-						<button type="button" class="btn btn-success btn-xs" aria-label="Desativar" style="width:auto;" data-toggle="modal" data-target="#pagar_selecionadas">
-							REGISTRAR PAGAMENTO NAS SELECIONADAS
-						</button>
+					<td colspan="8">
+
 					</td>
 				</tr>
 			</tfoot>
-			(: end :)
-			
+
 			<script>
 				function toggleCheckBoxes(source) 
 				{
@@ -247,6 +244,16 @@
 			
 		</table>
 		
+		<div class="row">
+			<div class="col-md-2">
+				(: if params.paid != true :)
+					<button type="button" class="btn btn-success btn-sm" aria-label="Desativar" data-toggle="modal" data-target="#pagar_selecionadas">
+						Pagar selecionadas
+					</button>
+				(: end :)
+			</div>
+		</div>
+			
 		<nav>
 			<ul class="pager mt30">
 			(:if showPrev:)
@@ -285,8 +292,8 @@
 				</div>
 				<div class="modal-footer">
 					<div class="row">
-						<div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
-						<div class="col-md-6"><button type="submit" value="submit" class="btn btn-success">PAGAR</button></div>
+						<div class="col-md-4"><button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button></div>
+						<div class="col-md-4 col-md-offset-4"><button type="submit" value="submit" class="btn btn-success">Pagar</button></div>
 					</div>
 				</div>
 			</div>

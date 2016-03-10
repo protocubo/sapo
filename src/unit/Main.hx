@@ -8,6 +8,7 @@ class Main {
 		runner.addCase(new DataBaseMetaToTemplateTests());
 		runner.addCase(new RandomTests());
 		runner.addCase(new QueryTests());
+		runner.addCase(new TimeTests());
 
 		utest.ui.Report.create(runner);
 

@@ -273,8 +273,8 @@ function onSubmitTicket()
 				</div>
 				<div class="modal-footer">
 					<div class="row">
-						<div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
-						<div class="col-md-6"><button type="submit" class="btn btn-success">ENVIAR</button></div>
+						<div class="col-md-4"><button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button></div>
+						<div class="col-md-4 col-md-offset-4"><button type="submit" class="btn btn-success">Enviar</button></div>
 					</div>
 				</div>
 			</div>
@@ -346,6 +346,19 @@ function onSubmitTicket()
                                     </label>
                                     <label class="btn btn-default (: if survey.checkCQ == false :) active (: end :)" style="width:auto;">
                                         <input type="radio" name="checkCQ" value="false" id="op3false" autocomplete="off" (: if survey.checkCQ == false :) checked (: end :)> <span class="glyphicon glyphicon-remove PSuperUser" aria-hidden="true"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 col-md-offset-2"><h4>Telefonada:</h4></div>
+                            <div class="col-md-4">
+                                <div class="btn-group" data-toggle="buttons">
+                                    <label class="btn btn-default (: if survey.isPhoned == false :) active (: end :)" style="width:auto; color:#DDD;">
+                                        <input type="radio" name="Phoned" value="false" id="nao" autocomplete="off"> <span class="glyphicon glyphicon-earphone" aria-hidden="true"></span>
+                                    </label>
+                                    <label class="btn btn-default (: if survey.isPhoned == true :) active (: end :)" style="width:auto;">
+                                        <input type="radio" name="Phoned" value="true" id="sim" autocomplete="off" > <span class="glyphicon glyphicon-earphone" aria-hidden="true"> </span>
                                     </label>
                                 </div>
                             </div>
