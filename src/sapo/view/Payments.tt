@@ -33,16 +33,10 @@
 (: static function surveySimpleStatus(payment:Survey) :)
 <!-- LINHA: número da pesquisa, data da pesquisa, endereço, refpagto, datapagto, status -->
 <tr>
-	<td>(: payment.id:)</td>
+	<td>(: payment.id:) </td>
 	<td>(: payment.date_completed :)</td>
-	<td></td>
-	<td>(: payment.paid? payment.paymentRef : "" :)</td>
 	<td>(: payment.paid? payment.date_paid : "" :)</td>
-	<td class="text-right">
-	(:if payment.paid == true:)
-		<b class="aceita">Aceita</b>
-	(: end :)
-	</td>
+	<td>(: if payment.paymentRef == null :) Sem referência (: else :)(: payment.paid? payment.paymentRef : "" :) (: end :)</td>
 </tr>
 <!-- FIM LINHA -->
 (: end :)
@@ -68,12 +62,10 @@
 			<thead>
 				<tr>
 					<!-- HEAD -->
-					<th width="15%">Pesquisa</th>
-					<th width="20%">Data</th>
-					<th>Endereço</th>
-					<th width="15%">Ref. Pagto.</th>
-					<th width="15%">Data Pgto.</th>
-					<th class="text-right" width="15%">Status</th>
+					<th width="25%">Pesquisa</th>
+					<th width="25%">Data Completa</th>
+					<th width="25%">Data Pagamento</th>
+					<th width="25%">Referência Pagamento</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -83,11 +75,10 @@
 			</tbody>
 			<tfoot>
 				<tr>
-					<td colspan="6"></td>
+					<td colspan="4"></td>
 				</tr>
 			</tfoot>
 		</table>
-		
 		<nav>
 			<ul class="pager mt30">
 			(:if showPrev:)
