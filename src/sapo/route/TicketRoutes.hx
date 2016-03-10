@@ -145,7 +145,10 @@ class TicketRoutes extends AccessControl {
 			user = User.manager.get(intval);
 		else
 			group = Group.manager.select($name == args.value, null, false);
-
+		
+		var msg = new TicketMessage(t, Context.loop.user, "~ " + ((user != null) ? user.name : group.name) + " incluído(a) ao ticket ~".toUpperCase());
+		msg.insert();
+		
 		var ref = TicketSubscription.manager.select($ticket == t && ($group == group || $user == user), null, false);
 		if (ref == null)
 		{
@@ -163,7 +166,7 @@ class TicketRoutes extends AccessControl {
 		switch Context.loop.privilege {
 		case PSupervisor if (Context.loop.user != t.author):
 			throw 'Can\'t close ticket authored by someone else';
-		case PSuperUser:
+		case PSuperUser, PPhoneOperator:
 			// ok;
 		case _: throw "Assertion failed";
 		}

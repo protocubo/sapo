@@ -15,6 +15,9 @@ import haxe.PosInfos;
 import common.spod.InitDB;
 import sapo.Context;
 import sapo.spod.Survey;
+import sapo.spod.Ticket;
+import sapo.spod.User;
+import sapo.spod.User.Group;
 import sys.db.TableCreate;
 
 import sys.db.Connection;
@@ -52,9 +55,20 @@ class MainSync
 	static var warning : Int = 0;
 
 	static var enq : LocalEnqueuer;
+	
+	static var SYNC_USER : String;
+	
+	
+	static var TARGET_GROUP : String;
+	
+	static var group: Group;
+	static var author : User;
 
 	public static function main()
 	{
+		SYNC_USER = Sys.getEnv("SYNC_USER");
+		TARGET_GROUP = Sys.getEnv("TARGET_GROUP");
+		
 		Log.trace = function(txt : Dynamic, ?infos : PosInfos)
 		{
 			var v = File.append("Log.txt");
@@ -75,6 +89,10 @@ class MainSync
 
 		}
 		//END
+		
+		author = User.manager.get(Std.parseInt(SYNC_USER), false);
+		group = Group.manager.select($name == TARGET_GROUP, null, false);
+		
 		syncex = new Map();
 		ours = new Map();
 
@@ -83,14 +101,15 @@ class MainSync
 			trace("No cnxstring file!");
 			return;
 		}
-
+		serverTimestamp();
+		
 		var cnxstring = Json.parse(File.getContent("./private/cnxstring"));
 		targetCnx = Mysql.connect(Reflect.field(cnxstring, "DFTTPODD"));
 		targetCnx.request("START TRANSACTION");
 		
-		curTimestamp = serverTimestamp();
 		
-
+		curTimestamp = targetCnx.request("SELECT MAX(timestamp) as max FROM SyncMap").results().first().max;
+		
 		var resUsers = Manager.cnx.request("SELECT id, user_id, `group` FROM Survey s JOIN UpdatedSurvey us ON s.id = us.session_id ORDER BY user_id, `group`");
 		userGroup = new Map();
 		for (r in resUsers)
@@ -109,14 +128,15 @@ class MainSync
 		}
 		
 		var latestsync = Manager.cnx.request("SELECT MAX(syncTimestamp) as timestamp FROM Survey").results().first().timestamp();
-
+		
+		
 		//Todos os valores de enums -> usa as keys "EnumName" e "Old_val" => "New_val" para conversão das entradas originais para as novas
 		//A estrutura é Map<String,Map<Int,Int>>
 		refValue = populateHash();
 
 		// Query -> ../../extras/main.sql
 		//Session_id only
-		var updateVars = targetCnx.request("SELECT DISTINCT session_id FROM ((SELECT ep.session_id as session_id FROM SyncMap sm join EnderecoProp ep ON sm.tbl = 'EnderecoProp' AND sm.new_id = ep.id /*AND sm.timestamp > x*/) UNION ALL (SELECT  s.id as session_id FROM SyncMap sm JOIN Session s ON sm.tbl = 'Session' AND sm.new_id = s.id /*AND sm.timestamp > x*/) UNION ALL ( select f.session_id as session_id FROM SyncMap sm JOIN Familia f ON f.id = sm.new_id AND sm.tbl = 'Familia'  /*AND sm.timestamp > x*/) UNION ALL (select  m.session_id as session_id FROM SyncMap sm JOIN Morador m ON m.id = sm.new_id AND sm.tbl = 'Morador'  /*AND sm.timestamp > x*/) UNION ( select  p.session_id as session_id FROM SyncMap sm JOIN Ponto p ON  sm.tbl = 'Ponto' AND p.id = sm.new_id  /*AND sm.timestamp > x*/) UNION ALL (select m.session_id as session_id FROM SyncMap sm JOIN Modo m ON m.id = sm.new_id AND sm.tbl = 'Modo'  AND sm.timestamp >"+latestsync+")) ack WHERE session_id IS NOT NULL ORDER BY session_id ASC").results().map(function(v) { return v.session_id; } ).array();
+		var updateVars = targetCnx.request("SELECT DISTINCT session_id FROM ((SELECT ep.session_id as session_id FROM SyncMap sm join EnderecoProp ep ON sm.tbl = 'EnderecoProp' AND sm.new_id = ep.id AND sm.timestamp > "+latestsync+") UNION ALL (SELECT  s.id as session_id FROM SyncMap sm JOIN Session s ON sm.tbl = 'Session' AND sm.new_id = s.id AND sm.timestamp > "+latestsync+") UNION ALL ( select f.session_id as session_id FROM SyncMap sm JOIN Familia f ON f.id = sm.new_id AND sm.tbl = 'Familia'  AND sm.timestamp > "+latestsync+") UNION ALL (select  m.session_id as session_id FROM SyncMap sm JOIN Morador m ON m.id = sm.new_id AND sm.tbl = 'Morador'  AND sm.timestamp > "+latestsync+") UNION ( select  p.session_id as session_id FROM SyncMap sm JOIN Ponto p ON  sm.tbl = 'Ponto' AND p.id = sm.new_id  AND sm.timestamp > "+latestsync+") UNION ALL (select m.session_id as session_id FROM SyncMap sm JOIN Modo m ON m.id = sm.new_id AND sm.tbl = 'Modo'  AND sm.timestamp >"+latestsync+")) ack WHERE session_id IS NOT NULL ORDER BY session_id ASC").results().map(function(v) { return v.session_id; } ).array();
 		
 		
 
@@ -188,11 +208,11 @@ class MainSync
 							Reflect.setField(new_sess, f, Reflect.field(dbSession, f));
 				//Enum
 				case "estadoPesquisa_id":
-					Macros.setEnumField(f, new_sess, dbSession);
+					Macros.setEnumField(f, new_sess, dbSession, sid);
 				case "ponto","gps_id","client_ip", "closedFromIndex":
 					continue;
 				default:
-					Macros.warnTable("Survey", f, null);
+					Macros.extraField("Survey", f);
 			}
 		}
 
@@ -217,6 +237,8 @@ class MainSync
 				userGroup.set(new_sess.user_id, groups);
 
 				new_sess.group = biggest;
+				var sort = new CTicket();
+				sort.sort(new_sess.user_id, new_sess.group, biggest, new_sess);
 			}
 			else
 			{
@@ -225,6 +247,9 @@ class MainSync
 				userGroup.set(new_sess.user_id, groups);
 
 				new_sess.group = v;
+				
+				var sort = new CTicket();
+				sort.sort(new_sess.user_id, new_sess.group, biggest, new_sess);
 			}
 
 		}
@@ -271,7 +296,7 @@ class MainSync
 					case "ocupacaoDomicilio_id", "condicaoMoradia_id", "tipoImovel_id",
 					"aguaEncanada_id", "anoVeiculoMaisRecente_id", "empregadosDomesticos_id",
 					"rendaDomiciliar_id":
-						Macros.setEnumField(field, new_familia, f);
+						Macros.setEnumField(field, new_familia, f, old_sid);
 					
 					//Fields ctrl+c ctrl+v
 					case "isEdited", "numeroResidentes", "banheiros", "quartos",
@@ -297,7 +322,7 @@ class MainSync
 					"codigoReagendamento":
 						continue;
 					default:
-						Macros.warnTable("Familia", field, null);
+						Macros.extraField("Familia", field);
 				}
 			}
 			new_familia.syncTimestamp = curTimestamp;
@@ -330,7 +355,7 @@ class MainSync
 						new_morador.quemResponde = morHash.get(m.quemResponde_id);
 					//Enums
 					case "idade_id", "grauInstrucao_id", "situacaoFamiliar_id", "atividadeMorador_id", "portadorNecessidadesEspeciais_id", "motivoSemViagem_id","setorAtividadeEmpresaPrivada_id","setorAtividadeEmpresaPublica_id":
-						Macros.setEnumField(field, new_morador, m);
+						Macros.setEnumField(field, new_morador, m, old_session);
 					//Bools
 					case "isDeleted", "possuiHabilitacao_id","proprioMorador_id":
 						var f = (Reflect.field(m, field) == null) ? null : (Reflect.field(m, field) == 1);
@@ -348,7 +373,7 @@ class MainSync
 					case "gps_id","codigoReagendamento":
 						continue;
 					default:
-						Macros.warnTable("Morador", field, null);
+						Macros.extraField("Morador", field);
 				}
 			}
 
@@ -401,11 +426,11 @@ class MainSync
 							Reflect.setField(new_point, field, Reflect.field(p, field));
 					//Enums
 					case "motivoID", "motivoOutraPessoaID":
-						Macros.setEnumField("motivo", new_point, p);
+						Macros.setEnumField("motivo", new_point, p, session_id);
 					case "gps_id", "anterior_id", "posterior_id", "ordem", "city_str", "regadm_str", "street_str", "complement_str", "complement_two_str", "isIntermediario":
 						continue;
 					default:
-						Macros.warnTable("Ponto", field, null);
+						Macros.extraField("Ponto", field);
 				}
 			}
 
@@ -441,14 +466,14 @@ class MainSync
 						Reflect.setProperty(new_modo, f, (pointhash.get(Reflect.field(m, f)) != null) ? pointhash.get(Reflect.field(m, f)).id : null );
 					//Enums
 					case "meiotransporte_id":
-						if (Macros.checkEnumValue(MeioTransporte, m.meiotransporte_id))
+						if (Macros.checkEnumValue(MeioTransporte, m.meiotransporte_id, session_id))
 							new_modo.meiotransporte = Macros.getStaticEnum(MeioTransporte, m.meiotransporte_id);
 					case "estacaoEmbarque_id", "estacaoDesembarque_id":
 						Reflect.setProperty(new_modo, f.split("_")[0], EstacaoMetro.manager.get(Reflect.field(m, f)));
 					case "linhaOnibus_id":
 						new_modo.linhaOnibus = LinhaOnibus.manager.get(m.linhaOnibus_id);
 					case "formaPagamento_id", "tipoEstacionamento_id":
-						Macros.setEnumField(f, new_modo, m);
+						Macros.setEnumField(f, new_modo, m, session_id);
 					//Bools
 					case "isDeleted":
 						new_modo.isDeleted = (m.isDeleted == 1);
@@ -470,7 +495,7 @@ class MainSync
 					case "anterior_id", "posterior_id","ordem", "gps_id", "estacaoEmbarque_str", "estacaoDesembarque_str","naoSabeLinhaOnibus", "naoSabeEstacaoEmbarque", "naoSabeEstacaoDesembarque", "naoSabeValorViagem", "naoSabeValorPagoTaxi", "naoSabeCustoEstacionamento","naoRespondeuLinhaOnibus", "naoRespondeuEstacaoEmbarque", "naoRespondeuEstacaoDesembarque", "naoRespondeuValorViagem", "naoRespondeuValorPagoTaxi","naoRespondeuCustoEstacionamento":
 						continue;
 					default:
-						Macros.warnTable("Modo", f, null);
+						Macros.extraField("Modo", f);
 				}
 			}
 
@@ -507,7 +532,7 @@ class MainSync
 					case "sessionTime_id", "gps_id":
 						continue;
 					default:
-						Macros.warnTable("Ocorrencias", f, null);
+						Macros.extraField("Ocorrencias", f);
 				}
 			}
 
@@ -538,8 +563,22 @@ class MainSync
 
 		return t;
 	}
+	
 
-	static function serverTimestamp() : Float
+	static function ticket(subject : String, msg : String, survey_id : Int)
+	{
+		var survey = Survey.manager.get(survey_id);
+		var t = new Ticket(survey, author, subject);
+		t.insert();
+		
+		var sub = new TicketSubscription(t, group, null);
+		sub.insert();
+		
+		var rec = new TicketRecipient(t, sub);
+		rec.insert();
+	}
+	
+	static function serverTimestamp()
 	{
 		var http = new Http("syncex.comtacti.com");
 		http.setHeader("X-sync-type", "timestamp");
@@ -547,8 +586,8 @@ class MainSync
 		{
 			var f = Std.parseFloat(s);
 			var now = Date.now().getTime();
-			//1min
-			var dif = 60*1000;
+			//5s
+			var dif = 5000;
 			if ((now - dif) < f && f < (now + dif))
 			{
 				throw "Error: Time difference is too damn high!";

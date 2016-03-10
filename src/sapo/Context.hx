@@ -67,6 +67,7 @@ class Context {
 			TicketMessage.manager,
 			TicketRecipient.manager,
 			TicketSubscription.manager,
+			TicketSort.manager,
 			Token.manager,
 			User.manager
 		];

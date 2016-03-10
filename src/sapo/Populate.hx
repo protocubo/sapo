@@ -113,7 +113,7 @@ class Populate {
 		s.checkCT = rndNullTrue();
 		s.checkSV = rndNullTrue();
 		s.checkCQ = rndNullTrue();
-		s.isPhoned = rndNullTrue(.1);
+		s.isPhoned = rndTrue(.1);
 		s.date_started = s.date_create;
 		s.date_finished = rndDate(s.date_create, HaxeTimestamp.resolveTime(5*$day));
 		s.date_completed = s.date_finished;

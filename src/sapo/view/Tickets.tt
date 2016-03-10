@@ -11,6 +11,22 @@ unavailable
 (: end :)
 
 (: static function ticketSummary(ticket:Ticket, ?open=false) :)
+<script>
+	$(document).ready(function()
+	{
+		$("#BodyTicket(:ticket.id:)").on('shown.bs.collapse', function()
+			{
+				var elem = $(this).find(".barraderolagem").first();
+				var p = elem.find('p');
+				top1 = p.first().offset().top;
+				top2 = p.last().offset().top;
+				
+				elem.animate({
+					scrollTop: parseInt(top2-top1)
+				}, 0);
+			});
+	});
+</script>
 <!-- TICKET -->
 <div class="panel panel-default">
 	<!-- HEAD TICKET -->
@@ -83,7 +99,7 @@ unavailable
 					(: do disabled = true :)
 				(: end :)
 				(: do var closedDisabled = false :)
-				(: if ticket.author != u && u.group.privilege != PSuperUser :)
+				(: if ticket.author != u && (u.group.privilege != PSuperUser || u.group.privilege == PPhoneOperator ) :)
 					(: do closedDisabled = true :)
 				(: end :)
 
@@ -121,6 +137,8 @@ unavailable
 		{
 			locationgen(true);
 		});
+		
+	
 	});
 	
 	//Gera o window.location.href de um modo overkill
