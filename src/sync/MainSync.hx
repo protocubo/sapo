@@ -83,14 +83,15 @@ class MainSync
 			trace("No cnxstring file!");
 			return;
 		}
-
+		serverTimestamp();
+		
 		var cnxstring = Json.parse(File.getContent("./private/cnxstring"));
 		targetCnx = Mysql.connect(Reflect.field(cnxstring, "DFTTPODD"));
 		targetCnx.request("START TRANSACTION");
 		
-		curTimestamp = serverTimestamp();
 		
-
+		curTimestamp = targetCnx.request("SELECT MAX(timestamp) as max FROM SyncMap").results().first().max;
+		
 		var resUsers = Manager.cnx.request("SELECT id, user_id, `group` FROM Survey s JOIN UpdatedSurvey us ON s.id = us.session_id ORDER BY user_id, `group`");
 		userGroup = new Map();
 		for (r in resUsers)
@@ -109,14 +110,15 @@ class MainSync
 		}
 		
 		var latestsync = Manager.cnx.request("SELECT MAX(syncTimestamp) as timestamp FROM Survey").results().first().timestamp();
-
+		
+		
 		//Todos os valores de enums -> usa as keys "EnumName" e "Old_val" => "New_val" para conversão das entradas originais para as novas
 		//A estrutura é Map<String,Map<Int,Int>>
 		refValue = populateHash();
 
 		// Query -> ../../extras/main.sql
 		//Session_id only
-		var updateVars = targetCnx.request("SELECT DISTINCT session_id FROM ((SELECT ep.session_id as session_id FROM SyncMap sm join EnderecoProp ep ON sm.tbl = 'EnderecoProp' AND sm.new_id = ep.id /*AND sm.timestamp > x*/) UNION ALL (SELECT  s.id as session_id FROM SyncMap sm JOIN Session s ON sm.tbl = 'Session' AND sm.new_id = s.id /*AND sm.timestamp > x*/) UNION ALL ( select f.session_id as session_id FROM SyncMap sm JOIN Familia f ON f.id = sm.new_id AND sm.tbl = 'Familia'  /*AND sm.timestamp > x*/) UNION ALL (select  m.session_id as session_id FROM SyncMap sm JOIN Morador m ON m.id = sm.new_id AND sm.tbl = 'Morador'  /*AND sm.timestamp > x*/) UNION ( select  p.session_id as session_id FROM SyncMap sm JOIN Ponto p ON  sm.tbl = 'Ponto' AND p.id = sm.new_id  /*AND sm.timestamp > x*/) UNION ALL (select m.session_id as session_id FROM SyncMap sm JOIN Modo m ON m.id = sm.new_id AND sm.tbl = 'Modo'  AND sm.timestamp >"+latestsync+")) ack WHERE session_id IS NOT NULL ORDER BY session_id ASC").results().map(function(v) { return v.session_id; } ).array();
+		var updateVars = targetCnx.request("SELECT DISTINCT session_id FROM ((SELECT ep.session_id as session_id FROM SyncMap sm join EnderecoProp ep ON sm.tbl = 'EnderecoProp' AND sm.new_id = ep.id AND sm.timestamp > "+latestsync+") UNION ALL (SELECT  s.id as session_id FROM SyncMap sm JOIN Session s ON sm.tbl = 'Session' AND sm.new_id = s.id AND sm.timestamp > "+latestsync+") UNION ALL ( select f.session_id as session_id FROM SyncMap sm JOIN Familia f ON f.id = sm.new_id AND sm.tbl = 'Familia'  AND sm.timestamp > "+latestsync+") UNION ALL (select  m.session_id as session_id FROM SyncMap sm JOIN Morador m ON m.id = sm.new_id AND sm.tbl = 'Morador'  AND sm.timestamp > "+latestsync+") UNION ( select  p.session_id as session_id FROM SyncMap sm JOIN Ponto p ON  sm.tbl = 'Ponto' AND p.id = sm.new_id  AND sm.timestamp > "+latestsync+") UNION ALL (select m.session_id as session_id FROM SyncMap sm JOIN Modo m ON m.id = sm.new_id AND sm.tbl = 'Modo'  AND sm.timestamp >"+latestsync+")) ack WHERE session_id IS NOT NULL ORDER BY session_id ASC").results().map(function(v) { return v.session_id; } ).array();
 		
 		
 
@@ -539,7 +541,7 @@ class MainSync
 		return t;
 	}
 
-	static function serverTimestamp() : Float
+	static function serverTimestamp()
 	{
 		var http = new Http("syncex.comtacti.com");
 		http.setHeader("X-sync-type", "timestamp");
@@ -548,7 +550,7 @@ class MainSync
 			var f = Std.parseFloat(s);
 			var now = Date.now().getTime();
 			//1min
-			var dif = 60*1000;
+			var dif = 2000;
 			if ((now - dif) < f && f < (now + dif))
 			{
 				throw "Error: Time difference is too damn high!";
