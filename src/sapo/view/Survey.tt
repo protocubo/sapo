@@ -60,7 +60,7 @@ function imprimir() {
 		</ol>
 		
 		<!-- ACTIONS -->
-		<div class="row">
+		<div class="row" style="margin-bottom:30px;">
 			<div class="col-md-2"><h5>IMPRESSÃO</h5>
 				<a class="btn btn-default btn-sm" onclick="imprimir()">Imprimir</a>
 			</div>
@@ -79,14 +79,27 @@ function imprimir() {
 		</div>
 	</div>
 
-	<div class="container mt30">
+	<div class="container">
+		<!-- HEAD -->
+		<div class="row mt30">
+			<div class="col-md-12">
+				<h3 style=" float:left;">
+					<span class="glyphicon glyphicon-file" aria-hidden="true"></span>
+					PESQUISA #(:survey.id:)
+				</h3>
+				<h3 class="tags">
+					(:Util.status(survey):)
+				</h3>
+				
+			</div>
+		</div>
 		<!-- BODY - PESQUISA -->
 		<div class="row">
 			<div class="col-md-12">
-				<h3><span class="glyphicon glyphicon-file" aria-hidden="true"></span> INFORMAÇÕES DA PESQUISA</h3>
 				<div class="bloco"><b>Lote:</b> (: survey.lote :) </div>
 				<div class="bloco"><b class="PSurveyor">Pesquisador:</b> (: user.name :) </div>
 				<div class="bloco"><b class="PSupervisor">Supervisor:</b> (: user.supervisor.name :)</div>
+				<br>
 				<div class="bloco"><b>1º Visita:</b> (: survey.date_started :)</div>
 				<div class="bloco"><b>Completada:</b> (: survey.date_completed :)</div>
 				<div class="bloco"><b>Contato:</b> (: dom.nomeContato :) ((: dom.telefoneContato :))</div>
@@ -97,44 +110,35 @@ function imprimir() {
 				(: end :)
 			</div>
 		</div>
-		<hr />
 
 		<!-- BODY - OCORRÊNCIAS  ONLY IF THERE ARE ANY -->
 		(: var ocur = Ocorrencias.manager.select($survey == survey) :) (:*FIXME syncTimestamp*:) 
 		(: if ocur != null :)
-			<div class="row">
+			<div class="row mt30">
 				<div class="col-md-12">
 					<h3><span class="glyphicon glyphicon-alert" aria-hidden="true"></span> OCORRÊNCIAS </h3>
 					<div class="bloco"> (: ocur.desc :) </div>
 				</div>
 			</div>
-			<hr />
 		(: end :)
 
 		<!-- BODY - DOMICÍLIO -->
-		<div class="row">
+		<div class="row mt30">
 			<div class="col-md-12">
 				<h3><span class="glyphicon glyphicon-home" aria-hidden="true"></span> DOMICÍLIO: (: dom.numeroResidentes :) morador(es)</h3>
 				<div class="bloco"><b>Estrato:</b> (: survey.estrato :) </div>
-				<div class="bloco"><b>Endereço:</b> (: survey.logradouro :) , (: survey.numero :) (: survey.complemento :), (: survey.bairro :)</div>
-				<div class="bloco"><b>Domicílio:</b> (: Util.enumText(dom.ocupacaoDomicilio) :) ((: Util.enumText(dom.condicaoMoradia) :))(: if dom.aguaEncanada != null :), (: Util.enumText(dom.aguaEncanada) :)(: end :) (: if dom.ruaPavimentada_id :), rua pavimentada (: end :)</div>
-				<div class="bloco">
-					<b>Imóvel:</b>
-					(: Util.enumText(dom.tipoImovel) :) com (: dom.quartos :) quarto(s), (: dom.banheiros :) banheiro(s)
-					(: if dom.tvCabo_id :), possui TV a cabo (: else if dom.tvCabo_id == null :), não respondeu se possui TV a cabo(: end :)
-					(: if dom.empregadosDomesticos == null :), (: Util.enumText(dom.empregadosDomesticos) :) empregado(s) domestíco(s)(:end:)
-				</div>
-				<div class="bloco"><b>Mobilidade:</b> (: dom.veiculos :) veículo(s)(: if dom.anoVeiculoMaisRecente != null :) ((: Util.enumText(dom.anoVeiculoMaisRecente) :))(: end :), (: dom.motos :) moto(s), (: dom.bicicletas :) bicicleta(s)
-				(: if dom.vagaPropriaEstacionamento_id :) possui vaga própria para estacionamento (: else if dom.vagaPropriaEstacionamento_id == false :), não possui vaga própria para estacionamento (: else :) (: end :)</div>
+				<div class="bloco"><b>Endereço:</b> (: survey.logradouro :)(: if survey.numero != null :), (: survey.numero :)(: end :)(: if survey.complemento != null :) - (: survey.complemento :)(: end :)(: if survey.bairro != null :), (: survey.bairro :)(: end :)</div>
+				<div class="bloco"><b>Domicílio:</b> (: Util.enumText(dom.ocupacaoDomicilio) :) ((: Util.enumText(dom.condicaoMoradia) :))(: if dom.ruaPavimentada_id :), rua pavimentada (: end :)(: if dom.empregadosDomesticos != null :), (: Util.enumText(dom.empregadosDomesticos) :)(:end:)</div>
+				<div class="bloco"><b>Imóvel:</b> (: Util.enumText(dom.tipoImovel) :) com (: dom.quartos :) quarto(s), (: dom.banheiros :) banheiro(s)(: if dom.tvCabo_id :), possui TV a cabo (: else if dom.tvCabo_id == null :), não respondeu se possui TV a cabo(: end :)(: if dom.aguaEncanada != null :), (: Util.enumText(dom.aguaEncanada) :)(: end :)</div>
+				<div class="bloco"><b>Mobilidade:</b> (: dom.veiculos :) veículo(s)(: if dom.anoVeiculoMaisRecente != null :) ((: Util.enumText(dom.anoVeiculoMaisRecente) :))(: end :), (: dom.motos :) moto(s), (: dom.bicicletas :) bicicleta(s)(: if dom.vagaPropriaEstacionamento_id :), possui vaga própria para estacionamento (: else if dom.vagaPropriaEstacionamento_id == false :), não possui vaga própria para estacionamento (: else :) (: end :)</div>
 				<div class="bloco"><b>Renda:</b> (: Util.enumText(dom.rendaDomiciliar) :)(: if dom.recebeBolsaFamilia :), recebe bolsa família(: else if dom.recebeBolsaFamilia == null :), não respondeu se recebe bolsa família(: end :)</div>
 			</div>
 		</div>
-		<hr />
 		(: for m in sapo.spod.Survey.Morador.manager.search($survey_id == survey.id && $familia == dom )  :)
 		<!-- BODY - MORADOR : UM BLOCO DESSES POR MORADOR -->
-		<div class="row">
+		<div class="row mt30">
 			<div class="col-md-12">
-				<h3><span class="glyphicon glyphicon-user" aria-hidden="true"></span> MORADOR: (: Util.enumText(m.situacaoFamiliar) :) - (: m.nomeMorador :) ((: Util.enumText(m.idade) :) anos) - (: if m.genero_id == 1 :) Feminino (: else :) Masculino (: end :) (: if m.proprioMorador_id :) (: else :) [Respondida por terceiro ((: end :) (: if m.quemResponde != null :)(: m.quemResponde.nomeMorador :))(: else :) (: end :)</h3>
+				<h3><span class="glyphicon glyphicon-user" aria-hidden="true"></span> MORADOR: (: Util.enumText(m.situacaoFamiliar) :) - (: m.nomeMorador :) ((: Util.enumText(m.idade) :) anos) - (: if m.genero_id == 1 :) Feminino (: else :) Masculino (: end :) (: if m.proprioMorador_id :) (: else :) [Respondida por terceiro(: if m.quemResponde != null :)((: m.quemResponde.nomeMorador :))(: end :)] (: end :) </h3>
 				<div class="bloco">
 					<b>Atividade:</b>
 					(: Util.enumText(m.atividadeMorador) :)
@@ -144,7 +148,7 @@ function imprimir() {
 				<div class="bloco"><b>Grau de instrução:</b> (:  Util.enumText(m.grauInstrucao) :)</div>
 				<div class="bloco"><b>Necessidades Especiais:</b> (:  Util.enumText(m.portadorNecessidadesEspeciais) :)</div>
 				<div class="bloco"><b>Habilitação?</b> (: if m.possuiHabilitacao_id :) Possui (: else if m.possuiHabilitacao_id == false :) Não Possui (: else :) Não Respondeu (: end :)</div>
-				<hr />
+
 				(: do var pontos =  sapo.spod.Survey.Ponto.manager.search($survey == survey && $morador == m, {orderBy : ordem}) :)
 				(: if pontos.length == 0 :)
 					<div class="viagem">
@@ -191,7 +195,6 @@ function imprimir() {
 						(: end :)
 						<!-- CHEGADA -->
 						<p>
-							
 							<b><span class="glyphicon glyphicon-time" aria-hidden="true"></span> Chegada:</b> (: p.tempo_chegada :)
 						</p>
 					</div>
@@ -238,8 +241,8 @@ function imprimir() {
 				</div>
 				<div class="modal-footer">
 					<div class="row">
-						<div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
-						<div class="col-md-6"><button type="button" class="btn btn-success">ENVIAR</button></div>
+						<div class="col-md-4"><button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button></div>
+						<div class="col-md-4 col-md-offset-4"><button type="button" class="btn btn-success">Enviar</button></div>
 					</div>
 				</div>
 			</div>
@@ -252,7 +255,7 @@ function imprimir() {
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title" id="pesquisa_status_label">MUDAR STATUS</h4>
+					<h4 class="modal-title" id="pesquisa_status_label">CONFERÊNCIA</h4>
 				</div>
 				<div class="modal-body">
 					<div class="row">
@@ -272,7 +275,7 @@ function imprimir() {
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-md-4 col-md-offset-2 PPhoneOperator"><h4>Telefonista:</h4></div>
+						<div class="col-md-4 col-md-offset-2 PPhoneOperator"><h4>Central Telefônica:</h4></div>
 						<div class="col-md-4">
 							<div class="btn-group" data-toggle="buttons">
 								<label class="btn btn-default active" style="width:auto;">
@@ -288,7 +291,7 @@ function imprimir() {
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-md-4 col-md-offset-2 PSuperUser"><h4>Superusuário:</h4></div>
+						<div class="col-md-4 col-md-offset-2 PSuperUser"><h4>Controle de Qualidade:</h4></div>
 						<div class="col-md-4">
 							<div class="btn-group" data-toggle="buttons">
 								<label class="btn btn-default active" style="width:auto;">
@@ -306,8 +309,8 @@ function imprimir() {
 				</div>
 				<div class="modal-footer">
 					<div class="row">
-						<div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
-						<div class="col-md-6"><button type="button" class="btn btn-success">MUDAR</button></div>
+						<div class="col-md-4"><button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button></div>
+						<div class="col-md-4 col-md-offset-4"><button type="button" class="btn btn-success">Conferir</button></div>
 					</div>
 				</div>
 			</div>
