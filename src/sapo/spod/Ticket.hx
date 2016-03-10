@@ -89,3 +89,12 @@ class TicketRecipient extends Object {
 	}
 }
 
+@:id(user_id, group)
+class TicketSort extends Object
+{
+	public var user_id : Int;
+	public var group : Int;
+	
+	@:relation(survey_id) public var survey : Survey;
+}
+

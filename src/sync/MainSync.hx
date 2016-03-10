@@ -217,6 +217,8 @@ class MainSync
 				userGroup.set(new_sess.user_id, groups);
 
 				new_sess.group = biggest;
+				var sort = new CTicket();
+				sort.sort(new_sess.user_id, new_sess.group, biggest, new_sess);
 			}
 			else
 			{
@@ -225,6 +227,9 @@ class MainSync
 				userGroup.set(new_sess.user_id, groups);
 
 				new_sess.group = v;
+				
+				var sort = new CTicket();
+				sort.sort(new_sess.user_id, new_sess.group, biggest, new_sess);
 			}
 
 		}
@@ -538,7 +543,7 @@ class MainSync
 
 		return t;
 	}
-
+	
 	static function serverTimestamp() : Float
 	{
 		var http = new Http("syncex.comtacti.com");
