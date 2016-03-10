@@ -105,15 +105,8 @@ class TicketRoutes extends AccessControl {
 	@authorize(PSupervisor, PPhoneOperator, PSuperUser)
 	public function postReply(t:Ticket, args:{ text:String })
 	{
-		switch Context.loop.privilege {
-		case PSupervisor, PPhoneOperator:
-			if(t.author != Context.loop.user && t.recipient.user != Context.loop.user && t.recipient.group != Context.loop.user.group)
-			Web.redirect("/tickets");
-			return;
-		case PSuperUser:
-			// ok;
-		case _: throw "Assertion failed";
-		}
+		if (t.closed_at != null && !canClose(t))
+			throw '${Context.loop.user.email} cannot reopen ticket ${t.id}';
 
 		var u = Context.loop.user;
 		try {
@@ -123,6 +116,7 @@ class TicketRoutes extends AccessControl {
 				t.lock();
 				t.closed_at = null;
 				t.update();
+				// TODO compute this automagically
 				var msg = new TicketMessage(t,u, "~ TICKET REABERTO ~", Context.now);
 				msg.insert();
 			}
@@ -174,16 +168,15 @@ class TicketRoutes extends AccessControl {
 	}
 
 	@authorize(PSupervisor, PPhoneOperator, PSuperUser)
-	public function postClose(t:Lock<Ticket>)
+	public function postClose(t:Ticket)
 	{
-		if (!canClose(t)) {
-			t.update();  // TODO better way to unlock
-			throw '${Context.loop.user} cannot close ticket ${t.id}';
-		}
+		if (!canClose(t)) throw '${Context.loop.user.email} cannot close ticket ${t.id}';
 
+		// TODO do this inside a transaction
+		t.lock();
 		t.closed_at = Context.now;
 		t.update();
-
+		// TODO do this automagically
 		var msg = new TicketMessage(t, Context.loop.user, "~ TICKET FECHADO ~");
 		msg.insert();
 
