@@ -46,7 +46,7 @@ class TicketRoutes extends AccessControl {
 
 		if (survey_id != null)
 			sql += " t.survey_id = " + survey_id + " AND ";
-		
+
 		sql += ' t.closed_at ${open ? "IS" : "NOT"} NULL';
 
 		sql += ' ORDER BY t.opened_at LIMIT ${PAGE_SIZE + 1}';
@@ -145,10 +145,10 @@ class TicketRoutes extends AccessControl {
 			user = User.manager.get(intval);
 		else
 			group = Group.manager.select($name == args.value, null, false);
-		
+
 		var msg = new TicketMessage(t, Context.loop.user, "~ " + ((user != null) ? user.name : group.name) + " incluído(a) ao ticket ~".toUpperCase());
 		msg.insert();
-		
+
 		var ref = TicketSubscription.manager.select($ticket == t && ($group == group || $user == user), null, false);
 		if (ref == null)
 		{
@@ -189,40 +189,40 @@ class TicketRoutes extends AccessControl {
 
 		resetOrRedirect();
 	}
-	
+
 	@authorize(PSupervisor, PSuperUser)
 	public function postOpen(args : { author : Int, recipient : String, subject : String, message : String, survey : Survey } )
 	{
 		var author = User.manager.get(args.author);
-	
+
 		var t = new Ticket(args.survey, author, args.subject);
 		t.insert();
-		
+
 		var msg = new TicketMessage(t, author, args.message);
 		msg.insert();
-		
+
 		var intVal = Std.parseInt(args.recipient);
-		
+
 		var rec : TicketRecipient;
 		var sub : TicketSubscription;
 		if (intVal != null)
 		{
 			var user = User.manager.get(intVal);
 			sub = new TicketSubscription(t, null, user);
-			
+
 		}
 		else
 		{
 			var group = Group.manager.select($name == args.recipient, null, false);
 			sub = new TicketSubscription(t, group, null);
-		}	
+		}
 		//
 		sub.insert();
 		rec = new TicketRecipient(t, sub);
 		rec.insert();
-		
+
 		Web.redirect("/tickets/search?ticket=" + t.id);
-		
+
 	}
 
 	public function new() {}

@@ -17,7 +17,7 @@
 				var p = elem.find('p');
 				top1 = p.first().offset().top;
 				top2 = p.last().offset().top;
-				
+
 				elem.animate({
 					scrollTop: parseInt(top2-top1)
 				}, 0);
@@ -78,7 +78,7 @@
 					<div class="bloco"><b>Senha:</b> <span class="pin">(: ticket.survey.pin :)</span> </div>
 					<hr>
 					(: for m in sapo.spod.Survey.Morador.manager.search($survey_id == ticket.survey.id)  :)
-						(: var dash = false :)							
+						(: var dash = false :)
 							<p><b>(: m.nomeMorador :) ((: Util.enumText(m.idade) :)):</b>
 							(: for p in sapo.spod.Ponto.manager.search($morador_id == m.id)  :)
 								(: if dash :) - (: end :)(: Util.enumText(p.motivo) :) (: do dash = true :)
@@ -118,15 +118,15 @@
 		{
 			locationgen(false);
 		});
-		
+
 		$('.next').bind('click',function()
 		{
 			locationgen(true);
 		});
-		
-	
+
+
 	});
-	
+
 	//Gera o window.location.href de um modo overkill
 	function locationgen(nextPage)
 	{
@@ -147,11 +147,11 @@
 						curPage++;
 					else
 						curPage--;
-					str += fields[0]+"="+ curPage;			
+					str += fields[0]+"="+ curPage;
 				}
 				else
 					str += params[i];
-					
+
 				if((i+1) != params.length)
 					str += "&"
 			}
@@ -163,7 +163,7 @@
 				searchparams += "&page=2";
 			else
 				searchparams = "?page=2";
-		
+
 		}
 		var p = window.location.protocol;
 		var port = window.location.port;
@@ -258,7 +258,7 @@
 				(: else :)
 				<li class="previous">&nbsp</li>
 				(: end :)
-				
+
 				(: if totalItems > PAGE_SIZE :)
 				<li class="next"><a href="#">PRÓXIMA</a></li>
 				(: else :)
