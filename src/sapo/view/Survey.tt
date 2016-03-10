@@ -88,7 +88,7 @@ function imprimir() {
 					PESQUISA #(:survey.id:)
 				</h3>
 				<h3 class="tags">
-					(: Util.status( survey.isPhoned,survey.paid,survey.checkSV,survey.checkCT,survey.checkCQ) :)
+					(:Util.status(survey):)
 				</h3>
 				
 			</div>
