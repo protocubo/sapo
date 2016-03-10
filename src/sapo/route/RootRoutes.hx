@@ -8,6 +8,7 @@ import sapo.route.RegistrationRoutes;
 import sapo.spod.Other;
 import sapo.spod.Ticket;
 import sapo.spod.User;
+import StringTools.urlEncode in urlEn;
 
 class RootRoutes extends AccessControl {
 	function initialLocation(?user:User)
@@ -26,7 +27,7 @@ class RootRoutes extends AccessControl {
 
 	@authorize(all, guest)
 	public function doLicenses()
-		Sys.println(sapo.view.Licenses.render());
+		Sys.println(sapo.view.Licenses.render());		
 
 	@authorize(all, guest)
 	public function doLogin(args:{ ?redirect:String })
@@ -41,7 +42,9 @@ class RootRoutes extends AccessControl {
 		var user = User.manager.select($email == new EmailAddress(args.email));
 		if (user == null || !user.password.matches(args.password)) {
 			trace('User "${args.email}" ' + (user == null ? "unknown" : "known, but password did not match"));
-			Web.redirect('default?error=${StringTools.urlEncode("Usuário ou senha inválidos")}');
+			Web.redirect("/error?" +
+					'title=${urlEn("O login falhou!")}' +
+					'&message=${urlEn("O usuário não existe ou a senha não bate.  Por favor, corrija os dados e tente outra vez.")}');
 			return;
 		}
 
@@ -49,6 +52,13 @@ class RootRoutes extends AccessControl {
 		session.insert();
 		Web.setCookie(Session.COOKIE_KEY, session.id, session.expires_at, null, "/", Web.isTora, true);
 		Web.redirect(args.redirect != null ? args.redirect : initialLocation(user));
+	}
+	
+	@authorize(all, guest)
+	public function doError( ?args:{ ?title:String, ?message:String } )
+	{
+		if (args == null) args = { };
+		Sys.println(sapo.view.Error.render(args.title, args.message));
 	}
 
 	@authorize(all, guest)
@@ -94,6 +104,9 @@ class RootRoutes extends AccessControl {
 		var u = User.manager.select($email == new EmailAddress(args.email));
 		if (u == null) {
 			trace('WARNING: email ${args.email} not found');
+			Web.redirect("/error?" +
+					'title=${urlEn("Email não encontrado.")}' +
+					'&message=${urlEn("O usuário não existe.  Por favor, corrija o endereço e tente outra vez.")}');
 			return;
 		}
 

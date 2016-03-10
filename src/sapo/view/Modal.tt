@@ -117,7 +117,7 @@
 				</div>
 				<div class="modal-body">
 					<div class="row">
-						<div class="col-md-6 text-right"><h4>Supervisores:</h4></div>
+						<div class="col-md-6 text-right"><h4>Supervisor:</h4></div>
 						<div class="col-md-6">
 							<div class="btn-group" data-toggle="buttons">
 								<label class="btn btn-default active" style="width:auto;">
@@ -265,8 +265,8 @@
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 					<h4 class="modal-title" id="pagar(: pagamentos.id :)_um_label">PAGAR PESQUISA</h4>
 				</div>
-				<form action="/payments/pay" method="get">
-					<input type="hidden" name="toPay" value="e(:pagamentos.id:)">
+				<form action="/payments/pay" method="POST">
+					<input type="hidden" name="toPay" value="(:pagamentos.id:)">
 					<div class="modal-body">
 						<div class="row">
 							<div class="col-md-4"><h4>Ref. Pagamento:</h4></div>

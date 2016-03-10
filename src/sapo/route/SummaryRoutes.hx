@@ -3,7 +3,7 @@ package sapo.route;
 import common.db.MoreTypes;
 import haxe.Serializer;
 import haxe.Unserializer;
-import neko.Web;
+import common.Web;
 import sapo.Context;
 import sapo.spod.Survey;
 import sapo.spod.User;
@@ -265,16 +265,22 @@ class SummaryRoutes extends AccessControl
 			}
 		}
 
-		var referer = Web.getClientHeader("Referer");
-		referer = referer.split("?")[0];
 		var serializer = new Serializer();
 		if(ret.length > 0)
 			serializer.serialize(ret);
-		trace(referer);
-		if(ret.length > 0)
-			Web.redirect(referer + "?data=" + serializer.toString());
-		else
-			Web.redirect(referer);
+
+		redirect(serializer.toString(), user);
+	}
+	
+	function redirect(?data : Null<String>, user : User)
+	{
+		if (data != null && data.length > 0)
+			data = "?data=" + data;
+		//Remove all params
+		var uri = Web.getLocalReferer().split('?')[0];
+		uri += data + "&user=" + user.id;
+		Web.redirect(uri);
+		
 	}
 
 	//Pega todos os status por grupo e um Map de user_id, grupo, e enum de estado
@@ -282,33 +288,16 @@ class SummaryRoutes extends AccessControl
 	{
 		// TODO make compatible with mysql
 		// TODO when syncing, change WHERE s.date_completed to s.sync_timestamp
-		var controlResults = Context.db.request("
-				SELECT
-					s.user_id as user,
-					s.`group` as grupo,
-					COUNT(*) as pesqGrupo,
-					SUM(CASE WHEN (checkSV IS NULL OR checkCT IS NULL OR checkCQ IS NULL) OR ((checkSV IS NOT NULL AND checkSV != 0 AND checkCT IS NOT NULL AND checkCT != 0 AND checkCQ IS NOT NULL AND checkCQ != 0) AND NOT (checkSV = 1  AND checkCT = 1 AND checkCQ = 1) ) THEN 1 ELSE 0 END) as Completa,
-					SUM(CASE WHEN checkSV = 0 AND checkCT = 0 AND checkCQ = 0 THEN 1 ELSE 0 END) as allFalse,
-					SUM(CASE WHEN checkSV = 0 OR checkCT = 0 OR checkCQ = 0 THEN 1 ELSE 0 END) as hasFalse,
-					SUM(CASE WHEN checkSV = 1 AND checkCT = 1 AND checkCQ = 1 THEN 1 ELSE 0 END) as isTrue,
-					SUM(CASE WHEN checkSV IS NULL THEN 1 ELSE 0 END) as nullSupervisor,
-					SUM(CASE WHEN checkCT IS NULL THEN 1 ELSE 0 END) as nullCT,
-					SUM(CASE WHEN checkCQ IS NULL THEN 1 ELSE 0 END) AS nullSuper
-				FROM Survey s JOIN UpdatedSurvey us
-					ON s.old_survey_id = us.old_survey_id
-					AND s.syncTimestamp = us.syncTimestamp
-				WHERE
-					s.syncTimestamp > 1000
-				GROUP BY s.user_id, s.`group`
-				ORDER BY s.user_id, s.`group`");
+		//TODO: Delete query and use UserGroup or x instead
+		var controlResults = SurveyGroupStatus.manager.all();
 
 		var userCheck : Map<Int,Map<Int,PesqStatus>> = new Map();
 		userCheck = new Map();
 		for (c in controlResults)
 		{
 			var group : Map<Int, PesqStatus> = new Map();
-			if (userCheck.exists(c.user))
-				group = userCheck.get(c.user);
+			if (userCheck.exists(c.user_id))
+				group = userCheck.get(c.user_id);
 
 			var status;
 			if (c.allFalse != 0)
@@ -320,8 +309,8 @@ class SummaryRoutes extends AccessControl
 			else
 				status = PesqStatus.Completa;
 
-			group.set(c.grupo, status);
-			userCheck.set(c.user, group);
+			group.set(c.group, status);
+			userCheck.set(c.user_id, group);
 		}
 
 		return userCheck;

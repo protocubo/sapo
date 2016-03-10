@@ -1,13 +1,10 @@
 package sapo.route;
-import neko.Web;
+
+import common.Web;
 import sapo.spod.Survey;
 import sapo.spod.User;
 import common.db.MoreTypes;
 
-/**
- * ...
- * @author RV
- */
 class PaymentRoutes extends AccessControl
 {
 	@authorize(PSuperUser, PSurveyor)
@@ -195,7 +192,7 @@ class PaymentRoutes extends AccessControl
 	}
 
 	@authorize(PSuperUser)
-	public function doPay(?args:{ ?toPay:String, ?reference:String })  // TODO only POST
+	public function postPay(?args:{ ?toPay:String, ?reference:String })  // TODO only POST
 	{
 		if (args == null) args = { };
 		if (args.toPay.length > 1)
