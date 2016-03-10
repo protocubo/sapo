@@ -1,13 +1,10 @@
 package sapo.route;
-import neko.Web;
+
+import common.Web;
 import sapo.spod.Survey;
 import sapo.spod.User;
 import common.db.MoreTypes;
 
-/**
- * ...
- * @author RV
- */
 class PaymentRoutes extends AccessControl
 {
 	@authorize(PSuperUser, PSurveyor)
