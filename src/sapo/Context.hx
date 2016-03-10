@@ -131,9 +131,9 @@ class Context {
 						s.id as id,
 						s.`group` as `group`,
 						s.isPhoned as isPhoned,
-						CASE WHEN s.checkSV IS NULL THEN sg.checkSV ELSE s.checkSV END as checkSV,
+						s.checkSV END as checkSV,
 						CASE WHEN s.checkCT IS NULL THEN sg.checkCT ELSE s.checkCT END as checkCT,
-						CASE WHEN s.checkCQ IS NULL THEN sg.checkCQ ELSE s.checkCQ END AS checkCQ,
+						s.checkCQ END AS checkCQ,
 						s.date_completed as date_completed
 						FROM Survey s 
 						JOIN SurveyGroupStatus sg 
