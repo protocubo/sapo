@@ -4,13 +4,6 @@
 <head>
 (: Util.head("SAPO") :)
 <script>
-$("document").ready(function()
-{
-	$(".btn").click(function()
-	{
-		$("form").submit();
-	});
-});
 </script>
 </head>
 <body>

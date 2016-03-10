@@ -1,4 +1,4 @@
-(: static function render() :)
+(: static function render( title:String, message:String ) :)
 <!DOCTYPE html>
 <!DOCTYPE html>
 <html>
@@ -14,12 +14,12 @@
 		<ol class="breadcrumb">
 			<li class="active">Erro</li>
 		</ol>
-        <div class="row">
-            <div class="col-md-6 col-md-offset-3">
-                <div class="alert alert-danger text-center" role="alert">ERRO: #MENSAGEM DE ERRO</div>
-				<p>#MENSAGEM GRANDE DE ERRO.</p>
-           </div>
-        </div>
+		<div class="row">
+			<div class="col-md-6 col-md-offset-3">
+				<div class="alert alert-danger text-center" role="alert">ERRO: (:title:)</div>
+				<p class="text-center">(:message:)</p>
+			</div>
+		</div>
 	</div>
 
 	(: Util.footer() :)
@@ -27,3 +27,4 @@
 </body>
 </html>
 (: end :)
+

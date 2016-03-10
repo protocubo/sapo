@@ -25,7 +25,7 @@
 				(: survey.logradouro:) , (:survey.numero:)
 				</a>
 				<span class="tags">
-					(: Util.status(survey.isPhoned, survey.paid, survey.checkSV, survey.checkCT , survey.checkCQ ) :)
+					(: Util.status(survey ) :)
 				</span>
 			</div>
 		</div>
@@ -65,7 +65,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-(: Util.head("SAPO - Pesquisas", {formCache:true}) :)
+(: Util.head("SAPO - Pesquisas", {formCache:true, uncollapseHash : true}) :)
 </head>
 <body>
 	<!-- PESQUISAS -->

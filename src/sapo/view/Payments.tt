@@ -15,7 +15,7 @@
 	(:var u = User.manager.select($id == payment.user_id):)
 	<td>(: u.name :)</td>
 	<td><a href="/survey/(: payment.id :)">(: payment.id :)</a></td>
-	<td class"tags" style="text-align: right;">(: Util.status(payment.isPhoned, payment.paid, payment.checkSV, payment.checkCT,payment.checkCQ) :)</td>
+	<td class"tags" style="text-align: right;">(: Util.status(payment) :)</td>
 	<td>(: payment.date_completed :)</td>
 	<td>(: payment.paid? payment.paymentRef : "" :)</td>
 	<td>(: payment.paid? payment.date_paid : "" :)</td>
@@ -277,7 +277,7 @@
 <!-- MODAL PAGAR -->
 <div class="modal fade" id="pagar_selecionadas" tabindex="-1" role="dialog" aria-labelledby="pagar_selecionadas_label">
 	<div class="modal-dialog" role="document">
-		<form action="/payments/pay" method="get">
+		<form action="/payments/pay" method="POST">
 			<input type="hidden" id="checkedSurveys" name="toPay">
 			<div class="modal-content">
 				<div class="modal-header">
