@@ -233,7 +233,7 @@ class Context {
 
 	public static function updateClock()
 	{
-		now = Date.now();
+		now = Sys.time()*1e3;
 	}
 
 	public static function startTransaction()
