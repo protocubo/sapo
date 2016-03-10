@@ -218,8 +218,8 @@
 					</div>
 					<div class="modal-footer">
 						<div class="row">
-							<div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
-							<div class="col-md-6"><button type="submit" value="submit" class="btn btn-success">SALVAR</button></div>
+							<div class="col-md-4"><button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button></div>
+							<div class="col-md-4 col-md-offset-4"><button type="submit" value="submit" class="btn btn-success">Salvar</button></div>
 						</div>
 					</div>
 				</form>
@@ -247,8 +247,8 @@
 					</div>
 					<div class="modal-footer">
 						<div class="row">
-							<div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">NÃO</button></div>
-							<div class="col-md-6"><button type="submit" value="submit" class="btn btn-success">SIM</button></div>
+							<div class="col-md-4"><button type="button" class="btn btn-danger" data-dismiss="modal">Não</button></div>
+							<div class="col-md-4 col-md-offset-4"><button type="submit" value="submit" class="btn btn-success">Sim</button></div>
 						</div>
 					</div>
 				</form>
@@ -266,7 +266,7 @@
 					<h4 class="modal-title" id="pagar(: pagamentos.id :)_um_label">PAGAR PESQUISA</h4>
 				</div>
 				<form action="/payments/pay" method="get">
-					<input type="hidden" name="toPay" value="e(:pagamentos.id:)">
+					<input type="hidden" name="toPay" value="(:pagamentos.id:)">
 					<div class="modal-body">
 						<div class="row">
 							<div class="col-md-4"><h4>Ref. Pagamento:</h4></div>
@@ -275,9 +275,8 @@
 					</div>
 					<div class="modal-footer">
 						<div class="row">
-							<div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
-							<form action="/payments/pay" method="get">
-							<div class="col-md-6"><button type="submit" value="submit" class="btn btn-success">PAGAR</button></div>
+							<div class="col-md-4"><button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button></div>
+							<div class="col-md-4 col-md-offset-4"><button type="submit" value="submit" class="btn btn-success">Pagar</button></div>
 						</div>
 					</div>
 				</form>
