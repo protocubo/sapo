@@ -342,6 +342,19 @@ function onSubmitTicket()
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-md-4 col-md-offset-2"><h4>Telefonada:</h4></div>
+                            <div class="col-md-4">
+                                <div class="btn-group" data-toggle="buttons">
+                                    <label class="btn btn-default (: if survey.isPhoned == false :) active (: end :)" style="width:auto; color:#DDD;">
+                                        <input type="radio" name="Phoned" value="false" id="nao" autocomplete="off"> <span class="glyphicon glyphicon-earphone" aria-hidden="true"></span>
+                                    </label>
+                                    <label class="btn btn-default (: if survey.isPhoned == true :) active (: end :)" style="width:auto;">
+                                        <input type="radio" name="Phoned" value="true" id="sim" autocomplete="off" > <span class="glyphicon glyphicon-earphone" aria-hidden="true"> </span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <div class="row">
