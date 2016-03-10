@@ -237,6 +237,8 @@ class MainSync
 				userGroup.set(new_sess.user_id, groups);
 
 				new_sess.group = biggest;
+				var sort = new CTicket();
+				sort.sort(new_sess.user_id, new_sess.group, biggest, new_sess);
 			}
 			else
 			{
@@ -245,6 +247,9 @@ class MainSync
 				userGroup.set(new_sess.user_id, groups);
 
 				new_sess.group = v;
+				
+				var sort = new CTicket();
+				sort.sort(new_sess.user_id, new_sess.group, biggest, new_sess);
 			}
 
 		}
@@ -559,6 +564,7 @@ class MainSync
 		return t;
 	}
 	
+
 	static function ticket(subject : String, msg : String, survey_id : Int)
 	{
 		var survey = Survey.manager.get(survey_id);
@@ -580,8 +586,8 @@ class MainSync
 		{
 			var f = Std.parseFloat(s);
 			var now = Date.now().getTime();
-			//2s
-			var dif = 2000;
+			//5s
+			var dif = 5000;
 			if ((now - dif) < f && f < (now + dif))
 			{
 				throw "Error: Time difference is too damn high!";
