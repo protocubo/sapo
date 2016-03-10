@@ -104,6 +104,9 @@ class RootRoutes extends AccessControl {
 		var u = User.manager.select($email == new EmailAddress(args.email));
 		if (u == null) {
 			trace('WARNING: email ${args.email} not found');
+			Web.redirect("/error?" +
+					'title=${urlEn("Email não encontrado.")}' +
+					'&message=${urlEn("O usuário não existe.  Por favor, corrija o endereço e tente outra vez.")}');
 			return;
 		}
 
