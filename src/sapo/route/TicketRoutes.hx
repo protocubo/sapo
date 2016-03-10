@@ -159,16 +159,26 @@ class TicketRoutes extends AccessControl {
 		resetOrRedirect(t.id);
 	}
 
-	@authorize(PSupervisor, PSuperUser)
+	public static function canClose(t:Ticket)
+	{
+		return switch Context.loop.privilege {
+		case PSuperUser:
+			true;
+		case PPhoneOperator if (t.recipient.group == Context.loop.group):
+			true;
+		case PSupervisor if (t.author == Context.loop.user):
+			true;
+		case _:
+			false;
+		}
+	}
+
+	@authorize(PSupervisor, PSuperUser, PPhoneOperator)
 	public function postClose(t:Lock<Ticket>)
 	{
-		// TODO separate route for PPhoneOperators
-		switch Context.loop.privilege {
-		case PSupervisor if (Context.loop.user != t.author):
-			throw 'Can\'t close ticket authored by someone else';
-		case PSuperUser, PPhoneOperator:
-			// ok;
-		case _: throw "Assertion failed";
+		if (!canClose(t)) {
+			t.update();  // TODO better way to unlock
+			throw '${Context.loop.user} cannot close ticket ${t.id}';
 		}
 
 		t.closed_at = Context.now;
