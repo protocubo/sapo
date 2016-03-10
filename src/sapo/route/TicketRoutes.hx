@@ -163,7 +163,7 @@ class TicketRoutes extends AccessControl {
 		switch Context.loop.privilege {
 		case PSupervisor if (Context.loop.user != t.author):
 			throw 'Can\'t close ticket authored by someone else';
-		case PSuperUser:
+		case PSuperUser, PPhoneOperator:
 			// ok;
 		case _: throw "Assertion failed";
 		}

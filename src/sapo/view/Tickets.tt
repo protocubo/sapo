@@ -83,7 +83,7 @@ unavailable
 					(: do disabled = true :)
 				(: end :)
 				(: do var closedDisabled = false :)
-				(: if ticket.author != u && u.group.privilege != PSuperUser :)
+				(: if ticket.author != u && (u.group.privilege != PSuperUser || u.group.privilege == PPhoneOperator ) :)
 					(: do closedDisabled = true :)
 				(: end :)
 
