@@ -209,7 +209,10 @@ function imprimir() {
 
 	<!-- MODAL TICKET -->
 	<div class="modal fade" id="pesquisa_ticket" tabindex="-1" role="dialog" aria-labelledby="pesquisa_ticket_label">
+		<form method="POST" action="/tickets/open">
 		<div class="modal-dialog" role="document">
+			<input type="hidden" name="author" value="(:Context.loop.session.user.id:)"/>
+			<input type="hidden" name="survey" value="(:survey.id:)"/>
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -218,32 +221,44 @@ function imprimir() {
 				<div class="modal-body">
 					<div class="row">
 						<div class="col-md-2"><h4>Assunto:</h4></div>
-						<div class="col-md-10"><input type="text" class="form-control"></div>
+						<div class="col-md-10"><input type="text" name="subject" class="form-control"></div>
 					</div>
 					<div class="row">
 						<div class="col-md-2"><h4>Destino:</h4></div>
 						<div class="col-md-10">
-							<select class="form-control">
+							<select class="form-control" name="recipient">
 								<option disabled selected>Selecione</option>
-								<option>Supervisor</option>
-								<option>Telefonista</option>
-								<option>Super</option>
+								(: do var groups = Group.manager.search($privilege != Privilege.PSurveyor, {orderBy : -privilege}, false) :)
+								<optgroup label="Grupo">
+								(: for g in groups :)
+								<option value="(:g.name:)">(:g.name:)</option>
+								(: end :)
+								</optgroup>
+								(: for g in groups :)
+								<optgroup label="(:g.name:)">
+									(: do var users = User.manager.search($group == g, {orderBy : name}, false) :)
+									(: for u in users :)
+								<option value="(:u.id:)">(: u.name :)</option>
+									(: end :)
+								</optgroup>
+								(: end :)	
 							</select>
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-md-2"><h4>Mensagem:</h4></div>
-						<div class="col-md-10"><textarea class="form-control" style="height: 200px;"></textarea></div>
+						<div class="col-md-10"><textarea name="message" class="form-control" style="height: 200px;"></textarea></div>
 					</div>
 				</div>
 				<div class="modal-footer">
 					<div class="row">
 						<div class="col-md-6"><button type="button" class="btn btn-danger" data-dismiss="modal">CANCELAR</button></div>
-						<div class="col-md-6"><button type="button" class="btn btn-success">ENVIAR</button></div>
+						<div class="col-md-6"><button type="submit" class="btn btn-success">ENVIAR</button></div>
 					</div>
 				</div>
 			</div>
 		</div>
+		</form>
 	</div>
 
 	<!-- MODAL STATUS -->

@@ -176,6 +176,41 @@ class TicketRoutes extends AccessControl {
 
 		resetOrRedirect();
 	}
+	
+	@authorize(PSupervisor, PSuperUser)
+	public function postOpen(args : { author : Int, recipient : String, subject : String, message : String, survey : Survey } )
+	{
+		var author = User.manager.get(args.author);
+	
+		var t = new Ticket(args.survey, author, args.subject);
+		t.insert();
+		
+		var msg = new TicketMessage(t, author, args.message);
+		msg.insert();
+		
+		var intVal = Std.parseInt(args.recipient);
+		
+		var rec : TicketRecipient;
+		var sub : TicketSubscription;
+		if (intVal != null)
+		{
+			var user = User.manager.get(intVal);
+			sub = new TicketSubscription(t, null, user);
+			
+		}
+		else
+		{
+			var group = Group.manager.select($name == args.recipient, null, false);
+			sub = new TicketSubscription(t, group, null);
+		}	
+		//
+		sub.insert();
+		rec = new TicketRecipient(t, sub);
+		rec.insert();
+		
+		Web.redirect("/tickets/search?ticket=" + t.id);
+		
+	}
 
 	public function new() {}
 }
