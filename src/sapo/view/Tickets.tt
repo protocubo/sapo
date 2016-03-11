@@ -1,4 +1,5 @@
-(:import sapo.route.TicketRoutes.* :)
+(:import sapo.route.TicketRoutes.ManyTicketRoutes.* :)
+(:import sapo.route.TicketRoutes.canClose :)
 (:import common.db.MoreTypes:)
 (:import sapo.spod.Survey:)
 (:import sapo.spod.Ticket:)
@@ -94,7 +95,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-(: Util.head("SAPO - Tickets", {formCache:true, uncollapseHash:true}) :)
+(: Util.head("SAPO - Tickets", {formCache:true, uncollapseHash:true, uriForm:true}) :)
 <script>
 	$('document').ready(function()
 	{
@@ -115,20 +116,20 @@
 			selector += "#BodyTicket(:t.id:)";
 			(:end:)
 		(: end :)
-		
-		
+
+
 		$(selector).on('shown.bs.collapse', function()
 		{
 			var elem = $(this).find(".barraderolagem").first();
 			var p = elem.find('p');
 			top1 = p.first().offset().top;
 			top2 = p.last().offset().top;
-			
+
 			elem.animate({
 				scrollTop: parseInt(top2-top1)
 			}, 0);
 		});
-		
+
 		if(location.hash != "" && location.hash.length > 1)
 		{
 			$(location.hash).trigger('shown.bs.collapse');
@@ -225,9 +226,9 @@
 				}
 			</script>
 			<!-- BUSCA -->
-			<form action="/tickets/search" method="get">
+			<form action="/ticket" method="get" name="uri-form">
 				<div class="col-md-2  col-md-offset-2"><h5>TICKET</h5>
-					<input type="text" name="ticket" id="ticketSearch" class="form-control input-sm" oninput="disableSearch(this.name, this.value)" placeholder="Nº do Ticket">
+					<input type="text" name="id" id="ticketSearch" class="form-control input-sm" oninput="disableSearch(this.name, this.value)" placeholder="Nº do Ticket" required>
 				</div>
 
 				<div class="col-md-1"><h5>&nbsp;</h5>

@@ -138,8 +138,10 @@ class RootRoutes extends AccessControl {
 	}
 
 	@authorize(PSupervisor, PPhoneOperator, PSuperUser)
-	public function doTickets(d:Dispatch)
-		d.dispatch(new TicketRoutes());
+	var doTickets = TicketRoutes.doTicketsImpl;
+
+	@authorize(PSupervisor, PPhoneOperator, PSuperUser)
+	var doTicket = TicketRoutes.doSingleTicketImpl;
 
 	@authorize(PSupervisor, PPhoneOperator, PSuperUser)
 	public function doSurveys(d:Dispatch)

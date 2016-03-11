@@ -3,32 +3,19 @@ package sapo.route;
 import common.Dispatch;
 import common.Web;
 import common.db.MoreTypes;
+import sapo.Context.loop;
 import sapo.spod.Other;
 import sapo.spod.Survey;
 import sapo.spod.Ticket;
 import sapo.spod.User;
 
-class TicketRoutes extends AccessControl {
+class ManyTicketRoutes extends AccessControl {
 	public static inline var PAGE_SIZE = 20;
 	public static inline var PARAM_ALL = "all";
 	public static inline var PARAM_GROUP = "group";
 	public static inline var PARAM_INDIVIDUAL = "individual";
 	public static inline var PARAM_OPEN = "open";
 	public static inline var PARAM_CLOSED = "closed";
-
-	public static function canClose(t:Ticket)
-	{
-		return switch Context.loop.privilege {
-		case PSuperUser:
-			true;
-		case PPhoneOperator if (t.recipient.group == Context.loop.group):
-			true;
-		case PSupervisor if (t.author == Context.loop.user):
-			true;
-		case _:
-			false;
-		}
-	}
 
 	@authorize(PSupervisor, PPhoneOperator, PSuperUser)
 	public function doDefault(?args:{?recipient:String, ?state:String, ?survey : Survey, ?page : Int })
@@ -78,111 +65,6 @@ class TicketRoutes extends AccessControl {
 		Sys.println(sapo.view.Tickets.page(tickets,args.page,total));
 	}
 
-	@authorize(PSupervisor, PPhoneOperator, PSuperUser)
-	public function doSearch(?args:{ ?ofUser:User, ?ticket:Ticket })
-	{
-		if (args == null) args = { };
-		var tickets : List<Ticket> = new List();
-		if (args.ticket != null)
-			tickets.push(args.ticket);
-
-		Sys.println(sapo.view.Tickets.page(tickets,1,tickets.length));
-	}
-
-	function resetOrRedirect(?tid:Null<Int>)
-	{
-		var uri = Web.getLocalReferer();
-		if (uri == null) {
-			if (tid != null)
-				uri = '/tickets/search?ticket=$tid';
-			else
-				uri = "/tickets";
-		} else if (tid != null)
-			uri += "#BodyTicket" + tid;
-		Web.redirect(uri);
-	}
-
-	@authorize(PSupervisor, PPhoneOperator, PSuperUser)
-	public function postReply(t:Ticket, args:{ text:String })
-	{
-		if (t.closed_at != null && !canClose(t))
-			throw '${Context.loop.user.email} cannot reopen ticket ${t.id}';
-
-		var u = Context.loop.user;
-		try {
-			Context.db.startTransaction();
-			if (t.closed_at != null)
-			{
-				t.lock();
-				t.closed_at = null;
-				t.update();
-				// TODO compute this automagically
-				var msg = new TicketMessage(t,u, "~ TICKET REABERTO ~", Context.now);
-				msg.insert();
-			}
-
-			var msg = new TicketMessage(t, u, args.text);
-			msg.insert();
-			var sub = TicketSubscription.manager.select($user == u || $group == u.group);
-			if (sub == null) {
-				sub = new TicketSubscription(t, u);
-				sub.insert();
-			}
-			Context.db.commit();
-		} catch (e:Dynamic) {
-			Context.db.rollback();
-			Web.setReturnCode(500);
-			return;
-		}
-		resetOrRedirect(t.id);
-	}
-
-	@authorize(PSupervisor, PPhoneOperator, PSuperUser)
-	public function postInclude(t : Ticket, args : { value : String } )
-	{
-		if (args == null)
-		{
-			Web.redirect("/tickets/");
-			return;
-		}
-		var intval = Std.parseInt(args.value);
-		var user : User = null;
-		var group : Group = null;
-
-		if (intval != null)
-			user = User.manager.get(intval);
-		else
-			group = Group.manager.select($name == args.value, null, false);
-
-		var msg = new TicketMessage(t, Context.loop.user, "~ " + ((user != null) ? user.name : group.name) + " incluído(a) ao ticket ~".toUpperCase());
-		msg.insert();
-
-		var ref = TicketSubscription.manager.select($ticket == t && ($group == group || $user == user), null, false);
-		if (ref == null)
-		{
-			var sub = new TicketSubscription(t, group, user);
-			sub.insert();
-		}
-
-		resetOrRedirect(t.id);
-	}
-
-	@authorize(PSupervisor, PPhoneOperator, PSuperUser)
-	public function postClose(t:Ticket)
-	{
-		if (!canClose(t)) throw '${Context.loop.user.email} cannot close ticket ${t.id}';
-
-		// TODO do this inside a transaction
-		t.lock();
-		t.closed_at = Context.now;
-		t.update();
-		// TODO do this automagically
-		var msg = new TicketMessage(t, Context.loop.user, "~ TICKET FECHADO ~");
-		msg.insert();
-
-		resetOrRedirect();
-	}
-
 	@authorize(PSupervisor, PSuperUser)
 	public function postOpen(args : { author : Int, recipient : String, subject : String, message : String, survey : Survey } )
 	{
@@ -219,5 +101,148 @@ class TicketRoutes extends AccessControl {
 	}
 
 	public function new() {}
+}
+
+class TicketRoutes extends AccessControl {
+	var ticket:Ticket;
+
+	function resetOrRedirect(?tid:Null<Int>)
+	{
+		var uri = Web.getLocalReferer();
+		if (uri == null) {
+			if (tid != null)
+				uri = '/tickets/search?ticket=$tid';
+			else
+				uri = "/tickets";
+		} else if (tid != null)
+			uri += "#BodyTicket" + tid;
+		Web.redirect(uri);
+	}
+
+	@authorize(PSupervisor, PPhoneOperator, PSuperUser)
+	public function doDefault()
+	{
+		var tickets = new List();
+		tickets.add(ticket);
+		Sys.println(sapo.view.Tickets.page(tickets,1,tickets.length));
+	}
+
+
+	@authorize(PSupervisor, PPhoneOperator, PSuperUser)
+	public function postReply(args:{ text:String })
+	{
+		if (ticket.closed_at != null && !canClose(ticket))
+			throw '${Context.loop.user.email} cannot reopen ticket ${ticket.id}';
+
+		var u = Context.loop.user;
+		try {
+			Context.db.startTransaction();
+			if (ticket.closed_at != null)
+			{
+				ticket.lock();
+				ticket.closed_at = null;
+				ticket.update();
+				// TODO compute this automagically
+				var msg = new TicketMessage(ticket,u, "~ TICKET REABERTO ~", Context.now);
+				msg.insert();
+			}
+
+			var msg = new TicketMessage(ticket, u, args.text);
+			msg.insert();
+			var sub = TicketSubscription.manager.select($user == u || $group == u.group);
+			if (sub == null) {
+				sub = new TicketSubscription(ticket, u);
+				sub.insert();
+			}
+			Context.db.commit();
+		} catch (e:Dynamic) {
+			Context.db.rollback();
+			Web.setReturnCode(500);
+			return;
+		}
+		resetOrRedirect(ticket.id);
+	}
+
+	@authorize(PSupervisor, PPhoneOperator, PSuperUser)
+	public function postInclude(args : { value : String } )
+	{
+		if (args == null)
+		{
+			Web.redirect("/tickets/");
+			return;
+		}
+		var intval = Std.parseInt(args.value);
+		var user : User = null;
+		var group : Group = null;
+
+		if (intval != null)
+			user = User.manager.get(intval);
+		else
+			group = Group.manager.select($name == args.value, null, false);
+
+		var msg = new TicketMessage(ticket, Context.loop.user, "~ " + ((user != null) ? user.name : group.name) + " incluído(a) ao ticket ~".toUpperCase());
+		msg.insert();
+
+		var ref = TicketSubscription.manager.select($ticket == ticket && ($group == group || $user == user), null, false);
+		if (ref == null)
+		{
+			var sub = new TicketSubscription(ticket, group, user);
+			sub.insert();
+		}
+
+		resetOrRedirect(ticket.id);
+	}
+
+	@authorize(PSupervisor, PPhoneOperator, PSuperUser)
+	public function postClose()
+	{
+		if (!canClose(ticket)) throw '${Context.loop.user.email} cannot close ticket ${ticket.id}';
+
+		// TODO do this inside a transaction
+		ticket.lock();
+		ticket.closed_at = Context.now;
+		ticket.update();
+		// TODO do this automagically
+		var msg = new TicketMessage(ticket, Context.loop.user, "~ TICKET FECHADO ~");
+		msg.insert();
+
+		resetOrRedirect();
+	}
+
+	public function new(ticket)
+	{
+		this.ticket = ticket;
+	}
+
+	public static function canClose(t:Ticket)
+	{
+		return switch Context.loop.privilege {
+		case PSuperUser:
+			true;
+		case PPhoneOperator if (t.recipient.group == Context.loop.group):
+			true;
+		case PSupervisor if (t.author == Context.loop.user):
+			true;
+		case _:
+			false;
+		}
+	}
+
+	public static function doTicketsImpl(d:Dispatch)
+		d.dispatch(new ManyTicketRoutes());
+
+	public static function doSingleTicketImpl(d:Dispatch, t:Ticket)
+	{
+		switch loop.privilege {
+		case PSuperUser:
+			// ok
+		case PPhoneOperator | PSupervisor
+				if (TicketSubscription.manager.count($ticket == t && ($group == loop.group || $user == loop.user)) > 0):
+			// ok
+		case _:
+			throw 'ACCESS ERROR: user ${loop.user.email} for ticket ${t.id}';
+		}
+		d.dispatch(new TicketRoutes(t));
+	}
 }
 

@@ -8,7 +8,7 @@
 	<div class="modal fade" id="ticket(: ticket.id :)_fechar" tabindex="-1" role="dialog" aria-labelledby="ticket(: ticket.id :)_fechar_label">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
-				<form method="POST" action="/tickets/close/(: ticket.id :)">
+				<form method="POST" action="/ticket/(:ticket.id:)/close">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 						<h4 class="modal-title" id="ticket(: ticket.id :)_fechar_label">FECHAR TICKET #(: ticket.id :)</h4>
@@ -36,7 +36,7 @@
 	<div class="modal fade" id="ticket(: ticket.id :)_responder" tabindex="-1" role="dialog" aria-labelledby="ticket(: ticket.id :)_responder_label">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
-				<form method="POST" action="/tickets/reply/(: ticket.id :)">
+				<form method="POST" action="/ticket/(:ticket.id:)/reply">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 						(: if reopen :)
@@ -70,7 +70,7 @@
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 					<h4 class="modal-title" id="ticket(: ticket.id :)_incluir_label">INCLUIR USUÁRIO OU GRUPO NO TICKET #(: ticket.id :)</h4>
 				</div>
-				<form method="POST" action="/tickets/include/(:ticket.id:)">
+				<form method="POST" action="/ticket/(:ticket.id:)/include">
 				<div class="modal-body">
 					<div class="row">
 						<div class="col-md-12">

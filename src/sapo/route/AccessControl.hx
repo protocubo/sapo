@@ -39,6 +39,8 @@ class AccessControl {
 
 		var fields = Context.getBuildFields();
 		for (f in fields) {
+			if (Lambda.exists(f.access, function (i) return i.match(AStatic | AMacro)))
+				continue;
 			for (m in f.meta) {
 				switch m.name.split(":") {
 				case [META]:
