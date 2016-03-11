@@ -73,14 +73,14 @@ class Populate {
 		var alice = new User(g.superUsers, new EmailAddress("alice@sapo"), "Alice Aria");
 		var ford = new User(g.superUsers, new EmailAddress("ford@sapo"), "Ford Frederik");
 		var judite = new User(g.phoneOperators, new EmailAddress("judite@sapo"), "Judite Julia");
-		var magentoCol = [ for (i in 0...4) new User(g.supervisors, new EmailAddress('magento.${i+1}@sapo'),
+		var magentoCol = [ for (i in 0...3) new User(g.supervisors, new EmailAddress('magento.${i+1}@sapo'),
 				'Magento Maria #${i+1}') ];
 		var morgana = new User(g.lessSuperUsers, new EmailAddress("morgana@sapo"), "Morgana Moura");
 		for (u in [alice, ford, judite, morgana].concat(magentoCol)) {
 			u.password = Password.make("secret");
 			u.insert();
 		}
-		var maneCol = [ for (i in 0...20) new User(g.surveyors, new EmailAddress('mane.${i+1}@sapo'),
+		var maneCol = [ for (i in 0...12) new User(g.surveyors, new EmailAddress('mane.${i+1}@sapo'),
 				'Mané Maurício #${i+1}', magentoCol[i%magentoCol.length]) ];
 		for (u in maneCol) {
 			u.password = Password.make("secret");
