@@ -96,7 +96,7 @@ class ManyTicketRoutes extends AccessControl {
 		rec = new TicketRecipient(t, sub);
 		rec.insert();
 
-		Web.redirect("/tickets/search?ticket=" + t.id);
+		Web.redirect('/ticket/${t.id}');
 
 	}
 
@@ -111,7 +111,7 @@ class TicketRoutes extends AccessControl {
 		var uri = Web.getLocalReferer();
 		if (uri == null) {
 			if (tid != null)
-				uri = '/tickets/search?ticket=$tid';
+				uri = '/ticket/$tid';
 			else
 				uri = "/tickets";
 		} else if (tid != null)
@@ -168,7 +168,7 @@ class TicketRoutes extends AccessControl {
 	{
 		if (args == null)
 		{
-			Web.redirect("/tickets/");
+			Web.redirect("/tickets/");  // FIXME
 			return;
 		}
 		var intval = Std.parseInt(args.value);
