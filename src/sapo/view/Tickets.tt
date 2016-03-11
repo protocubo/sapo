@@ -8,22 +8,6 @@
 (:private static function hideClose(ticket:Ticket):)(:if !canClose(ticket):)unavailable(: end :)(: end :)
 
 (: static function ticketSummary(ticket:Ticket, ?open=false) :)
-<script>
-	$(document).ready(function()
-	{
-		$("#BodyTicket(:ticket.id:)").on('shown.bs.collapse', function()
-			{
-				var elem = $(this).find(".barraderolagem").first();
-				var p = elem.find('p');
-				top1 = p.first().offset().top;
-				top2 = p.last().offset().top;
-
-				elem.animate({
-					scrollTop: parseInt(top2-top1)
-				}, 0);
-			});
-	});
-</script>
 <!-- TICKET -->
 <div class="panel panel-default">
 	<!-- HEAD TICKET -->
@@ -123,8 +107,32 @@
 		{
 			locationgen(true);
 		});
-
-
+		var selector = "";
+		(: for t in tickets :)
+			(: if(t != tickets.last()) :)
+			selector += "#BodyTicket(:t.id:),";
+			(: else :)
+			selector += "#BodyTicket(:t.id:)";
+			(:end:)
+		(: end :)
+		
+		
+		$(selector).on('shown.bs.collapse', function()
+		{
+			var elem = $(this).find(".barraderolagem").first();
+			var p = elem.find('p');
+			top1 = p.first().offset().top;
+			top2 = p.last().offset().top;
+			
+			elem.animate({
+				scrollTop: parseInt(top2-top1)
+			}, 0);
+		});
+		
+		if(location.hash != "" && location.hash.length > 1)
+		{
+			$(location.hash).trigger('shown.bs.collapse');
+		}
 	});
 
 	//Gera o window.location.href de um modo overkill
