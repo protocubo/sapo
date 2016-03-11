@@ -36,7 +36,7 @@ typedef SlackPayload = {
 @:keep
 class Slack implements comn.Message {
 #if hxssl
-	public function deliver(creds)
+	public function deliver(queue, creds)
 	{
 		var req = new haxe.Http(creds.slackUrl);
 		req.setHeader("Content-Type", "application/json");

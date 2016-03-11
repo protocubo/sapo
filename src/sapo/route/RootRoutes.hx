@@ -160,6 +160,10 @@ class RootRoutes extends AccessControl {
 	public function doRegistration(d:Dispatch)
 		d.dispatch(new RegistrationRoutes());
 
+	@authorize(PSuperUser)
+	public function doExport()
+		Context.comn.enqueue(new comn.message.DataExport(Context.now, Context.loop.user.email));
+
 	@authorize(all)
 	public function doDefault()
 		Web.redirect(initialLocation());

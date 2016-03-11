@@ -1,8 +1,11 @@
 package comn;
 
+import comn.Spod;
+import sys.db.Manager;
+
 interface Message {
 	#if hxssl 
-	function deliver(creds:Credentials):Void; 
+	function deliver(queue:Manager<QueuedMessage>, creds:Credentials):Void; 
 	#end // throws DeliveryError 
 }
 
