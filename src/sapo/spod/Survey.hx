@@ -52,7 +52,7 @@ class Survey extends Object {
 	public var checkSV : Null<Bool>;
 	public var checkCT : Null<Bool>;
 	public var checkCQ : Null<Bool>;
-	public var isPhoned : Null<Bool>;
+	public var isPhoned : Bool = false;
 	public var group : Null<Int>;
 	public var date_edited : Null<HaxeTimestamp>;
 	/*********************************/
