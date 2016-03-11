@@ -19,23 +19,34 @@ class SurveyRoutes extends AccessControl {
 		
 		var surveys = new List<Survey>(); 
 		var users;
-		
+		var privilege = Context.loop.privilege;
 		if (args.user != null) 
 		{
 			//all supervisor's surveyors
 			if (args.user.group.privilege.match(PSupervisor)) 
-				users = Lambda.array(User.manager.search($supervisor == args.user)).map(function (i) return i.id);
+			{
+				if(privilege == PSuperUser || privilege == PPhoneOperator || (privilege == PSupervisor && Context.loop.user == args.user))
+					users = Lambda.array(User.manager.search($supervisor == args.user)).map(function (i) return i.id);
+			}
 			//single surveyor
-			else 
-				users = [args.user.id];			
+			else if(privilege == PSuperUser || privilege == PPhoneOperator || Context.loop.user == args.user.supervisor)
+				users = [args.user.id];
 		}
 		//all surveyors
 		else 
 		{
-			var group = Group.manager.select($privilege == PSurveyor);
-			users = Lambda.array(User.manager.search($group == group)).map(function (i) return i.id);
+			
+			if (privilege == PSuperUser || privilege == PPhoneOperator)
+			{
+				var group = Group.manager.select($privilege == PSurveyor);
+				users = Lambda.array(User.manager.search($group == group)).map(function (i) return i.id);
+			}	
+			else
+				users = Lambda.array(User.manager.search($supervisor == Context.loop.user, null, false).map(function(i) return i.id);
+			
 		}
 		surveys = PaymentRoutes.filterStates(users, args.page, elementsPerPage, args.status, args.order);
+		
 		var pagination = PaymentRoutes.setPagination(surveys, args.page, elementsPerPage);
 		
 		Sys.println(sapo.view.Surveys.page(surveys, args, pagination.showPrev, pagination.showNext));
@@ -46,9 +57,21 @@ class SurveyRoutes extends AccessControl {
 	{
 		if (args == null) args = { };
 		var surveys : List<Survey> = new List();
-		if (args.survey != null)
-			surveys.add(args.survey);
-
+		switch(Context.loop.privilege)
+		{
+			case PSuperUser, PPhoneOperator:
+				//Ok
+			case PSupervisor:
+				var u = User.manager.get(args.survey.user_id);
+				if (u.supervisor == Context.loop.user)
+					surveys.add(args.survey);
+				else
+					Web.redirect("/tickets");
+					return;
+			default:
+				throw "Invalid permission!";
+		}
+		
 		Sys.println(sapo.view.Surveys.page( surveys ));
 	}
 
@@ -56,20 +79,34 @@ class SurveyRoutes extends AccessControl {
 	public function doChangecheck(args:{ surveyid:Int, checkSV:Null<Bool>, checkCT:Null<Bool>, checkCQ:Null<Bool> })  // TODO only POST
 	{
         var s = Survey.manager.select($id == args.surveyid);
-        var priv = Context.loop.privilege;
-        var changecheckSV = false;
+		var user = User.manager.get(s.user_id, false);
+        
+		var changecheckSV = false;
         var changecheckCT = false;
         var changecheckCQ = false;
-		if (s.checkSV != args.checkSV && (priv == PSupervisor || priv == PSuperUser)) changecheckSV = true;
-		if (s.checkCT != args.checkCT && (priv == PPhoneOperator || priv == PSuperUser)) changecheckCT = true;
-		if (s.checkCQ != args.checkCQ && priv == PSuperUser) changecheckCQ = true;
-        if (changecheckSV || changecheckCT || changecheckCQ) {
+		
+		var priv = Context.loop.privilege;
+		switch(priv)
+		{
+			case PSupervisor:
+				changecheckSV = (user.supervisor == Context.loop.user) ? true : false;
+			case PSuperUser:
+				changecheckSV = changecheckCT = changecheckCQ = true;
+			case PPhoneOperator:
+				changecheckCT = true;
+			default:
+				throw "Invalid permission";
+		}
+		
+        if (changecheckSV || changecheckCT || changecheckCQ) 
+		{
             s.lock();
             if (changecheckSV)  s.checkSV = args.checkSV;
             if (changecheckCT)  s.checkCT = args.checkCT;
             if (changecheckCQ)  s.checkCQ = args.checkCQ;
             s.update();
         }
+		
 		Web.redirect("/survey/" + s.id);
 	}
 
