@@ -299,13 +299,13 @@ function onSubmitTicket()
                             <div class="col-md-6">
                                 <div class="btn-group" data-toggle="buttons">
                                     <label class="btn btn-default (: if survey.checkSV == null :) active (: end :)" style="width:auto;">
-                                        <input type="radio" name="checkSV" value="" id="op1null" autocomplete="off" (: if survey.checkSV == null :) checked (: end :) > <span class="glyphicon glyphicon-minus PSupervisor" aria-hidden="true"></span>
+                                        <input type="radio" name="checkCT" value="" id="op1null" autocomplete="off" (: if survey.checkSV == null :) checked (: end :) > <span class="glyphicon glyphicon-minus PSupervisor" aria-hidden="true"></span>
                                     </label>
                                     <label class="btn btn-default (: if survey.checkSV == true :) active (: end :)" style="width:auto;">
-                                        <input type="radio" name="checkSV" value="true" id="op2true" autocomplete="off"(: if survey.checkSV == true :) checked (: end :)> <span class="glyphicon glyphicon-ok PSupervisor" aria-hidden="true"></span>
+                                        <input type="radio" name="checkCT" value="true" id="op2true" autocomplete="off"(: if survey.checkSV == true :) checked (: end :)> <span class="glyphicon glyphicon-ok PSupervisor" aria-hidden="true"></span>
                                     </label>
                                     <label class="btn btn-default(: if survey.checkSV == false :) active (: end :)" style="width:auto;">
-                                        <input type="radio" name="checkSV" value="false" id="op3false" autocomplete="off"(: if survey.checkSV == false :) checked (: end :)> <span class="glyphicon glyphicon-remove PSupervisor" aria-hidden="true"></span>
+                                        <input type="radio" name="checkCT" value="false" id="op3false" autocomplete="off"(: if survey.checkSV == false :) checked (: end :)> <span class="glyphicon glyphicon-remove PSupervisor" aria-hidden="true"></span>
                                     </label>
                                 </div>
 								<span style="float:right;">
@@ -329,13 +329,13 @@ function onSubmitTicket()
                             <div class="col-md-6">
                                 <div class="btn-group" data-toggle="buttons">
                                     <label class="btn btn-default (: if survey.checkCT == null :) active (: end :)" style="width:auto;">
-                                        <input type="radio" name="checkCT" value="" id="op1null" autocomplete="off"(: if survey.checkCT == null :) checked (: end :) > <span class="glyphicon glyphicon-minus PPhoneOperator" aria-hidden="true"></span>
+                                        <input type="radio" name="checkSV" value="" id="op1null" autocomplete="off"(: if survey.checkCT == null :) checked (: end :) > <span class="glyphicon glyphicon-minus PPhoneOperator" aria-hidden="true"></span>
                                     </label>
                                     <label class="btn btn-default (: if survey.checkCT == true :) active (: end :)" style="width:auto;">
-                                        <input type="radio" name="checkCT" value="true" id="op2true" autocomplete="off" (: if survey.checkCT == true :) checked (: end :)> <span class="glyphicon glyphicon-ok PPhoneOperator" aria-hidden="true"></span>
+                                        <input type="radio" name="checkSV" value="true" id="op2true" autocomplete="off" (: if survey.checkCT == true :) checked (: end :)> <span class="glyphicon glyphicon-ok PPhoneOperator" aria-hidden="true"></span>
                                     </label>
                                     <label class="btn btn-default (: if survey.checkCT == false :) active (: end :)" style="width:auto;">
-                                        <input type="radio" name="checkCT" value="false" id="op3false" autocomplete="off" (: if survey.checkCT == false :) checked (: end :)> <span class="glyphicon glyphicon-remove PPhoneOperator" aria-hidden="true"></span>
+                                        <input type="radio" name="checkSV" value="false" id="op3false" autocomplete="off" (: if survey.checkCT == false :) checked (: end :)> <span class="glyphicon glyphicon-remove PPhoneOperator" aria-hidden="true"></span>
                                     </label>
                                 </div>
                             </div>
