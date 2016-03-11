@@ -19,7 +19,7 @@
 			<div class="col-md-12">
 		        <h3><a href="https://github.com/jonasmalacofilho/sapood" target="_blank">SAPO</a></h3>
                 <h4> <b> Release M </b> </h4>
-                <p> O SAPO teve seu desenvolvimento inicial, em fevereiro e março de 2016 patrocinado pela <a href="www.comtacti.com.br" >COMTACTI</a> e pela <a href="www.logiteng.com">LOGIT</a> para utilização na pesquisa Origem Destino Domiciliar do Distrito Federal promovida pelo <a href"http://www.metro.df.gov.br">Metrô de Brasília </a> no mesmo ano.</p>
+                <p> O SAPO teve seu desenvolvimento inicial, em fevereiro e março de 2016 patrocinado pela <a href="http://www.comtacti.com.br" >COMTACTI</a> e pela <a href="http://www.logiteng.com">LOGIT</a> para utilização na pesquisa Origem Destino Domiciliar do Distrito Federal promovida pelo <a href="http://www.metro.df.gov.br">Metrô de Brasília </a> no mesmo ano.</p>
 
 				<hr />
 				<div id="chart_div"></div>
