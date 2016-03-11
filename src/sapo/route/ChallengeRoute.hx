@@ -45,7 +45,7 @@ class ChallengeRoute extends AccessControl
 		var response = prefix + tokenID + "$" + nounce;		
 		
 		//create token
-		token = generateToken(Bytes.ofString(response), nounce);
+		token = generateToken(Bytes.ofString(pwd), nounce);
 		trace(token);
 		
 		
