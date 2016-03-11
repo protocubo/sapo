@@ -18,7 +18,9 @@ class DataExport implements comn.Message {
 		buf.add("TODO");
 		var data = buf.toString();
 		var sha1 = haxe.crypto.Sha1.encode(data);
-		File.saveContent(haxe.io.Path.join([EXPORTS, sha1 + ".csv"]), data);
+		var path = haxe.io.Path.join([EXPORTS, sha1 + ".csv"]);
+		File.saveContent(path + ".tmp", data);
+		FileSystem.rename(path + ".tmp", path);
 		return sha1;
 	}
 
