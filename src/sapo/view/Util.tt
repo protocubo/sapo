@@ -1,5 +1,5 @@
 (: import sapo.spod.Survey :)
-(: static function head(title:String, ?use:{ ?formCache:Bool, ?uncollapseHash:Bool }) :)
+(: static function head(title:String, ?use:{ ?formCache:Bool, ?uncollapseHash:Bool, ?uriForm:Bool }) :)
 
 <!-- TITLE -->
 <meta charset="utf-8">
@@ -20,6 +20,18 @@
 (:if use != null:)
 	(:if use.formCache:)<script src="/js/formcache.js"></script>(:end:)
 	(:if use.uncollapseHash:)<script>if (location.hash) $().ready(function () { document.getElementById(location.hash.substr(1)).className += " in" })</script>(:end:)
+	(:if use.uriForm:)
+		<script>
+			$().ready(function () {
+				$('form[name="uri-form"]').on('submit',function(e)
+				{
+					e.preventDefault();
+					var id = $(this).find('input[name="id"]').val();
+					location.href = $(this).attr('action') + '/' + id;
+				});
+			});
+		</script>
+	(:end:)
 (:end:)
 (: end :)
 
