@@ -60,6 +60,8 @@ class RootRoutes extends AccessControl {
 		if (args == null) args = { };
 		Sys.println(sapo.view.Error.render(args.title, args.message));
 	}
+	
+	
 
 	@authorize(all, guest)
 	public function doPwd(args : { token : String } )
@@ -153,6 +155,10 @@ class RootRoutes extends AccessControl {
 	public function doSummary(d : Dispatch)
 		d.dispatch(new SummaryRoutes());
 		//Sys.println(sapo.view.Summary.render());
+		
+	@authorize(guest)
+	public function doChallenge(d : Dispatch)
+		d.dispatch(new ChallengeRoute());
 
 	@authorize(PSurveyor, PSuperUser)
 	public function doPayments(d:Dispatch)
