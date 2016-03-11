@@ -19,13 +19,13 @@
 				<span class="glyphicon glyphicon-arrow-right text-muted" aria-hidden="true" style="color: #999;"></span>
 				<span class="glyphicon glyphicon glyphicon-user (: ticket.recipient.privilege :)" aria-hidden="true"></span>
 				<!-- Nº do Ticket, Data da criação do Ticket, Hora da criação do Ticket -->
-				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyTicket(: ticket.id :)" aria-expanded="true" aria-controls="BodyTicket(: ticket.id :)">
+				<a role="button" data-toggle="collapse" data-target="#BodyTicket(: ticket.id :)" data-parent="#accordion" href="#BodyTicket(: ticket.id :)" aria-expanded="true" aria-controls="BodyTicket(: ticket.id :)">
 					<b>Ticket #(: ticket.id :)</b> - (: ticket.opened_at :) - (: ticket.subject :)
 				</a>
 			</div>
 			<div class="col-md-5 panel-title">
 				<!-- Número da pesquisa, data da pesquisa, Nome do pesquisador (class: super, telefonista, supervisor e pesquisador) -->
-				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyTicket(: ticket.id :)" aria-expanded="true" aria-controls="BodyTicket(: ticket.id :)">
+				<a role="button" data-toggle="collapse" data-target="#BodyTicket(: ticket.id :)" data-parent="#accordion" href="#BodyTicket(: ticket.id :)" aria-expanded="true" aria-controls="BodyTicket(: ticket.id :)">
 					<b>Pesquisa #(:ticket.survey.id:)</b> - <span class="PSurveyor">(: User.manager.get(ticket.survey.user_id).name :)</span>
 				</a>
 			<span class="tags">
