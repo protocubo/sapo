@@ -278,7 +278,8 @@ class SummaryRoutes extends AccessControl
 			data = "?data=" + data;
 		//Remove all params
 		var uri = Web.getLocalReferer().split('?')[0];
-		uri += data + "&user=" + user.id;
+		if(user != null)
+			uri += data + "&user=" + user.id;
 		Web.redirect(uri);
 		
 	}
