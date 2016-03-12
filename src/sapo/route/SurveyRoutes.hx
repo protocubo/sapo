@@ -18,7 +18,7 @@ class SurveyRoutes extends AccessControl {
 		args.status = args.status == null? SSAll : args.status;
 		
 		var surveys = new List<Survey>(); 
-		var users;
+		var users = [];
 		var privilege = Context.loop.privilege;
 		if (args.user != null) 
 		{
@@ -26,25 +26,36 @@ class SurveyRoutes extends AccessControl {
 			if (args.user.group.privilege.match(PSupervisor)) 
 			{
 				if(privilege == PSuperUser || privilege == PPhoneOperator || (privilege == PSupervisor && Context.loop.user == args.user))
-					users = Lambda.array(User.manager.search($supervisor == args.user)).map(function (i) return i.id);
+					users = Lambda.array(User.manager.search($supervisor == args.user)).map(function(i) return i.id);
+				else
+				{
+					Web.redirect("/surveys");
+					return;
+				}
 			}
 			//single surveyor
 			else if(privilege == PSuperUser || privilege == PPhoneOperator || Context.loop.user == args.user.supervisor)
 				users = [args.user.id];
+			else
+			{
+				Web.redirect("/surveys");
+				return;
+			}
 		}
 		//all surveyors
 		else 
 		{
-			
 			if (privilege == PSuperUser || privilege == PPhoneOperator)
 			{
 				var group = Group.manager.select($privilege == PSurveyor);
-				users = Lambda.array(User.manager.search($group == group)).map(function (i) return i.id);
+				users = Lambda.array(User.manager.search($group == group)).map(function(i) return i.id);
 			}	
 			else
-				users = Lambda.array(User.manager.search($supervisor == Context.loop.user, null, false).map(function(i) return i.id);
-			
+			{
+				users = Lambda.array(User.manager.search($supervisor == Context.loop.user, null, false)).map(function(i) return i.id);
+			}
 		}
+		
 		surveys = PaymentRoutes.filterStates(users, args.page, elementsPerPage, args.status, args.order);
 		
 		var pagination = PaymentRoutes.setPagination(surveys, args.page, elementsPerPage);
@@ -66,7 +77,7 @@ class SurveyRoutes extends AccessControl {
 				if (u.supervisor == Context.loop.user)
 					surveys.add(args.survey);
 				else
-					Web.redirect("/tickets");
+					Web.redirect("/surveys");
 					return;
 			default:
 				throw "Invalid permission!";
