@@ -129,6 +129,7 @@
       } :)
 (:end:)
 
+
 (: static function status( survey : Survey ) :)
 
 	(: do var surveyCheck = SurveyCheckStatus.manager.get(survey.id) :)
@@ -164,6 +165,17 @@
 	(:if surveyCheck.checkSV == null :)
 	<span class="glyphicon glyphicon-minus PSupervisor" aria-hidden="true" title="Supervisor"></span>
 	(: end :)
+	
+	<!-- status SUPERVISOR -->
+	(:if surveyCheck.checkSV == true :)
+	<span class="glyphicon glyphicon-ok PSupervisor" aria-hidden="true" title="SUPERVISOR"></span>
+	(: end :)
+	(:if surveyCheck.checkSV == false :)
+	<span class="glyphicon glyphicon-remove PSupervisor" aria-hidden="true" title="SUPERVISOR"></span>
+	(: end :)
+	(:if surveyCheck.checkSV == null :)
+	<span class="glyphicon glyphicon-minus PSupervisor" aria-hidden="true" title="SUPERVISOR"></span>
+	(: end :)
 
 	<!-- status SUPERUSUÁRIO -->
 	(:if surveyCheck.checkCQ == true :)
@@ -177,3 +189,7 @@
 	(: end :)
 	
 (: end :)
+
+
+
+
