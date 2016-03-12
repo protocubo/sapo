@@ -292,12 +292,15 @@ class Context {
 			Context.shutdown();
 			trace('Access control error: $e');
 			var url = Web.getURI();
-			if (Web.getMethod().toLowerCase() == "get")
+			if (url != "" && uri != "/" && uri != "/login" && Web.getMethod().toLowerCase() == "get") {
 				url += "?" + [
 					for (k in Web.getParams().keys())
 						'${StringTools.urlEncode(k)}=${StringTools.urlEncode(Web.getParams().get(k))}'
 				].join("&");
-			Web.redirect('/login?redirect=${StringTools.urlEncode(url)}');
+				Web.redirect('/login?redirect=${StringTools.urlEncode(url)}');
+			} else {
+				Web.redirect("/login");
+			}
 		}
 	}
 #end
