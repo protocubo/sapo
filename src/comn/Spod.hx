@@ -15,3 +15,16 @@ class QueuedMessage extends sys.db.Object {
 		pos = DateTools.delta(Date.now(), 1e3*seconds);
 }
 
+class ExportLog extends sys.db.Object {
+	public var id:SId;
+	public var sha1:String;
+	public var time:HaxeTimestamp;
+
+	public function new(sha1, time)
+	{
+		this.sha1 = sha1;
+		this.time = time;
+		super();
+	}
+}
+
