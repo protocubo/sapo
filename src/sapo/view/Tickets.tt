@@ -1,32 +1,14 @@
-(:import sapo.route.TicketRoutes.* :)
+(:import sapo.route.TicketRoutes.ManyTicketRoutes.* :)
+(:import sapo.route.TicketRoutes.canClose :)
 (:import common.db.MoreTypes:)
 (:import sapo.spod.Survey:)
 (:import sapo.spod.Ticket:)
 (:import sapo.spod.User:)
 
-(: private static function hideClose(ticket:Ticket) :)
-(: if ticket.closed_at != null || (Context.loop.user != ticket.author && !Context.loop.privilege.match(PSuperUser)) :)
-unavailable
-(: end :)
-(: end :)
+(:* (:if ticket.closed_at != null || (Context.loop.user != ticket.author && !Context.loop.privilege.match(PSuperUser)):) *:)
+(:private static function hideClose(ticket:Ticket):)(:if !canClose(ticket):)unavailable(: end :)(: end :)
 
 (: static function ticketSummary(ticket:Ticket, ?open=false) :)
-<script>
-	$(document).ready(function()
-	{
-		$("#BodyTicket(:ticket.id:)").on('shown.bs.collapse', function()
-			{
-				var elem = $(this).find(".barraderolagem").first();
-				var p = elem.find('p');
-				top1 = p.first().offset().top;
-				top2 = p.last().offset().top;
-				
-				elem.animate({
-					scrollTop: parseInt(top2-top1)
-				}, 0);
-			});
-	});
-</script>
 <!-- TICKET -->
 <div class="panel panel-default">
 	<!-- HEAD TICKET -->
@@ -38,13 +20,13 @@ unavailable
 				<span class="glyphicon glyphicon-arrow-right text-muted" aria-hidden="true" style="color: #999;"></span>
 				<span class="glyphicon glyphicon glyphicon-user (: ticket.recipient.privilege :)" aria-hidden="true"></span>
 				<!-- Nº do Ticket, Data da criação do Ticket, Hora da criação do Ticket -->
-				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyTicket(: ticket.id :)" aria-expanded="true" aria-controls="BodyTicket(: ticket.id :)">
+				<a role="button" data-toggle="collapse" data-target="#BodyTicket(: ticket.id :)" data-parent="#accordion" href="#BodyTicket(: ticket.id :)" aria-expanded="true" aria-controls="BodyTicket(: ticket.id :)">
 					<b>Ticket #(: ticket.id :)</b> - (: ticket.opened_at :) - (: ticket.subject :)
 				</a>
 			</div>
 			<div class="col-md-5 panel-title">
 				<!-- Número da pesquisa, data da pesquisa, Nome do pesquisador (class: super, telefonista, supervisor e pesquisador) -->
-				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#BodyTicket(: ticket.id :)" aria-expanded="true" aria-controls="BodyTicket(: ticket.id :)">
+				<a role="button" data-toggle="collapse" data-target="#BodyTicket(: ticket.id :)" data-parent="#accordion" href="#BodyTicket(: ticket.id :)" aria-expanded="true" aria-controls="BodyTicket(: ticket.id :)">
 					<b>Pesquisa #(:ticket.survey.id:)</b> - <span class="PSurveyor">(: User.manager.get(ticket.survey.user_id).name :)</span>
 				</a>
 			<span class="tags">
@@ -81,7 +63,7 @@ unavailable
 					<div class="bloco"><b>Senha:</b> <span class="pin">(: ticket.survey.pin :)</span> </div>
 					<hr>
 					(: for m in sapo.spod.Survey.Morador.manager.search($survey_id == ticket.survey.id)  :)
-						(: var dash = false :)							
+						(: var dash = false :)
 							<p><b>(: m.nomeMorador :) ((: Util.enumText(m.idade) :)):</b>
 							(: for p in sapo.spod.Ponto.manager.search($morador_id == m.id)  :)
 								(: if dash :) - (: end :)(: Util.enumText(p.motivo) :) (: do dash = true :)
@@ -92,27 +74,16 @@ unavailable
 			</div>
 			<!-- AÇÕES -->
 			<div class="row mt30">
-				(: do var u = Context.loop.user :)
-				(: do var disabled = false :)
-
-				(: if ticket.author != u && ticket.recipient.user != u && ticket.recipient.group != u.group && u.group.privilege != PSuperUser :)
-					(: do disabled = true :)
-				(: end :)
-				(: do var closedDisabled = false :)
-				(: if ticket.author != u && (u.group.privilege != PSuperUser || u.group.privilege == PPhoneOperator ) :)
-					(: do closedDisabled = true :)
-				(: end :)
-
-				(: if ticket.closed_at == null :)
-				<div class="col-md-2"><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_incluir" (:if disabled :) disabled (: end :)>Incluir</button></div>
-				<div class="col-md-2"><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_responder" (:if disabled :) disabled (: end :)>Responder</button></div>
-				<div class="col-md-2"><button type="button" class="btn btn-success btn-sm (: hideClose(ticket) :)" data-toggle="modal" data-target="#ticket(: ticket.id :)_fechar" (: if closedDisabled :) disabled (: end :)>Fechar</button></div>
+				(:if ticket.closed_at == null:)
+				<div class="col-md-2"><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#ticket(:ticket.id:)_incluir">Incluir</button></div>
+				<div class="col-md-2"><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#ticket(:ticket.id:)_responder">Responder</button></div>
+				<div class="col-md-2"><button type="button" class="btn btn-success btn-sm (:hideClose(ticket):)" data-toggle="modal" data-target="#ticket(:ticket.id:)_fechar">Fechar</button></div>
 				<div class="col-md-2 col-md-offset-1"><a href="/survey/(:ticket.survey.id:)" type="button" class="btn btn-primary btn-sm">Ver Pesquisa</a></div>
-				<div class="col-md-2"><button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_status">Conferência</button></div>
-				(: else :)
-				<div class="col-md-2"><button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#ticket(: ticket.id :)_responder" (:if disabled :) disabled (: end :)>Reabrir</button></div>
+				<div class="col-md-2"><button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#ticket(:ticket.id:)_status">Conferência</button></div>
+				(:else:)
+				<div class="col-md-2"><button type="button" class="btn btn-danger btn-sm (:hideClose(ticket):)" data-toggle="modal" data-target="#ticket(:ticket.id:)_responder">Reabrir</button></div>
 				<div class="col-md-2 col-md-offset-5"><a href="/survey/(:ticket.survey.id:)" type="button" class="btn btn-primary btn-sm">Ver Pesquisa</a></div>
-				(: end :)
+				(:end:)
 			</div>
 		</div>
 	</div>
@@ -124,7 +95,7 @@ unavailable
 <!DOCTYPE html>
 <html>
 <head>
-(: Util.head("SAPO - Tickets", {formCache:true, uncollapseHash:true}) :)
+(: Util.head("SAPO - Tickets", {formCache:true, uncollapseHash:true, uriForm:true}) :)
 <script>
 	$('document').ready(function()
 	{
@@ -132,15 +103,39 @@ unavailable
 		{
 			locationgen(false);
 		});
-		
+
 		$('.next').bind('click',function()
 		{
 			locationgen(true);
 		});
-		
-	
+		var selector = "";
+		(: for t in tickets :)
+			(: if(t != tickets.last()) :)
+			selector += "#BodyTicket(:t.id:),";
+			(: else :)
+			selector += "#BodyTicket(:t.id:)";
+			(:end:)
+		(: end :)
+
+
+		$(selector).on('shown.bs.collapse', function()
+		{
+			var elem = $(this).find(".barraderolagem").first();
+			var p = elem.find('p');
+			top1 = p.first().offset().top;
+			top2 = p.last().offset().top;
+
+			elem.animate({
+				scrollTop: parseInt(top2-top1)
+			}, 0);
+		});
+
+		if(location.hash != "" && location.hash.length > 1)
+		{
+			$(location.hash).trigger('shown.bs.collapse');
+		}
 	});
-	
+
 	//Gera o window.location.href de um modo overkill
 	function locationgen(nextPage)
 	{
@@ -161,11 +156,11 @@ unavailable
 						curPage++;
 					else
 						curPage--;
-					str += fields[0]+"="+ curPage;			
+					str += fields[0]+"="+ curPage;
 				}
 				else
 					str += params[i];
-					
+
 				if((i+1) != params.length)
 					str += "&"
 			}
@@ -177,7 +172,7 @@ unavailable
 				searchparams += "&page=2";
 			else
 				searchparams = "?page=2";
-		
+
 		}
 		var p = window.location.protocol;
 		var port = window.location.port;
@@ -231,9 +226,9 @@ unavailable
 				}
 			</script>
 			<!-- BUSCA -->
-			<form action="/tickets/search" method="get">
+			<form action="/ticket" method="get" name="uri-form">
 				<div class="col-md-2  col-md-offset-2"><h5>TICKET</h5>
-					<input type="text" name="ticket" id="ticketSearch" class="form-control input-sm" oninput="disableSearch(this.name, this.value)" placeholder="Nº do Ticket">
+					<input type="text" name="id" id="ticketSearch" class="form-control input-sm" oninput="disableSearch(this.name, this.value)" placeholder="Nº do Ticket" required>
 				</div>
 
 				<div class="col-md-1"><h5>&nbsp;</h5>
@@ -272,7 +267,7 @@ unavailable
 				(: else :)
 				<li class="previous">&nbsp</li>
 				(: end :)
-				
+
 				(: if totalItems > PAGE_SIZE :)
 				<li class="next"><a href="#">PRÓXIMA</a></li>
 				(: else :)

@@ -91,7 +91,6 @@ class RootRoutes extends AccessControl {
 
 				t.setExpired();
 				t.update();
-				//Manager.cnx.commit();
 			}
 		}
 
@@ -138,8 +137,10 @@ class RootRoutes extends AccessControl {
 	}
 
 	@authorize(PSupervisor, PPhoneOperator, PSuperUser)
-	public function doTickets(d:Dispatch)
-		d.dispatch(new TicketRoutes());
+	var doTickets = TicketRoutes.doTicketsImpl;
+
+	@authorize(PSupervisor, PPhoneOperator, PSuperUser)
+	var doTicket = TicketRoutes.doSingleTicketImpl;
 
 	@authorize(PSupervisor, PPhoneOperator, PSuperUser)
 	public function doSurveys(d:Dispatch)
@@ -152,22 +153,18 @@ class RootRoutes extends AccessControl {
 	@authorize(PSupervisor, PSuperUser)
 	public function doSummary(d : Dispatch)
 		d.dispatch(new SummaryRoutes());
-		//Sys.println(sapo.view.Summary.render());
 
 	@authorize(PSurveyor, PSuperUser)
 	public function doPayments(d:Dispatch)
-	{
 		d.dispatch(new PaymentRoutes());
-		//switch Context.loop.privilege {
-		//case PSurveyor: Sys.println(sapo.view.Payments.surveyorPage());
-		//case PSuperUser: d.dispatch(new PaymentRoutes());
-		//case other: throw 'access control model failure: got $other';
-		//}
-	}
 
 	@authorize(PSuperUser)
 	public function doRegistration(d:Dispatch)
 		d.dispatch(new RegistrationRoutes());
+
+	@authorize(PSuperUser)
+	public function doExport()
+		Context.comn.enqueue(new comn.message.DataExport(Context.now, Context.loop.user.email));
 
 	@authorize(all)
 	public function doDefault()

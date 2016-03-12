@@ -295,19 +295,29 @@ function onSubmitTicket()
                     <div class="modal-body">
 (: if Context.loop.privilege == PSupervisor || Context.loop.privilege == PSuperUser :)
                         <div class="row">
-                            <div class="col-md-4 col-md-offset-2 PSupervisor"><h4>Supervisor:</h4></div>
-                            <div class="col-md-4">
+                            <div class="col-md-4 col-md-offset-2 PPhoneOperator"><h4>Central Telefônica:</h4></div>
+                            <div class="col-md-6">
                                 <div class="btn-group" data-toggle="buttons">
                                     <label class="btn btn-default (: if survey.checkSV == null :) active (: end :)" style="width:auto;">
-                                        <input type="radio" name="checkSV" value="" id="op1null" autocomplete="off" (: if survey.checkSV == null :) checked (: end :) > <span class="glyphicon glyphicon-minus PSupervisor" aria-hidden="true"></span>
+                                        <input type="radio" name="checkCT" value="" id="op1null" autocomplete="off" (: if survey.checkSV == null :) checked (: end :) > <span class="glyphicon glyphicon-minus PSupervisor" aria-hidden="true"></span>
                                     </label>
                                     <label class="btn btn-default (: if survey.checkSV == true :) active (: end :)" style="width:auto;">
-                                        <input type="radio" name="checkSV" value="true" id="op2true" autocomplete="off"(: if survey.checkSV == true :) checked (: end :)> <span class="glyphicon glyphicon-ok PSupervisor" aria-hidden="true"></span>
+                                        <input type="radio" name="checkCT" value="true" id="op2true" autocomplete="off"(: if survey.checkSV == true :) checked (: end :)> <span class="glyphicon glyphicon-ok PSupervisor" aria-hidden="true"></span>
                                     </label>
                                     <label class="btn btn-default(: if survey.checkSV == false :) active (: end :)" style="width:auto;">
-                                        <input type="radio" name="checkSV" value="false" id="op3false" autocomplete="off"(: if survey.checkSV == false :) checked (: end :)> <span class="glyphicon glyphicon-remove PSupervisor" aria-hidden="true"></span>
+                                        <input type="radio" name="checkCT" value="false" id="op3false" autocomplete="off"(: if survey.checkSV == false :) checked (: end :)> <span class="glyphicon glyphicon-remove PSupervisor" aria-hidden="true"></span>
                                     </label>
                                 </div>
+								<span style="float:right;">
+									<div class="btn-group" data-toggle="buttons">
+										<label class="btn btn-default (: if survey.isPhoned == false :) active (: end :)" style="width:auto; color:#DDD;">
+											<input type="radio" name="Phoned" value="false" id="nao" autocomplete="off"> <span class="glyphicon glyphicon-earphone" aria-hidden="true"></span>
+										</label>
+										<label class="btn btn-default (: if survey.isPhoned == true :) active (: end :)" style="width:auto;">
+											<input type="radio" name="Phoned" value="true" id="sim" autocomplete="off" > <span class="glyphicon glyphicon-earphone" aria-hidden="true"> </span>
+										</label>
+									</div>
+								</span>
                             </div>
                         </div>
 (: else :)
@@ -315,17 +325,17 @@ function onSubmitTicket()
 (:end:)
 (: if Context.loop.privilege == PPhoneOperator || Context.loop.privilege == PSuperUser :)
                         <div class="row">
-                            <div class="col-md-4 col-md-offset-2 PPhoneOperator"><h4>Central Telefônica:</h4></div>
-                            <div class="col-md-4">
+                            <div class="col-md-4 col-md-offset-2 PSupervisor"><h4>Supervisor:</h4></div>
+                            <div class="col-md-6">
                                 <div class="btn-group" data-toggle="buttons">
                                     <label class="btn btn-default (: if survey.checkCT == null :) active (: end :)" style="width:auto;">
-                                        <input type="radio" name="checkCT" value="" id="op1null" autocomplete="off"(: if survey.checkCT == null :) checked (: end :) > <span class="glyphicon glyphicon-minus PPhoneOperator" aria-hidden="true"></span>
+                                        <input type="radio" name="checkSV" value="" id="op1null" autocomplete="off"(: if survey.checkCT == null :) checked (: end :) > <span class="glyphicon glyphicon-minus PPhoneOperator" aria-hidden="true"></span>
                                     </label>
                                     <label class="btn btn-default (: if survey.checkCT == true :) active (: end :)" style="width:auto;">
-                                        <input type="radio" name="checkCT" value="true" id="op2true" autocomplete="off" (: if survey.checkCT == true :) checked (: end :)> <span class="glyphicon glyphicon-ok PPhoneOperator" aria-hidden="true"></span>
+                                        <input type="radio" name="checkSV" value="true" id="op2true" autocomplete="off" (: if survey.checkCT == true :) checked (: end :)> <span class="glyphicon glyphicon-ok PPhoneOperator" aria-hidden="true"></span>
                                     </label>
                                     <label class="btn btn-default (: if survey.checkCT == false :) active (: end :)" style="width:auto;">
-                                        <input type="radio" name="checkCT" value="false" id="op3false" autocomplete="off" (: if survey.checkCT == false :) checked (: end :)> <span class="glyphicon glyphicon-remove PPhoneOperator" aria-hidden="true"></span>
+                                        <input type="radio" name="checkSV" value="false" id="op3false" autocomplete="off" (: if survey.checkCT == false :) checked (: end :)> <span class="glyphicon glyphicon-remove PPhoneOperator" aria-hidden="true"></span>
                                     </label>
                                 </div>
                             </div>
@@ -335,8 +345,8 @@ function onSubmitTicket()
 (:end:)
 (: if Context.loop.privilege == PSuperUser :)
                         <div class="row">
-                            <div class="col-md-4 col-md-offset-2 PSuperUser"><h4>Superusuário:</h4></div>
-                            <div class="col-md-4">
+                            <div class="col-md-4 col-md-offset-2 PSuperUser"><h4>Controle de Qualidade:</h4></div>
+                            <div class="col-md-6">
                                 <div class="btn-group" data-toggle="buttons">
                                     <label class="btn btn-default (: if survey.checkCQ == null :) active (: end :)" style="width:auto;">
                                         <input type="radio" name="checkCQ" value="" id="op1null" autocomplete="off"(: if survey.checkCQ == null :) checked (: end :)> <span class="glyphicon glyphicon-minus PSuperUser" aria-hidden="true"></span>
@@ -346,19 +356,6 @@ function onSubmitTicket()
                                     </label>
                                     <label class="btn btn-default (: if survey.checkCQ == false :) active (: end :)" style="width:auto;">
                                         <input type="radio" name="checkCQ" value="false" id="op3false" autocomplete="off" (: if survey.checkCQ == false :) checked (: end :)> <span class="glyphicon glyphicon-remove PSuperUser" aria-hidden="true"></span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4 col-md-offset-2"><h4>Telefonada:</h4></div>
-                            <div class="col-md-4">
-                                <div class="btn-group" data-toggle="buttons">
-                                    <label class="btn btn-default (: if survey.isPhoned == false :) active (: end :)" style="width:auto; color:#DDD;">
-                                        <input type="radio" name="Phoned" value="false" id="nao" autocomplete="off"> <span class="glyphicon glyphicon-earphone" aria-hidden="true"></span>
-                                    </label>
-                                    <label class="btn btn-default (: if survey.isPhoned == true :) active (: end :)" style="width:auto;">
-                                        <input type="radio" name="Phoned" value="true" id="sim" autocomplete="off" > <span class="glyphicon glyphicon-earphone" aria-hidden="true"> </span>
                                     </label>
                                 </div>
                             </div>

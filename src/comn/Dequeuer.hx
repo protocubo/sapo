@@ -5,8 +5,9 @@ import comn.Spod;
 import sys.db.*;
 
 // keep
-import comn.message.Slack;
+import comn.message.DataExport;
 import comn.message.Email;
+import comn.message.Slack;
 
 class Dequeuer {
 	var cnx:Connection;
@@ -45,7 +46,7 @@ class Dequeuer {
 			var msg = next.data;
 			var error = null;
 			try {
-				msg.deliver(creds);
+				msg.deliver(queue, creds);
 				next.sentAt = Date.now().getTime();
 			} catch (e:DeliveryError) {
 				error = e;

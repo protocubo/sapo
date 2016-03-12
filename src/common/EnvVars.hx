@@ -10,6 +10,9 @@ package common;
 	// Location of necessary static files
 	var STATIC_FILES = "STATIC_FILES";
 
+	// Location for the exported files
+	var EXPORTS_PATH = "EXPORTS_PATH";
+
 	// Url to deliver Slack messages to
 	var COMN_SLACK_URL = "COMN_SLACK_URL";
 	// SendGrid API key

@@ -1,5 +1,5 @@
 (: import sapo.spod.Survey :)
-(: static function head(title:String, ?use:{ ?formCache:Bool, ?uncollapseHash:Bool }) :)
+(: static function head(title:String, ?use:{ ?formCache:Bool, ?uncollapseHash:Bool, ?uriForm:Bool }) :)
 
 <!-- TITLE -->
 <meta charset="utf-8">
@@ -20,6 +20,18 @@
 (:if use != null:)
 	(:if use.formCache:)<script src="/js/formcache.js"></script>(:end:)
 	(:if use.uncollapseHash:)<script>if (location.hash) $().ready(function () { document.getElementById(location.hash.substr(1)).className += " in" })</script>(:end:)
+	(:if use.uriForm:)
+		<script>
+			$().ready(function () {
+				$('form[name="uri-form"]').on('submit',function(e)
+				{
+					e.preventDefault();
+					var id = $(this).find('input[name="id"]').val();
+					location.href = $(this).attr('action') + '/' + id;
+				});
+			});
+		</script>
+	(:end:)
 (:end:)
 (: end :)
 
@@ -123,45 +135,45 @@
 	
 	<!-- se paga -->
 	(: if survey.paid == true :)
-	<span class="glyphicon glyphicon-usd" aria-hidden="true" title="PAGA"></span>
+	<span class="glyphicon glyphicon-usd" aria-hidden="true" title="Paga"></span>
 	(: end :)
 	
 	<!-- se telefonada -->
 	(: if surveyCheck.isPhoned == true :)
-	<span class="glyphicon glyphicon-earphone " aria-hidden="true" title="TELEFONADA"></span>
-	(: end :)
-	
-	<!-- status SUPERVISOR -->
-	(:if surveyCheck.checkSV == true :)
-	<span class="glyphicon glyphicon-ok PSupervisor" aria-hidden="true" title="SUPERVISOR"></span>
-	(: end :)
-	(:if surveyCheck.checkSV == false :)
-	<span class="glyphicon glyphicon-remove PSupervisor" aria-hidden="true" title="SUPERVISOR"></span>
-	(: end :)
-	(:if surveyCheck.checkSV == null :)
-	<span class="glyphicon glyphicon-minus PSupervisor" aria-hidden="true" title="SUPERVISOR"></span>
+	<span class="glyphicon glyphicon-earphone " aria-hidden="true" title="Telefonada"></span>
 	(: end :)
 	
 	<!-- status TELEFONISTA -->
 	(:if surveyCheck.checkCT == true :)
-	<span class="glyphicon glyphicon-ok PPhoneOperator" aria-hidden="true" title="TELEFONISTA"></span>
+	<span class="glyphicon glyphicon-ok PPhoneOperator" aria-hidden="true" title="Central Telefônica"></span>
 	(: end :)
 	(:if surveyCheck.checkCT == false :)
-	<span class="glyphicon glyphicon-remove PPhoneOperator" aria-hidden="true" title="TELEFONISTA"></span>
+	<span class="glyphicon glyphicon-remove PPhoneOperator" aria-hidden="true" title="Central Telefônica"></span>
 	(: end :)
 	(:if surveyCheck.checkCT == null :)
-	<span class="glyphicon glyphicon-minus PPhoneOperator" aria-hidden="true" title="TELEFONISTA"></span>
+	<span class="glyphicon glyphicon-minus PPhoneOperator" aria-hidden="true" title="Central Telefônica"></span>
+	(: end :)
+	
+	<!-- status SUPERVISOR -->
+	(:if surveyCheck.checkSV == true :)
+	<span class="glyphicon glyphicon-ok PSupervisor" aria-hidden="true" title="Supervisor"></span>
+	(: end :)
+	(:if surveyCheck.checkSV == false :)
+	<span class="glyphicon glyphicon-remove PSupervisor" aria-hidden="true" title="Supervisor"></span>
+	(: end :)
+	(:if surveyCheck.checkSV == null :)
+	<span class="glyphicon glyphicon-minus PSupervisor" aria-hidden="true" title="Supervisor"></span>
 	(: end :)
 
 	<!-- status SUPERUSUÁRIO -->
 	(:if surveyCheck.checkCQ == true :)
-	<span class="glyphicon glyphicon-ok PSuperUser" aria-hidden="true" title="SUPERUSUÁRIO"></span>
+	<span class="glyphicon glyphicon-ok PSuperUser" aria-hidden="true" title="Controle de Qualidade"></span>
 	(: end :)
 	(:if surveyCheck.checkCQ == false :)
-	<span class="glyphicon glyphicon-remove PSuperUser" aria-hidden="true" title="SUPERUSUÁRIO"></span>
+	<span class="glyphicon glyphicon-remove PSuperUser" aria-hidden="true" title="Controle de Qualidade"></span>
 	(: end :)
 	(:if surveyCheck.checkCQ == null :)
-	<span class="glyphicon glyphicon-minus PSuperUser" aria-hidden="true" title="SUPERUSUÁRIO"></span>
+	<span class="glyphicon glyphicon-minus PSuperUser" aria-hidden="true" title="Controle de Qualidade"></span>
 	(: end :)
 	
 (: end :)

@@ -34,7 +34,7 @@ typedef SendGridPayload = {
 class SendGridEmail implements comn.Message {
 #if hxssl
 	static var url = "https://api.sendgrid.com/api/mail.send.json";
-	public function deliver(creds)
+	public function deliver(queue, creds)
 	{
 		var req = new haxe.Http(url);
 		req.setHeader("Content-Type", "application/x-www-form-urlencoded");

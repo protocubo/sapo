@@ -82,16 +82,28 @@
 				<div class="col-md-2"><h5>USUÁRIO</h5>
 					<select class="form-control input-sm" name="user" id="userID">
 						<option value="">Todos</option>
+						(: do var privilege = Context.loop.privilege :)
 						(: var g = Group.manager.select($privilege == PSupervisor) :)
 						<optgroup label=(:g.name:)>
-							(: for u in User.manager.search($group_id == g.id ) :)
-								<option value=(:u.id:)>(:u.name:)</option>
+							(: if privilege == PSuperUser || privilege == PPhoneOperator :)
+								(: for u in User.manager.search($group_id == g.id ) :)
+									<option value="(:u.id:)">(:u.name:)</option>
+								(: end :)
+							(: else if privilege == PSupervisor :)
+								<option value="(:Context.loop.user.id:)">(:Context.loop.user.name:)</option>
 							(: end :)
 						(: var g = Group.manager.select($privilege == PSurveyor) :)
 						<optgroup label=(:g.name:)>
-							(: for u in User.manager.search($group_id == g.id ) :)
-								<option value=(:u.id:)>(:u.name:)</option>
+							(: if privilege == PSuperUser || privilege == PPhoneOperator :)
+								(: for u in User.manager.search($group_id == g.id ) :)
+									<option value=(:u.id:)>(:u.name:)</option>
+								(: end :)
+							(: else if privilege == PSupervisor :)
+								(: for u in User.manager.search($group_id == g.id && $supervisor == Context.loop.user) :)
+									<option value="(:u.id:)">(:u.name:)</option>
+								(: end :)
 							(: end :)
+
 						</optgroup>
 					</select>
 				</div>
