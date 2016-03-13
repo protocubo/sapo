@@ -26,6 +26,8 @@ class Context {
 	public static var loop(default,null):Context;
 	public static var comn(default,null):LocalEnqueuer;
 
+	public static var glAnalyticsId:Null<String>;
+
 	var dispatch:Dispatch;
 
 	public var uri(default,null):String;
@@ -37,23 +39,12 @@ class Context {
 	public var group(default,null):Null<Group>;
 	public var privilege(default,null):Null<Privilege>;
 
-	function new(uri:String, params:Map<String, String>, method:String, session:Null<Session>)
+	static function __init__()
 	{
-		this.uri = uri;
-		this.params = params;
-		dispatch = new Dispatch(uri, params, method);
-
-		if (session == null)
-			return;
-		if (session.expired(now)) {
-			session.expire();
-			session.update();
-			return;
-		}
-		this.session = session;
-		this.user = session.user;
-		this.group = user.group;
-		this.privilege = group.privilege;
+		// google analytics
+		var gaid = Sys.getEnv(GL_ANALYTICS_ID);
+		if (gaid != null && StringTools.trim(gaid) != "")
+			glAnalyticsId = gaid;
 	}
 
 	static function dbInit()
@@ -221,6 +212,25 @@ class Context {
 				neko.Lib.rethrow(e);
 			}
 		}
+	}
+
+	function new(uri:String, params:Map<String, String>, method:String, session:Null<Session>)
+	{
+		this.uri = uri;
+		this.params = params;
+		dispatch = new Dispatch(uri, params, method);
+
+		if (session == null)
+			return;
+		if (session.expired(now)) {
+			session.expire();
+			session.update();
+			return;
+		}
+		this.session = session;
+		this.user = session.user;
+		this.group = user.group;
+		this.privilege = group.privilege;
 	}
 
 	public static function init(?now)
