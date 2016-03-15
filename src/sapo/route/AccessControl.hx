@@ -11,6 +11,7 @@ import sapo.spod.User;
 
 #if !macro
 enum AccessControlError {
+	EACNotLoggedIn;
 	EACNotAuthorized(?user:User);
 	EACSessionExpired(session:Session);
 }
@@ -85,7 +86,7 @@ class AccessControl {
 
 			// no need to check for params.length == 0, since that has been enforced in macro mode
 			var ctx = Context.loop;
-			if (ctx.session == null) throw EACNotAuthorized();
+			if (ctx.session == null) throw EACNotLoggedIn;
 			if (ctx.session.expired()) {
 				ctx.session.expire();
 				throw EACSessionExpired(ctx.session);

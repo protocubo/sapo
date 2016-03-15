@@ -302,7 +302,9 @@ class Context {
 			Context.shutdown();
 			trace('Access control error: $e');
 			var url = Web.getURI();
-			if (url != "" && uri != "/" && uri != "/login" && Web.getMethod().toLowerCase() == "get") {
+			if (e.match(EACNotAuthorized(_))) {
+				Web.redirect("/403.html");
+			} else if (url != "" && uri != "/" && uri != "/login" && Web.getMethod().toLowerCase() == "get") {
 				url += "?" + [
 					for (k in Web.getParams().keys())
 						'${StringTools.urlEncode(k)}=${StringTools.urlEncode(Web.getParams().get(k))}'
@@ -311,6 +313,10 @@ class Context {
 			} else {
 				Web.redirect("/login");
 			}
+		} catch (e:DispatchError) {
+			Context.shutdown();
+			trace('Dispatch error: $e');
+			Web.redirect("/404.html");
 		}
 	}
 #end
