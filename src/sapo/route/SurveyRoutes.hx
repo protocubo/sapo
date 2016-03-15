@@ -87,7 +87,7 @@ class SurveyRoutes extends AccessControl {
 	}
 
 	@authorize(PSuperUser, PSupervisor, PPhoneOperator)
-	public function DoChangecheck(args:{ surveyid:Int, checkSV:Null<Bool>, checkCT:Null<Bool>, isPhoned:Bool, checkCQ:Null<Bool> })  // TODO only POST
+	public function doChangecheck(args:{ surveyid:Int, checkCT:Null<Bool>, isPhoned:Bool, checkSV:Null<Bool>, checkCQ:Null<Bool> })  // TODO only POST
 	{
         var s = Survey.manager.select($id == args.surveyid); //This could be done by the dispatcher (fix?)
 		var user = User.manager.get(s.user_id, false);
