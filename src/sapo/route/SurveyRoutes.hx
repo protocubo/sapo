@@ -113,11 +113,9 @@ class SurveyRoutes extends AccessControl {
 		// }
 		
 
-		if (s.checkSV != args.checkSV && (priv == PSupervisor || priv == PSuperUser)) changecheckSV = true;
-		if (s.checkCT != args.checkCT && (priv == PPhoneOperator || priv == PSuperUser)) {
-                changecheckCT = true;
-                changeisPhoned = true;
-        }
+		if (s.isPhoned != args.isPhoned && (priv == PPhoneOperator || priv == PSuperUser)) changeisPhoned = true;
+        if (s.checkCT != args.checkCT && (priv == PPhoneOperator || priv == PSuperUser)) changecheckCT = true;
+        if (s.checkSV != args.checkSV && (priv == PSupervisor || priv == PSuperUser)) changecheckSV = true;
 		if (s.checkCQ != args.checkCQ && priv == PSuperUser) changecheckCQ = true;
 
         if (changecheckSV || changecheckCT || changecheckCQ || changeisPhoned) {

@@ -225,9 +225,13 @@ function onSubmitTicket()
 		<!-- FIM BODY - MORADOR -->
 		(: end :)
 	</div>
-
 	(: Util.footer() :)
+    (: Survey.checkmodal(survey) :)
+</body>
+</html>
+(: end :) (:* render *:)
 
+(: static function checkmodal (survey:sapo.spod.Survey) :)
 	<!-- MODAL TICKET -->
 	<div class="modal fade" id="pesquisa_ticket" tabindex="-1" role="dialog" aria-labelledby="pesquisa_ticket_label">
 		<form method="POST" id="openticket" action="/tickets/open" onsubmit="return onSubmitTicket();">
@@ -378,6 +382,4 @@ function onSubmitTicket()
 		</div>
 	</div>
 
-</body>
-</html>
-(: end :)
+(: end :) (:* checkmodal *:)
