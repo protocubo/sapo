@@ -61,7 +61,9 @@ class Index {
 			Context.shutdown();
 		} catch (e:Dynamic) {
 			Context.shutdown();
-			neko.Lib.rethrow(e);
+			trace('ERROR (unknown): $e');
+			trace(haxe.CallStack.toString(haxe.CallStack.exceptionStack()));
+			Web.redirect("/500.html");
 		}
 	}
 }

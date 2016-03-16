@@ -26,6 +26,8 @@ class Context {
 	public static var loop(default,null):Context;
 	public static var comn(default,null):LocalEnqueuer;
 
+	public static var glAnalyticsId:Null<String>;
+
 	var dispatch:Dispatch;
 
 	public var uri(default,null):String;
@@ -37,23 +39,12 @@ class Context {
 	public var group(default,null):Null<Group>;
 	public var privilege(default,null):Null<Privilege>;
 
-	function new(uri:String, params:Map<String, String>, method:String, session:Null<Session>)
+	static function __init__()
 	{
-		this.uri = uri;
-		this.params = params;
-		dispatch = new Dispatch(uri, params, method);
-
-		if (session == null)
-			return;
-		if (session.expired(now)) {
-			session.expire();
-			session.update();
-			return;
-		}
-		this.session = session;
-		this.user = session.user;
-		this.group = user.group;
-		this.privilege = group.privilege;
+		// google analytics
+		var gaid = Sys.getEnv(GL_ANALYTICS_ID);
+		if (gaid != null && StringTools.trim(gaid) != "")
+			glAnalyticsId = gaid;
 	}
 
 	static function dbInit()
@@ -223,6 +214,25 @@ class Context {
 		}
 	}
 
+	function new(uri:String, params:Map<String, String>, method:String, session:Null<Session>)
+	{
+		this.uri = uri;
+		this.params = params;
+		dispatch = new Dispatch(uri, params, method);
+
+		if (session == null)
+			return;
+		if (session.expired(now)) {
+			session.expire();
+			session.update();
+			return;
+		}
+		this.session = session;
+		this.user = session.user;
+		this.group = user.group;
+		this.privilege = group.privilege;
+	}
+
 	public static function init(?now)
 	{
 		updateClock();
@@ -292,12 +302,21 @@ class Context {
 			Context.shutdown();
 			trace('Access control error: $e');
 			var url = Web.getURI();
-			if (Web.getMethod().toLowerCase() == "get")
+			if (e.match(EACNotAuthorized(_))) {
+				Web.redirect("/403.html");
+			} else if (url != "" && uri != "/" && uri != "/login" && Web.getMethod().toLowerCase() == "get") {
 				url += "?" + [
 					for (k in Web.getParams().keys())
 						'${StringTools.urlEncode(k)}=${StringTools.urlEncode(Web.getParams().get(k))}'
 				].join("&");
-			Web.redirect('/login?redirect=${StringTools.urlEncode(url)}');
+				Web.redirect('/login?redirect=${StringTools.urlEncode(url)}');
+			} else {
+				Web.redirect("/login");
+			}
+		} catch (e:DispatchError) {
+			Context.shutdown();
+			trace('Dispatch error: $e');
+			Web.redirect("/404.html");
 		}
 	}
 #end
