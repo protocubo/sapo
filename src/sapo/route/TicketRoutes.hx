@@ -118,7 +118,7 @@ class TicketRoutes extends AccessControl {
 			uri += "#BodyTicket" + tid;
 		Web.redirect(uri);
 	}
-
+ 
 	@authorize(PSupervisor, PPhoneOperator, PSuperUser)
 	public function doDefault()
 	{

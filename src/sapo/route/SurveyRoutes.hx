@@ -87,9 +87,9 @@ class SurveyRoutes extends AccessControl {
 	}
 
 	@authorize(PSuperUser, PSupervisor, PPhoneOperator)
-	public function doChangecheck(args:{ surveyid:Int, checkCT:Null<Bool>, isPhoned:Bool, checkSV:Null<Bool>, checkCQ:Null<Bool> })  // TODO only POST
+	public function postChangecheck(args:{ sid:Int, checkCT:Null<Bool>, isPhoned:Bool, checkSV:Null<Bool>, checkCQ:Null<Bool>, tid:Null<Int> })  // TODO only POST
 	{
-        var s = Survey.manager.select($id == args.surveyid); //This could be done by the dispatcher (fix?)
+        var s = Survey.manager.select($id == args.sid); //This could be done by the dispatcher (fix?)
 		var user = User.manager.get(s.user_id, false);
         
 		var changecheckSV = false;
@@ -126,9 +126,19 @@ class SurveyRoutes extends AccessControl {
             if (changeisPhoned) s.isPhoned = args.isPhoned;
             s.update();
         }
-		
-		Web.redirect("/survey/" + s.id);
+        // the bellow was copied and changed from TicketRoutes.resetOrRedirect
+        // ACS has no idea how getLocalReferer works
+		var uri = Web.getLocalReferer();
+		if (uri == null) {
+			if (args.tid != null)
+				uri = '/ticket/${args.tid}';
+			else
+				uri = '/survey/${args.sid}';
+		} else if (args.tid != null)
+			uri += '#BodyTicket${args.tid}';
+		Web.redirect(uri);
 	}
+
 
 	public function new() {}
 }
