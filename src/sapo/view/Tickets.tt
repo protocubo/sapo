@@ -283,7 +283,7 @@
 		(: if t.closed_at == null :)
 			(: Modal.modalticketfechar(t) :)
 			(: Modal.modalticketincluir(t) :)
-			(: Modal.modalticketstatus(t) :)
+			(: Modal.modalstatus(t.survey, t) :)
 		(: end :)
 	(: end :)
 

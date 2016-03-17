@@ -87,39 +87,58 @@ class SurveyRoutes extends AccessControl {
 	}
 
 	@authorize(PSuperUser, PSupervisor, PPhoneOperator)
-	public function doChangecheck(args:{ surveyid:Int, checkSV:Null<Bool>, checkCT:Null<Bool>, checkCQ:Null<Bool> })  // TODO only POST
+	public function postChangecheck(args:{ sid:Int, checkCT:Null<Bool>, isPhoned:Bool, checkSV:Null<Bool>, checkCQ:Null<Bool>, tid:Null<Int> })  // TODO only POST
 	{
-        var s = Survey.manager.select($id == args.surveyid);
+        var s = Survey.manager.select($id == args.sid); //This could be done by the dispatcher (fix?)
 		var user = User.manager.get(s.user_id, false);
         
 		var changecheckSV = false;
         var changecheckCT = false;
         var changecheckCQ = false;
-		
+        var changeisPhoned = false;
 		var priv = Context.loop.privilege;
-		switch(priv)
-		{
-			case PSupervisor:
-				changecheckSV = (user.supervisor == Context.loop.user) ? true : false;
-			case PSuperUser:
-				changecheckSV = changecheckCT = changecheckCQ = true;
-			case PPhoneOperator:
-				changecheckCT = true;
-			default:
-				throw "Invalid permission";
-		}
 		
-        if (changecheckSV || changecheckCT || changecheckCQ) 
-		{
+        
+        // The bellow seems to to cover the same things and still throws, but it writes on db even if there is no changes
+        // switch(priv)
+		// {
+		// 	case PSupervisor:
+		// 		changecheckSV = (user.supervisor == Context.loop.user) ? true : false;
+		// 	case PSuperUser:
+		// 		changecheckSV = changecheckCT = changecheckCQ = true;
+		// 	case PPhoneOperator:
+		// 		changecheckCT = true;
+		// 	default:
+		// 		throw "Invalid permission";
+		// }
+		
+
+		if (s.isPhoned != args.isPhoned && (priv == PPhoneOperator || priv == PSuperUser)) changeisPhoned = true;
+        if (s.checkCT != args.checkCT && (priv == PPhoneOperator || priv == PSuperUser)) changecheckCT = true;
+        if (s.checkSV != args.checkSV && (priv == PSupervisor || priv == PSuperUser)) changecheckSV = true;
+		if (s.checkCQ != args.checkCQ && priv == PSuperUser) changecheckCQ = true;
+
+        if (changecheckSV || changecheckCT || changecheckCQ || changeisPhoned) {
             s.lock();
             if (changecheckSV)  s.checkSV = args.checkSV;
             if (changecheckCT)  s.checkCT = args.checkCT;
             if (changecheckCQ)  s.checkCQ = args.checkCQ;
+            if (changeisPhoned) s.isPhoned = args.isPhoned;
             s.update();
         }
-		
-		Web.redirect("/survey/" + s.id);
+        // the bellow was copied and changed from TicketRoutes.resetOrRedirect
+        // ACS has no idea how getLocalReferer works
+		var uri = Web.getLocalReferer();
+		if (uri == null) {
+			if (args.tid != null)
+				uri = '/ticket/${args.tid}';
+			else
+				uri = '/survey/${args.sid}';
+		} else if (args.tid != null)
+			uri += '#BodyTicket${args.tid}';
+		Web.redirect(uri);
 	}
+
 
 	public function new() {}
 }

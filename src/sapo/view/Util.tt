@@ -141,6 +141,7 @@
       } :)
 (:end:)
 
+
 (: static function status( survey : Survey ) :)
 
 	(: do var surveyCheck = SurveyCheckStatus.manager.get(survey.id) :)
@@ -189,3 +190,7 @@
 	(: end :)
 	
 (: end :)
+
+
+
+
