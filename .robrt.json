@@ -13,7 +13,9 @@
 			"haxe comn.hxml",
 			"haxe sync.hxml",
 			"haxe unit.hxml",
+			"tar crvf redist.tgz bin www",
 			"cp -r www/* $ROBRT_OUTPUT_DIR",
+			"cp redist.tgz $ROBRT_OUTPUT_DIR/",
 			"cp -r docs/mockup $ROBRT_OUTPUT_DIR/"
 		]
 	}
