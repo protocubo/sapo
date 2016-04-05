@@ -14,9 +14,9 @@
 			"haxe sync.hxml",
 			"haxe unit.hxml",
 			"tar cvf redist.tgz bin www README.md LICENSE.md",
-			"cp -r www/* $ROBRT_OUTPUT_DIR",
-			"cp redist.tgz $ROBRT_OUTPUT_DIR/",
-			"cp -r docs/mockup $ROBRT_OUTPUT_DIR/"
+			"cp -r www bin $ROBRT_OUTPUT_DIR/",
+			"cp redist.tgz $ROBRT_OUTPUT_DIR/www/",
+			"cp -r docs/mockup $ROBRT_OUTPUT_DIR/www/"
 		]
 	}
 }
