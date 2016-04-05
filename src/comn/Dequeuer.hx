@@ -155,7 +155,7 @@ class Dequeuer {
 
 		bodge.Flare.register(
 			function (signum) {
-				if (signum != /*SIGTERM*/ 15) return;
+				if (signum != SIGTERM) return;
 				dq.shutdown();
 				trace('Gracefully shutting down after receiving signal $signum');
 			});
