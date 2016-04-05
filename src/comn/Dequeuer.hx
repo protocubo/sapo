@@ -153,6 +153,12 @@ class Dequeuer {
 			Sys.sleep(1);
 		}
 
+		bodge.Flare.register(
+			function (signum) {
+				if (signum != /*SIGTERM*/ 15) return;
+				dq.shutdown();
+				trace('Gracefully shutting down after receiving signal $signum');
+			});
 		dq.start();
 	}
 }
