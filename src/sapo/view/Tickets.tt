@@ -195,7 +195,7 @@
 			<form method="get" name="filter" action="/tickets">
 				<div class="col-md-2"><h5>DESTINO</h5>
 					<select class="form-control input-sm" id="recipientID" name="recipient">
-						<option value="(:PARAM_ALL:)">Para todos</option>
+						<option value="(:PARAM_ALL:)">Todos</option>
 						<option value="(:PARAM_GROUP:)">Para o grupo</option>
 						<option value="(:PARAM_INDIVIDUAL:)">De/Para mim</option>
 					</select>
