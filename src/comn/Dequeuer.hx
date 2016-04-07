@@ -153,9 +153,8 @@ class Dequeuer {
 			Sys.sleep(1);
 		}
 
-		bodge.Flare.register(
+		bodge.Flare.notify(SIGTERM,
 			function (signum) {
-				if (signum != SIGTERM) return;
 				dq.shutdown();
 				trace('Gracefully shutting down after receiving signal $signum');
 			});

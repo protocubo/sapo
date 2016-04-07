@@ -12,5 +12,5 @@ RUN haxelib --always install compiletime
 RUN haxelib --always install tink_template
 RUN haxelib --always install utest
 RUN haxelib --always install version
-RUN mkdir -p /var/deps/bodge-flare && git clone https://github.com/jonasmalacofilho/bodge-flare.hx /var/deps/bodge-flare && git -C /var/deps/bodge-flare merge-base --is-ancestor b6a0d8e HEAD && haxelib dev bodge-flare /var/deps/bodge-flare
+RUN mkdir -p /var/deps/bodge-flare && git clone https://github.com/jonasmalacofilho/bodge-flare.hx /var/deps/bodge-flare && git -C /var/deps/bodge-flare merge-base --is-ancestor cb4a6c3 HEAD && haxelib dev bodge-flare /var/deps/bodge-flare
 
