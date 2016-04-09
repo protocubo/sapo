@@ -15,7 +15,7 @@
 			"haxe unit.hxml",
 			"mkdir -p ndlls",
 			"haxelib run bodge-ndlls -Linux64 --out ndlls bodge-flare hxssl",
-			"tar -cvf redist.tgz --transform 's,^,sapo/,' .",
+			"tar -czvf redist.tgz --transform 's,^,sapo/,' .",
 			"cp -r www bin ndlls $ROBRT_OUTPUT_DIR/",
 			"cp redist.tgz $ROBRT_OUTPUT_DIR/www/",
 			"cp -r docs/mockup $ROBRT_OUTPUT_DIR/www/"
