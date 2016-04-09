@@ -13,8 +13,10 @@
 			"haxe comn.hxml",
 			"haxe sync.hxml",
 			"haxe unit.hxml",
-			"tar cvf redist.tgz bin www README.md LICENSE.md",
-			"cp -r www bin $ROBRT_OUTPUT_DIR/",
+			"mkdir -p ndlls",
+			"haxelib run bodge-ndlls -Linux64 --out ndlls bodge-flare hxsll",
+			"tar -cvf redist.tgz --transform 's,^,sapo/,' .",
+			"cp -r www bin ndlls $ROBRT_OUTPUT_DIR/",
 			"cp redist.tgz $ROBRT_OUTPUT_DIR/www/",
 			"cp -r docs/mockup $ROBRT_OUTPUT_DIR/www/"
 		]
