@@ -32,7 +32,7 @@ typedef SendGridPayload = {
 
 @:keep
 class SendGridEmail implements comn.Message {
-#if hxssl
+#if sapo_comn
 	static var url = "https://api.sendgrid.com/api/mail.send.json";
 	public function deliver(queue, creds)
 	{

@@ -24,6 +24,7 @@ class DataExport implements comn.Message {
 		return sha1;
 	}
 
+#if sapo_comn
 	public function deliver(queue, creds)
 	{
 		if (EXPORTS == null)
@@ -43,6 +44,7 @@ class DataExport implements comn.Message {
 		var enq = new LocalEnqueuer(queue);
 		enq.enqueue(email);
 	}
+#end
 
 	public function new(time, sendTo)
 	{

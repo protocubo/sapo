@@ -35,7 +35,7 @@ typedef SlackPayload = {
 
 @:keep
 class Slack implements comn.Message {
-#if hxssl
+#if sapo_comn
 	public function deliver(queue, creds)
 	{
 		var req = new haxe.Http(creds.slackUrl);

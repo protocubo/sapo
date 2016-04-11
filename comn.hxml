@@ -1,6 +1,7 @@
 -cp src
 -cp override
--lib hxssl
+-D sapo-comn
+# -lib hxssl
 -lib bodge-flare
 # (with haxelib git hxssl https://github.com/tong/hxssl)
 # (with haxelib git bodge-flare https://github.com/jonasmalacofilho/bodge-flare.hx)
