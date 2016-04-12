@@ -32,7 +32,7 @@ class ManyTicketRoutes extends AccessControl {
 			case PARAM_CLOSED:
 				' t.closed_at IS NOT NULL ';
 			case PARAM_BOTH:
-				' t.closed_at IS NULL OR t.closed_at IS NOT NULL ';
+				' (t.closed_at IS NULL OR t.closed_at IS NOT NULL) ';
 			default:
 				throw "Unexpected state value: " + args.state;
 		}
@@ -42,7 +42,7 @@ class ManyTicketRoutes extends AccessControl {
 		var g = Context.loop.group;
 		var p = Context.loop.privilege;
 
-		var sql = "SELECT t.* FROM Ticket t";
+		var sql = "SELECT DISTINCT t.* FROM Ticket t";
 		sql += switch args.recipient {
 		case null, PARAM_ALL if (p.match(PSuperUser)):
 			' WHERE';  // done: all
@@ -65,6 +65,7 @@ class ManyTicketRoutes extends AccessControl {
 		sql += state;
 
 		sql += ' ORDER BY t.opened_at LIMIT ${PAGE_SIZE + 1}';
+		trace(sql);
 		if (args.page > 1)
 		{
 			var p = args.page -1;
