@@ -234,7 +234,7 @@ class TicketRoutes extends AccessControl {
 		return switch Context.loop.privilege {
 		case PSuperUser:
 			true;
-		case PPhoneOperator if (t.recipient.group == Context.loop.group):
+		case PPhoneOperator if (t.recipient.group == Context.loop.group && t.survey.checkCT != null && t.survey.isPhoned):
 			true;
 		case PSupervisor if (t.author == Context.loop.user):
 			true;
