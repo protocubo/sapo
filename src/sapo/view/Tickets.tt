@@ -12,7 +12,7 @@
 <!-- TICKET -->
 <div class="panel panel-default">
 	<!-- HEAD TICKET -->
-	<div class="panel-heading" role="tab" id="HeadTicket(: ticket.id :)">
+	<div class="panel-heading" role="tab" id="HeadTicket(: ticket.id :)" (:if ticket.closed_at != null :) style="background-color: #DDD;" (: end :)>
 		<div class="row">
 			<div class="col-md-7 panel-title">
 				<!-- DE/PARA (class: super, telefonista, supervisor e pesquisador) -->
@@ -204,6 +204,7 @@
 					<select class="form-control input-sm" name="state">
 						<option value="(:PARAM_OPEN:)">Abertos</option>
 						<option value="(:PARAM_CLOSED:)">Fechados</option>
+						<option value="(:PARAM_BOTH:)">Todos</option>
 					</select>
 				</div>
 				<div class="col-md-2"><h5>PESQUISA</h5>

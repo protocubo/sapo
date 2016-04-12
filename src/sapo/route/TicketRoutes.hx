@@ -16,13 +16,27 @@ class ManyTicketRoutes extends AccessControl {
 	public static inline var PARAM_INDIVIDUAL = "individual";
 	public static inline var PARAM_OPEN = "open";
 	public static inline var PARAM_CLOSED = "closed";
+	//open || closed
+	public static inline var PARAM_BOTH = "both";
 
 	@authorize(PSupervisor, PPhoneOperator, PSuperUser)
 	public function doDefault(?args:{?recipient:String, ?state:String, ?survey : Survey, ?page : Int })
 	{
 		if (args == null) args = {};
-		var open = args.state == null || args.state == PARAM_OPEN;
-		if (!open && args.state != PARAM_CLOSED) throw 'Unexpected state value: ${args.state}';
+		var ticketstate = args.state;
+		
+		var state = switch(args.state)
+		{
+			case null, "", PARAM_OPEN:
+				' t.closed_at IS NULL ';
+			case PARAM_CLOSED:
+				' t.closed_at IS NOT NULL ';
+			case PARAM_BOTH:
+				' t.closed_at IS NULL OR t.closed_at IS NOT NULL ';
+			default:
+				throw "Unexpected state value: " + args.state;
+		}
+		
 		var survey_id = (args.survey != null) ? args.survey.id : null;
 		var u = Context.loop.user;
 		var g = Context.loop.group;
@@ -47,8 +61,8 @@ class ManyTicketRoutes extends AccessControl {
 
 		if (survey_id != null)
 			sql += " t.survey_id = " + survey_id + " AND ";
-
-		sql += ' t.closed_at ${open ? "IS" : "NOT"} NULL';
+		
+		sql += state;
 
 		sql += ' ORDER BY t.opened_at LIMIT ${PAGE_SIZE + 1}';
 		if (args.page > 1)
