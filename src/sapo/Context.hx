@@ -153,8 +153,8 @@ class Context {
 		}
 
 		var dir = sys.FileSystem.readDirectory(bpath);
-		if (dir.length == 0) {
-			trace('WARNING no static files to load in path: $bpath');
+		if (dir.filter(StringTools.endsWith.bind(_, ".csv")).length == 0) {
+			trace('WARNING no static CSV files to load in path: $bpath');
 			return;
 		}
 
