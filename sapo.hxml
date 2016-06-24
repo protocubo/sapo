@@ -8,6 +8,7 @@
 -lib tink_template
 -lib compiletime
 -lib version
+-lib eweb
 -D dump=pretty
 # -D trace-sqlite
 # -D no-deprecation-warnings

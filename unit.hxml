@@ -4,6 +4,7 @@
 -lib compiletime
 -lib version
 -lib tink_template
+-lib eweb
 
 --each
 
