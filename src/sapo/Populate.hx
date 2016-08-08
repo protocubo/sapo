@@ -345,6 +345,7 @@ class Populate {
 			neko.Lib.rethrow(e);
 		}
 		Context.commit();
+		Context.shutdown();
 	}
 }
 
