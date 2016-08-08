@@ -259,6 +259,7 @@ class Context {
 	public static function shutdown()
 	{
 		if (db == null) return;
+		common.crypto.Random.global.close();
 		db.close();
 		db = Manager.cnx = null;
 	}

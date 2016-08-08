@@ -15,7 +15,8 @@ class Random extends Input {
 	function new(gen:Input)
 		this.gen = gen;
 
-	public static var global(default,null):Random;
+	override public inline function close()
+		gen.close();
 
 	override public inline function readByte()
 		return gen.readByte();
@@ -30,16 +31,17 @@ class Random extends Input {
 	public function readHex(len:Int):String
 		return readSimpleBytes(len).toHex();
 
-	static function __init__()
-	{
-		var gen = switch Sys.systemName() {
-		case "Windows":
-			Sys.stderr().writeString("WARNING no real random generator used on Windows\n");
-			new StdRandomInput();
-		case _:
-			sys.io.File.read("/dev/urandom", true);
+	public static var global(get,null):Random;
+		static function get_global() {
+			if (global != null) return global;
+			var gen = switch Sys.systemName() {
+			case "Windows":
+				Sys.stderr().writeString("WARNING no real random generator used on Windows\n");
+				new StdRandomInput();
+			case _:
+				sys.io.File.read("/dev/urandom", true);
+			}
+			return global = new Random(gen);
 		}
-		global = new Random(gen);
-	}
 }
 
