@@ -238,7 +238,8 @@ class Populate {
 		p.syncTimestamp = m.syncTimestamp;
 		p.tempo_chegada = lpad(Std.string(rnd.int(24)), "0", 2) + ":" + lpad(Std.string(rnd.int(60)), "0", 2);
 		p.tempo_saida = lpad(Std.string(rnd.int(24)), "0", 2) + ":" + lpad(Std.string(rnd.int(60)), "0", 2);
-		p.uf = UF.manager.get(1);
+		var u = UF.manager.get(1);  // HACK for probably analyzer bug
+		p.uf = u;
 		p.insert();
 		return p;
 	}
