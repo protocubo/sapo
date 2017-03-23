@@ -133,8 +133,6 @@ class Context {
 									AND 
 								s.`group` = sg.`group`");		
 		}
-
-		comn = new LocalEnqueuer(QueuedMessage.manager);
 	}
 
 	static function updateStatics()
@@ -233,13 +231,22 @@ class Context {
 		this.privilege = group.privilege;
 	}
 
-	public static function init(?now)
+	/*
+	Initialize the context.
+
+	If `hot` is set, many assumptions optimistic assumptions will be made
+	concerning external state (e.g. database initialization).
+	*/
+	public static function init(?now:Null<Float>, ?hot=false)
 	{
 		updateClock();
 		common.spod.InitDB.run();
 		db = Manager.cnx;
-		dbInit();
-		updateStatics();
+		comn = new LocalEnqueuer(QueuedMessage.manager);
+		if (!hot) {
+			dbInit();
+			updateStatics();
+		}
 	}
 
 	public static function updateClock()

@@ -21,7 +21,7 @@ class Index {
 				return;
 			}
 
-			Context.init();  // db init (reserved for future cache operation on tora)
+			Context.init(true);  // db init (reserved for future cache operation on tora)
 			Context.iterate();  // dispatch happens here
 			Context.shutdown();
 		} catch (e:Dynamic) {
