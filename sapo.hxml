@@ -6,10 +6,13 @@
 -neko www/index.n
 -main sapo.Index
 -lib instrument
+--macro instrument.TimeCalls.hijack("Context")
+--macro instrument.TimeCalls.hijack("sys.db.Sqlite", "open")
 --macro instrument.TimeCalls.hijack("sys.db.Sqlite.SqliteConnection", "request", true)
---macro instrument.TraceArgs.hijack("sys.db.Sqlite", "open")
---macro instrument.TraceArgs.hijack("sys.db.Sqlite.SqliteConnection", "request")
---macro instrument.TraceArgs.hijack("sys.db.Sqlite.SqliteConnection", "close")
+--macro instrument.TimeCalls.hijack("sys.db.Sqlite.SqliteConnection", "close")
+# --macro instrument.TraceArgs.hijack("sys.db.Sqlite", "open")
+# --macro instrument.TraceArgs.hijack("sys.db.Sqlite.SqliteConnection", "request")
+# --macro instrument.TraceArgs.hijack("sys.db.Sqlite.SqliteConnection", "close")
 -lib record-macros
 -lib tink_template
 -lib compiletime

@@ -18,7 +18,7 @@ class Index {
 			var tcall = v.count > 0 ? v.time/v.count : 0.;
 			var totalScale = instrument.TimeCalls.autoScale(v.time);
 			var callScale = instrument.TimeCalls.autoScale(tcall);
-			buf.add('${k}: ${v.count} calls, ${tcall*callScale.divisor}${callScale.symbol}/call, ${v.time*totalScale.divisor}${totalScale.symbol} in total\n');
+			buf.add('  ${k}: ${v.count} calls, ${tcall*callScale.divisor}${callScale.symbol}/call, ${v.time*totalScale.divisor}${totalScale.symbol} in total\n');
 		}
 		return buf.toString();
 	}
@@ -27,8 +27,8 @@ class Index {
 	{
 		haxe.Log.trace = function (msg, ?pos:haxe.PosInfos) {
 			if (pos.customParams != null) msg += "\n{" + pos.customParams.join(" ") + "}";
-			msg += '  @${pos.className}:${pos.methodName}  (${pos.fileName}:${pos.lineNumber})';
-			Web.logMessage(msg);
+			msg += '  @${pos.className}:${pos.methodName}  (${pos.fileName}:${pos.lineNumber})\n';
+			Sys.stderr().writeString(msg);
 		}
 
 		timers = new Map();
