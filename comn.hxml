@@ -1,10 +1,11 @@
--cp src
--cp override
--D sapo-comn
 # -lib hxssl
 -lib bodge-flare
 # (with haxelib git hxssl https://github.com/tong/hxssl)
 # (with haxelib git bodge-flare https://github.com/jonasmalacofilho/bodge-flare.hx)
+-lib record-macros
+-cp src
+-cp override
+-D sapo-comn
 
 --each
 
