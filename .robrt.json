@@ -8,6 +8,8 @@
 	"build" : {
 		"cmds" : [
 			"cd $ROBRT_REPOSITORY_DIR",
+			"haxelib --always git instrument https://github.com/protocubo/instrument.hx",
+			"haxelib install record-macros",
 			"haxelib list",
 			"haxe sapo.hxml",
 			"haxe comn.hxml",
