@@ -6,9 +6,7 @@
 -neko www/index.n
 -main sapo.Index
 -lib instrument
---macro instrument.TraceCalls.hijack("sapo.Index")
---macro instrument.TraceCalls.hijack("sapo.Context")
-# --macro instrument.TimeCalls.hijack("sapo.Context")
+--macro instrument.TimeCalls.hijack("sapo.Context")
 --macro instrument.TimeCalls.hijack("sys.db.Sqlite", "open")
 --macro instrument.TimeCalls.hijack("sys.db.Sqlite.SqliteConnection", "request", true)
 --macro instrument.TimeCalls.hijack("sys.db.Sqlite.SqliteConnection", "close")
@@ -21,6 +19,7 @@
 -lib version
 -lib eweb
 -D dump=pretty
+-D instrument_stderr_default
 # -D no-deprecation-warnings
 
 --next

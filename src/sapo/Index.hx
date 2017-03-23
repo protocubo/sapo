@@ -25,6 +25,12 @@ class Index {
 
 	static function main()
 	{
+		haxe.Log.trace = function (msg, ?pos:haxe.PosInfos) {
+			if (pos.customParams != null) msg += "\n{" + pos.customParams.join(" ") + "}";
+			msg += '  @${pos.className}:${pos.methodName}  (${pos.fileName}:${pos.lineNumber})\n';
+			Sys.stderr().writeString(msg);
+		}
+
 		timers = new Map();
 		var defaultOnTimed = instrument.TimeCalls.onTimed;
 		instrument.TimeCalls.onTimed = function (start, finish, ?pos:haxe.PosInfos) {
@@ -55,15 +61,6 @@ class Index {
 			trace('ERROR (unknown): $e');
 			trace(haxe.CallStack.toString(haxe.CallStack.exceptionStack()));
 			Web.redirect("/500.html");
-		}
-	}
-
-	static function __init__()
-	{
-		haxe.Log.trace = function (msg, ?pos:haxe.PosInfos) {
-			if (pos.customParams != null) msg += "\n{" + pos.customParams.join(" ") + "}";
-			msg += '  @${pos.className}:${pos.methodName}  (${pos.fileName}:${pos.lineNumber})\n';
-			Sys.stderr().writeString(msg);
 		}
 	}
 }

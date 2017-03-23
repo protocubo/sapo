@@ -43,9 +43,6 @@ class Context {
 
 	static function __init__()
 	{
-		// force Index.__init__ to run first
-		__deps__ = [Index];
-
 		// google analytics
 		var gaid = Sys.getEnv(GL_ANALYTICS_ID);
 		if (gaid != null && StringTools.trim(gaid) != "")
