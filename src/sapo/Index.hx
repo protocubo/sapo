@@ -9,12 +9,13 @@ class Index {
 
 	static function printTimers()
 	{
-		var keys = [ for (k in timers.keys()) k ];
-		keys.sort(Reflect.compare);
+		var values = [ for (k in timers.keys()) { key:k, val:timers[k] } ];
+		values.sort(function (a,b) return Reflect.compare(b.val.time, a.val.time));
 		var buf = new StringBuf();
 		buf.add("timers:\n");
-		for (k in keys) {
-			var v = timers[k];
+		for (val in values) {
+			var k = val.key;
+			var v = val.val;
 			var tcall = v.count > 0 ? v.time/v.count : 0.;
 			var totalScale = instrument.TimeCalls.autoScale(v.time);
 			var callScale = instrument.TimeCalls.autoScale(tcall);
