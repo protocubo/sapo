@@ -1,10 +1,11 @@
--cp src
--cp override
 -lib utest
+-lib record-macros
 -lib compiletime
 -lib version
 -lib tink_template
 -lib eweb
+-cp src
+-cp override
 
 --each
 

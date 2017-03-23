@@ -1,8 +1,9 @@
--cp src
--cp override
+-lib record-macros
 -lib compiletime
 -lib version
 -lib eweb
+-cp src
+-cp override
 -D sapo-sync
 
 --each
