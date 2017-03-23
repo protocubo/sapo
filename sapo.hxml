@@ -6,7 +6,7 @@
 -neko www/index.n
 -main sapo.Index
 -lib instrument
---macro instrument.TimeCalls.hijack("Context")
+--macro instrument.TimeCalls.hijack("sapo.Context")
 --macro instrument.TimeCalls.hijack("sys.db.Sqlite", "open")
 --macro instrument.TimeCalls.hijack("sys.db.Sqlite.SqliteConnection", "request", true)
 --macro instrument.TimeCalls.hijack("sys.db.Sqlite.SqliteConnection", "close")
