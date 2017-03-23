@@ -39,8 +39,13 @@ class Context {
 	public var group(default,null):Null<Group>;
 	public var privilege(default,null):Null<Privilege>;
 
+	static var __deps__:Array<Class<Dynamic>>;
+
 	static function __init__()
 	{
+		// force Index.__init__ to run first
+		__deps__ = [Index];
+
 		// google analytics
 		var gaid = Sys.getEnv(GL_ANALYTICS_ID);
 		if (gaid != null && StringTools.trim(gaid) != "")
