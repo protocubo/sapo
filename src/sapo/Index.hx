@@ -25,7 +25,6 @@ class Index {
 
 	static function main()
 	{
-
 		timers = new Map();
 		var defaultOnTimed = instrument.TimeCalls.onTimed;
 		instrument.TimeCalls.onTimed = function (start, finish, ?pos:haxe.PosInfos) {
