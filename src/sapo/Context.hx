@@ -17,8 +17,8 @@ import sapo.spod.User;
 import sys.db.*;
 
 class Context {
-	static var DBPATH = Sys.getEnv(SAPO_DB);
-	static var STATICPATH = Sys.getEnv(STATIC_FILES);
+	static var DBPATH = SAPO_DB.getValue();
+	static var STATICPATH = STATIC_FILES.getValue();
 
 	public static var version(default,null) = { commit : Version.getGitCommitHash() }
 	public static var now(default,null):HaxeTimestamp;
@@ -44,7 +44,7 @@ class Context {
 	static function __init__()
 	{
 		// google analytics
-		var gaid = Sys.getEnv(GL_ANALYTICS_ID);
+		var gaid = GL_ANALYTICS_ID.getValue();
 		if (gaid != null && StringTools.trim(gaid) != "")
 			glAnalyticsId = gaid;
 	}

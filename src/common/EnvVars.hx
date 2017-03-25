@@ -25,5 +25,24 @@ package common;
 	// Optional Google Analytics tracking id
 	// is supplyed, builds will include tracking code
 	var GL_ANALYTICS_ID = "GL_ANALYTICS_ID";
+
+	public function getValue()
+		return Sys.getEnv(this);
+
+	public function defined()
+		return Sys.getEnv(this) != null;
+
+	public function enabled()
+	{
+		var v = getValue();
+		if (v == null)
+			return false;
+		return
+			switch v.toLowerCase() {
+			case "": false;
+			case "0", "false", "no": false;
+			case _: true;
+			}
+	}
 }
 
