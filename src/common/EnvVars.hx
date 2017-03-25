@@ -7,6 +7,8 @@ package common;
 	var COMN_DB = "COMN_DB";
 	// Location of necessary static files
 	var STATIC_FILES = "STATIC_FILES";
+	// Demo mode
+	var SAPO_DEMO_MODE = "SAPO_DEMO_MODE";
 
 	// Location for the exported files
 	var EXPORTS_PATH = "EXPORTS_PATH";

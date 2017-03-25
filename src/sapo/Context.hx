@@ -25,6 +25,7 @@ class Context {
 	public static var db(default,null):common.db.AutocommitConnection;
 	public static var loop(default,null):Context;
 	public static var comn(default,null):LocalEnqueuer;
+	public static var inDemoMode(default,null) = SAPO_DEMO_MODE.enabled();
 
 	public static var glAnalyticsId:Null<String>;
 

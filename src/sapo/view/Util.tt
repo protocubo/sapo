@@ -97,7 +97,7 @@
 	<footer class="footer apagar">
 		<div class="container">
 			<h4 class="rodape">
-				<b>SAPO</b> OD DF 2016<br>
+				<b>SAPO(:if Context.inDemoMode:)[DEMO](:end:)</b> OD DF 2016<br>
 				<a href="/about">SOBRE</a> |
 				<a href="/licenses">LICENÇAS</a> |
 				<a href="https://github.com/jonasmalacofilho/sapood/" target="_blank">CÓDIGO FONTE</a> |
