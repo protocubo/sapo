@@ -40,7 +40,7 @@ class Slack implements comn.Message {
 	{
 		var req = new haxe.Http(creds.slackUrl);
 		req.setHeader("Content-Type", "application/json");
-		req.setHeader("User-Agent", "sapood");
+		req.setHeader("User-Agent", "sapo");
 		req.setPostData(haxe.Json.stringify(payload));
 
 		var status = null;

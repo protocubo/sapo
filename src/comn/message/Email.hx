@@ -38,7 +38,7 @@ class SendGridEmail implements comn.Message {
 	{
 		var req = new haxe.Http(url);
 		req.setHeader("Content-Type", "application/x-www-form-urlencoded");
-		req.setHeader("User-Agent", "sapood");
+		req.setHeader("User-Agent", "sapo");
 		req.setParameter("from", payload.from);
 		for (i in payload.to)
 			req.addParameter("to", i);

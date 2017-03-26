@@ -28,7 +28,7 @@ class Demo {
 		if (recipient == null) throw 'Missing $COMN_DEMO_EMAIL_RECIPIENT environment variable';
 		eq.enqueue(new comn.message.Email({
 			from : author, to : [recipient],
-			subject : "Hello from sapood",
+			subject : "Hello from sapo",
 			text : "Hi, just letting you known that I'm working just fine" }));
 	}
 }
