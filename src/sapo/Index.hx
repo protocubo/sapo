@@ -19,7 +19,7 @@ class Index {
 			var tcall = v.count > 0 ? v.time/v.count : 0.;
 			var totalScale = instrument.TimeCalls.autoScale(v.time);
 			var callScale = instrument.TimeCalls.autoScale(tcall);
-			buf.add('  ${k}: ${v.count} calls, ${tcall*callScale.divisor}${callScale.symbol}/call, ${v.time*totalScale.divisor}${totalScale.symbol} in total\n');
+			buf.add('  ${k}: ${v.count} calls, ${Math.round(tcall*callScale.divisor)}${callScale.symbol}/call, ${Math.round(v.time*totalScale.divisor)}${totalScale.symbol} in total\n');
 		}
 		return buf.toString();
 	}
