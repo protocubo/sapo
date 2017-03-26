@@ -19,7 +19,7 @@
 			<div class="col-md-12">
 				<!-- SAPO -->
 				<h3><a href="https://github.com/protocubo/sapo" target="_blank">SAPO</a></h3>
-				<h4>Licensed under the <a ref="license" href="https://github.com/protocubo/sapo/blob/development/LICENSE" target="_blank">GNU GPL v3</a></h4>
+				<h4>Licensed under the <a ref="license" href="https://github.com/protocubo/sapo/blob/master/LICENSE.md" target="_blank">GNU GPL v3</a></h4>
 				<p>Copyright 2016 Arthur Szász, Caio Honma, Jonas Malaco, Rafael Craice and Renato Vogelaar</p>
 				<p>This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, version 3.</p>
 				<p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>
