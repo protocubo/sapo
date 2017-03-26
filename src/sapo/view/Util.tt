@@ -100,8 +100,8 @@
 				<b>SAPO(:if Context.inDemoMode:)[DEMO](:end:)</b> OD DF 2016<br>
 				<a href="/about">SOBRE</a> |
 				<a href="/licenses">LICENÇAS</a> |
-				<a href="https://github.com/jonasmalacofilho/sapood/" target="_blank">CÓDIGO FONTE</a> |
-				<a href="https://github.com/jonasmalacofilho/sapood/commit/(:Context.version.commit.substr(0,7):)" target="_blank">COMMIT (:Context.version.commit.substr(0,7):)</a>
+				<a href="https://github.com/protocubo/sapo/" target="_blank">CÓDIGO FONTE</a> |
+				<a href="https://github.com/protocubo/sapo/commit/(:Context.version.commit.substr(0,7):)" target="_blank">COMMIT (:Context.version.commit.substr(0,7):)</a>
 			</h4>
 			<img src="/resources/sapo_logo.png" class="rodape_logo">
 		</div>
